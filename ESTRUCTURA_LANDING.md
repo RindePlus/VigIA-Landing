@@ -31,11 +31,11 @@ Header ─ Cómo funciona · Alertas · Clientes · Contacto · [Ingresar]
 
 ## 1. Introducción (`#inicio`)
 
-Basado en la tarjeta "VigIA BioEstrés · Mitigación de Estrés" de la landing de Rinde Plus, sin la mención a IA.
+Basado en la tarjeta "VigIA BioEstrés · Mitigación de Estrés" de la landing de Rinde Plus, sin la mención a IA. Por ahora la marca se presenta sólo como **VigIA** (sin "BioEstrés").
 
 | Elemento | Contenido |
 |---|---|
-| Marca | **VigIA BioEstrés** (logo de VigIA + "BioEstrés") |
+| Marca | **VigIA** (logo de VigIA) |
 | Etiqueta | ESTRÉS HÍDRICO Y TÉRMICO |
 | Título | **Mitigación de Estrés** |
 | Descripción | Monitoreá y anticipá el estrés hídrico y térmico antes de que se manifieste. VigIA cruza el clima, el balance hídrico y el suelo de cada lote para darte alertas tempranas y un manejo preventivo con bioinsumos. |
@@ -140,10 +140,10 @@ Bloque secundario, más chico que el resto del módulo.
 
 | Hoy | Con esta estructura |
 |---|---|
-| Hero con título "Anticipá el estrés de tu cultivo…" | Introducción con la identidad **VigIA BioEstrés · Mitigación de Estrés** |
+| Hero con título "Anticipá el estrés de tu cultivo…" | Introducción con la identidad **VigIA · Mitigación de Estrés** |
 | Secciones sueltas: problema, tipos de estrés, cómo funciona, alertas, cultivo de servicio, pasos | Tres módulos: problema (con tipos de estrés) y mejora real (alertas, canales, datos, cultivo de servicio) |
 | Las alertas no dicen por dónde llegan | Bloque propio: plataforma + WhatsApp |
-| "De la siembra a la decisión" (4 pasos) | Se elimina o se integra en 3.2; la historia ya se cuenta en los tres módulos |
+| "De la siembra a la decisión" (4 pasos) | Pendiente de definir: se conserva por ahora (ver decisiones) |
 
 ---
 
@@ -167,9 +167,11 @@ Segunda etapa. La idea es que cada módulo tenga **un** elemento en movimiento, 
 - Ojo con GitHub Pages: el build se commitea en `docs/`, así que cada versión de un video queda en el historial del repo para siempre. Si los videos van a cambiar seguido, conviene alojarlos fuera del repo (por ejemplo, en un CDN o en un bucket) y referenciarlos por URL.
 - Los textos importantes nunca van dentro del video: siempre como texto HTML, por accesibilidad y SEO.
 
-## Decisiones pendientes
+## Decisiones
 
-1. **Nombre visible:** ¿la home se presenta como "VigIA BioEstrés" (como en la tarjeta de Rinde Plus) o sólo "VigIA"?
-2. **WhatsApp para el lanzamiento:** el envío de alertas por WhatsApp es una funcionalidad del sistema nuevo (el módulo actual no lo tiene). Si no está listo al publicar la landing, conviene marcarlo como "Próximamente".
-3. **Pasos de uso:** ¿se elimina la sección "De la siembra a la decisión" o se conserva dentro del módulo 3?
-4. **Clientes:** confirmar que los logos del carrusel corresponden a clientes de VigIA y no sólo de Rinde Plus.
+| # | Tema | Decisión |
+|---|---|---|
+| 1 | Nombre visible | **VigIA**, por ahora sin "BioEstrés". |
+| 2 | WhatsApp en el lanzamiento | **Va a estar listo cuando se publique la landing.** Se presenta como funcionalidad disponible, sin "Próximamente". |
+| 3 | Sección "De la siembra a la decisión" | **Pendiente.** Hasta que se defina, se mantiene como está. |
+| 4 | Logos del carrusel | **Se mantienen igual** que en la landing de Rinde Plus. |
