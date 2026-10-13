@@ -1,0 +1,161 @@
+---
+// Hilo que conecta los tres módulos (Introducción → Problema → Mejora real)
+// y fondo que cambia de tono con la historia del lote. Va dentro de
+// `.vg-journey` (ver index.astro):
+// - Los puntos del hilo son los elementos con `data-vg-node` (1, 2, 3); el
+//   hilo termina en el elemento con `data-vg-end`.
+// - La línea se dibuja con el scroll: verde (VigIA vigila) → ámbar y rojo
+//   (el lote sin aviso) → verde (el lote se salva).
+// - El fondo usa las mismas posiciones: sano → seco → agua → neutro.
+// - Con movimiento reducido el hilo aparece completo y quieto. Sin JS no se
+//   dibuja el hilo y queda el fondo de respaldo de sections.css.
+---
+
+<svg class="vg-thread" aria-hidden="true" data-vg-thread>
+  <defs>
+    <linearGradient id="vg-thread-grad" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="0" y2="1">
+      <stop data-stop="ok-a" style="stop-color: var(--vg-thread-ok)" />
+      <stop data-stop="ok-b" style="stop-color: var(--vg-thread-ok)" />
+      <stop data-stop="amber" style="stop-color: var(--vg-sev-alerta)" />
+      <stop data-stop="red" style="stop-color: var(--vg-sev-critico)" />
+      <stop data-stop="ok-c" style="stop-color: var(--vg-thread-ok)" />
+      <stop data-stop="ok-d" style="stop-color: var(--vg-thread-ok)" />
+    </linearGradient>
+  </defs>
+  <path class="vg-thread__track" />
+  <path class="vg-thread__line" stroke="url(#vg-thread-grad)" />
+  <g class="vg-thread__nodes"></g>
+</svg>
+
+<script>
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const NODE_COLOR = ['var(--vg-thread-ok)', 'var(--vg-sev-alerta)', 'var(--vg-thread-ok)'];
+
+  const journey = document.querySelector<HTMLElement>('.vg-journey');
+  const svg = journey?.querySelector<SVGSVGElement>('[data-vg-thread]');
+
+  if (journey && svg) {
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const track = svg.querySelector<SVGPathElement>('.vg-thread__track')!;
+    const line = svg.querySelector<SVGPathElement>('.vg-thread__line')!;
+    const grad = svg.querySelector<SVGLinearGradientElement>('#vg-thread-grad')!;
+    const nodesGroup = svg.querySelector<SVGGElement>('.vg-thread__nodes')!;
+    const anchors = [...journey.querySelectorAll<HTMLElement>('[data-vg-node]')];
+    const end = journey.querySelector<HTMLElement>('[data-vg-end]');
+
+    let geo: { nodes: { x: number; y: number }[]; yStart: number; yEnd: number; length: number } | null = null;
+    let nodeEls: SVGGElement[] = [];
+
+    const setStop = (name: string, offset: number) => {
+      grad.querySelector(`[data-stop="${name}"]`)?.setAttribute('offset', String(Math.min(1, Math.max(0, offset))));
+    };
+
+    const layout = () => {
+      const jr = journey.getBoundingClientRect();
+      const W = jr.width;
+      const H = journey.offsetHeight;
+      if (!anchors.length || !W || !H) return;
+
+      const nodes = anchors.map((a) => {
+        const r = a.getBoundingClientRect();
+        return { x: r.left - jr.left - 36, y: r.top - jr.top + r.height / 2 };
+      });
+      const x = Math.max(18, Math.min(...nodes.map((n) => n.x)));
+      nodes.forEach((n) => (n.x = x));
+      const yEnd = end ? end.getBoundingClientRect().bottom - jr.top : H - 40;
+      const amp = W > 960 ? 16 : 6;
+
+      // Curvas suaves entre puntos: el hilo serpentea como un trazado de campo.
+      let d = `M${x} ${nodes[0].y}`;
+      for (let i = 1; i < nodes.length; i++) {
+        const y1 = nodes[i - 1].y;
+        const y2 = nodes[i].y;
+        const dy = y2 - y1;
+        d += ` C${x + amp} ${y1 + dy / 3} ${x - amp} ${y1 + (2 * dy) / 3} ${x} ${y2}`;
+      }
+      d += ` L${x} ${yEnd}`;
+
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      svg.setAttribute('width', String(W));
+      svg.setAttribute('height', String(H));
+      track.setAttribute('d', d);
+      line.setAttribute('d', d);
+
+      // Colores de la línea según la historia.
+      const yStart = nodes[0].y;
+      const f = (y: number) => (y - yStart) / (yEnd - yStart);
+      grad.setAttribute('y1', String(yStart));
+      grad.setAttribute('y2', String(yEnd));
+      const n2 = f(nodes[1]?.y ?? yEnd);
+      const n3 = f(nodes[2]?.y ?? yEnd);
+      setStop('ok-a', 0);
+      setStop('ok-b', n2 - 0.06);
+      setStop('amber', n2);
+      setStop('red', (n2 + n3) / 2);
+      setStop('ok-c', n3);
+      setStop('ok-d', 1);
+
+      // Puntos numerados.
+      nodesGroup.replaceChildren();
+      nodeEls = nodes.map((n, i) => {
+        const g = document.createElementNS(SVG_NS, 'g');
+        g.setAttribute('class', 'vg-thread__node');
+        g.setAttribute('style', `--c: ${NODE_COLOR[i] ?? NODE_COLOR[0]}`);
+        const c = document.createElementNS(SVG_NS, 'circle');
+        c.setAttribute('cx', String(n.x));
+        c.setAttribute('cy', String(n.y));
+        c.setAttribute('r', W > 680 ? '13' : '9');
+        const t = document.createElementNS(SVG_NS, 'text');
+        t.setAttribute('x', String(n.x));
+        t.setAttribute('y', String(n.y));
+        t.textContent = String(i + 1);
+        g.append(c, t);
+        nodesGroup.append(g);
+        return g;
+      });
+
+      // Fondo: sano → seco → agua → neutro, con las mismas posiciones. Cada
+      // cambio se funde a lo largo de ~520 px, así al bajar el color pasa de
+      // un tono al otro de a poco y nunca de golpe.
+      const y2 = nodes[1]?.y ?? H * 0.4;
+      const y3 = nodes[2]?.y ?? H * 0.7;
+      const BLEND = 520;
+      journey.style.background = `linear-gradient(to bottom,
+        var(--vg-bg-sano) 0px, var(--vg-bg-sano) ${y2 - 60 - BLEND}px,
+        var(--vg-bg-seco) ${y2 - 60}px, var(--vg-bg-seco) ${y3 - 60 - BLEND}px,
+        var(--vg-bg-agua) ${y3 - 60}px, var(--vg-bg-agua) ${H - BLEND}px,
+        var(--gh-canvas) ${H}px)`;
+
+      geo = { nodes, yStart, yEnd, length: line.getTotalLength() };
+      line.style.strokeDasharray = String(geo.length);
+      update();
+    };
+
+    const update = () => {
+      if (!geo) return;
+      const jr = journey.getBoundingClientRect();
+      const target = reduceMotion ? Infinity : window.innerHeight * 0.62 - jr.top;
+      const frac = Math.min(1, Math.max(0, (target - geo.yStart) / (geo.yEnd - geo.yStart)));
+      line.style.strokeDashoffset = String(geo.length * (1 - frac));
+      geo.nodes.forEach((n, i) => nodeEls[i]?.classList.toggle('is-reached', target >= n.y));
+    };
+
+    let ticking = false;
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          update();
+        });
+      },
+      { passive: true },
+    );
+
+    // Recalcula si cambia el alto (fuentes, imágenes, tamaño de ventana).
+    new ResizeObserver(() => layout()).observe(journey);
+    layout();
+  }
+</script>

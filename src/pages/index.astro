@@ -1,6 +1,6 @@
 ---
 // Home en tres módulos: Introducción → Qué problema resuelve → La mejora
-// real, más clientes, para quién es y CTA. Contenido en src/data/vigia.js;
+// real, más para quién es, clientes y CTA. Contenido en src/data/vigia.js;
 // estructura acordada en ESTRUCTURA_LANDING.md.
 // Los medios de los tres módulos usan MediaStory: animación en código y,
 // cuando exista, el video del módulo (src/data/videos.js).
@@ -9,6 +9,7 @@ import BalanceChart from '../components/BalanceChart.astro';
 import WhatsAppMock from '../components/WhatsAppMock.astro';
 import ProblemChart from '../components/ProblemChart.astro';
 import MediaStory from '../components/MediaStory.astro';
+import JourneyThread from '../components/JourneyThread.astro';
 import TrustedCompanies from '../components/TrustedCompanies.jsx';
 import { LuCloudSun, LuSprout, LuCloudRain, LuLayers, LuMonitor, LuSmartphone } from 'react-icons/lu';
 import { INTRO, PROBLEMA, MEJORA, PARA_QUIEN } from '../data/vigia';
@@ -22,11 +23,16 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
 ---
 
 <BaseLayout>
+  <!-- Los tres módulos comparten un fondo que cambia con la historia del
+       lote y un hilo que los conecta (JourneyThread). -->
+  <div class="vg-journey">
+  <JourneyThread />
+
   <!-- 1. Introducción -->
   <section class="vg-hero" id="inicio">
     <div class="vg-wrap vg-hero__grid">
       <div class="vg-hero__copy">
-        <p class="vg-eyebrow vg-eyebrow--lime">{INTRO.etiqueta}</p>
+        <p class="vg-eyebrow vg-eyebrow--lime" data-vg-node="1">{INTRO.etiqueta}</p>
         <h1 class="vg-hero__title">{INTRO.titulo}</h1>
         <p class="vg-hero__subtitle">{INTRO.descripcion}</p>
         <ul class="vg-checks vg-hero__points">
@@ -45,15 +51,10 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
     </div>
   </section>
 
-  <section class="vg-trusted" id="clientes">
-    <h2 class="vg-trusted__title">Confían en nosotros</h2>
-    <TrustedCompanies client:visible />
-  </section>
-
   <!-- 2. Qué problema resuelve -->
   <section class="vg-section" id="problema">
     <div class="vg-wrap">
-      <p class="vg-eyebrow vg-eyebrow--amber">{PROBLEMA.etiqueta}</p>
+      <p class="vg-eyebrow vg-eyebrow--amber" data-vg-node="2">{PROBLEMA.etiqueta}</p>
       <h2 class="vg-section__title">{PROBLEMA.titulo}</h2>
       <p class="vg-section__lead">{PROBLEMA.bajada}</p>
 
@@ -91,9 +92,9 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
   </section>
 
   <!-- 3. La mejora real -->
-  <section class="vg-section vg-section--tint" id="mejora">
+  <section class="vg-section" id="mejora">
     <div class="vg-wrap">
-      <p class="vg-eyebrow vg-eyebrow--lime">{MEJORA.etiqueta}</p>
+      <p class="vg-eyebrow vg-eyebrow--lime" data-vg-node="3">{MEJORA.etiqueta}</p>
       <h2 class="vg-section__title">{MEJORA.titulo}</h2>
       <p class="vg-section__lead">{MEJORA.bajada}</p>
 
@@ -150,11 +151,13 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
         </ul>
       </div>
 
-      <p class="vg-servicio">
+      <p class="vg-servicio" data-vg-end>
         <strong>{MEJORA.cultivoServicio.pregunta}</strong> {MEJORA.cultivoServicio.texto}
       </p>
     </div>
   </section>
+
+  </div>
 
   <!-- Para quién es -->
   <section class="vg-section vg-section--compact" id="para-quien">
@@ -173,6 +176,11 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
       </div>
       <p class="vg-perfiles__nota">{PARA_QUIEN.nota}</p>
     </div>
+  </section>
+
+  <section class="vg-trusted" id="clientes">
+    <h2 class="vg-trusted__title">Confían en nosotros</h2>
+    <TrustedCompanies client:visible />
   </section>
 
   <section class="vg-section vg-cta">

@@ -303,6 +303,12 @@ img {
   --vg-sev-alerta-soft: #fff8c5;
   --vg-sev-info: #1f5bff;
   --vg-sev-info-soft: #e8eeff;
+  /* Fondo de los tres módulos: muy claros, para que el hilo (más intenso)
+     siempre se vea encima. */
+  --vg-bg-sano: #e8f3e4;
+  --vg-bg-seco: #f7ecda;
+  --vg-bg-agua: #e2f1ed;
+  --vg-thread-ok: #3f8f1f;
 }
 
 [data-rp-theme="dark"] {
@@ -317,4 +323,8 @@ img {
   --vg-sev-alerta-soft: #2e2a13;
   --vg-sev-info: #6b93ff;
   --vg-sev-info-soft: #131d33;
+  --vg-bg-sano: #0f1a12;
+  --vg-bg-seco: #1e170c;
+  --vg-bg-agua: #0b1a1b;
+  --vg-thread-ok: #8fd14f;
 }

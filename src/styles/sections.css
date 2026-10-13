@@ -129,11 +129,7 @@ h3 {
 
 /* ---------- Clientes (carrusel) ---------- */
 .vg-trusted {
-  padding-block: 8px 48px;
-}
-
-.vg-trusted + .vg-section {
-  padding-top: 56px;
+  padding-block: 8px 72px;
 }
 
 .vg-trusted__title {
@@ -772,4 +768,81 @@ h3 {
     grid-template-columns: 1fr;
     gap: 40px;
   }
+}
+
+/* ============================================================
+   Recorrido de los tres módulos: fondo que cambia + hilo (JourneyThread)
+   ============================================================ */
+.vg-journey {
+  position: relative;
+  /* Respaldo sin JS; con JS se recalcula con las posiciones reales. */
+  background: linear-gradient(
+    to bottom,
+    var(--vg-bg-sano) 0%,
+    var(--vg-bg-sano) 22%,
+    var(--vg-bg-seco) 38%,
+    var(--vg-bg-seco) 52%,
+    var(--vg-bg-agua) 66%,
+    var(--vg-bg-agua) 88%,
+    var(--gh-canvas) 100%
+  );
+}
+
+.vg-journey > section {
+  position: relative;
+  z-index: 1;
+}
+
+.vg-thread {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Recorrido completo, punteado y tenue (como los puntos del logo) */
+.vg-thread__track {
+  fill: none;
+  stroke: var(--gh-border-strong);
+  stroke-width: 2;
+  stroke-dasharray: 1 7;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+
+/* Tramo ya recorrido, con los colores de la historia */
+.vg-thread__line {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.vg-thread__node circle {
+  fill: var(--gh-surface);
+  stroke: var(--c);
+  stroke-width: 2;
+  transition: fill 0.35s ease;
+}
+
+.vg-thread__node text {
+  fill: var(--c);
+  font: 700 12px var(--font-body);
+  text-anchor: middle;
+  dominant-baseline: central;
+  transition: fill 0.35s ease;
+}
+
+.vg-thread__node.is-reached circle { fill: var(--c); }
+.vg-thread__node.is-reached text { fill: var(--gh-surface); }
+
+/* Lugar para el hilo cuando el margen lateral es angosto */
+@media (max-width: 1260px) {
+  .vg-journey .vg-wrap { padding-left: 72px; }
+}
+
+@media (max-width: 680px) {
+  .vg-journey .vg-wrap { padding-left: 40px; }
+  .vg-thread__node text { font-size: 9px; }
 }

@@ -32,7 +32,6 @@ Para que la página no se haga larga, cada tipo de texto tiene un máximo:
 Header ─ El problema · La mejora · Para quién · Clientes · Contacto · [Ingresar]
 │
 ├─ 1. INTRODUCCIÓN            #inicio
-├─    Clientes (carrusel)      #clientes        ← ya implementado
 ├─ 2. QUÉ PROBLEMA RESUELVE   #problema
 ├─ 3. LA MEJORA REAL          #mejora
 │     · Alertas predictivas
@@ -40,6 +39,7 @@ Header ─ El problema · La mejora · Para quién · Clientes · Contacto · [I
 │     · Cómo lo logra (los datos)
 │     · Cultivos de servicio (una línea)
 ├─    Para quién es            #para-quien
+├─    Clientes (carrusel)      #clientes
 ├─    CTA final                                 ← ya implementado
 └─ Footer / contacto           #contacto        ← ya implementado
 ```
@@ -58,7 +58,7 @@ Header ─ El problema · La mejora · Para quién · Clientes · Contacto · [I
 | Botones | **Quiero una demo** (abre WhatsApp) · **Cómo funciona** (baja a `#mejora`) |
 | Visual | Gráfico del balance hídrico con la alerta "Estrés hídrico moderado en 4 días" (ya existe, `BalanceChart.astro`). Lugar reservado para video en la etapa 2. |
 
-Debajo va el carrusel **Confían en nosotros**, sin cambios.
+El carrusel **Confían en nosotros** se movió debajo de Para quién es: así no corta la continuidad entre los tres módulos y queda como prueba social justo antes del CTA.
 
 ---
 
@@ -299,6 +299,23 @@ Unos 8 s en total:
 1. Generar la imagen base del lote y los dos clips (problema y resolución).
 2. Copiarlos a `public/videos/` (o subirlos a un CDN).
 3. Completar `problema` y `resolucion` en `src/data/videos.js`. No hace falta tocar nada más: en `pnpm dev` cada módulo muestra una nota mientras su video falte.
+
+## Recorrido: hilo y fondo
+
+Para que los tres módulos no se vean como secciones aisladas, comparten un contenedor (`.vg-journey`) con dos elementos que cuentan la misma historia del lote (`JourneyThread.astro`):
+
+| Módulo | Hilo | Fondo |
+|---|---|---|
+| 1. Mitigación de Estrés | Verde: VigIA vigila el lote. Punto **1**. | Verde muy suave (lote sano). |
+| 2. El problema que resuelve | Se vuelve ámbar y rojo: el agua cruza el umbral sin aviso. Punto **2**. | Arena (seco y calor). |
+| 3. La mejora real | Vuelve a verde: el lote se salvó. Punto **3**. | Verde agua (recuperación). |
+
+- **El hilo se dibuja con el scroll** sobre un recorrido punteado tenue (como los puntos del logo). Cada punto se llena cuando el hilo llega a su módulo.
+- **El fondo cambia de forma gradual:** cada color se funde con el siguiente a lo largo de unos 520 px, nunca de golpe.
+- **Contraste:** los fondos son muy claros (u oscuros en modo oscuro) y la línea usa tonos más intensos, para que el fondo nunca la tape.
+- En pantallas angostas el contenido de los tres módulos deja más margen izquierdo para el hilo.
+- Con movimiento reducido el hilo aparece completo y quieto. Sin JS se ve el fondo con un degradé de respaldo, sin hilo.
+- Los colores de fondo se ajustan en `src/styles/global.css` (`--vg-bg-sano`, `--vg-bg-seco`, `--vg-bg-agua`). Más adelante se puede sumar una imagen o textura de fondo encima de estos colores.
 
 ## Decisiones
 
