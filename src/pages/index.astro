@@ -2,14 +2,18 @@
 // Home en tres módulos: Introducción → Qué problema resuelve → La mejora
 // real, más clientes, para quién es y CTA. Contenido en src/data/vigia.js;
 // estructura acordada en ESTRUCTURA_LANDING.md.
-// Cada `.vg-media` es el lugar reservado para el video de la etapa 2.
+// Los medios de los tres módulos usan MediaStory: animación en código y,
+// cuando exista, el video del módulo (src/data/videos.js).
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BalanceChart from '../components/BalanceChart.astro';
 import WhatsAppMock from '../components/WhatsAppMock.astro';
+import ProblemChart from '../components/ProblemChart.astro';
+import MediaStory from '../components/MediaStory.astro';
 import TrustedCompanies from '../components/TrustedCompanies.jsx';
 import { LuCloudSun, LuSprout, LuCloudRain, LuLayers, LuMonitor, LuSmartphone } from 'react-icons/lu';
 import { INTRO, PROBLEMA, MEJORA, PARA_QUIEN } from '../data/vigia';
 import { buildWhatsAppUrl } from '../data/social';
+import { VIDEOS, DESCRIPCION_PENDIENTE } from '../data/videos';
 import '../styles/sections.css';
 
 const ICONOS_DATOS = { clima: LuCloudSun, cultivo: LuSprout, agua: LuCloudRain, suelo: LuLayers };
@@ -34,7 +38,9 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
         </div>
       </div>
       <div class="vg-media">
-        <BalanceChart />
+        <MediaStory duracion={7500}>
+          <BalanceChart />
+        </MediaStory>
       </div>
     </div>
   </section>
@@ -51,16 +57,24 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
       <h2 class="vg-section__title">{PROBLEMA.titulo}</h2>
       <p class="vg-section__lead">{PROBLEMA.bajada}</p>
 
-      <div class="vg-problems">
-        {
-          PROBLEMA.razones.map((r, i) => (
-            <article class="vg-problem">
-              <span class="vg-problem__num">0{i + 1}</span>
-              <h3>{r.titulo}</h3>
-              <p>{r.texto}</p>
-            </article>
-          ))
-        }
+      <div class="vg-problema">
+        <div class="vg-problems">
+          {
+            PROBLEMA.razones.map((r, i) => (
+              <article class="vg-problem">
+                <span class="vg-problem__num">0{i + 1}</span>
+                <h3>{r.titulo}</h3>
+                <p>{r.texto}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <div class="vg-media">
+          <MediaStory duracion={6500} video={VIDEOS.problema} pendiente={DESCRIPCION_PENDIENTE.problema}>
+            <ProblemChart />
+          </MediaStory>
+        </div>
       </div>
 
       <div class="vg-stress">
@@ -112,7 +126,9 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
         </div>
 
         <div class="vg-media">
-          <WhatsAppMock />
+          <MediaStory duracion={4500} video={VIDEOS.resolucion} pendiente={DESCRIPCION_PENDIENTE.resolucion}>
+            <WhatsAppMock />
+          </MediaStory>
         </div>
       </div>
 

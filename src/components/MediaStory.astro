@@ -1,0 +1,102 @@
+---
+// Contenedor de medios de cada módulo: primero corre la animación en código
+// (el contenido del slot) y después, si hay video, se funde a él. Al terminar
+// el video vuelve a empezar. Sin video, la animación se repite sola.
+//
+// - Sin JS o con `prefers-reduced-motion`: queda el estado final estático de
+//   la animación y el video no se muestra.
+// - Sólo corre mientras está a la vista; fuera de pantalla se detiene.
+// - Las animaciones del slot se activan con la clase `.is-playing` en
+//   `.vg-story__anim` (ver sections.css).
+interface Video {
+  webm?: string;
+  mp4?: string;
+  poster?: string;
+  descripcion?: string;
+}
+
+interface Props {
+  /** Duración de la animación en ms, antes de pasar al video o repetir. */
+  duracion: number;
+  video?: Video | null;
+  /** Nota visible sólo en `pnpm dev` cuando todavía no hay video. */
+  pendiente?: string;
+}
+
+const { duracion, video = null, pendiente } = Astro.props;
+const mostrarPendiente = !video && pendiente && import.meta.env.DEV;
+---
+
+<div class="vg-story" data-vg-story data-duracion={duracion}>
+  <div class="vg-story__anim">
+    <slot />
+  </div>
+  {
+    video && (
+      <video class="vg-story__video" muted playsinline preload="none" poster={video.poster} aria-hidden="true">
+        {video.webm && <source src={video.webm} type="video/webm" />}
+        {video.mp4 && <source src={video.mp4} type="video/mp4" />}
+      </video>
+    )
+  }
+  {mostrarPendiente && <p class="vg-story__pendiente">🎬 Pendiente: {pendiente}</p>}
+</div>
+
+<script>
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion) {
+    document.querySelectorAll<HTMLElement>('[data-vg-story]').forEach((story) => {
+      const anim = story.querySelector<HTMLElement>('.vg-story__anim');
+      const video = story.querySelector<HTMLVideoElement>('.vg-story__video');
+      const duracion = Number(story.dataset.duracion) || 7000;
+      if (!anim) return;
+
+      let timer: number | undefined;
+      let visible = false;
+
+      const playAnim = () => {
+        story.dataset.stage = 'anim';
+        anim.classList.remove('is-playing');
+        void anim.offsetWidth; // reinicia las animaciones CSS
+        anim.classList.add('is-playing');
+        timer = window.setTimeout(afterAnim, duracion);
+      };
+
+      const afterAnim = () => {
+        if (!visible) return;
+        if (!video) {
+          playAnim();
+          return;
+        }
+        story.dataset.stage = 'video';
+        video.currentTime = 0;
+        video.play().catch(() => {
+          // El video no cargó o el navegador no lo deja reproducir: sigue
+          // sólo con la animación.
+          playAnim();
+        });
+      };
+
+      video?.addEventListener('ended', () => {
+        if (visible) playAnim();
+      });
+
+      const stop = () => {
+        window.clearTimeout(timer);
+        video?.pause();
+        story.dataset.stage = 'anim';
+      };
+
+      new IntersectionObserver(
+        ([entry]) => {
+          const wasVisible = visible;
+          visible = entry.isIntersecting;
+          if (visible && !wasVisible) playAnim();
+          if (!visible && wasVisible) stop();
+        },
+        { threshold: 0.35 },
+      ).observe(story);
+    });
+  }
+</script>

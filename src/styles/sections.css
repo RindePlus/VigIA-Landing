@@ -590,3 +590,186 @@ h3 {
 
   .vg-problems { gap: 28px; }
 }
+
+/* ============================================================
+   Medios animados de los módulos (MediaStory + gráficos + celular)
+   Sin `.is-playing` (sin JS o con movimiento reducido) se ve el estado
+   final. Con `.is-playing`, cada pieza entra con su retraso.
+   ============================================================ */
+
+/* ---------- MediaStory: animación → video ---------- */
+.vg-story {
+  position: relative;
+}
+
+.vg-story__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.vg-story[data-stage="video"] .vg-story__video {
+  opacity: 1;
+}
+
+.vg-story__pendiente {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border: 1px dashed var(--gh-border-strong);
+  border-radius: 8px;
+  color: var(--gh-fg-muted);
+  font-size: 0.8125rem;
+}
+
+/* ---------- Datos de entrada del gráfico (módulo 1) ---------- */
+.vg-chart__inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+  list-style: none;
+}
+
+.vg-chart__input {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--vg-blue-soft);
+  color: var(--vg-blue);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Gráfico sin VigIA (módulo 2) ---------- */
+.vg-chart__loss { fill: var(--vg-sev-critico); opacity: 0.18; }
+.vg-chart--sin .vg-chart__au { stroke: var(--gh-fg-subtle); }
+.vg-chart--sin .vg-chart__label--au { fill: var(--gh-fg-subtle); }
+.vg-chart__cross { fill: var(--gh-surface); stroke: var(--gh-fg-subtle); stroke-width: 2; }
+.vg-chart__field { stroke: var(--vg-sev-critico); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.vg-chart__label--loss,
+.vg-chart__label--critico { fill: var(--vg-sev-critico); font-weight: 600; }
+
+.vg-alert--sin {
+  --sev: var(--gh-fg-subtle);
+  --sev-soft: var(--gh-surface-2);
+}
+
+/* ---------- Celular: "escribiendo…" ---------- */
+.vg-phone__chat { position: relative; }
+
+.vg-phone__typing {
+  position: absolute;
+  top: 20px;
+  left: 14px;
+  display: inline-flex;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 4px 12px 12px 12px;
+  background: var(--gh-surface);
+  box-shadow: var(--gh-shadow-card);
+  opacity: 0;
+}
+
+.vg-phone__typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gh-fg-subtle);
+}
+
+/* ---------- Animaciones (sólo con movimiento permitido) ---------- */
+@keyframes vg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes vg-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes vg-reveal {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes vg-pop {
+  0% { opacity: 0; transform: scale(0.4); }
+  70% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes vg-typing {
+  0%, 85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes vg-dot {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-3px); }
+}
+
+@keyframes vg-flash {
+  0% { background: transparent; }
+  50% { background: var(--vg-blue-soft); }
+  100% { background: transparent; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Recorte que "dibuja" la línea de izquierda a derecha */
+  .vg-chart__reveal {
+    transform-box: fill-box;
+    transform-origin: left center;
+  }
+
+  .vg-chart__alertg {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* Módulo 1: datos → línea → pronóstico → alerta */
+  .is-playing .vg-chart__input { animation: vg-in 0.4s ease-out var(--d, 0s) both; }
+  .is-playing .vg-chart:not(.vg-chart--sin) .vg-chart__reveal { animation: vg-reveal 3s linear 1.5s both; }
+  .is-playing .vg-chart__fc { animation: vg-fade 0.6s ease-out 3s both; }
+  .is-playing .vg-chart:not(.vg-chart--sin) .vg-chart__alertg { animation: vg-pop 0.5s ease-out 4.5s both; }
+  .is-playing .vg-chart:not(.vg-chart--sin) .vg-chart__callout { animation: vg-in 0.5s ease-out 4.7s both; }
+
+  /* Módulo 2: la línea cruza el umbral sin aviso y se ve a campo tarde */
+  .is-playing .vg-chart--sin .vg-chart__reveal { animation: vg-reveal 3.5s linear 0.3s both; }
+  .is-playing .vg-chart--sin .vg-chart__alertg { animation: vg-fade 0.5s ease-out 4s both; }
+  .is-playing .vg-chart--sin .vg-chart__callout { animation: vg-in 0.5s ease-out 4.4s both; }
+
+  /* Módulo 3: escribiendo… → llega el mensaje → se marca el enlace */
+  .is-playing .vg-phone__typing { animation: vg-typing 1.3s linear both; }
+  .is-playing .vg-phone__typing i { animation: vg-dot 0.9s ease-in-out infinite; }
+  .is-playing .vg-phone__typing i:nth-child(2) { animation-delay: 0.15s; }
+  .is-playing .vg-phone__typing i:nth-child(3) { animation-delay: 0.3s; }
+  .is-playing .vg-phone__bubble { animation: vg-in 0.4s ease-out 1.3s both; }
+  .is-playing .vg-phone__link { border-radius: 4px; animation: vg-flash 0.9s ease-in-out 2.6s both; }
+}
+
+/* ---------- Módulo 2 en dos columnas: razones | gráfico + video ---------- */
+.vg-problema {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.vg-problema .vg-problems {
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+@media (max-width: 960px) {
+  .vg-problema {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}

@@ -200,23 +200,105 @@ Sin cambios.
 
 ## Animaciones y video
 
-Segunda etapa. La idea es que cada módulo tenga **un** elemento en movimiento, no varios.
+Segunda etapa. Sólo para los tres módulos principales: **Mitigación de Estrés**, **El problema que resuelve** y **La mejora real**. Cada uno tiene **un** elemento en movimiento, corto, que suma a la información sin explicarla toda.
 
-| Módulo | Propuesta |
+### Criterio 1: animación en código + video
+
+| Qué se muestra | Con qué | Por qué |
+|---|---|---|
+| La interfaz del sistema (gráfico, alertas, celular) | **Animación en código** (SVG/CSS en la página) | Se ve nítida en cualquier pantalla, sigue al tema claro u oscuro, casi no pesa y un texto se corrige en minutos. |
+| El campo real (cultivo, suelo, aplicación, riego) | **Video generado** (Higgsfield u otra herramienta) | Aporta el contexto emocional que una interfaz no transmite. |
+
+Así, Higgsfield se usa sólo en dos clips (problema y resolución). El gráfico y el celular no dependen de los videos y se pueden hacer ya.
+
+### Criterio 2: el mismo lote cuenta una historia
+
+Los tres módulos muestran **el mismo lote** (por ejemplo, soja en la llanura pampeana, luz de atardecer):
+
+| Módulo | Capítulo de la historia |
 |---|---|
-| 1. Introducción | Video corto en loop (5-8 s): lote visto desde arriba, transición de verde sano a cultivo estresado por calor y sequía. Alternativa liviana: animar el gráfico existente (la línea de agua útil bajando hasta cruzar el umbral y la alerta apareciendo). |
-| 2. Problema | Clip de hoja enrollándose bajo el sol o del suelo agrietándose. Las razones entran al hacer scroll. |
-| 3. Mejora real | Animación del celular recibiendo el WhatsApp de VigIA. Las alertas aparecen una por una con su color de severidad. |
+| 1. Mitigación de Estrés | **VigIA vigila el lote:** entran los datos y aparece la alerta antes del estrés. |
+| 2. El problema que resuelve | **El lote sin VigIA:** nadie avisa y el estrés se ve cuando ya es tarde. |
+| 3. La mejora real | **El lote con VigIA:** llega el aviso, se actúa a tiempo y el lote se salva. |
 
-**Herramientas:** los clips se pueden generar con Higgsfield u otra herramienta similar. Usar IA para producir el video no contradice la regla de contenido: lo que no se dice es que el producto usa IA.
+Para que el lote se vea igual en los clips generados, primero se genera **una imagen fija del lote** y se usa como base de todos los videos.
 
-**Requisitos técnicos para que la página no se vuelva pesada:**
+### 1. Mitigación de Estrés — gráfico animado (código)
+
+Loop de 6-7 s sobre el gráfico de balance hídrico que ya existe (`BalanceChart.astro`). Muestra la función del sistema en una pasada: datos → balance → alerta.
+
+| Tiempo | Qué pasa |
+|---|---|
+| 0–1,5 s | Aparecen los datos que usa VigIA alrededor del gráfico, uno tras otro: temperatura 34 °C · HR 25 % · DPV 3,2 kPa · lluvia 12 mm. |
+| 1,5–3 s | La línea de agua útil se dibuja día a día; con la lluvia suben las barras y la línea sube un poco. |
+| 3–4,5 s | Llega a "Hoy", se aclara la zona de pronóstico y la línea punteada sigue hasta cruzar el umbral. |
+| 4,5–5,5 s | El punto del cruce late y la tarjeta "Estrés hídrico moderado en 4 días" sube desde abajo. |
+| 5,5–7 s | Pausa para leer y vuelve a empezar. |
+
+**Variante (opcional):** de fondo, un clip lento del lote visto desde arriba, con la tarjeta del gráfico flotando encima. Más vistoso, pero pesa más y compite con el texto.
+
+### 2. El problema que resuelve — gráfico sin VigIA + video (código + video)
+
+Combina las dos cosas en el mismo espacio y en secuencia: **el gráfico lo muestra, el campo lo confirma.**
+
+1. **Gráfico sin VigIA (código, ~6,5 s, `ProblemChart.astro`):** el mismo lote del módulo 1 pero sin pronóstico ni alerta. La línea cruza el umbral en silencio, el área bajo el umbral se pinta de rojo ("Rinde perdido") y aparece "Lo ves a campo · +6 días" con la tarjeta "Sin aviso".
+2. **Video del lote (Higgsfield, 5-6 s):** la animación se funde al clip.
+3. Al terminar el video vuelve a empezar el gráfico. Mientras no haya video, el gráfico se repite solo.
+
+Clip de 5-6 s generado:
+
+| Tiempo | Qué pasa |
+|---|---|
+| 0–2 s | El lote verde; todo parece normal. Sol fuerte, calor visible en el aire. |
+| 2–4 s | Timelapse: las hojas se enrollan y el suelo se agrieta. |
+| 4–6 s | Primer plano de una mano que toca una planta marchita: se llegó tarde. |
+
+Al repetir el gráfico del inicio pero sin VigIA, el contraste entre los módulos 1 y 2 refuerza la historia del mismo lote.
+
+### 3. La mejora real — alerta y resolución (código + video)
+
+Unos 8 s en total:
+
+| Tiempo | Con qué | Qué pasa |
+|---|---|---|
+| 0–3 s | Código | El celular de la sección (`WhatsAppMock.astro`): aparece "escribiendo…", llega el mensaje de VigIA y se marca "Ver detalle en la plataforma". |
+| 3–6 s | Video | La resolución: una pulverizadora aplicando al amanecer o un pivote de riego que arranca. Genérico, sin marcas ni etiquetas de productos. |
+| 6–8 s | Video | El mismo lote del módulo 2, ahora verde y sano. |
+
+**Detalle en código (opcional):** al terminar, la alerta pasa de "Alerta" a "Resuelta ✓" y la línea del balance sube por encima del umbral después del riego, como espejo del gráfico del inicio.
+
+### Reglas para los tres
+
+- **Duración:** 5-8 s cada uno, en loop y sin sonido.
+- **Un mensaje por módulo:** qué hace (1), qué pasa si no lo usás (2), cómo te salva (3). El video no explica todo el flujo de la plataforma; los detalles están en los textos.
+- **Sin texto dentro del video.** Los textos van en HTML, por accesibilidad, traducción y SEO.
+- **Misma estética:** luz de atardecer, verdes de la paleta de VigIA, movimientos de cámara lentos, sin cortes rápidos.
+- **Qué evitar:**
+  - drones o satélites "escaneando" el campo, o pantallas tipo HUD: VigIA no usa imágenes satelitales y transmite la idea de "IA" que se excluye;
+  - robots, cerebros digitales o cualquier estética de inteligencia artificial;
+  - marcas o etiquetas de productos.
+- **Herramientas:** usar IA para producir el video no contradice la regla de contenido; lo que no se dice es que el producto usa IA.
+
+### Requisitos técnicos
 
 - `<video autoplay muted loop playsinline>` con `poster` (imagen de la primera escena), formatos **WebM + MP4**, y carga diferida para los videos que no están arriba de todo.
-- Tamaño objetivo: menos de 2-4 MB por clip, 720p alcanza para fondos.
-- Con `prefers-reduced-motion` se muestra el `poster` en lugar del video.
+- Tamaño objetivo: menos de 2-4 MB por clip; 720p alcanza.
+- Con `prefers-reduced-motion`, las animaciones en código quedan en su estado final y los videos muestran el `poster`.
 - Ojo con GitHub Pages: el build se commitea en `docs/`, así que cada versión de un video queda en el historial del repo para siempre. Si los videos van a cambiar seguido, conviene alojarlos fuera del repo (por ejemplo, en un CDN o en un bucket) y referenciarlos por URL.
-- Los textos importantes nunca van dentro del video: siempre como texto HTML, por accesibilidad y SEO.
+
+### Implementación
+
+**Hecho:** las tres animaciones en código y el mecanismo que pasa de la animación al video.
+
+- `MediaStory.astro`: corre la animación del módulo y, si hay video, se funde a él; al terminar vuelve a empezar. Sólo corre mientras el módulo está a la vista. Con movimiento reducido o sin JS se ve el estado final, sin video.
+- `BalanceChart.astro` (módulo 1), `ProblemChart.astro` (módulo 2) y `WhatsAppMock.astro` (módulo 3): las animaciones, en CSS.
+- `src/data/balanceEjemplo.js`: la serie de agua útil compartida, para que los módulos 1 y 2 muestren el mismo lote.
+
+**Pendiente:** generar los clips y cargarlos.
+
+1. Generar la imagen base del lote y los dos clips (problema y resolución).
+2. Copiarlos a `public/videos/` (o subirlos a un CDN).
+3. Completar `problema` y `resolucion` en `src/data/videos.js`. No hace falta tocar nada más: en `pnpm dev` cada módulo muestra una nota mientras su video falte.
 
 ## Decisiones
 

@@ -1,0 +1,63 @@
+---
+// Módulo 2: el mismo lote del módulo 1, pero sin VigIA. Sin pronóstico ni
+// alerta: la línea cruza el umbral en silencio, el área bajo el umbral se
+// pinta de rojo y el estrés recién se detecta a campo, 6 días después.
+// Misma mecánica de animación que BalanceChart (`.is-playing`).
+import { x, AU, UMBRAL_Y, DIA_CRUCE, path } from '../data/balanceEjemplo';
+
+const CAMPO = 30; // día en que el estrés se ve a campo
+const bajoUmbral = AU.filter(([d]) => d > DIA_CRUCE);
+const areaPerdida = [
+  `M${x(DIA_CRUCE)} ${UMBRAL_Y}`,
+  ...bajoUmbral.map(([d, y]) => `L${x(d)} ${y}`),
+  `L${x(CAMPO)} ${UMBRAL_Y}`,
+  'Z',
+].join(' ');
+---
+
+<figure class="vg-chart vg-chart--sin">
+  <figcaption class="vg-chart__head">
+    <span class="vg-chart__title">Balance hídrico · sin VigIA</span>
+    <span class="vg-chart__note">Ejemplo ilustrativo</span>
+  </figcaption>
+
+  <svg viewBox="0 0 560 270" role="img" aria-labelledby="vg-problem-desc">
+    <desc id="vg-problem-desc">
+      Sin pronóstico ni alertas, el agua útil cruza el umbral del cultivo sin
+      que nadie avise. El estrés se detecta a campo seis días después.
+    </desc>
+    <defs>
+      <clipPath id="vg-problem-reveal">
+        <rect class="vg-chart__reveal" x="40" y="0" width="480" height="270" />
+      </clipPath>
+    </defs>
+
+    <line class="vg-chart__axis" x1="40" y1="230" x2="520" y2="230" />
+    <line class="vg-chart__umbral" x1="40" y1={UMBRAL_Y} x2="520" y2={UMBRAL_Y} />
+    <text class="vg-chart__label vg-chart__label--umbral" x="44" y={UMBRAL_Y + 18}>Umbral del cultivo</text>
+    <text class="vg-chart__label vg-chart__label--au" x="44" y="76">Agua útil</text>
+
+    <g class="vg-chart__data" clip-path="url(#vg-problem-reveal)">
+      <rect class="vg-chart__rain" x={x(7) - 5} y="208" width="10" height="22" rx="2" />
+      <rect class="vg-chart__rain" x={x(8) - 5} y="196" width="10" height="34" rx="2" />
+      <path class="vg-chart__loss" d={areaPerdida} />
+      <path class="vg-chart__au" d={path(AU)} />
+      <circle class="vg-chart__cross" cx={x(DIA_CRUCE)} cy={UMBRAL_Y} r="5" />
+      <text class="vg-chart__label vg-chart__label--loss" x={x(23.4)} y="212">Rinde perdido</text>
+    </g>
+
+    <text class="vg-chart__label" x={x(DIA_CRUCE) - 34} y="252">Sin aviso</text>
+
+    <g class="vg-chart__alertg">
+      <line class="vg-chart__field" x1={x(CAMPO)} y1="20" x2={x(CAMPO)} y2="230" />
+      <text class="vg-chart__label vg-chart__label--critico" x={x(CAMPO) - 4} y="38" text-anchor="end">Lo ves a campo</text>
+      <text class="vg-chart__label vg-chart__label--critico" x={x(CAMPO) - 4} y="252" text-anchor="end">+6 días</text>
+    </g>
+  </svg>
+
+  <div class="vg-alert vg-alert--sin vg-chart__callout">
+    <span class="vg-alert__chip">Sin aviso</span>
+    <p class="vg-alert__title">El estrés se detecta a campo, 6 días tarde</p>
+    <p class="vg-alert__action">Para entonces, el bioinsumo ya no llega a tiempo.</p>
+  </div>
+</figure>

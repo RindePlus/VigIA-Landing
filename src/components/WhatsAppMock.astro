@@ -2,6 +2,8 @@
 // Celular con un aviso de VigIA por WhatsApp. HTML + CSS (sin imagen) para
 // que siga al tema claro/oscuro. Es ilustrativo: los datos salen de
 // MEJORA.mensaje en src/data/vigia.js.
+// Animación (con `.is-playing`, la dispara MediaStory): "escribiendo…", llega
+// el mensaje y se marca el enlace al detalle. Sin ella, se ve el mensaje.
 import { FaWhatsapp } from 'react-icons/fa';
 import { MEJORA } from '../data/vigia';
 
@@ -20,6 +22,7 @@ const { lote, alerta, accion, hora } = MEJORA.mensaje;
     </div>
 
     <div class="vg-phone__chat">
+      <span class="vg-phone__typing" aria-hidden="true"><i></i><i></i><i></i></span>
       <div class="vg-phone__bubble">
         <p class="vg-phone__lote">VigIA · {lote}</p>
         <p class="vg-phone__alerta"><span aria-hidden="true">⚠️</span> {alerta}</p>
