@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BalanceChart from '../components/BalanceChart.astro';
 import { LuCloudSun, LuSprout, LuCloudRain, LuLayers } from 'react-icons/lu';
-import { PROBLEMAS, ESTRESES, DATOS, ALERTAS, PASOS, MODULOS } from '../data/vigia';
+import { PROBLEMAS, ESTRESES, DATOS, ALERTAS, PASOS, CULTIVO_SERVICIO } from '../data/vigia';
 import { buildWhatsAppUrl } from '../data/social';
 import '../styles/sections.css';
 
@@ -120,31 +120,16 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
     </div>
   </section>
 
-  <section class="vg-section" id="modulos">
-    <div class="vg-wrap">
-      <p class="vg-eyebrow">Más módulos</p>
-      <h2 class="vg-section__title">Los mismos datos del lote, aplicados a dos decisiones más</h2>
-      <div class="vg-modules">
-        {
-          MODULOS.map((m) => (
-            <article class={`vg-module vg-module--${m.id}`}>
-              <p class="vg-module__tag">{m.tag}</p>
-              <h3 class="vg-module__name">VigIA {m.nombre}</h3>
-              <p class="vg-module__text">{m.texto}</p>
-              <ul class="vg-checks">
-                {m.bullets.map((b) => <li>{b}</li>)}
-              </ul>
-              {m.semaforo && (
-                <div class="vg-semaforo" aria-label="Estados del semáforo de siembra">
-                  {m.semaforo.map((estado, i) => (
-                    <span class={`vg-semaforo__item vg-semaforo__item--${i}`}>{estado}</span>
-                  ))}
-                </div>
-              )}
-            </article>
-          ))
-        }
+  <section class="vg-section" id="cultivo-servicio">
+    <div class="vg-wrap vg-module">
+      <div>
+        <p class="vg-eyebrow">{CULTIVO_SERVICIO.tag}</p>
+        <h2 class="vg-section__title">{CULTIVO_SERVICIO.nombre}</h2>
+        <p class="vg-section__lead">{CULTIVO_SERVICIO.texto}</p>
       </div>
+      <ul class="vg-checks vg-module__list">
+        {CULTIVO_SERVICIO.bullets.map((b) => <li>{b}</li>)}
+      </ul>
     </div>
   </section>
 

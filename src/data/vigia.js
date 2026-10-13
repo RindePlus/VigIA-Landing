@@ -116,33 +116,18 @@ export const PASOS = [
   },
 ];
 
-// Los otros dos submódulos del VigIA anterior (ver MODULO_VIGIA.md, sección 1).
-export const MODULOS = [
-  {
-    id: 'cultivo-servicio',
-    tag: 'Mismo balance hídrico',
-    nombre: 'Cultivo de Servicio',
-    texto:
-      'Seguí cuánta agua consume tu cultivo de servicio frente a un barbecho y elegí el momento de secado que protege la recarga del perfil para el cultivo que viene.',
-    bullets: [
-      'Consumo de agua del cultivo de servicio contra un barbecho',
-      'Lluvia que realmente infiltra según la cobertura',
-      'Momento óptimo de secado',
-      'Estimación de materia seca producida',
-    ],
-  },
-  {
-    id: 'herbicidas',
-    tag: 'Residualidad',
-    nombre: 'Herbicidas',
-    texto:
-      'Modelá el residuo de los herbicidas aplicados antes de la siembra y su riesgo de fitotoxicidad sobre el cultivo siguiente, lote por lote.',
-    bullets: [
-      'Riesgo de carry-over por aplicación según suelo, lluvias y riego',
-      'Días que faltan hasta la siembra segura',
-      'Aplicaciones de la planilla del lote, carga manual o Unimap (Acronex)',
-      'Catálogo de principios activos y restricciones de marbete',
-    ],
-    semaforo: ['Siembra segura', 'Precaución', 'No sembrar'],
-  },
-];
+// Cultivo de Servicio: el mismo motor de balance hídrico aplicado a cultivos
+// de servicio (ver MODULO_VIGIA.md, sección 1). VigIA Herbicidas quedó fuera
+// del alcance del nuevo producto.
+export const CULTIVO_SERVICIO = {
+  tag: 'Mismo balance hídrico',
+  nombre: 'VigIA Cultivo de Servicio',
+  texto:
+    'Seguí cuánta agua consume tu cultivo de servicio frente a un barbecho y elegí el momento de secado que protege la recarga del perfil para el cultivo que viene.',
+  bullets: [
+    'Consumo de agua del cultivo de servicio contra un barbecho',
+    'Lluvia que realmente infiltra según la cobertura',
+    'Momento óptimo de secado',
+    'Estimación de materia seca producida',
+  ],
+};

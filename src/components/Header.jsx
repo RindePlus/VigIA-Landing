@@ -11,7 +11,7 @@ import './Header.css';
 const DEFAULT_ITEMS = [
   { label: 'Cómo funciona', href: '/#como-funciona' },
   { label: 'Alertas', href: '/#alertas' },
-  { label: 'Módulos', href: '/#modulos' },
+  { label: 'Cultivo de servicio', href: '/#cultivo-servicio' },
   { label: 'Precios', href: '/pricing' },
   { label: 'Contacto', href: '/#contacto' },
 ];
