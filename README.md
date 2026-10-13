@@ -65,4 +65,6 @@ src/
 
 Estructura y contenido planificado de la home: [ESTRUCTURA_LANDING.md](ESTRUCTURA_LANDING.md).
 
+Prompts para generar los videos de los módulos y el fondo: [PROMPTS_VIDEOS.md](PROMPTS_VIDEOS.md).
+
 Documentación funcional y técnica del módulo VigIA: [MODULO_VIGIA.md](MODULO_VIGIA.md). No va en `docs/` porque esa carpeta es la salida del build y se regenera.
