@@ -63,4 +63,6 @@ src/
 | Widget de WhatsApp dentro de `App.jsx`    | `WhatsAppWidget.jsx` (isla propia)         |
 | `vite.config.js` (plugin 404.html)        | `astro.config.mjs` (`outDir: ./docs`)      |
 
+Estructura y contenido planificado de la home: [ESTRUCTURA_LANDING.md](ESTRUCTURA_LANDING.md).
+
 Documentación funcional y técnica del módulo VigIA: [MODULO_VIGIA.md](MODULO_VIGIA.md). No va en `docs/` porque esa carpeta es la salida del build y se regenera.
