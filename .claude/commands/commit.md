@@ -5,7 +5,7 @@ description: Arma un commit con mensaje conventional a partir del diff. Solo cor
 El usuario pidió commitear. Este comando es **la única vía** por la que Claude commitea en este repo (además de un pedido explícito en el chat). Seguí el flujo completo:
 
 1. **Rama actual** — `git rev-parse --abbrev-ref HEAD`.
-   - Si es `main` o `master` → **parate**. Proponé crear una rama con `/branch-new` y terminá acá.
+   - Si es `main`, `develop` o `master` → **parate**. Proponé crear una rama con `/branch-new` y terminá acá.
 
 2. **Working tree** — `git status --short` y `git diff --cached --stat`.
    - Sin cambios → avisá y terminá.

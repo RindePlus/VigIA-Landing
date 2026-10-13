@@ -1,5 +1,5 @@
 ---
-description: Crea una rama de trabajo <type>/<slug> desde main actualizado
+description: Crea una rama de trabajo <type>/<slug> desde develop actualizado
 argument-hint: [descripción opcional de la tarea]
 ---
 
@@ -10,11 +10,11 @@ argument-hint: [descripción opcional de la tarea]
    - `slug` en kebab-case, 2-4 palabras: `feat/pricing-faq`, `fix/header-mobile-menu`, `style/hero-spacing`.
    - Confirmá el nombre con el usuario antes de crear nada.
 
-3. **Crear**:
+3. **Crear** desde `develop` (nunca desde `main`):
    ```bash
    git fetch origin
-   git switch -c <type>/<slug> origin/main
+   git switch -c <type>/<slug> origin/develop
    ```
-   Si el usuario eligió llevarse los cambios actuales, usá `git switch -c <type>/<slug>` (sin base) para no perderlos.
+   Si el usuario eligió llevarse los cambios actuales, usá `git switch -c <type>/<slug>` (sin base) para no perderlos, y avisá si la rama actual no parte de `develop`.
 
 4. **Reportá** la rama creada y su base. No pushees: la rama sube recién con `/pr`.

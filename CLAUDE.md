@@ -1,6 +1,6 @@
 # Guía de trabajo para Claude — RindePlus/VigIA-Landing
 
-Reglas para Claude (y para quien use Claude Code en este repo) sobre código, ramas, commits y PRs. La racional de este estándar está en [ADR 0001](doc/adr/0001-workflow-and-engineering-standards.md).
+Reglas para Claude (y para quien use Claude Code en este repo) sobre código, ramas, commits y PRs. La racional de este estándar está en [ADR 0001](doc/adr/0001-workflow-and-engineering-standards.md); el modelo de ramas con `develop` está en [ADR 0002](doc/adr/0002-develop-integration-branch.md).
 
 ## Qué es este repo
 
@@ -15,7 +15,7 @@ Landing page de **VigIA**, el sistema de monitoreo de cultivos de RindePlus. Es 
 | **Estilos** | CSS plano con design tokens `--gh-*` en `src/styles/global.css`. Sin Tailwind |
 | **Lenguaje** | JavaScript/JSX + TypeScript para chequeo de tipos (`astro/tsconfigs/strict`) |
 | **Calidad** | ESLint 9 (islas React) · `astro check` (tipos en `.astro`) |
-| **Deploy** | GitHub Pages sirviendo `docs/` de la rama `main` |
+| **Deploy** | GitHub Pages sirviendo `docs/` de la rama `main` (releases desde `develop`) |
 | **Tooling** | pnpm · Node ≥ 22.12 |
 
 Comandos:
@@ -42,24 +42,34 @@ pnpm validate    # lint + typecheck + build — gate antes de /pr
 
 Cómo se aplica en la práctica:
 
+- En este repo las ramas protegidas son `main` **y** `develop`: la prohibición de push directo y de commits aplica a las dos.
+
 - "Terminé la tarea" **no** es un pedido de commit. Al terminar, resumí qué cambió y qué conviene mirar en el navegador; no ofrezcas commitear en cada turno.
 - Tampoco ejecutes `git add`, `git stash`, `git reset`, `git checkout -- <archivo>` ni `git restore` sobre cambios del desarrollador sin pedido explícito.
 - Refuerzos técnicos (en `.claude/settings.json`):
   - `git commit`, `git push` y `gh pr create` piden confirmación siempre (reglas `ask`).
-  - `gh pr merge` y `gh pr review` están denegados: el merge a `main` publica el sitio y lo hace una persona.
-  - El hook `git-guard.sh` bloquea commits en `main`/`master`, pushes hacia `main`/`master` y mensajes fuera de conventional commits.
+  - `gh pr merge` y `gh pr review` están denegados: los merges a `develop` y a `main` los hace una persona.
+  - El hook `git-guard.sh` bloquea commits en `main`/`develop`/`master`, pushes hacia esas ramas y mensajes fuera de conventional commits.
   - El hook `stop.sh` muestra al final de cada turno los archivos sin commitear, como recordatorio para el desarrollador.
 
 Si un hook bloquea, leé el motivo y corregí. Nunca uses `--no-verify` ni lo esquives con otra forma del comando.
 
-## Ramas
+## Ramas — main + develop
 
-- `main` → producción. Lo que se mergea a `main` se publica. **Rama protegida**: solo recibe Pull Requests.
-- Todo el trabajo vive en ramas cortas creadas desde `main`, con formato `<type>/<slug>`:
+| Rama | Rol | Recibe cambios de |
+|---|---|---|
+| `main` | Producción. GitHub Pages publica `docs/` de `main`: lo que se mergea acá sale al aire. | Solo PRs de release desde `develop` (`/release`). |
+| `develop` | Integración. Acumula features ya revisadas para probarlas juntas antes de publicar. | Solo PRs desde feature branches (`/pr`). |
+| `<type>/<slug>` | Trabajo. Ramas cortas, una por tarea, creadas desde `develop`. | Commits del desarrollador. |
+
+- `main` y `develop` son **protegidas**: ni commits ni pushes directos. Los merges los hace una persona desde GitHub.
+- Feature branches con formato `<type>/<slug>`:
   - `type` ∈ `feat`, `fix`, `style`, `refactor`, `perf`, `docs`, `chore`, `test`.
   - `slug` en kebab-case, 2-4 palabras: `feat/pricing-faq`, `fix/header-mobile-menu`, `style/hero-spacing`.
-- Si estás en `main` y el pedido implica editar código, **antes de editar** proponé una rama con `/branch-new`. Si la rama actual no corresponde al pedido, avisá antes de mezclar temas.
+- Si estás en `main` o `develop` y el pedido implica editar código, **antes de editar** proponé una rama con `/branch-new`. Si la rama actual no corresponde al pedido, avisá antes de mezclar temas.
 - Preguntas exploratorias (explicar, buscar, leer) no requieren rama.
+- **Arreglos urgentes en producción**: también pasan por `develop` (rama `fix/<slug>` → `/pr` → `/release`). No hay hotfix directo a `main`.
+- **Conflictos en `docs/`**: son archivos generados. No se resuelven a mano: se toma cualquiera de los dos lados, se corre `pnpm build` y se commitea el resultado.
 
 ## Commits — conventional commits en inglés
 
@@ -76,18 +86,20 @@ Fuera de Claude Code, el hook opcional `.githooks/commit-msg` valida lo mismo: `
 
 ## Pull Requests
 
-- Se abren con `/pr`, siempre contra `main`, usando [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md).
+- Los de feature se abren con `/pr`, siempre contra `develop`, usando [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md).
 - Título en formato conventional commit. Body en español: summary, commits, screenshots, test plan y checklist de frontend.
 - Antes de abrir: skill `self-review-checklist` y `pnpm validate` en verde.
+- El release `develop → main` se abre con `/release`, que agrupa los commits en notas de release. Es el único PR contra `main`.
 - Claude **nunca** mergea ni aprueba PRs.
 
 ## Slash-commands
 
 | Comando | Qué hace |
 |---|---|
-| `/branch-new [descripción]` | Crea `<type>/<slug>` desde `origin/main`. |
+| `/branch-new [descripción]` | Crea `<type>/<slug>` desde `origin/develop`. |
 | `/commit` | Arma un commit conventional desde el diff, con confirmación. No pushea. |
-| `/pr` | Valida, pushea la rama y abre el PR contra `main`. Único punto donde Claude hace `git push`. |
+| `/pr` | Valida, pushea la feature branch y abre el PR contra `develop`. Único punto donde Claude hace `git push`. |
+| `/release` | Verifica el build de `develop` y abre el PR `develop → main` con notas de release. No pushea, no mergea. |
 
 ## Skills
 

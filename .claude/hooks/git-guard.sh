@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # PreToolUse hook (matcher: Bash|PowerShell). Barrera dura sobre git:
-#   1. `git commit` en rama protegida (main/master) → bloquea.
+#   1. `git commit` en rama protegida (main/develop/master) → bloquea.
 #   2. `git commit -m` con mensaje fuera de conventional commits → bloquea.
-#   3. `git push` desde rama protegida o hacia main/master → bloquea.
+#   3. `git push` desde rama protegida o hacia main/develop/master → bloquea.
 #
 # Que el commit/push ocurra solo cuando el usuario lo pide lo garantizan las
 # reglas `ask` de .claude/settings.json (piden confirmación siempre) y CLAUDE.md.
@@ -36,19 +36,22 @@ git_sub() {
 BRANCH="$(cd "$REPO" 2>/dev/null && git rev-parse --abbrev-ref HEAD 2>/dev/null)"
 [ -z "$BRANCH" ] && exit 0
 PROTECTED=0
-case "$BRANCH" in main|master) PROTECTED=1 ;; esac
+case "$BRANCH" in main|develop|master) PROTECTED=1 ;; esac
 
 # ── push ────────────────────────────────────────────────────────────────
 if git_sub push; then
-  TARGETS_MAIN=0
-  printf '%s' "$FLAT" | grep -qE '(^|[ :+])(refs/heads/)?(main|master)( |$)' && TARGETS_MAIN=1
-  if [ "$PROTECTED" -eq 1 ] || [ "$TARGETS_MAIN" -eq 1 ]; then
+  # Solo el tramo del push (hasta el próximo ; & |): si se mirara todo el
+  # comando, un mensaje de commit que nombre `develop` o `main` bloquearía.
+  PUSH_SEG="$(printf '%s' "$FLAT" | grep -oE 'git( +-[^ ]+( +[^- ][^ ]*)?)* +push[^;&|]*')"
+  TARGETS_PROTECTED=0
+  printf '%s' "$PUSH_SEG" | grep -qE '(^|[ :+])(refs/heads/)?(main|develop|master)( |$)' && TARGETS_PROTECTED=1
+  if [ "$PROTECTED" -eq 1 ] || [ "$TARGETS_PROTECTED" -eq 1 ]; then
     cat >&2 <<EOF
-🚫 Push bloqueado: no se pushea a \`main\`/\`master\` (rama actual: \`$BRANCH\`).
+🚫 Push bloqueado: no se pushea a \`main\`/\`develop\`/\`master\` (rama actual: \`$BRANCH\`).
 
-\`main\` publica el sitio en GitHub Pages: solo recibe cambios por Pull Request
-mergeado por una persona. Claude solo pushea una feature branch al abrir un PR
-con \`/pr\`. Ver CLAUDE.md § Regla estricta de Git.
+Esas ramas solo reciben cambios por Pull Request mergeado por una persona:
+feature → \`develop\` con \`/pr\`, \`develop\` → \`main\` con \`/release\`. Claude solo
+pushea su feature branch al abrir un PR. Ver CLAUDE.md § Regla estricta de Git.
 EOF
     exit 2
   fi

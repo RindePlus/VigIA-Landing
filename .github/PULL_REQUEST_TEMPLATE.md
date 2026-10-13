@@ -3,7 +3,7 @@
 -
 
 ## Commits
-<!-- git log --oneline origin/main..HEAD -->
+<!-- git log --oneline origin/develop..HEAD -->
 
 ## Screenshots / video
 <!-- Antes / después en mobile (≤ 390px) y desktop. Obligatorio si cambia algo visible. -->
@@ -21,7 +21,7 @@
 **Calidad**
 - [ ] `pnpm validate` pasa (lint + typecheck + build)
 - [ ] El diff contiene solo cambios de esta tarea (sin `console.log`, archivos temporales ni reformateos ajenos)
-- [ ] `docs/` regenerado con `pnpm build` en el último commit (es lo que publica GitHub Pages al mergear)
+- [ ] `docs/` regenerado con `pnpm build` en el último commit (es lo que GitHub Pages publica cuando llega a `main`)
 
 **UI / UX y accesibilidad**
 - [ ] Contraste WCAG AA en textos sobre fondos (incluidos videos/imágenes)
@@ -36,4 +36,5 @@
 
 **Git**
 - [ ] Rama `feat/<slug>` / `fix/<slug>` / … y commits en conventional commits
-- [ ] Base del PR: `main` (sin pushes directos a `main`)
+- [ ] Base del PR: `develop` (solo los PRs de release van de `develop` a `main`)
+- [ ] Sin pushes directos a `develop` ni a `main`
