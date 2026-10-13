@@ -25,3 +25,19 @@ dist-ssr
 # Astro
 dist/
 .astro/
+
+# Variables de entorno (nunca se commitean; sí la plantilla de ejemplo)
+.env
+.env.*
+!.env.example
+
+# Temporales y cobertura
+*.tmp
+*.bak
+tmp/
+.cache/
+coverage/
+Thumbs.db
+
+# Configuración local de Claude Code (por desarrollador)
+.claude/settings.local.json

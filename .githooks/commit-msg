@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Hook commit-msg (opt-in): valida conventional commits al commitear desde la
+# terminal o el IDE, fuera de Claude Code. Activar una vez por clone con:
+#     pnpm hooks:install      # = git config --local core.hooksPath .githooks
+#
+# Formato: type(scope)?!?: description
+#   type:  feat|fix|chore|refactor|docs|test|style|perf|ci|build
+#   scope: opcional, [a-z0-9._-]
+#   `!`:   opcional, marca breaking change
+# Pasan sin validar: merges, reverts y commits fixup!/squash!.
+set +e
+
+MSG_FILE="$1"
+[ -f "$MSG_FILE" ] || exit 0
+
+# Primera línea que no sea comentario de git.
+FIRST_LINE="$(grep -v '^#' "$MSG_FILE" | head -n 1 | tr -d '\r')"
+
+case "$FIRST_LINE" in
+  "Merge "*|"Revert "*|"fixup! "*|"squash! "*) exit 0 ;;
+esac
+
+REGEX='^(feat|fix|chore|refactor|docs|test|style|perf|ci|build)(\([a-z0-9._-]+\))?!?: .+'
+printf '%s' "$FIRST_LINE" | grep -qE "$REGEX" && exit 0
+
+cat >&2 <<EOF
+🚫 Commit rechazado: el mensaje no cumple conventional commits.
+
+Recibido:  $FIRST_LINE
+Esperado:  type(scope): description
+  type ∈ {feat, fix, chore, refactor, docs, test, style, perf, ci, build}
+  description en inglés, minúsculas, imperativo, sin punto final.
+
+Ejemplos: feat(home): add audience section · fix(header): close menu on route change
+EOF
+exit 1
