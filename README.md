@@ -16,15 +16,23 @@ pnpm install
 pnpm dev       # servidor local en http://localhost:4321
 pnpm build     # genera el sitio estático en docs/
 pnpm preview   # sirve el build
-pnpm check     # chequeo de tipos de los .astro
+pnpm check     # chequeo de tipos de los .astro (alias: pnpm typecheck)
 pnpm lint      # eslint de las islas React
+pnpm validate  # lint + typecheck + build, antes de abrir un PR
 ```
 
 Requiere Node `>=22.12`.
 
+## Flujo de trabajo
+
+- Ramas `<type>/<slug>` desde `develop`, commits en conventional commits y PR contra `develop` con [la plantilla](.github/PULL_REQUEST_TEMPLATE.md).
+- Publicación: PR de release `develop → main` (`/release`). Al mergear a `main`, GitHub Pages publica `docs/`.
+- Validación local de commits (una vez por clone): `pnpm hooks:install`.
+- Reglas para Claude Code: [CLAUDE.md](CLAUDE.md). Racional: [ADR 0001](doc/adr/0001-workflow-and-engineering-standards.md) y [ADR 0002](doc/adr/0002-develop-integration-branch.md).
+
 ## Deploy
 
-Igual que Landing: GitHub Pages publicando la carpeta `docs/` de `main`.
+Igual que Landing: GitHub Pages publicando la carpeta `docs/` de `main`. A `main` solo llegan releases desde `develop`.
 Pendiente: definir dominio, agregar `public/CNAME` y `site` en `astro.config.mjs`.
 
 ## Estructura

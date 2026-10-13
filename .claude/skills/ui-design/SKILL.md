@@ -1,6 +1,6 @@
 ---
 name: ui-design
-description: Use when designing or implementing UI/UX — building visual interfaces from scratch, choosing color palettes, typography, spacing, aesthetic direction, dashboards, dark/light modes, charts and data visualization, accessibility, redesigning existing screens, or implementing the resulting design as React/Next.js components with Tailwind.
+description: Use when designing or implementing UI/UX — building visual interfaces from scratch, choosing color palettes, typography, spacing, aesthetic direction, dashboards, dark/light modes, charts and data visualization, accessibility, redesigning existing screens, or implementing the resulting design as Astro pages/components and React islands with plain CSS tokens.
 ---
 
 # Skill: UI Design
@@ -98,28 +98,32 @@ These tag a design as "AI-generated SaaS default". Treat them as red flags durin
 
 ## Implementation conventions (this repo)
 
-Stack: **Next.js 15 (App Router, standalone) + React 19 + TypeScript `strict: true` + Tailwind 4**.
+Stack: **Astro 7 (static output to `docs/`, GitHub Pages) + React 19 islands + plain CSS with design tokens**. No Tailwind, no Next.js, no backend.
 
 ### File structure
 
 ```
-frontend/src/
-├── app/                    App Router routes (page.tsx, layout.tsx, route.ts).
-├── components/             Reusable components (PascalCase.tsx), subcarpetas por feature.
-├── contexts/               Providers + hooks de Context API (XxxContext.tsx).
-├── lib/                    Data hooks (useCamelCase.ts), utils, __tests__/.
-└── utils/                  Pure utilities (camelCase.ts).
+src/
+├── pages/        One route per file (index.astro, pricing.astro, 404.astro).
+├── layouts/      BaseLayout.astro: <head>, anti-flash theme script, header, footer.
+├── components/   Static sections as .astro; interactive islands as .jsx + a sibling .css.
+├── data/         Copy and content as plain JS modules (clientes.js, vigia.js, social.js…).
+├── hooks/        React hooks used by islands (useTheme.js).
+├── styles/       global.css (tokens --gh-* + reset) and sections.css.
+└── assets/       Images processed by Astro.
+public/           Files served as-is (videos, favicons, CNAME).
 ```
 
 ### Key rules
 
-- **Naming**: components `PascalCase.tsx`, hooks `useCamelCase.ts`, utils `camelCase.ts`.
-- **`'use client'`** on first line only if the component uses hooks or interactivity. Default is Server Component.
-- **Props**: always typed with a separate `interface`, no `React.FC`. Default export for components, named exports for hooks/utils/types.
-- **State**: Context API only (no Redux/Zustand). Pattern: provider + custom hook in `contexts/<Feature>Context.tsx`.
-- **Styles**: Tailwind 4 classes inline in JSX. No CSS modules, no styled-components.
-- **TypeScript**: `strict: true`, avoid `any`, use `@/*` alias for `src/*`.
-- **Testing**: Vitest + @testing-library/react. Tests in `src/lib/__tests__/` or colocated as `Component.test.tsx`. Test non-trivial logic at minimum.
+- **Static first**: build sections as `.astro` (zero JS). Use a React island only when the UI needs state or events, and pick the laziest directive that works: `client:visible` > `client:idle` > `client:load`.
+- **Small scroll/visual effects** that need no state go in an inline `<script>` inside the `.astro` component, not in a React island.
+- **Naming**: components `PascalCase.astro` / `PascalCase.jsx`, hooks `useCamelCase.js`, data modules `camelCase.js`.
+- **Styles**: plain CSS using the tokens in `src/styles/global.css` (`--gh-*`). No hardcoded hex values in components; add a token if one is missing. Light and dark themes are driven by the token set, not by per-component overrides.
+- **Content** (copy, client lists, numbers) lives in `src/data/`, not hardcoded in markup, so it can be edited without touching layout.
+- **Motion**: every animation respects `prefers-reduced-motion` and degrades to the final static state without JS.
+- **Media**: images through Astro assets with explicit dimensions; videos `muted playsinline`, with a poster, and never the LCP element without a fallback.
+- **React props**: inside `.astro`, React components take `className` (not `class`) — `pnpm typecheck` enforces it.
 
 ## Delivery checklist
 
@@ -140,11 +144,9 @@ Run this before declaring done. Each item is a hard gate.
 - [ ] Forgotten states (loading, empty, error) are designed, not just the happy path.
 
 **Implementation:**
-- [ ] `'use client'` only where needed.
-- [ ] Props typed with `interface`, no `any`.
-- [ ] `npm run lint` passes without type warnings.
-- [ ] Responsive tested (mobile + desktop).
-- [ ] Non-trivial logic has a Vitest test.
+- [ ] Sections are `.astro`; React islands only where interactivity requires it, with the laziest `client:*` directive.
+- [ ] Colors, spacing and radii come from the CSS tokens — no stray hex values.
+- [ ] Animations respect `prefers-reduced-motion`.
+- [ ] Responsive tested (≤ 390px mobile + desktop) in light and dark themes.
+- [ ] `pnpm validate` passes (lint + typecheck + build).
 - [ ] No console.log or debug code left behind.
-- [ ] Styles use Tailwind (no inline CSS except dynamic values).
-- [ ] Imports use `@/*` alias.

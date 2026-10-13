@@ -1,0 +1,3 @@
+# Los scripts de hooks se ejecutan con bash: con CRLF fallan en Windows.
+*.sh text eol=lf
+.githooks/* text eol=lf
