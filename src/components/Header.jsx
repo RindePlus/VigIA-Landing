@@ -12,6 +12,7 @@ const DEFAULT_ITEMS = [
   { label: 'Cómo funciona', href: '/#como-funciona' },
   { label: 'Alertas', href: '/#alertas' },
   { label: 'Cultivo de servicio', href: '/#cultivo-servicio' },
+  { label: 'Clientes', href: '/#clientes' },
   { label: 'Precios', href: '/pricing' },
   { label: 'Contacto', href: '/#contacto' },
 ];

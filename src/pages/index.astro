@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BalanceChart from '../components/BalanceChart.astro';
+import TrustedCompanies from '../components/TrustedCompanies.jsx';
 import { LuCloudSun, LuSprout, LuCloudRain, LuLayers } from 'react-icons/lu';
 import { PROBLEMAS, ESTRESES, DATOS, ALERTAS, PASOS, CULTIVO_SERVICIO } from '../data/vigia';
 import { buildWhatsAppUrl } from '../data/social';
@@ -30,6 +31,11 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
       </div>
       <BalanceChart />
     </div>
+  </section>
+
+  <section class="vg-trusted" id="clientes">
+    <h2 class="vg-trusted__title">Confían en nosotros</h2>
+    <TrustedCompanies client:visible />
   </section>
 
   <section class="vg-section" id="problema">

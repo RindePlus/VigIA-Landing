@@ -127,6 +127,25 @@ h3 {
   margin-inline: auto;
 }
 
+/* ---------- Clientes (carrusel) ---------- */
+.vg-trusted {
+  padding-block: 8px 48px;
+}
+
+.vg-trusted + .vg-section {
+  padding-top: 56px;
+}
+
+.vg-trusted__title {
+  margin-bottom: 24px;
+  color: var(--gh-fg-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 /* ---------- Gráfico del hero ---------- */
 .vg-chart {
   position: relative;
@@ -408,7 +427,7 @@ h3 {
 
 @media (max-width: 680px) {
   .vg-section { padding-block: 64px; }
-  .vg-hero { padding-block: 120px 64px; }
+  .vg-hero { padding-block: 120px 48px; }
   .vg-wrap { padding-inline: 16px; }
 
   .vg-problems,

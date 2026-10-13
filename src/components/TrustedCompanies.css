@@ -1,0 +1,78 @@
+/* Carrusel de clientes. Portado de Landing (TrustedCompanies.css): acá queda
+   sólo el skin de la home (.rp-home), que es el único que usa VigIA.
+   Logos sobre el fondo de la página, en silueta monocromática (oscura en
+   claro, clara en oscuro) que muestra los colores de marca en hover. */
+
+.carousel-wrapper {
+  overflow: hidden;
+  width: 100%;
+  /* Los logos se desvanecen en los bordes */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
+}
+
+.carousel-track {
+  display: flex;
+  align-items: center;
+  gap: 104px;
+  padding: 8px 0;
+  will-change: transform;
+  cursor: grab;
+}
+
+.carousel-track:active {
+  cursor: grabbing;
+}
+
+.company-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88px;
+  padding: 0 6px;
+}
+
+.company-logo img {
+  width: auto;
+  max-width: none;
+  max-height: none;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: grayscale(1) brightness(0);
+  opacity: 0.72;
+  transition: filter 0.25s ease, opacity 0.25s ease;
+}
+
+.company-logo:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+[data-rp-theme="dark"] .company-logo img {
+  filter: grayscale(1) brightness(0) invert(1);
+  opacity: 0.75;
+}
+
+[data-rp-theme="dark"] .company-logo:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+/* Logos de un solo color (Munira, Conci): en hover van a negro/blanco puro
+   en vez de mostrar colores de marca. */
+.company-logo--mono:hover img {
+  filter: grayscale(1) brightness(0);
+  opacity: 1;
+}
+
+[data-rp-theme="dark"] .company-logo--mono:hover img {
+  filter: grayscale(1) brightness(0) invert(1);
+  opacity: 1;
+}
+
+@media (max-width: 680px) {
+  .carousel-track { gap: 56px; }
+  .company-logo { height: 72px; }
+}
