@@ -1,0 +1,61 @@
+---
+// Gráfico ilustrativo del hero: agua útil del suelo que baja hacia el umbral
+// del cultivo y lo cruza dentro del pronóstico, donde VigIA dispara la alerta.
+// SVG estático (sin JS); los colores salen de tokens, así sigue al tema.
+const x = (d: number) => 40 + d * 16;
+const HOY = 20;
+// y crece hacia abajo = menos agua. Lluvia el día 8.
+const au: [number, number][] = [
+  [0, 90], [2, 96], [4, 102], [6, 108], [8, 84], [10, 90], [12, 97], [14, 104],
+  [16, 111], [18, 118], [20, 125], [22, 136], [24, 150], [26, 163], [28, 175], [30, 186],
+];
+const UMBRAL_Y = 148;
+const path = (pts: [number, number][]) =>
+  pts.map(([d, y], i) => `${i ? 'L' : 'M'}${x(d)} ${y}`).join(' ');
+const pasado = au.filter(([d]) => d <= HOY);
+const futuro = au.filter(([d]) => d >= HOY);
+---
+
+<figure class="vg-chart">
+  <figcaption class="vg-chart__head">
+    <span class="vg-chart__title">Balance hídrico · Ambiente 2</span>
+    <span class="vg-chart__note">Ejemplo ilustrativo</span>
+  </figcaption>
+
+  <svg viewBox="0 0 560 270" role="img" aria-labelledby="vg-chart-desc">
+    <desc id="vg-chart-desc">
+      El agua útil del suelo baja día a día. En el tramo de pronóstico cruza el
+      umbral del cultivo dentro de 4 días, y ahí se genera la alerta.
+    </desc>
+
+    <rect class="vg-chart__forecast" x={x(HOY)} y="20" width={x(30) - x(HOY)} height="210" />
+    <text class="vg-chart__label" x={x(HOY) + 8} y="38">Pronóstico</text>
+
+    <line class="vg-chart__axis" x1="40" y1="230" x2="520" y2="230" />
+
+    <rect class="vg-chart__rain" x={x(7) - 5} y="208" width="10" height="22" rx="2" />
+    <rect class="vg-chart__rain" x={x(8) - 5} y="196" width="10" height="34" rx="2" />
+    <text class="vg-chart__label" x={x(7) - 12} y="190">Lluvia</text>
+
+    <line class="vg-chart__umbral" x1="40" y1={UMBRAL_Y} x2="520" y2={UMBRAL_Y} />
+    <text class="vg-chart__label vg-chart__label--umbral" x="44" y={UMBRAL_Y + 18}>Umbral del cultivo</text>
+
+    <path class="vg-chart__au" d={path(pasado)} />
+    <path class="vg-chart__au vg-chart__au--forecast" d={path(futuro)} />
+    <text class="vg-chart__label vg-chart__label--au" x="44" y="76">Agua útil</text>
+
+    <line class="vg-chart__today" x1={x(HOY)} y1="20" x2={x(HOY)} y2="230" />
+    <circle class="vg-chart__dot" cx={x(HOY)} cy="125" r="5" />
+    <text class="vg-chart__label vg-chart__label--strong" x={x(HOY) - 30} y="252">Hoy</text>
+    <text class="vg-chart__label" x={x(24) - 14} y="252">+4 días</text>
+
+    <circle class="vg-chart__alert-ring" cx={x(24)} cy={UMBRAL_Y + 2} r="13" />
+    <circle class="vg-chart__alert" cx={x(24)} cy={UMBRAL_Y + 2} r="6" />
+  </svg>
+
+  <div class="vg-alert vg-alert--alerta vg-chart__callout">
+    <span class="vg-alert__chip">Alerta</span>
+    <p class="vg-alert__title">Estrés hídrico moderado en 4 días</p>
+    <p class="vg-alert__action">Planificar riego o bioinsumo en la ventana de hoy a 3 días.</p>
+  </div>
+</figure>

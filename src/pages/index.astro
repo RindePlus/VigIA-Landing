@@ -1,36 +1,175 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Reveal from '../components/Reveal.jsx';
-import { MODULOS } from '../data/modules';
-import { WHATSAPP_URL } from '../data/social';
+import BalanceChart from '../components/BalanceChart.astro';
+import { LuCloudSun, LuSprout, LuCloudRain, LuLayers } from 'react-icons/lu';
+import { PROBLEMAS, ESTRESES, DATOS, ALERTAS, PASOS, MODULOS } from '../data/vigia';
+import { buildWhatsAppUrl } from '../data/social';
 import '../styles/sections.css';
+
+const ICONOS = { clima: LuCloudSun, cultivo: LuSprout, agua: LuCloudRain, suelo: LuLayers };
+const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
 ---
 
 <BaseLayout>
-  <section class="vg-section vg-hero" id="inicio">
-    <h1 class="vg-hero__title">VigIA</h1>
-    <p class="vg-hero__subtitle">
-      Monitoreo agronómico por lote: clima, suelo y fenología traducidos en
-      alertas y decisiones accionables para cada campaña.
-    </p>
-    <a class="vg-btn" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-      Hablemos
-    </a>
+  <section class="vg-hero" id="inicio">
+    <div class="vg-wrap vg-hero__grid">
+      <div class="vg-hero__copy">
+        <p class="vg-eyebrow">Mitigación de estrés abiótico</p>
+        <h1 class="vg-hero__title">
+          Anticipá el estrés de tu cultivo. <span>Aplicá el bioinsumo a tiempo.</span>
+        </h1>
+        <p class="vg-hero__subtitle">
+          VigIA cruza el clima, el DPV, el balance hídrico y el suelo de cada lote para
+          predecir cuándo va a aparecer el estrés hídrico y térmico, y te avisa con días de
+          anticipación para que el bioinsumo llegue antes que el daño.
+        </p>
+        <div class="vg-hero__ctas">
+          <a class="vg-btn" href={demoUrl} target="_blank" rel="noopener noreferrer">Quiero una demo</a>
+          <a class="vg-btn vg-btn--ghost" href="#como-funciona">Cómo funciona</a>
+        </div>
+      </div>
+      <BalanceChart />
+    </div>
+  </section>
+
+  <section class="vg-section" id="problema">
+    <div class="vg-wrap">
+      <h2 class="vg-section__title">El estrés se ve cuando ya costó rinde</h2>
+      <div class="vg-problems">
+        {
+          PROBLEMAS.map((p, i) => (
+            <article class="vg-problem">
+              <span class="vg-problem__num">0{i + 1}</span>
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="vg-section vg-section--tint" id="estres">
+    <div class="vg-wrap">
+      <p class="vg-eyebrow">Qué estrés mitiga</p>
+      <h2 class="vg-section__title">Hídrico, térmico y la combinación de los dos</h2>
+      <div class="vg-stress">
+        {
+          ESTRESES.map((e) => (
+            <article class={`vg-stress__item vg-stress__item--${e.id}`}>
+              <h3>{e.nombre}</h3>
+              <p>{e.texto}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="vg-section" id="como-funciona">
+    <div class="vg-wrap">
+      <p class="vg-eyebrow">Cómo funciona</p>
+      <h2 class="vg-section__title">Un balance hídrico diario para cada ambiente del lote</h2>
+      <p class="vg-section__lead">
+        VigIA combina cuatro fuentes de datos. Con ellas calcula, día por día, cuánta agua le
+        queda al cultivo y cuánto lo exige el ambiente.
+      </p>
+      <div class="vg-data">
+        {
+          DATOS.map((d) => {
+            const Icon = ICONOS[d.id as keyof typeof ICONOS];
+            return (
+              <article class="vg-data__item">
+                <span class="vg-data__icon"><Icon /></span>
+                <h3>{d.titulo}</h3>
+                <p>{d.texto}</p>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="vg-section vg-section--tint" id="alertas">
+    <div class="vg-wrap vg-alerts">
+      <div class="vg-alerts__copy">
+        <p class="vg-eyebrow">Alertas predictivas</p>
+        <h2 class="vg-section__title">Te avisa antes, y te dice qué hacer</h2>
+        <p class="vg-section__lead">
+          Como el pronóstico entra al balance, las alertas miran hacia adelante: estrés hídrico
+          a 4 días, episodios de DPV y el período crítico en las próximas dos semanas.
+        </p>
+        <ul class="vg-checks">
+          <li>Cada alerta trae su severidad y una acción concreta de manejo.</li>
+          <li>Las de DPV se disparan por rachas sostenidas, no por un pico de un día.</li>
+          <li>La severidad hídrica sale de cuánta agua le queda realmente al cultivo.</li>
+        </ul>
+      </div>
+      <div class="vg-alerts__list">
+        {
+          ALERTAS.map((a) => (
+            <div class={`vg-alert vg-alert--${a.severidad}`}>
+              <span class="vg-alert__chip">{a.etiqueta}</span>
+              <p class="vg-alert__title">{a.titulo}</p>
+              <p class="vg-alert__action">{a.accion}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </section>
 
   <section class="vg-section" id="modulos">
-    <h2 class="vg-section__title">Módulos</h2>
-    <div class="vg-grid">
-      {
-        MODULOS.map((modulo, i) => (
-          <Reveal client:visible delay={i + 1}>
-            <article class="vg-card">
-              <h3>{modulo.nombre}</h3>
-              <p>{modulo.resumen}</p>
+    <div class="vg-wrap">
+      <p class="vg-eyebrow">Más módulos</p>
+      <h2 class="vg-section__title">Los mismos datos del lote, aplicados a dos decisiones más</h2>
+      <div class="vg-modules">
+        {
+          MODULOS.map((m) => (
+            <article class={`vg-module vg-module--${m.id}`}>
+              <p class="vg-module__tag">{m.tag}</p>
+              <h3 class="vg-module__name">VigIA {m.nombre}</h3>
+              <p class="vg-module__text">{m.texto}</p>
+              <ul class="vg-checks">
+                {m.bullets.map((b) => <li>{b}</li>)}
+              </ul>
+              {m.semaforo && (
+                <div class="vg-semaforo" aria-label="Estados del semáforo de siembra">
+                  {m.semaforo.map((estado, i) => (
+                    <span class={`vg-semaforo__item vg-semaforo__item--${i}`}>{estado}</span>
+                  ))}
+                </div>
+              )}
             </article>
-          </Reveal>
-        ))
-      }
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="vg-section vg-section--tint" id="pasos">
+    <div class="vg-wrap">
+      <p class="vg-eyebrow">En la práctica</p>
+      <h2 class="vg-section__title">De la siembra a la decisión</h2>
+      <ol class="vg-steps">
+        {
+          PASOS.map((p) => (
+            <li class="vg-steps__item">
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="vg-section vg-cta">
+    <div class="vg-wrap vg-cta__inner">
+      <h2>Que el bioinsumo llegue antes que el estrés</h2>
+      <p>Contanos tus lotes y te mostramos VigIA funcionando con tus datos.</p>
+      <a class="vg-btn vg-btn--light" href={demoUrl} target="_blank" rel="noopener noreferrer">Hablemos por WhatsApp</a>
     </div>
   </section>
 </BaseLayout>

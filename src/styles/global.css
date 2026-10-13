@@ -195,3 +195,126 @@ img {
     scroll-behavior: auto !important;
   }
 }
+/* Paleta --rp-* que usan Header.css y Footer.css (en Landing vive en
+   components/pricing.css). */
+:root {
+  /* Backgrounds */
+  --rp-accent-gold: #d4a017;
+  --rp-accent-blue: #1d4ed8;
+
+  /* Brand gold scale */
+  --rp-gold-50: #fffdf5;
+  --rp-gold-100: #fef9e7;
+  --rp-gold-200: #fcefc4;
+  --rp-gold-300: #f7de82;
+  --rp-gold-400: #f2cd00;
+  --rp-gold-500: #e5bd13;
+  --rp-gold-600: #d4a017;
+  --rp-gold-700: #b8860b;
+
+  /* Semantic palette */
+  --rp-gray-50: #f9fafb;
+  --rp-gray-100: #f3f4f6;
+  --rp-gray-200: #e5e7eb;
+  --rp-gray-300: #d1d5db;
+  --rp-gray-400: #9ca3af;
+  --rp-gray-500: #6b7280;
+  --rp-gray-600: #4b5563;
+  --rp-gray-700: #374151;
+  --rp-gray-900: #111827;
+
+  --rp-emerald-50: #ecfdf5;
+  --rp-emerald-100: #d1fae5;
+  --rp-emerald-200: #a7f3d0;
+  --rp-emerald-300: #6ee7b7;
+  --rp-emerald-400: #34d399;
+  --rp-emerald-500: #10b981;
+  --rp-emerald-600: #059669;
+  --rp-emerald-700: #047857;
+
+  --rp-blue-50: #eff6ff;
+  --rp-blue-100: #dbeafe;
+  --rp-blue-200: #bfdbfe;
+  --rp-blue-300: #93c5fd;
+  --rp-blue-400: #60a5fa;
+  --rp-blue-500: #3b82f6;
+  --rp-blue-600: #2563eb;
+  --rp-blue-700: #1d4ed8;
+
+  --rp-amber-50: #fffbeb;
+  --rp-amber-100: #fef3c7;
+  --rp-amber-200: #fde68a;
+  --rp-amber-300: #fcd34d;
+  --rp-amber-400: #fbbf24;
+  --rp-amber-500: #f59e0b;
+  --rp-amber-600: #d97706;
+  --rp-amber-700: #b45309;
+  --rp-amber-800: #92400e;
+
+  --rp-sky-50: #f0f9ff;
+  --rp-sky-100: #e0f2fe;
+  --rp-sky-200: #bae6fd;
+  --rp-sky-300: #7dd3fc;
+  --rp-sky-400: #38bdf8;
+  --rp-sky-500: #0ea5e9;
+  --rp-sky-600: #0284c7;
+  --rp-sky-700: #0369a1;
+
+  --rp-indigo-50: #eef2ff;
+  --rp-indigo-100: #e0e7ff;
+  --rp-indigo-200: #c7d2fe;
+  --rp-indigo-300: #a5b4fc;
+  --rp-indigo-400: #818cf8;
+  --rp-indigo-500: #6366f1;
+  --rp-indigo-600: #4f46e5;
+  --rp-indigo-700: #4338ca;
+
+  --rp-violet-50: #f5f3ff;
+  --rp-violet-100: #ede9fe;
+  --rp-violet-200: #ddd6fe;
+  --rp-violet-300: #c4b5fd;
+  --rp-violet-400: #a78bfa;
+  --rp-violet-500: #8b5cf6;
+  --rp-violet-600: #7c3aed;
+  --rp-violet-700: #6d28d9;
+
+  --rp-rose-50: #fff1f2;
+  --rp-rose-100: #ffe4e6;
+  --rp-rose-200: #fecdd3;
+  --rp-rose-300: #fda4af;
+  --rp-rose-400: #fb7185;
+  --rp-rose-500: #f43f5e;
+  --rp-rose-600: #e11d48;
+  --rp-rose-700: #be123c;
+}
+
+/* ============================================================
+   Marca VigIA (colores del logo) + severidades de alertas
+   ============================================================ */
+:root {
+  --vg-forest: #0e3b36;
+  --vg-blue: #1f5bff;
+  --vg-blue-soft: #e8eeff;
+  --vg-lime: #6fb23a;
+  --vg-lime-soft: #eef7e6;
+  --vg-sev-critico: #cf222e;
+  --vg-sev-critico-soft: #ffebe9;
+  --vg-sev-alerta: #9a6700;
+  --vg-sev-alerta-soft: #fff8c5;
+  --vg-sev-info: #1f5bff;
+  --vg-sev-info-soft: #e8eeff;
+}
+
+[data-rp-theme="dark"] {
+  --vg-forest: #e6edf3;
+  --vg-blue: #6b93ff;
+  --vg-blue-soft: #131d33;
+  --vg-lime: #8fd14f;
+  --vg-lime-soft: #18240f;
+  --vg-sev-critico: #ff7b72;
+  --vg-sev-critico-soft: #2d1416;
+  --vg-sev-alerta: #e3b341;
+  --vg-sev-alerta-soft: #2e2a13;
+  --vg-sev-info: #6b93ff;
+  --vg-sev-info-soft: #131d33;
+}

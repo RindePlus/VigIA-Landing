@@ -36,13 +36,11 @@ src/
 │   ├── Header.jsx     # isla React (client:load): menú, toggle de tema, "Ingresar"
 │   ├── Footer.astro   # estático, sin JS
 │   ├── WhatsAppWidget.jsx  # isla React (client:idle); openWhatsApp() la abre desde otras islas
-│   └── Reveal.jsx     # isla React (client:visible): animación de entrada
 ├── data/
 │   ├── social.js      # contacto, WhatsApp, URL de la app
 │   └── modules.js     # módulos de VigIA que muestra la home
 ├── hooks/
 │   ├── useTheme.js    # tema claro/oscuro system-first
-│   └── useIntersectionObserver.js
 ├── layouts/
 │   └── BaseLayout.astro    # <head>, script anti-flash de tema, header, footer, WhatsApp
 ├── pages/             # una ruta por archivo
