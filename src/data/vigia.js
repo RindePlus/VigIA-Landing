@@ -1,133 +1,128 @@
-// Contenido de la home. Todo lo que se afirma acá está respaldado por cómo
-// funciona hoy el motor de VigIA en Plataforma (ver MODULO_VIGIA.md):
-// balance hídrico FAO-56, DPV diario contra umbrales por cultivo, pronóstico
-// a 14 días y las alertas de components/biostres/alertEngine.ts.
+// Contenido de la home, un objeto por módulo (ver ESTRUCTURA_LANDING.md).
+// Lo que se afirma está respaldado por el motor de VigIA en Plataforma
+// (ver MODULO_VIGIA.md): balance hídrico FAO-56, DPV diario contra umbrales
+// por cultivo, pronóstico a 14 días y las alertas de alertEngine.ts.
+// Reglas: sin menciones a Inteligencia Artificial ni a Herbicidas; acciones
+// genéricas (bioinsumo o riego), sin productos ni marcas.
 
-export const PROBLEMAS = [
-  {
-    titulo: 'El estrés se ve tarde',
-    texto:
-      'Cuando la hoja se enrolla o el cultivo cambia de color, el daño fisiológico ya ocurrió y el rinde ya está comprometido.',
-  },
-  {
-    titulo: 'El bioinsumo necesita llegar antes',
-    texto:
-      'Un bioinsumo antiestrés acompaña a la planta para atravesar el momento difícil. Aplicado cuando el estrés ya pasó, protege poco.',
-  },
-  {
-    titulo: 'El pronóstico regional no conoce tu lote',
-    texto:
-      'Saber que va a hacer calor no alcanza: hay que saber cuánta agua le queda a tu suelo y en qué etapa está tu cultivo.',
-  },
-];
-
-export const ESTRESES = [
-  {
-    id: 'hidrico',
-    nombre: 'Estrés hídrico',
-    texto:
-      'El agua útil del suelo cae por debajo del umbral que el cultivo necesita en su etapa actual.',
-  },
-  {
-    id: 'termico',
-    nombre: 'Estrés térmico (DPV)',
-    texto:
-      'El déficit de presión de vapor supera el límite del cultivo: el aire seca a la planta más rápido de lo que ella puede reponer agua.',
-  },
-  {
-    id: 'combinado',
-    nombre: 'Estrés combinado',
-    texto:
-      'Falta de agua y DPV alto el mismo día. Es el escenario más dañino y el que exige actuar primero.',
-  },
-];
-
-export const DATOS = [
-  {
-    id: 'clima',
-    titulo: 'Clima y DPV',
-    texto:
-      'Temperatura y humedad diarias en las coordenadas del lote, el historial de la campaña y el pronóstico de los próximos 14 días. Con eso VigIA calcula el DPV de cada día y lo compara con los umbrales del cultivo.',
-  },
-  {
-    id: 'cultivo',
-    titulo: 'Cultivo y fenología',
-    texto:
-      'A partir de la fecha de siembra y el ciclo o grupo de madurez, sigue la etapa del cultivo día a día y su consumo de agua en cada etapa, incluido el período crítico.',
-  },
-  {
-    id: 'agua',
-    titulo: 'Lluvias y riego',
-    texto:
-      'Cargás las lluvias que registrás en el lote y los riegos de cada ambiente. El balance usa lo que realmente cayó en tu campo, no una estimación regional.',
-  },
-  {
-    id: 'suelo',
-    titulo: 'Textura del suelo',
-    texto:
-      'Desde los muestreos de suelo de cada ambiente estima la capacidad de campo, el punto de marchitez y el agua útil que el perfil puede almacenar.',
-  },
-];
-
-// Alertas de ejemplo: títulos y acciones tal como los genera el motor.
-export const ALERTAS = [
-  {
-    severidad: 'alerta',
-    etiqueta: 'Alerta',
-    titulo: 'Estrés hídrico moderado en 4 días',
-    accion: 'Planificar riego o bioinsumo en la ventana de hoy a 3 días.',
-  },
-  {
-    severidad: 'info',
-    etiqueta: 'Preventiva',
-    titulo: 'Período crítico próximo',
-    accion: 'Bioinsumo preventivo antes de que el cultivo entre al estadio.',
-  },
-  {
-    severidad: 'critico',
-    etiqueta: 'Crítica',
-    titulo: 'Exceso de DPV sostenido',
-    accion: 'Mitigar el estrés térmico: antiestrés foliar o riego.',
-  },
-  {
-    severidad: 'critico',
-    etiqueta: 'Crítica',
-    titulo: 'Estrés hídrico + térmico combinado',
-    accion: 'Intervención inmediata: bioinsumo hídrico más antiestrés térmico.',
-  },
-];
-
-export const PASOS = [
-  {
-    titulo: 'Configurás el lote',
-    texto: 'Cultivo, fecha de siembra, ciclo y el muestreo de suelo de cada ambiente.',
-  },
-  {
-    titulo: 'VigIA calcula todos los días',
-    texto: 'Balance hídrico por ambiente y DPV, con el clima real y el pronóstico.',
-  },
-  {
-    titulo: 'Recibís la alerta con su acción',
-    texto: 'Qué estrés viene, cuándo, qué tan severo y qué bioinsumo o manejo conviene.',
-  },
-  {
-    titulo: 'Registrás lluvias y riegos',
-    texto: 'Cada dato que cargás ajusta el balance y afina la próxima predicción.',
-  },
-];
-
-// Cultivo de Servicio: el mismo motor de balance hídrico aplicado a cultivos
-// de servicio (ver MODULO_VIGIA.md, sección 1). VigIA Herbicidas quedó fuera
-// del alcance del nuevo producto.
-export const CULTIVO_SERVICIO = {
-  tag: 'Mismo balance hídrico',
-  nombre: 'VigIA Cultivo de Servicio',
-  texto:
-    'Seguí cuánta agua consume tu cultivo de servicio frente a un barbecho y elegí el momento de secado que protege la recarga del perfil para el cultivo que viene.',
-  bullets: [
-    'Consumo de agua del cultivo de servicio contra un barbecho',
-    'Lluvia que realmente infiltra según la cobertura',
-    'Momento óptimo de secado',
-    'Estimación de materia seca producida',
+// Módulo 1 — Introducción
+export const INTRO = {
+  etiqueta: 'Estrés hídrico y térmico',
+  titulo: 'Mitigación de Estrés',
+  descripcion:
+    'Anticipá el estrés hídrico y térmico antes de que se manifieste. VigIA cruza el clima, el balance hídrico y el suelo de cada lote, y te avisa a tiempo para aplicar el bioinsumo.',
+  puntos: [
+    'Monitoreo de temperatura, humedad y DPV',
+    'Pronóstico climático y balance hídrico por ambiente',
+    'Alertas tempranas en la plataforma y por WhatsApp',
   ],
+};
+
+// Módulo 2 — Qué problema resuelve
+export const PROBLEMA = {
+  etiqueta: 'El problema que resuelve',
+  titulo: 'El cultivo muestra el estrés cuando ya perdiste rinde',
+  bajada: 'Para cuando lo ves a campo, reaccionás tarde y el daño ya está hecho.',
+  razones: [
+    {
+      titulo: 'El estrés se ve tarde',
+      texto: 'Cuando la hoja se enrolla, el rinde ya está comprometido.',
+    },
+    {
+      titulo: 'El bioinsumo necesita llegar antes',
+      texto: 'Aplicado cuando el estrés ya pasó, protege poco.',
+    },
+    {
+      titulo: 'El pronóstico regional no conoce tu lote',
+      texto: 'No sabe cuánta agua le queda a tu suelo ni en qué etapa está tu cultivo.',
+    },
+  ],
+  estreses: [
+    { id: 'hidrico', nombre: 'Hídrico', texto: 'Falta agua útil en el suelo para la etapa del cultivo.' },
+    { id: 'termico', nombre: 'Térmico (DPV)', texto: 'El aire seca a la planta más rápido de lo que repone.' },
+    { id: 'combinado', nombre: 'Combinado', texto: 'Las dos cosas el mismo día: el escenario más dañino.' },
+  ],
+};
+
+// Módulo 3 — La mejora real
+export const MEJORA = {
+  etiqueta: 'La mejora real',
+  titulo: 'Alertas tempranas, antes que el estrés',
+  bajada:
+    'Recibís alertas predictivas para actuar de forma preventiva, proteger el rendimiento y aplicar los bioinsumos en el momento justo.',
+  // Títulos y acciones tal como los genera el motor, acortados.
+  alertas: [
+    {
+      severidad: 'alerta',
+      etiqueta: 'Alerta',
+      titulo: 'Estrés hídrico moderado en 4 días',
+      accion: 'Planificar riego o bioinsumo entre hoy y 3 días.',
+    },
+    {
+      severidad: 'info',
+      etiqueta: 'Preventiva',
+      titulo: 'Período crítico en 14 días',
+      accion: 'Bioinsumo preventivo antes del estadio.',
+    },
+    {
+      severidad: 'critico',
+      etiqueta: 'Crítica',
+      titulo: 'Estrés hídrico + térmico combinado',
+      accion: 'Bioinsumo hídrico más antiestrés térmico, ya.',
+    },
+  ],
+  canales: [
+    {
+      id: 'plataforma',
+      titulo: 'En la plataforma',
+      texto: 'El panel del lote, con el balance hídrico y el DPV que explican la alerta.',
+    },
+    {
+      id: 'whatsapp',
+      titulo: 'En tu WhatsApp',
+      texto: 'El aviso te llega al celular sin tener que entrar a la plataforma.',
+    },
+  ],
+  // Mensaje de ejemplo del celular.
+  mensaje: {
+    lote: 'Lote 12 – Ambiente 2',
+    alerta: 'Estrés hídrico moderado en 4 días.',
+    accion: 'Acción sugerida: planificar riego o bioinsumo entre hoy y el jueves.',
+    hora: '07:30',
+  },
+  datos: [
+    { id: 'clima', titulo: 'Clima y DPV', texto: 'Historial y pronóstico a 14 días en las coordenadas del lote.' },
+    { id: 'cultivo', titulo: 'Cultivo y fenología', texto: 'Etapa y consumo de agua día a día, desde la siembra.' },
+    { id: 'agua', titulo: 'Lluvias y riego', texto: 'Lo que realmente cayó en tu campo, cargado por vos.' },
+    { id: 'suelo', titulo: 'Suelo', texto: 'Agua útil del perfil según la textura de cada ambiente.' },
+  ],
+  cultivoServicio: {
+    pregunta: '¿Hacés cultivos de servicio?',
+    texto:
+      'VigIA también sigue su consumo de agua frente a un barbecho y te marca el momento óptimo de secado.',
+  },
+};
+
+// Para quién es VigIA (sección corta, después de La mejora real).
+export const PARA_QUIEN = {
+  etiqueta: 'Para quién es',
+  titulo: 'Para quien decide sobre el lote',
+  perfiles: [
+    {
+      id: 'productores',
+      titulo: 'Productores',
+      texto: 'Sabés qué lote se viene complicado y decidís con días de margen cuándo aplicar o regar.',
+    },
+    {
+      id: 'asesores',
+      titulo: 'Asesores agronómicos',
+      texto: 'Seguís los lotes de todos tus clientes y recibís sus alertas en un solo lugar.',
+    },
+    {
+      id: 'empresas',
+      titulo: 'Empresas y grupos',
+      texto: 'Una misma lectura del estrés para todos los lotes y ambientes de la organización.',
+    },
+  ],
+  nota: 'En secano o bajo riego.',
 };

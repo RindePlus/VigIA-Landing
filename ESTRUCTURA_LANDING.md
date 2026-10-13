@@ -1,6 +1,8 @@
 # Estructura de la landing de VigIA
 
-Plan de contenido y de optimización de la home. La página se organiza en **3 módulos principales** (Introducción, Qué problema resuelve y La mejora real), más los bloques de soporte que ya están implementados: clientes, CTA final y contacto.
+Plan de contenido y de optimización de la home. La página se organiza en **3 módulos principales** (Introducción, Qué problema resuelve y La mejora real), más una sección corta **Para quién es** y los bloques de soporte: clientes, CTA final y contacto.
+
+**Estado:** implementado en `src/pages/index.astro`, con los textos en `src/data/vigia.js`.
 
 El objetivo de esta versión es **una página más corta, con un mensaje por módulo**. Las animaciones y los videos se suman en una segunda etapa (ver [Animaciones y video](#animaciones-y-video)).
 
@@ -27,7 +29,7 @@ Para que la página no se haga larga, cada tipo de texto tiene un máximo:
 ## Mapa de la página
 
 ```
-Header ─ El problema · La mejora · Clientes · Contacto · [Ingresar]
+Header ─ El problema · La mejora · Para quién · Clientes · Contacto · [Ingresar]
 │
 ├─ 1. INTRODUCCIÓN            #inicio
 ├─    Clientes (carrusel)      #clientes        ← ya implementado
@@ -37,6 +39,7 @@ Header ─ El problema · La mejora · Clientes · Contacto · [Ingresar]
 │     · En la plataforma y en tu WhatsApp
 │     · Cómo lo logra (los datos)
 │     · Cultivos de servicio (una línea)
+├─    Para quién es            #para-quien
 ├─    CTA final                                 ← ya implementado
 └─ Footer / contacto           #contacto        ← ya implementado
 ```
@@ -133,6 +136,25 @@ Una línea al pie del módulo, en lugar de la sección actual:
 
 ---
 
+## Para quién es (`#para-quien`)
+
+Sección corta, después de La mejora real.
+
+| Elemento | Contenido |
+|---|---|
+| Etiqueta | PARA QUIÉN ES |
+| Título | **Para quien decide sobre el lote** |
+
+| Perfil | Texto |
+|---|---|
+| Productores | Sabés qué lote se viene complicado y decidís con días de margen cuándo aplicar o regar. |
+| Asesores agronómicos | Seguís los lotes de todos tus clientes y recibís sus alertas en un solo lugar. |
+| Empresas y grupos | Una misma lectura del estrés para todos los lotes y ambientes de la organización. |
+
+Nota al pie: "En secano o bajo riego."
+
+---
+
 ## CTA final y footer
 
 Sin cambios.
@@ -148,7 +170,7 @@ Sin cambios.
 
 | Hoy | Después |
 |---|---|
-| 8 secciones de contenido | 3 módulos + clientes + CTA |
+| 8 secciones de contenido | 3 módulos + para quién es + clientes + CTA |
 | Hero "Anticipá el estrés de tu cultivo…" | Introducción "Mitigación de Estrés" |
 | "El estrés se ve…" y "Qué estrés mitiga" por separado | Un solo módulo de problema, con los tipos de estrés en una franja |
 | "Cómo funciona" con 4 tarjetas grandes | 4 ítems de una línea dentro de La mejora real |
@@ -156,9 +178,9 @@ Sin cambios.
 | 4 alertas de ejemplo | 3 |
 | Sección "VigIA Cultivo de Servicio" | Una línea al pie de La mejora real |
 | "De la siembra a la decisión" (4 pasos) | **Se elimina** |
-| Menú: Cómo funciona · Alertas · Cultivo de servicio · Clientes · Precios · Contacto | Menú: El problema · La mejora · Clientes · Contacto |
+| Menú: Cómo funciona · Alertas · Cultivo de servicio · Clientes · Precios · Contacto | Menú: El problema · La mejora · Para quién · Clientes · Contacto |
 
-**Resultado esperado:** la página baja de unos 5.600 px a unos 3.800 px de alto en escritorio (1440 px de ancho).
+**Resultado:** la página bajó de unos 5.600 px a unos 3.900 px de alto en escritorio (1440 px de ancho), incluida la sección nueva Para quién es.
 
 ### Tareas
 
@@ -166,7 +188,7 @@ Sin cambios.
 2. **Página** (`src/pages/index.astro`): reordenar en Introducción → Clientes → Problema → Mejora → CTA. Borrar las secciones que se unen o eliminan.
 3. **Componente nuevo** `WhatsAppMock.astro`: el celular con el mensaje, en HTML y CSS (sin imagen), para que se adapte al tema claro y oscuro.
 4. **Estilos** (`src/styles/sections.css`): borrar `.vg-steps`, `.vg-data` grande y `.vg-module`; agregar la franja de tipos de estrés, la fila compacta de datos y el layout de dos columnas de La mejora real.
-5. **Header** (`src/components/Header.jsx`): menú El problema · La mejora · Clientes · Contacto. Precios sale del menú; la página `/pricing` se mantiene.
+5. **Header** (`src/components/Header.jsx`): menú El problema · La mejora · Para quién · Clientes · Contacto. Precios sale del menú; la página `/pricing` se mantiene.
 6. **Lugar para video:** cada módulo con un contenedor de medios que hoy muestra el visual estático y mañana recibe el video, sin cambiar el layout.
 7. **Verificación:**
    - `pnpm build` y `pnpm lint` sin errores.
@@ -204,4 +226,5 @@ Segunda etapa. La idea es que cada módulo tenga **un** elemento en movimiento, 
 | 2 | WhatsApp en el lanzamiento | **Va a estar listo cuando se publique la landing.** Se presenta como funcionalidad disponible, sin "Próximamente". |
 | 3 | Sección "De la siembra a la decisión" | **Se elimina**, para que la página no quede larga. |
 | 4 | Logos del carrusel | **Se mantienen igual** que en la landing de Rinde Plus. |
-| 5 | Precios en el menú | **Propuesta:** sacarlo del menú mientras no haya precios definidos. La página `/pricing` sigue existiendo. |
+| 5 | Precios en el menú | **Se saca del menú** mientras no haya precios definidos. La página `/pricing` sigue existiendo. |
+| 6 | Para quién es | **Se agrega** una sección corta con tres perfiles: productores, asesores agronómicos y empresas o grupos. |

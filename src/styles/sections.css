@@ -202,83 +202,26 @@ h3 {
   100% { transform: scale(1.6); opacity: 0; }
 }
 
-/* ---------- Problema ---------- */
-.vg-problems {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-  margin-top: 40px;
+/* ---------- Etiquetas de módulo y variantes ---------- */
+.vg-eyebrow--lime { color: var(--vg-lime); }
+.vg-eyebrow--amber { color: var(--vg-sev-alerta); }
+
+.vg-section--compact {
+  padding-block: 72px;
 }
 
-.vg-problem__num {
-  display: block;
-  margin-bottom: 16px;
-  color: var(--vg-lime);
-  font-size: 0.875rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
+.vg-hero__points {
+  margin-bottom: 32px;
 }
 
-.vg-problem p,
-.vg-stress__item p,
-.vg-data__item p,
-.vg-steps__item p {
-  color: var(--gh-fg-muted);
+/* Lugar reservado para el video de cada módulo (etapa 2). Hoy contiene el
+   visual estático; el video lo reemplaza sin cambiar el layout. */
+.vg-media {
+  position: relative;
+  min-width: 0;
 }
 
-/* ---------- Tipos de estrés ---------- */
-.vg-stress {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 32px;
-}
-
-.vg-stress__item {
-  padding: 24px;
-  border-radius: var(--gh-radius-card);
-  background: var(--gh-canvas);
-  border-top: 4px solid var(--vg-blue);
-}
-
-.vg-stress__item--termico { border-top-color: var(--vg-sev-alerta); }
-.vg-stress__item--combinado { border-top-color: var(--vg-sev-critico); }
-
-/* ---------- Datos ---------- */
-.vg-data {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-.vg-data__item {
-  padding: 28px;
-  border: 1px solid var(--gh-border);
-  border-radius: var(--gh-radius-card);
-  background: var(--gh-surface);
-}
-
-.vg-data__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  background: var(--vg-lime-soft);
-  color: var(--vg-lime);
-  font-size: 20px;
-}
-
-/* ---------- Alertas ---------- */
-.vg-alerts {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 56px;
-  align-items: start;
-}
-
+/* ---------- Checks (listas) ---------- */
 .vg-checks {
   display: grid;
   gap: 12px;
@@ -303,7 +246,69 @@ h3 {
   transform: rotate(-45deg);
 }
 
-.vg-alerts__list {
+/* ---------- 2. Problema ---------- */
+.vg-problems {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.vg-problem__num {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--vg-sev-alerta);
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.vg-problem p,
+.vg-datos__item p,
+.vg-perfil p {
+  color: var(--gh-fg-muted);
+}
+
+/* Franja compacta con los tres tipos de estrés */
+.vg-stress {
+  display: grid;
+  grid-template-columns: auto repeat(3, 1fr);
+  gap: 12px 24px;
+  align-items: center;
+  margin-top: 48px;
+  padding: 20px 24px;
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-card);
+  background: var(--gh-surface);
+}
+
+.vg-stress__label {
+  color: var(--gh-fg-subtle);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vg-stress__item {
+  padding-left: 12px;
+  border-left: 3px solid var(--vg-blue);
+  color: var(--gh-fg-muted);
+  font-size: 0.9375rem;
+}
+
+.vg-stress__item strong { color: var(--gh-fg); }
+.vg-stress__item--termico { border-left-color: var(--vg-sev-alerta); }
+.vg-stress__item--combinado { border-left-color: var(--vg-sev-critico); }
+
+/* ---------- 3. La mejora real ---------- */
+.vg-mejora {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.vg-mejora__alertas {
   display: grid;
   gap: 12px;
 }
@@ -311,7 +316,7 @@ h3 {
 .vg-alert {
   --sev: var(--vg-sev-info);
   --sev-soft: var(--vg-sev-info-soft);
-  padding: 16px 18px;
+  padding: 14px 18px;
   border: 1px solid var(--gh-border);
   border-left: 4px solid var(--sev);
   border-radius: var(--gh-radius-card);
@@ -323,7 +328,7 @@ h3 {
 
 .vg-alert__chip {
   display: inline-block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   padding: 2px 8px;
   border-radius: 999px;
   background: var(--sev-soft);
@@ -343,48 +348,191 @@ h3 {
   font-size: 0.9375rem;
 }
 
-/* ---------- Cultivo de Servicio ---------- */
-.vg-module {
+.vg-canales {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 56px;
+  gap: 12px;
+  margin-top: 12px;
+  list-style: none;
+}
+
+.vg-canales li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  color: var(--gh-fg-muted);
+}
+
+.vg-canales strong { color: var(--gh-fg); }
+
+.vg-canales__icon {
+  flex-shrink: 0;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--vg-blue-soft);
+  color: var(--vg-blue);
+  font-size: 16px;
 }
 
-.vg-module .vg-section__lead {
-  margin-bottom: 0;
+/* Celular con el WhatsApp (WhatsAppMock.astro) */
+.vg-phone {
+  width: min(100%, 320px);
+  margin-inline: auto;
 }
 
-.vg-module__list {
-  padding: 32px;
+.vg-phone__screen {
+  overflow: hidden;
+  border: 10px solid #1f2328;
+  border-radius: 36px;
+  background: var(--gh-surface-2);
+  box-shadow: var(--gh-shadow-overlay);
+}
+
+.vg-phone__bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 18px 14px 12px;
+  background: #075e54;
+  color: #fff;
+}
+
+.vg-phone__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+  color: #0e3b36;
+  font-weight: 800;
+}
+
+.vg-phone__contact {
+  display: grid;
+  line-height: 1.2;
+}
+
+.vg-phone__contact small { opacity: 0.8; font-size: 0.75rem; }
+
+.vg-phone__wa {
+  margin-left: auto;
+  font-size: 20px;
+}
+
+.vg-phone__chat {
+  min-height: 260px;
+  padding: 20px 14px 28px;
+}
+
+.vg-phone__bubble {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  max-width: 92%;
+  padding: 10px 12px 22px;
+  border-radius: 4px 12px 12px 12px;
+  background: var(--gh-surface);
+  box-shadow: var(--gh-shadow-card);
+  color: var(--gh-fg);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.vg-phone__lote { font-weight: 700; }
+.vg-phone__alerta { font-weight: 600; }
+.vg-phone__link { color: var(--vg-blue); font-weight: 600; }
+
+.vg-phone__time {
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  color: var(--gh-fg-subtle);
+  font-size: 0.6875rem;
+}
+
+.vg-phone__note {
+  margin-top: 10px;
+  color: var(--gh-fg-subtle);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* Cómo lo logra: fila compacta de cuatro datos */
+.vg-datos {
+  margin-top: 64px;
+}
+
+.vg-datos__label {
+  margin-bottom: 20px;
+  color: var(--gh-fg-subtle);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vg-datos__list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  list-style: none;
+}
+
+.vg-datos__item h3 {
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+.vg-datos__item p {
+  font-size: 0.9375rem;
+}
+
+.vg-datos__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  background: var(--vg-lime-soft);
+  color: var(--vg-lime);
+  font-size: 18px;
+}
+
+/* Cultivos de servicio: una línea al pie del módulo */
+.vg-servicio {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--gh-border-muted);
+  color: var(--gh-fg-muted);
+}
+
+.vg-servicio strong { color: var(--gh-fg); }
+
+/* ---------- Para quién es ---------- */
+.vg-perfiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.vg-perfil {
+  padding: 24px;
   border: 1px solid var(--gh-border);
-  border-radius: 16px;
+  border-radius: var(--gh-radius-card);
   background: var(--gh-surface);
 }
 
-/* ---------- Pasos ---------- */
-.vg-steps {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  margin-top: 40px;
-  list-style: none;
-  counter-reset: paso;
-}
-
-.vg-steps__item {
-  counter-increment: paso;
-  padding-top: 20px;
-  border-top: 2px solid var(--gh-border);
-}
-
-.vg-steps__item::before {
-  content: counter(paso);
-  display: block;
-  margin-bottom: 12px;
-  color: var(--vg-blue);
-  font-size: 1.5rem;
-  font-weight: 800;
+.vg-perfiles__nota {
+  margin-top: 16px;
+  color: var(--gh-fg-subtle);
+  font-size: 0.875rem;
 }
 
 /* ---------- CTA final ---------- */
@@ -414,26 +562,29 @@ h3 {
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
   .vg-hero__grid,
-  .vg-alerts,
-  .vg-module {
+  .vg-mejora {
     grid-template-columns: 1fr;
     gap: 40px;
   }
 
-  .vg-steps {
+  .vg-stress {
+    grid-template-columns: 1fr;
+  }
+
+  .vg-datos__list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 680px) {
   .vg-section { padding-block: 64px; }
+  .vg-section--compact { padding-block: 56px; }
   .vg-hero { padding-block: 120px 48px; }
   .vg-wrap { padding-inline: 16px; }
 
   .vg-problems,
-  .vg-stress,
-  .vg-data,
-  .vg-steps {
+  .vg-perfiles,
+  .vg-datos__list {
     grid-template-columns: 1fr;
   }
 

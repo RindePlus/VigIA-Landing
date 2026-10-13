@@ -1,35 +1,41 @@
 ---
+// Home en tres módulos: Introducción → Qué problema resuelve → La mejora
+// real, más clientes, para quién es y CTA. Contenido en src/data/vigia.js;
+// estructura acordada en ESTRUCTURA_LANDING.md.
+// Cada `.vg-media` es el lugar reservado para el video de la etapa 2.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BalanceChart from '../components/BalanceChart.astro';
+import WhatsAppMock from '../components/WhatsAppMock.astro';
 import TrustedCompanies from '../components/TrustedCompanies.jsx';
-import { LuCloudSun, LuSprout, LuCloudRain, LuLayers } from 'react-icons/lu';
-import { PROBLEMAS, ESTRESES, DATOS, ALERTAS, PASOS, CULTIVO_SERVICIO } from '../data/vigia';
+import { LuCloudSun, LuSprout, LuCloudRain, LuLayers, LuMonitor, LuSmartphone } from 'react-icons/lu';
+import { INTRO, PROBLEMA, MEJORA, PARA_QUIEN } from '../data/vigia';
 import { buildWhatsAppUrl } from '../data/social';
 import '../styles/sections.css';
 
-const ICONOS = { clima: LuCloudSun, cultivo: LuSprout, agua: LuCloudRain, suelo: LuLayers };
+const ICONOS_DATOS = { clima: LuCloudSun, cultivo: LuSprout, agua: LuCloudRain, suelo: LuLayers };
+const ICONOS_CANALES = { plataforma: LuMonitor, whatsapp: LuSmartphone };
 const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
 ---
 
 <BaseLayout>
+  <!-- 1. Introducción -->
   <section class="vg-hero" id="inicio">
     <div class="vg-wrap vg-hero__grid">
       <div class="vg-hero__copy">
-        <p class="vg-eyebrow">Mitigación de estrés abiótico</p>
-        <h1 class="vg-hero__title">
-          Anticipá el estrés de tu cultivo. <span>Aplicá el bioinsumo a tiempo.</span>
-        </h1>
-        <p class="vg-hero__subtitle">
-          VigIA cruza el clima, el DPV, el balance hídrico y el suelo de cada lote para
-          predecir cuándo va a aparecer el estrés hídrico y térmico, y te avisa con días de
-          anticipación para que el bioinsumo llegue antes que el daño.
-        </p>
+        <p class="vg-eyebrow vg-eyebrow--lime">{INTRO.etiqueta}</p>
+        <h1 class="vg-hero__title">{INTRO.titulo}</h1>
+        <p class="vg-hero__subtitle">{INTRO.descripcion}</p>
+        <ul class="vg-checks vg-hero__points">
+          {INTRO.puntos.map((p) => <li>{p}</li>)}
+        </ul>
         <div class="vg-hero__ctas">
           <a class="vg-btn" href={demoUrl} target="_blank" rel="noopener noreferrer">Quiero una demo</a>
-          <a class="vg-btn vg-btn--ghost" href="#como-funciona">Cómo funciona</a>
+          <a class="vg-btn vg-btn--ghost" href="#mejora">Cómo funciona</a>
         </div>
       </div>
-      <BalanceChart />
+      <div class="vg-media">
+        <BalanceChart />
+      </div>
     </div>
   </section>
 
@@ -38,121 +44,118 @@ const demoUrl = buildWhatsAppUrl('Hola, quiero conocer VigIA para mis lotes');
     <TrustedCompanies client:visible />
   </section>
 
+  <!-- 2. Qué problema resuelve -->
   <section class="vg-section" id="problema">
     <div class="vg-wrap">
-      <h2 class="vg-section__title">El estrés se ve cuando ya costó rinde</h2>
+      <p class="vg-eyebrow vg-eyebrow--amber">{PROBLEMA.etiqueta}</p>
+      <h2 class="vg-section__title">{PROBLEMA.titulo}</h2>
+      <p class="vg-section__lead">{PROBLEMA.bajada}</p>
+
       <div class="vg-problems">
         {
-          PROBLEMAS.map((p, i) => (
+          PROBLEMA.razones.map((r, i) => (
             <article class="vg-problem">
               <span class="vg-problem__num">0{i + 1}</span>
-              <h3>{p.titulo}</h3>
-              <p>{p.texto}</p>
+              <h3>{r.titulo}</h3>
+              <p>{r.texto}</p>
             </article>
           ))
         }
       </div>
-    </div>
-  </section>
 
-  <section class="vg-section vg-section--tint" id="estres">
-    <div class="vg-wrap">
-      <p class="vg-eyebrow">Qué estrés mitiga</p>
-      <h2 class="vg-section__title">Hídrico, térmico y la combinación de los dos</h2>
       <div class="vg-stress">
+        <p class="vg-stress__label">Qué estrés mitiga VigIA</p>
         {
-          ESTRESES.map((e) => (
-            <article class={`vg-stress__item vg-stress__item--${e.id}`}>
-              <h3>{e.nombre}</h3>
-              <p>{e.texto}</p>
-            </article>
+          PROBLEMA.estreses.map((e) => (
+            <p class={`vg-stress__item vg-stress__item--${e.id}`}>
+              <strong>{e.nombre}.</strong> {e.texto}
+            </p>
           ))
         }
       </div>
     </div>
   </section>
 
-  <section class="vg-section" id="como-funciona">
+  <!-- 3. La mejora real -->
+  <section class="vg-section vg-section--tint" id="mejora">
     <div class="vg-wrap">
-      <p class="vg-eyebrow">Cómo funciona</p>
-      <h2 class="vg-section__title">Un balance hídrico diario para cada ambiente del lote</h2>
-      <p class="vg-section__lead">
-        VigIA combina cuatro fuentes de datos. Con ellas calcula, día por día, cuánta agua le
-        queda al cultivo y cuánto lo exige el ambiente.
-      </p>
-      <div class="vg-data">
-        {
-          DATOS.map((d) => {
-            const Icon = ICONOS[d.id as keyof typeof ICONOS];
-            return (
-              <article class="vg-data__item">
-                <span class="vg-data__icon"><Icon /></span>
-                <h3>{d.titulo}</h3>
-                <p>{d.texto}</p>
-              </article>
-            );
-          })
-        }
-      </div>
-    </div>
-  </section>
+      <p class="vg-eyebrow vg-eyebrow--lime">{MEJORA.etiqueta}</p>
+      <h2 class="vg-section__title">{MEJORA.titulo}</h2>
+      <p class="vg-section__lead">{MEJORA.bajada}</p>
 
-  <section class="vg-section vg-section--tint" id="alertas">
-    <div class="vg-wrap vg-alerts">
-      <div class="vg-alerts__copy">
-        <p class="vg-eyebrow">Alertas predictivas</p>
-        <h2 class="vg-section__title">Te avisa antes, y te dice qué hacer</h2>
-        <p class="vg-section__lead">
-          Como el pronóstico entra al balance, las alertas miran hacia adelante: estrés hídrico
-          a 4 días, episodios de DPV y el período crítico en las próximas dos semanas.
-        </p>
-        <ul class="vg-checks">
-          <li>Cada alerta trae su severidad y una acción concreta de manejo.</li>
-          <li>Las de DPV se disparan por rachas sostenidas, no por un pico de un día.</li>
-          <li>La severidad hídrica sale de cuánta agua le queda realmente al cultivo.</li>
+      <div class="vg-mejora">
+        <div class="vg-mejora__alertas">
+          {
+            MEJORA.alertas.map((a) => (
+              <div class={`vg-alert vg-alert--${a.severidad}`}>
+                <span class="vg-alert__chip">{a.etiqueta}</span>
+                <p class="vg-alert__title">{a.titulo}</p>
+                <p class="vg-alert__action">{a.accion}</p>
+              </div>
+            ))
+          }
+          <ul class="vg-canales">
+            {
+              MEJORA.canales.map((c) => {
+                const Icon = ICONOS_CANALES[c.id as keyof typeof ICONOS_CANALES];
+                return (
+                  <li>
+                    <span class="vg-canales__icon"><Icon /></span>
+                    <span>
+                      <strong>{c.titulo}.</strong> {c.texto}
+                    </span>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </div>
+
+        <div class="vg-media">
+          <WhatsAppMock />
+        </div>
+      </div>
+
+      <div class="vg-datos">
+        <p class="vg-datos__label">Cómo lo logra</p>
+        <ul class="vg-datos__list">
+          {
+            MEJORA.datos.map((d) => {
+              const Icon = ICONOS_DATOS[d.id as keyof typeof ICONOS_DATOS];
+              return (
+                <li class="vg-datos__item">
+                  <span class="vg-datos__icon"><Icon /></span>
+                  <h3>{d.titulo}</h3>
+                  <p>{d.texto}</p>
+                </li>
+              );
+            })
+          }
         </ul>
       </div>
-      <div class="vg-alerts__list">
-        {
-          ALERTAS.map((a) => (
-            <div class={`vg-alert vg-alert--${a.severidad}`}>
-              <span class="vg-alert__chip">{a.etiqueta}</span>
-              <p class="vg-alert__title">{a.titulo}</p>
-              <p class="vg-alert__action">{a.accion}</p>
-            </div>
-          ))
-        }
-      </div>
+
+      <p class="vg-servicio">
+        <strong>{MEJORA.cultivoServicio.pregunta}</strong> {MEJORA.cultivoServicio.texto}
+      </p>
     </div>
   </section>
 
-  <section class="vg-section" id="cultivo-servicio">
-    <div class="vg-wrap vg-module">
-      <div>
-        <p class="vg-eyebrow">{CULTIVO_SERVICIO.tag}</p>
-        <h2 class="vg-section__title">{CULTIVO_SERVICIO.nombre}</h2>
-        <p class="vg-section__lead">{CULTIVO_SERVICIO.texto}</p>
-      </div>
-      <ul class="vg-checks vg-module__list">
-        {CULTIVO_SERVICIO.bullets.map((b) => <li>{b}</li>)}
-      </ul>
-    </div>
-  </section>
-
-  <section class="vg-section vg-section--tint" id="pasos">
+  <!-- Para quién es -->
+  <section class="vg-section vg-section--compact" id="para-quien">
     <div class="vg-wrap">
-      <p class="vg-eyebrow">En la práctica</p>
-      <h2 class="vg-section__title">De la siembra a la decisión</h2>
-      <ol class="vg-steps">
+      <p class="vg-eyebrow">{PARA_QUIEN.etiqueta}</p>
+      <h2 class="vg-section__title">{PARA_QUIEN.titulo}</h2>
+      <div class="vg-perfiles">
         {
-          PASOS.map((p) => (
-            <li class="vg-steps__item">
+          PARA_QUIEN.perfiles.map((p) => (
+            <article class="vg-perfil">
               <h3>{p.titulo}</h3>
               <p>{p.texto}</p>
-            </li>
+            </article>
           ))
         }
-      </ol>
+      </div>
+      <p class="vg-perfiles__nota">{PARA_QUIEN.nota}</p>
     </div>
   </section>
 

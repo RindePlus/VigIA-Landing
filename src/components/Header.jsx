@@ -9,11 +9,10 @@ import './Header.css';
 // Isla React (client:load). A diferencia de Landing, la navegación entre
 // páginas son <a href> reales: el ruteo lo resuelve Astro por archivo.
 const DEFAULT_ITEMS = [
-  { label: 'Cómo funciona', href: '/#como-funciona' },
-  { label: 'Alertas', href: '/#alertas' },
-  { label: 'Cultivo de servicio', href: '/#cultivo-servicio' },
+  { label: 'El problema', href: '/#problema' },
+  { label: 'La mejora', href: '/#mejora' },
+  { label: 'Para quién', href: '/#para-quien' },
   { label: 'Clientes', href: '/#clientes' },
-  { label: 'Precios', href: '/pricing' },
   { label: 'Contacto', href: '/#contacto' },
 ];
 
