@@ -1,0 +1,197 @@
+:root {
+  --primary: #2ecc71;
+  /* More vibrant emerald green */
+  --primary-dark: #27ae60;
+  --secondary: #0c2a1c;
+  /* Darker forest green/black for contrast */
+  --accent: #3498db;
+  --bg-main: #f0f4f8;
+  /* Slightly more blue tint for bg */
+  --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --font-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --radius-md: 12px;
+  --radius-lg: 24px;
+
+  /* ============================================================
+     GitHub-style design tokens (used by the home / .rp-home)
+     ============================================================ */
+  --gh-canvas: #f6f8fa;
+  --gh-surface: #ffffff;
+  --gh-surface-2: #f6f8fa;
+  --gh-border: #d0d7de;
+  --gh-border-muted: #d8dee4;
+  --gh-border-strong: #afb8c1;
+  --gh-fg: #1f2328;
+  --gh-fg-muted: #656d76;
+  --gh-fg-subtle: #8b949e;
+  --gh-accent: #0969da;
+  --gh-accent-hover: #0860ca;
+  --gh-accent-soft: #ddf4ff;
+  --gh-accent-fg: #ffffff;
+  --gh-brand-blue: #025db8;
+  --gh-detail-green: #018c34;
+  --gh-detail-green-soft: #dafbe1;
+  --gh-detail-yellow: #ffd100;
+  --gh-detail-yellow-strong: #bf8700;
+  --gh-detail-yellow-soft: #fff8c5;
+  --gh-detail-pink: #bf3989;
+  --gh-danger: #cf222e;
+  --gh-radius: 6px;
+  --gh-radius-btn: 10px; /* interactive buttons (header, hero, CTAs) */
+  --gh-radius-card: 10px; /* cards share the button curve for a unified look */
+  --gh-shadow-sm: 0 1px 0 rgba(31, 35, 40, 0.04);
+  --gh-shadow-card: 0 1px 3px rgba(31, 35, 40, 0.12), 0 1px 2px rgba(31, 35, 40, 0.06);
+  --gh-shadow-overlay: 0 8px 24px rgba(31, 35, 40, 0.12);
+}
+
+/* Modo oscuro — BaseLayout.astro fija data-rp-theme en <html> antes del
+   primer paint (sin flash) y useTheme lo actualiza al usar el toggle. */
+[data-rp-theme="dark"] {
+  --gh-canvas: #0d1117;
+  --gh-surface: #161b22;
+  --gh-surface-2: #21262d;
+  --gh-border: #30363d;
+  --gh-border-muted: #21262d;
+  --gh-border-strong: #6e7681;
+  --gh-fg: #e6edf3;
+  --gh-fg-muted: #8b949e;
+  --gh-fg-subtle: #6e7681;
+  --gh-accent: #4493f8;
+  --gh-accent-hover: #58a6ff;
+  --gh-accent-soft: #121d2f;
+  --gh-accent-fg: #ffffff;
+  --gh-brand-blue: #4493f8;
+  --gh-detail-green: #3fb950;
+  --gh-detail-green-soft: #12261e;
+  --gh-detail-yellow: #e3b341;
+  --gh-detail-yellow-strong: #e3b341;
+  --gh-detail-yellow-soft: #2e2a13;
+  --gh-detail-pink: #db61a2;
+  --gh-danger: #f85149;
+  --gh-shadow-sm: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  --gh-shadow-card: 0 1px 3px rgba(1, 4, 9, 0.5);
+  --gh-shadow-overlay: 0 8px 24px rgba(1, 4, 9, 0.7);
+}
+
+/* Canvas + overscroll background follow the home dark theme */
+[data-rp-theme="dark"] body {
+  background-color: #0d1117;
+  color: #e6edf3;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  /* `clip` (not `hidden`) so these don't become scroll containers, which would
+     break `position: sticky` used by the Functionalities pinned section. */
+  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  color: var(--text-main);
+  background-color: var(--bg-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--secondary);
+}
+
+/* Base Animation Utilities */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  will-change: opacity, transform;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-1 {
+  transition-delay: 100ms;
+}
+
+.stagger-2 {
+  transition-delay: 200ms;
+}
+
+.stagger-3 {
+  transition-delay: 300ms;
+}
+
+/* Mejoras para dispositivos móviles */
+/* Removed font-size reduction for mobile to keep text readable */
+@media (max-width: 768px) {
+  /* optional: specific tweaks if needed, but keeping 16px base is better */
+}
+
+
+/* Prevenir zoom en inputs en iOS */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gh-accent, #0969da);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

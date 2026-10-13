@@ -1,0 +1,192 @@
+/* Widget flotante de WhatsApp — portado de Landing/src/App.css */
+/* ============================================================
+   WhatsApp widget — FAB that morphs into panel
+   ============================================================ */
+.wa-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+}
+
+.wa-widget {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9999;
+  width: 90px;
+  height: 90px;
+  border-radius: 45px;
+  background: #25d366;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  transition:
+    width 0.55s cubic-bezier(0.32, 0.72, 0, 1),
+    height 0.55s cubic-bezier(0.32, 0.72, 0, 1),
+    border-radius 0.55s cubic-bezier(0.32, 0.72, 0, 1),
+    background 0.35s ease,
+    box-shadow 0.55s ease;
+}
+
+/* darken on hover like the green CTAs — only while closed (open = white panel) */
+.wa-widget:not(.wa-widget--open):hover {
+  background: #1da851;
+}
+
+.wa-widget--open {
+  width: 300px;
+  height: 240px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 20px 48px -12px rgba(15, 23, 42, 0.22);
+  border: 1px solid var(--rp-gray-200);
+}
+
+/* FAB button */
+.wa-widget__fab {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 90px;
+  height: 90px;
+  border-radius: 45px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: width 0.55s cubic-bezier(0.32, 0.72, 0, 1),
+              height 0.55s cubic-bezier(0.32, 0.72, 0, 1),
+              border-radius 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.wa-widget--open .wa-widget__fab {
+  top: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+}
+
+.wa-widget__fab-icon {
+  position: absolute;
+  color: #fff;
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.wa-widget__fab-icon--wa {
+  opacity: 1;
+  transform: scale(1);
+  font-size: 54px;
+}
+
+.wa-widget__fab-icon--close {
+  opacity: 0;
+  transform: scale(0.5) rotate(-90deg);
+  font-size: 20px;
+  color: var(--rp-gray-500);
+}
+
+.wa-widget--open .wa-widget__fab-icon--wa {
+  opacity: 0;
+  transform: scale(0.5) rotate(90deg);
+}
+
+.wa-widget--open .wa-widget__fab-icon--close {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Panel content */
+.wa-widget__panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 44px 24px 20px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.15s ease 0.15s, transform 0.15s ease 0.15s;
+  pointer-events: none;
+}
+
+.wa-widget--open .wa-widget__panel {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s;
+}
+
+.wa-widget__greeting {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  color: var(--rp-gray-700);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.wa-widget--open .wa-widget__greeting {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.25s ease 0.3s, transform 0.25s ease 0.3s;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.wa-widget__send {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 12px 20px;
+  border-radius: 14px;
+  background: #25d366;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.wa-widget__send:hover {
+  background: #1ebe5d;
+}
+
+@media (max-width: 600px) {
+  .wa-widget {
+    right: 16px;
+    bottom: 20px;
+    width: 72px;
+    height: 72px;
+    border-radius: 36px;
+  }
+
+  .wa-widget__fab {
+    width: 72px;
+    height: 72px;
+    border-radius: 36px;
+  }
+
+  .wa-widget__fab-icon--wa { font-size: 42px; }
+
+  .wa-widget--open {
+    width: calc(100vw - 32px);
+    height: 210px;
+    border-radius: 20px;
+  }
+
+  .wa-widget--open .wa-widget__fab {
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+  }
+
+  .wa-widget__panel { padding: 40px 20px 20px; }
+}

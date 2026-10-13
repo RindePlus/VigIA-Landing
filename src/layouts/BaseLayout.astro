@@ -1,0 +1,55 @@
+---
+import Header from '../components/Header.jsx';
+import Footer from '../components/Footer.astro';
+import WhatsAppWidget from '../components/WhatsAppWidget.jsx';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  showMenu?: boolean;
+}
+
+const {
+  title = 'VigIA',
+  description = 'VigIA: monitoreo agronómico por lote. Estrés hídrico, cultivos de servicio y carry-over de herbicidas.',
+  showMenu = true,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Resuelve el tema antes del primer paint para evitar el flash claro→oscuro.
+         Misma clave y criterio que src/hooks/useTheme.js. -->
+    <script is:inline>
+      (function () {
+        var theme = null;
+        try { theme = localStorage.getItem('vg-theme'); } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-rp-theme', theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <Header client:load showMenu={showMenu} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppWidget client:idle />
+  </body>
+</html>

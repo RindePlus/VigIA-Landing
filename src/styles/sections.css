@@ -1,0 +1,94 @@
+/* Secciones base de las páginas de VigIA. Usan los tokens --gh-* de
+   global.css, que cambian con data-rp-theme. */
+body {
+  background: var(--gh-canvas);
+  color: var(--gh-fg);
+}
+
+.vg-section {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 96px 24px;
+}
+
+.vg-hero {
+  text-align: center;
+  padding-top: 160px;
+}
+
+.vg-hero__title,
+.vg-section__title {
+  color: var(--gh-fg);
+  letter-spacing: -0.02em;
+}
+
+.vg-hero__title {
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.1;
+}
+
+.vg-hero__subtitle {
+  max-width: 640px;
+  margin: 20px auto 32px;
+  color: var(--gh-fg-muted);
+  font-size: 1.125rem;
+}
+
+.vg-section__title {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  margin-bottom: 32px;
+}
+
+.vg-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: var(--gh-radius-btn);
+  background: var(--gh-detail-green);
+  color: #fff;
+  font-weight: 600;
+}
+
+.vg-btn:hover {
+  filter: brightness(0.95);
+}
+
+.vg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.vg-card {
+  padding: 24px;
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-card);
+  background: var(--gh-surface);
+  box-shadow: var(--gh-shadow-card);
+}
+
+.vg-card h3 {
+  color: var(--gh-fg);
+  margin-bottom: 8px;
+}
+
+.vg-card p {
+  color: var(--gh-fg-muted);
+}
+
+/* Entrada al hacer scroll (Reveal.jsx) */
+.rp-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.rp-reveal.rp-is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.rp-reveal--delay-1 { transition-delay: 100ms; }
+.rp-reveal--delay-2 { transition-delay: 200ms; }
+.rp-reveal--delay-3 { transition-delay: 300ms; }

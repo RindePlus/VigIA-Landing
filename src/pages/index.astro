@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Reveal from '../components/Reveal.jsx';
+import { MODULOS } from '../data/modules';
+import { WHATSAPP_URL } from '../data/social';
+import '../styles/sections.css';
+---
+
+<BaseLayout>
+  <section class="vg-section vg-hero" id="inicio">
+    <h1 class="vg-hero__title">VigIA</h1>
+    <p class="vg-hero__subtitle">
+      Monitoreo agronómico por lote: clima, suelo y fenología traducidos en
+      alertas y decisiones accionables para cada campaña.
+    </p>
+    <a class="vg-btn" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+      Hablemos
+    </a>
+  </section>
+
+  <section class="vg-section" id="modulos">
+    <h2 class="vg-section__title">Módulos</h2>
+    <div class="vg-grid">
+      {
+        MODULOS.map((modulo, i) => (
+          <Reveal client:visible delay={i + 1}>
+            <article class="vg-card">
+              <h3>{modulo.nombre}</h3>
+              <p>{modulo.resumen}</p>
+            </article>
+          </Reveal>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
