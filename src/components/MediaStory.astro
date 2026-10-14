@@ -5,7 +5,8 @@
 //
 // - Sin JS o con `prefers-reduced-motion`: queda el estado final estático de
 //   la animación y el video no se muestra.
-// - Sólo corre mientras está a la vista; fuera de pantalla se detiene.
+// - Sólo corre mientras está a la vista; fuera de pantalla se detiene. El
+//   video empieza a descargarse recién cuando el módulo entra en pantalla.
 // - Las animaciones del slot se activan con la clase `.is-playing` en
 //   `.vg-story__anim` (ver sections.css).
 interface Video {
@@ -92,6 +93,9 @@ const mostrarPendiente = !video && pendiente && import.meta.env.DEV;
         ([entry]) => {
           const wasVisible = visible;
           visible = entry.isIntersecting;
+          // El video arranca con preload="none" para no cargarlo si nunca se
+          // ve; al entrar en pantalla se baja mientras corre la animación.
+          if (visible && video && video.preload !== 'auto') video.preload = 'auto';
           if (visible && !wasVisible) playAnim();
           if (!visible && wasVisible) stop();
         },

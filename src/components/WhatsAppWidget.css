@@ -20,11 +20,11 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   transition:
-    width 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-    height 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-    border-radius 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-    background 0.35s ease,
-    box-shadow 0.55s ease;
+    width var(--dur-slow) var(--ease-fluid),
+    height var(--dur-slow) var(--ease-fluid),
+    border-radius var(--dur-slow) var(--ease-fluid),
+    background var(--dur-base) var(--ease-fluid),
+    box-shadow var(--dur-slow) var(--ease-fluid);
 }
 
 /* darken on hover like the green CTAs — only while closed (open = white panel) */
@@ -56,9 +56,9 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
-  transition: width 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-              height 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-              border-radius 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: width var(--dur-slow) var(--ease-fluid),
+              height var(--dur-slow) var(--ease-fluid),
+              border-radius var(--dur-slow) var(--ease-fluid);
 }
 
 .wa-widget--open .wa-widget__fab {
@@ -72,7 +72,7 @@
 .wa-widget__fab-icon {
   position: absolute;
   color: #fff;
-  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: opacity var(--dur-base) var(--ease-fluid), transform var(--dur-slow) var(--ease-fluid);
 }
 
 .wa-widget__fab-icon--wa {
@@ -108,7 +108,7 @@
   padding: 44px 24px 20px;
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 0.15s ease 0.15s, transform 0.15s ease 0.15s;
+  transition: opacity var(--dur-fast) var(--ease-fluid) 0.15s, transform var(--dur-fast) var(--ease-fluid) 0.15s;
   pointer-events: none;
 }
 
@@ -116,22 +116,22 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-  transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s;
+  transition: opacity var(--dur-base) var(--ease-fluid) 0.15s, transform var(--dur-base) var(--ease-fluid) 0.15s;
 }
 
 .wa-widget__greeting {
   font-family: var(--font-body);
-  font-size: 1.15rem;
+  font-size: var(--text-lg);
   color: var(--rp-gray-700);
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity var(--dur-fast) var(--ease-fluid), transform var(--dur-fast) var(--ease-fluid);
 }
 
 .wa-widget--open .wa-widget__greeting {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.25s ease 0.3s, transform 0.25s ease 0.3s;
+  transition: opacity var(--dur-base) var(--ease-fluid) 0.3s, transform var(--dur-base) var(--ease-fluid) 0.3s;
   line-height: 1.5;
   margin: 0;
 }
@@ -147,7 +147,7 @@
   background: #25d366;
   color: #fff;
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   font-weight: 700;
   text-decoration: none;
   transition: background 0.2s;

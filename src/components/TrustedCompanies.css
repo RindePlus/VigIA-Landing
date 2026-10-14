@@ -42,7 +42,7 @@
   -webkit-user-drag: none;
   filter: grayscale(1) brightness(0);
   opacity: 0.72;
-  transition: filter 0.25s ease, opacity 0.25s ease;
+  transition: filter var(--dur-base) var(--ease-fluid), opacity var(--dur-base) var(--ease-fluid);
 }
 
 .company-logo:hover img {

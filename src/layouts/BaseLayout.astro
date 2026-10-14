@@ -2,19 +2,24 @@
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.astro';
 import WhatsAppWidget from '../components/WhatsAppWidget.jsx';
+import { MARCA, SEO } from '../data/vigia';
 import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
   showMenu?: boolean;
+  /** Datos estructurados (schema.org) de la página, si los tiene. */
+  jsonLd?: Record<string, unknown>;
 }
 
-const {
-  title = 'VigIA',
-  description = 'VigIA: mitigación del estrés abiótico con bioinsumos. Clima, DPV, balance hídrico y suelo de cada lote, con alertas predictivas de estrés.',
-  showMenu = true,
-} = Astro.props;
+const { title = SEO.titulo, description = SEO.descripcion, showMenu = true, jsonLd } = Astro.props;
+
+// Las etiquetas para redes necesitan URLs absolutas. `site` se define en
+// astro.config.mjs; mientras no esté, se usa el dominio del producto.
+const site = Astro.site ?? new URL('https://vigiabioestres.com');
+const pageUrl = new URL(Astro.url.pathname, site).href;
+const ogImage = new URL('/og.jpg', site).href;
 ---
 
 <!doctype html>
@@ -22,13 +27,27 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content={MARCA} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <!-- Resuelve el tema antes del primer paint para evitar el flash claro→oscuro.
@@ -41,15 +60,52 @@ const {
           theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
         document.documentElement.setAttribute('data-rp-theme', theme);
+        // Habilita las apariciones al hacer scroll sólo con JS y movimiento
+        // permitido; sin esta clase el contenido se ve de entrada.
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduce && 'IntersectionObserver' in window) {
+          document.documentElement.classList.add('vg-reveal-on');
+        }
       })();
     </script>
   </head>
   <body class="rp-home">
+    <a class="vg-skip" href="#contenido">Saltar al contenido</a>
     <Header client:load showMenu={showMenu} />
-    <main>
+    <main id="contenido">
       <slot />
     </main>
     <Footer />
     <WhatsAppWidget client:idle />
+
+    <!-- Apariciones al hacer scroll ([data-reveal], estilos en global.css).
+         IntersectionObserver en lugar de un listener de scroll: no fuerza
+         reflows y cada elemento se anima una sola vez. -->
+    <script>
+      const root = document.documentElement;
+      if (root.classList.contains('vg-reveal-on')) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target as HTMLElement;
+              el.classList.add('is-revealed');
+              observer.unobserve(el);
+              // Terminada la aparición se quita el atributo para que el
+              // elemento recupere sus propias transiciones (hover sin retraso).
+              const done = (event: TransitionEvent) => {
+                if (event.target !== el || event.propertyName !== 'opacity') return;
+                el.removeEventListener('transitionend', done);
+                el.removeAttribute('data-reveal');
+                el.classList.remove('is-revealed');
+              };
+              el.addEventListener('transitionend', done);
+            });
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+        );
+        document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
+      }
+    </script>
   </body>
 </html>

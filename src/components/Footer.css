@@ -1,106 +1,76 @@
 /* ============================================================
-   Footer — light theme, modern, cohesivo con el Header
+   Footer — contacto directo + copyright. Tokens --gh-* (tema) y escalas
+   --text-*, --space-*, --ease-* de global.css.
    ============================================================ */
 
 .rp-footer {
   position: relative;
   width: 100%;
-  background: #ffffff;
-  color: var(--rp-gray-700);
+  background: var(--gh-surface);
+  color: var(--gh-fg-muted);
   font-family: var(--font-body);
-  overflow: hidden;
-  isolation: isolate;
-  border-top: 1px solid var(--rp-gray-200);
+  border-top: 1px solid var(--gh-border);
 }
 
-/* Top accent bar — fine gradient line */
-.rp-footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(212, 160, 23, 0.5) 25%,
-    rgba(29, 78, 216, 0.5) 75%,
-    transparent 100%
-  );
-  z-index: 2;
-}
-
-/* Radial glows removed for cleaner look */
-.rp-footer::after { display: none; }
 .rp-footer__dots { display: none; }
 
 .rp-footer__inner {
-  position: relative;
-  z-index: 1;
-  max-width: 1440px;
+  max-width: 1160px;
   margin: 0 auto;
-  padding: 36px 24px 36px;
-}
-
-@media (min-width: 768px) {
-  .rp-footer__inner { padding: 44px 40px 44px; }
+  padding: var(--space-500) var(--space-300);
 }
 
 @media (min-width: 1024px) {
-  .rp-footer__inner { padding: 52px 48px 48px; }
+  .rp-footer__inner { padding-block: var(--space-600); }
 }
 
-/* --- Section header --- */
+/* --- Título de la sección, entre dos líneas finas --- */
 .rp-footer__column-title {
-  font-family: var(--font-heading);
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.24em;
-  color: var(--rp-blue-700);
-  margin: 0 0 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: var(--space-100);
+  margin: 0 0 var(--space-400);
+  color: var(--gh-fg-muted);
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .rp-footer__column-title::before,
 .rp-footer__column-title::after {
   content: '';
-  width: 40px;
+  width: var(--space-500);
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--rp-gold-400));
+  background: var(--gh-border);
 }
 
-.rp-footer__column-title::after {
-  background: linear-gradient(90deg, var(--rp-gold-400), transparent);
-}
-
-/* --- Contact row (4 tiles: 1-col → 2×2 → 4-up) --- */
+/* --- Contactos: 1 columna → 2×2 → 4 --- */
 .rp-footer__contact {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
-  list-style: none;
+  gap: var(--space-100);
+  margin: 0 0 var(--space-500);
   padding: 0;
-  margin: 0 0 40px;
+  list-style: none;
 }
 
 @media (min-width: 768px) {
   .rp-footer__contact {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 48px;
+    gap: var(--space-200);
+    margin-bottom: var(--space-600);
   }
 }
 
 @media (min-width: 1024px) {
   .rp-footer__contact {
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    gap: var(--space-300);
   }
 }
 
@@ -109,100 +79,87 @@
 .rp-footer__contact-item {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 18px;
-  border-radius: 16px;
-  background: #ffffff;
-  border: 1px solid var(--rp-gray-200);
-  color: var(--rp-gray-800, #1f2937);
-  font-size: 0.88rem;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: left;
-  font-family: inherit;
-  box-shadow: 0 6px 14px -8px rgba(15, 23, 42, 0.12);
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.3s ease;
+  gap: var(--space-100);
   width: 100%;
+  padding: var(--space-100) var(--space-200);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-card);
+  background: var(--gh-surface);
+  color: var(--gh-fg);
+  text-align: left;
+  transition:
+    transform var(--dur-slow) var(--ease-fluid),
+    background-color var(--dur-base) var(--ease-fluid),
+    border-color var(--dur-base) var(--ease-fluid);
 }
 
 .rp-footer__contact-item:hover {
-  border-color: var(--rp-blue-300);
+  transform: translateY(calc(var(--space-25) * -1));
+  background: var(--gh-surface-2);
+  border-color: var(--gh-border-strong);
 }
 
+.rp-footer__contact-item:active {
+  transform: scale(0.98);
+}
+
+/* El ícono va solo, en su color, sin fondo. */
 .rp-footer__contact-icon {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.05rem;
-  color: #fff;
-  background: var(--rp-blue-600);
+  color: var(--gh-accent);
+  font-size: var(--text-2xl);
+  transition: transform var(--dur-slow) var(--ease-fluid);
 }
 
-.rp-footer__contact-icon--gold,
-.rp-footer__contact-icon--amber {
-  background: var(--rp-gold-600);
+.rp-footer__contact-item:hover .rp-footer__contact-icon {
+  transform: scale(1.1);
 }
 
-.rp-footer__contact-icon--whatsapp {
-  background: #25d366;
-}
+.rp-footer__contact-icon--whatsapp { color: #1a8a48; }
+.rp-footer__contact-icon--amber { color: var(--gh-detail-yellow-strong); }
+.rp-footer__contact-icon--instagram { color: var(--gh-detail-pink); }
 
-.rp-footer__contact-icon--instagram {
-  background: linear-gradient(45deg, #f09433, #dc2743 55%, #bc1888);
-}
+[data-rp-theme="dark"] .rp-footer__contact-icon--whatsapp { color: #3fb950; }
 
 .rp-footer__contact-text {
   display: flex;
   flex-direction: column;
   min-width: 0;
   overflow: hidden;
-  line-height: 1.3;
 }
 
 .rp-footer__contact-label {
+  color: var(--gh-fg-subtle);
   font-family: var(--font-heading);
-  font-size: 0.6rem;
-  font-weight: 700;
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
-  color: var(--rp-gray-400);
-  margin-bottom: 2px;
 }
 
 .rp-footer__contact-value {
-  font-size: 0.88rem;
-  color: var(--rp-gray-900);
-  white-space: nowrap;
   overflow: hidden;
+  color: var(--gh-fg);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 500;
   text-overflow: ellipsis;
-  font-weight: 600;
+  white-space: nowrap;
 }
 
-/* --- Bottom bar --- */
+/* --- Barra inferior --- */
 .rp-footer__divider {
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--rp-gray-200) 50%,
-    transparent 100%
-  );
-  margin-bottom: 24px;
+  margin-bottom: var(--space-300);
+  background: var(--gh-border);
 }
 
 .rp-footer__bottom {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-75);
   align-items: center;
   justify-content: space-between;
   text-align: center;
@@ -216,133 +173,13 @@
 }
 
 .rp-footer__copyright {
-  font-size: 0.78rem;
-  color: var(--rp-gray-500);
   margin: 0;
-  letter-spacing: 0.01em;
+  color: var(--gh-fg-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
 }
 
 .rp-footer__copyright strong {
-  color: var(--rp-gray-900);
-  font-weight: 700;
-}
-
-.rp-footer__made {
-  font-size: 0.68rem;
-  color: var(--rp-gray-400);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.rp-footer__made-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--rp-gold-500);
-  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.2);
-}
-
-/* ============================================================
-   GitHub footer skin — HOME ONLY (.rp-home)
-   ============================================================ */
-.rp-home .rp-footer {
-  background: var(--gh-surface);
-  color: var(--gh-fg-muted);
-  border-top: 1px solid var(--gh-border);
-}
-
-/* Replace the gold/blue accent line with a flat GitHub border */
-.rp-home .rp-footer::before {
-  display: none;
-}
-
-.rp-home .rp-footer__column-title {
-  color: var(--gh-fg-muted);
-  letter-spacing: 0.12em;
-}
-
-.rp-home .rp-footer__column-title::before,
-.rp-home .rp-footer__column-title::after {
-  background: var(--gh-border);
-}
-
-.rp-home .rp-footer__contact-item {
-  background: var(--gh-surface);
-  border: 1px solid var(--gh-border);
   color: var(--gh-fg);
-  border-radius: var(--gh-radius-btn, 10px);
-  box-shadow: var(--gh-shadow-sm);
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.rp-home .rp-footer__contact-item:hover {
-  background: var(--gh-surface-2);
-  border-color: var(--gh-border-strong);
-}
-
-/* Contact icons → just the line icon in its colour, no chip/background */
-.rp-home .rp-footer__contact-icon {
-  width: auto;
-  height: auto;
-  background: none;
-  border: none;
-  border-radius: 0;
-  font-size: 1.4rem;
-  color: var(--gh-accent);
-}
-
-.rp-home .rp-footer__contact-icon--whatsapp {
-  background: none;
-  border: none;
-  color: #1a8a48;
-}
-
-.rp-home .rp-footer__contact-icon--amber {
-  background: none;
-  border: none;
-  color: var(--gh-detail-yellow);
-}
-
-.rp-home .rp-footer__contact-icon--instagram {
-  background: none;
-  border: none;
-  color: var(--gh-detail-pink);
-}
-
-.rp-home .rp-footer__contact-label {
-  color: var(--gh-fg-subtle);
-}
-
-.rp-home .rp-footer__contact-value {
-  color: var(--gh-fg);
-  font-weight: 500;
-}
-
-.rp-home .rp-footer__divider {
-  background: var(--gh-border);
-}
-
-.rp-home .rp-footer__copyright {
-  color: var(--gh-fg-muted);
-}
-
-.rp-home .rp-footer__copyright strong {
-  color: var(--gh-fg);
-}
-
-.rp-home .rp-footer__made {
-  color: var(--gh-fg-subtle);
-}
-
-.rp-home .rp-footer__made-dot {
-  background: var(--gh-detail-yellow);
-  box-shadow: 0 0 0 3px var(--gh-detail-yellow-soft);
-}
-
-/* WhatsApp chip stays legible in dark mode */
-[data-rp-theme="dark"] .rp-home .rp-footer__contact-icon--whatsapp {
-  color: #3fb950;
+  font-weight: 600;
 }

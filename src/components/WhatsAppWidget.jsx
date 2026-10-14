@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { FaWhatsapp, FaTimes } from 'react-icons/fa';
+import { PiWhatsappLogo, PiX } from 'react-icons/pi';
 import { WHATSAPP_URL } from '../data/social';
 import './WhatsAppWidget.css';
 
@@ -29,7 +29,8 @@ const WhatsAppWidget = () => {
     };
     const handleScroll = () => setOpen(false);
     document.addEventListener('mousedown', handleClick);
-    window.addEventListener('scroll', handleScroll);
+    // Basta el primer scroll para cerrarlo: once evita escuchar cada evento.
+    window.addEventListener('scroll', handleScroll, { passive: true, once: true });
     return () => {
       document.removeEventListener('mousedown', handleClick);
       window.removeEventListener('scroll', handleScroll);
@@ -45,8 +46,8 @@ const WhatsAppWidget = () => {
           onClick={() => setOpen((v) => !v)}
           aria-label="WhatsApp"
         >
-          <FaWhatsapp className="wa-widget__fab-icon wa-widget__fab-icon--wa" />
-          <FaTimes className="wa-widget__fab-icon wa-widget__fab-icon--close" />
+          <PiWhatsappLogo className="wa-widget__fab-icon wa-widget__fab-icon--wa" />
+          <PiX className="wa-widget__fab-icon wa-widget__fab-icon--close" />
         </button>
 
         <div className="wa-widget__panel">
