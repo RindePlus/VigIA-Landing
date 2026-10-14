@@ -7,8 +7,9 @@ import react from '@astrojs/react';
 // 404.html con redirect que usa el router client-side de Landing.
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
-  // TODO: definir el dominio final de VigIA y agregar public/CNAME.
-  // site: 'https://vigia.rindeplus.com',
+  // Dominio propio: el sitio vive en la raíz, así que base queda en '/'.
+  // public/CNAME tiene que coincidir con site, o Pages pierde el dominio.
+  site: 'https://vigiabioestres.com',
   base: '/',
   outDir: './docs',
   trailingSlash: 'ignore',
