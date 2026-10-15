@@ -108,14 +108,14 @@ Fuera de Claude Code, el hook opcional `.githooks/commit-msg` valida lo mismo: `
 La guía de diseño es la skill **`landing-page-design`** (ver [ADR 0003](doc/adr/0003-landing-page-design-skill.md)): minimalista y moderno, con movimiento que acompaña sin recargar. Sus reglas se traducen a este repo así:
 
 - **Escalas como tokens CSS**, no clases de Tailwind: `--text-*` / `--leading-*` (tipografía), `--space-*` (espaciado), `--ease-fluid` y `--dur-*` (movimiento), todos en `src/styles/global.css`. Ningún tamaño, espaciado ni curva suelta en los componentes.
-- **Tipografía**: Geist (Google Fonts), pesos hasta 700, sin itálicas. `text-wrap: balance` en títulos y `pretty` en texto.
-- **Íconos**: Phosphor vía `react-icons/pi`.
+- **Tipografía**: Geist (Google Fonts), pesos hasta 700, sin itálicas. `text-wrap: pretty` en títulos y texto (los renglones se llenan al máximo, sin palabra suelta al final); `balance` sólo en la frase destacada centrada.
+- **Íconos**: Phosphor vía `react-icons/pi`. Monocromos en su color (verde `--vg-icon-green`, severidades, WhatsApp, etc.), **sin fondo ni círculo tintado**. Lo mismo para números de pasos y rótulos: nada de "badges" con fondo de color y texto flúor.
 - **Movimiento**: toda transición usa `var(--ease-fluid)`. Las apariciones al hacer scroll se activan con el atributo `data-reveal` (y `style="--reveal-delay: …"` para escalonar). El observer está en `BaseLayout.astro`. No pongas `data-reveal` en elementos que usa el hilo como ancla (`data-vg-node`, `data-vg-end`). Todo respeta `prefers-reduced-motion`.
 - **Modo oscuro**: fondos neutros de la paleta de la skill (`#181818`, `#1f1f1f`, `#272727`, `#313131`, `#131209`).
 
 Excepciones acordadas a la skill:
 
-- **Header**: se mantiene el estilo actual (ancho de contenido, translúcido, se oculta al bajar). No es la píldora flotante que propone la skill.
+- **Header**: ancho de contenido, se oculta al bajar. Arriba de todo es transparente y sin línea (se funde con el hero); con scroll (`header--scrolled`) o con el menú de celular abierto toma fondo translúcido con desenfoque y una línea fina abajo. No es la píldora flotante que propone la skill.
 - **Fondo de los tres módulos y el hilo** (`.vg-journey`, `JourneyThread`): degradé por etapas, **provisorio**. Se van a probar otros fondos; mientras tanto no se aplica la regla de fondos planos ahí.
 - **Estrategia y estructura (Parte A de la skill)**: en este repo la reemplaza `vigia-landing-structure`, que fija las secciones (incluidas frase destacada, cómo funciona y preguntas frecuentes), el CTA único y qué se puede afirmar del producto.
 

@@ -24,7 +24,7 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 - **Público:** productores (extensivos e intensivos, en secano o bajo riego) y asesores agronómicos.
 - **Problema:** el estrés hídrico y térmico se ve a campo cuando el rinde ya está comprometido.
 - **Promesa:** VigIA BioEstrés te avisa con días de margen, por ambiente, para aplicar el bioinsumo o regar a tiempo.
-- **Acción única:** **Quiero ver mis lotes en VigIA**. Abre WhatsApp para agendar una demo de 20 minutos con los lotes del cliente. Mismo texto en el hero y en el cierre.
+- **Acción única:** **Contactanos para empezar a usar VigIA**. Abre WhatsApp para agendar una demo de 20 minutos con los lotes del cliente. Mismo texto en el hero y en el cierre.
 - **Tipo de página:** relato largo con hero (tipo B de `landing-page-design`): hay que educar sobre el estrés invisible antes de pedir la acción.
 
 ## Estructura fija

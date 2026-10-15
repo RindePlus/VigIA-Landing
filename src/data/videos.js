@@ -3,7 +3,8 @@
 // en código; en `pnpm dev` aparece además una nota con la `descripcion`.
 //
 // Para agregar un clip, copiá los archivos a `public/videos/` y completá:
-//   { mp4: '/videos/x.mp4', poster: '/videos/x.jpg', descripcion: '...' }
+//   { mp4: '/videos/x.mp4', poster: '/videos/x.jpg', descripcion: '...',
+//     rotulo: 'Texto corto sobre el video', tono: 'critico' | 'ok', encuadre: '50% 50%' }
 // Clips de 5-8 s, sin sonido, sin texto adentro, menos de 4 MB.
 // Sólo MP4 (H.264): con follaje fino, a igual calidad el WebM (VP9) pesaba
 // más, y el navegador lo descargaría primero. `webm` sigue siendo opcional.
@@ -16,6 +17,10 @@ export const VIDEOS = {
     mp4: '/videos/problema.mp4',
     poster: '/videos/problema.jpg',
     descripcion: 'El lote se marchita bajo el sol del mediodía y la mano del productor toca una hoja seca (5 s).',
+    rotulo: 'Sin aviso · el daño se ve a campo',
+    tono: 'critico',
+    // Los eucaliptos y los silos están a la derecha.
+    encuadre: '75% 50%',
   },
 
   // Módulo 3: la resolución (pulverizadora aplicando al amanecer y el mismo
@@ -24,6 +29,10 @@ export const VIDEOS = {
     mp4: '/videos/resolucion.mp4',
     poster: '/videos/resolucion.jpg',
     descripcion: 'La pulverizadora aplica al amanecer y se funde al mismo lote, sano (5,5 s).',
+    rotulo: 'Con el aviso · se aplica a tiempo',
+    tono: 'ok',
+    // La pulverizadora va un poco a la izquierda del centro y los silos a la derecha.
+    encuadre: '58% 50%',
   },
 };
 

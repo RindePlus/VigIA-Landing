@@ -9,35 +9,68 @@
 //   video empieza a descargarse recién cuando el módulo entra en pantalla.
 // - Las animaciones del slot se activan con la clase `.is-playing` en
 //   `.vg-story__anim` (ver sections.css).
+// - Con `cierre` (ms), al terminar el video vuelve la animación en su estado
+//   final con `data-stage="cierre"` durante ese tiempo, antes de reiniciar:
+//   el slot puede mostrar cómo terminó la historia (ver WhatsAppMock).
+// - Durante el video se ve un rótulo de capítulo arriba a la izquierda (ícono
+//   + texto en mayúsculas): sin él, el paso de la interfaz al campo no se
+//   entiende. El ícono sale del `tono`: ⚠ crítico o ✓ ok.
+import { PiWarningCircleFill, PiCheckCircleFill } from 'react-icons/pi';
+
 interface Video {
   webm?: string;
   mp4?: string;
   poster?: string;
   descripcion?: string;
+  /** Texto corto sobre el video ("Sin aviso · …"). */
+  rotulo?: string;
+  /** Ícono y color del rótulo: 'critico' (⚠ rojo) u 'ok' (✓ verde, por defecto). */
+  tono?: string;
+  /** `object-position` del video: qué parte se conserva cuando el contenedor
+      es más angosto que 4:3 (en celular). */
+  encuadre?: string;
 }
 
 interface Props {
   /** Duración de la animación en ms, antes de pasar al video o repetir. */
   duracion: number;
+  /** Ms que se muestra el cierre después del video (0 = sin cierre). */
+  cierre?: number;
   video?: Video | null;
   /** Nota visible sólo en `pnpm dev` cuando todavía no hay video. */
   pendiente?: string;
 }
 
-const { duracion, video = null, pendiente } = Astro.props;
+const { duracion, cierre = 0, video = null, pendiente } = Astro.props;
 const mostrarPendiente = !video && pendiente && import.meta.env.DEV;
 ---
 
-<div class="vg-story" data-vg-story data-duracion={duracion}>
+<div class="vg-story" data-vg-story data-duracion={duracion} data-cierre={cierre}>
   <div class="vg-story__anim">
     <slot />
   </div>
   {
     video && (
-      <video class="vg-story__video" muted playsinline preload="none" poster={video.poster} aria-hidden="true">
+      <video
+        class="vg-story__video"
+        muted
+        playsinline
+        preload="none"
+        poster={video.poster}
+        aria-hidden="true"
+        style={video.encuadre ? `object-position: ${video.encuadre}` : undefined}
+      >
         {video.webm && <source src={video.webm} type="video/webm" />}
         {video.mp4 && <source src={video.mp4} type="video/mp4" />}
       </video>
+    )
+  }
+  {
+    video?.rotulo && (
+      <p class={`vg-story__rotulo vg-story__rotulo--${video.tono ?? 'ok'}`} aria-hidden="true">
+        {video.tono === 'critico' ? <PiWarningCircleFill /> : <PiCheckCircleFill />}
+        <span>{video.rotulo}</span>
+      </p>
     )
   }
   {mostrarPendiente && <p class="vg-story__pendiente">🎬 Pendiente: {pendiente}</p>}
@@ -45,12 +78,14 @@ const mostrarPendiente = !video && pendiente && import.meta.env.DEV;
 
 <script>
   const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const VELOCIDAD_VIDEO = 0.75;
 
   if (!reduceMotion) {
     document.querySelectorAll<HTMLElement>('[data-vg-story]').forEach((story) => {
       const anim = story.querySelector<HTMLElement>('.vg-story__anim');
       const video = story.querySelector<HTMLVideoElement>('.vg-story__video');
       const duracion = Number(story.dataset.duracion) || 7000;
+      const cierre = Number(story.dataset.cierre) || 0;
       if (!anim) return;
 
       let timer: number | undefined;
@@ -72,6 +107,9 @@ const mostrarPendiente = !video && pendiente && import.meta.env.DEV;
         }
         story.dataset.stage = 'video';
         video.currentTime = 0;
+        // Los clips van a 0,75x: el campo se mira con calma. Las animaciones
+        // en código conservan su velocidad.
+        video.playbackRate = VELOCIDAD_VIDEO;
         video.play().catch(() => {
           // El video no cargó o el navegador no lo deja reproducir: sigue
           // sólo con la animación.
@@ -80,7 +118,17 @@ const mostrarPendiente = !video && pendiente && import.meta.env.DEV;
       };
 
       video?.addEventListener('ended', () => {
-        if (visible) playAnim();
+        if (!visible) return;
+        if (!cierre) {
+          playAnim();
+          return;
+        }
+        // La animación sigue en su estado final (fill-mode both): sólo se
+        // cambia la etapa para que el slot muestre el desenlace.
+        story.dataset.stage = 'cierre';
+        timer = window.setTimeout(() => {
+          if (visible) playAnim();
+        }, cierre);
       });
 
       const stop = () => {

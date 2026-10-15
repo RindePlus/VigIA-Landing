@@ -10,12 +10,12 @@ export const MARCA = 'VigIA BioEstrés';
 
 // CTA único de la página: mismo texto en el hero y en el cierre.
 export const CTA = {
-  texto: 'Quiero ver mis lotes en VigIA',
-  mensajeWhatsApp: `Hola, quiero ver mis lotes en ${MARCA}`,
+  texto: 'Contactanos para empezar a usar VigIA',
+  mensajeWhatsApp: `Hola, quiero empezar a usar ${MARCA}`,
 };
 
 export const SEO = {
-  titulo: `${MARCA} · Anticipá el estrés hídrico y térmico de tus lotes`,
+  titulo: MARCA,
   descripcion:
     'Alertas de estrés hídrico y térmico por ambiente, con días de margen para aplicar el bioinsumo o regar. En la plataforma y por WhatsApp.',
 };
@@ -25,14 +25,13 @@ export const HERO = {
   etiqueta: 'Estrés hídrico y térmico',
   titulo: 'Detectá el estrés antes de que se convierta en merma',
   bajada: `${MARCA} cruza el clima, el balance hídrico y el suelo de cada ambiente, y te avisa días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos.`,
+  // Tres tarjetas con ícono (los íconos se asignan por id en index.astro).
   puntos: [
-    'Alertas a 4 días y aviso del período crítico a 14',
-    'Por ambiente, en secano o bajo riego',
-    'En la plataforma y en tu WhatsApp',
+    { id: 'aviso', titulo: 'Aviso anticipado', texto: 'Alerta a 4 días y el período crítico a 14.' },
+    { id: 'ambiente', titulo: 'Por ambiente', texto: 'En secano o bajo riego.' },
+    { id: 'whatsapp', titulo: 'En tu WhatsApp', texto: 'Y en la plataforma, con el detalle.' },
   ],
   secundario: { texto: 'Cómo funciona', href: '#como-funciona' },
-  // Antes de publicar, confirmar que estas organizaciones autorizan la mención.
-  prueba: 'Lo usan productores y asesores de Aapresid, CREA, Agroconsultor y SpeedAgro.',
 };
 
 // 2. El problema
@@ -42,14 +41,17 @@ export const PROBLEMA = {
   bajada: 'Para cuando lo ves a campo, reaccionás tarde y el daño ya está hecho.',
   razones: [
     {
+      id: 'sintoma',
       titulo: 'El síntoma llega tarde',
       texto: 'Cuando la hoja se enrolla, el rinde ya está comprometido.',
     },
     {
+      id: 'bioinsumo',
       titulo: 'El bioinsumo necesita llegar antes',
       texto: 'Aplicado cuando el estrés ya pasó, protege poco.',
     },
     {
+      id: 'pronostico',
       titulo: 'El pronóstico regional no conoce tu lote',
       texto: 'No sabe cuánta agua le queda a tu suelo ni en qué etapa está tu cultivo.',
     },
@@ -64,68 +66,63 @@ export const PROBLEMA = {
 // 3. Cómo funciona
 export const COMO_FUNCIONA = {
   etiqueta: 'Cómo funciona',
-  titulo: 'De la alerta a la decisión, en un solo flujo',
+  titulo: 'Te avisa antes, por WhatsApp y en la plataforma',
   bajada:
-    'VigIA sigue cada ambiente día a día y te avisa cuando todavía hay margen para aplicar el bioinsumo o regar.',
-  // Paso 1 con redacción neutral ("se cargan") hasta confirmar quién hace el
-  // alta de lotes (pregunta abierta 1 de ESTRUCTURA_LANDING.md).
-  pasos: [
-    {
-      id: 'lotes',
-      titulo: 'Tus lotes, en VigIA',
-      texto:
-        'Se cargan tus lotes, ambientes, suelo, siembra y cultivo. El clima del lote se conecta solo, con pronóstico a 14 días.',
-    },
-    {
-      id: 'calculo',
-      titulo: 'VigIA calcula cada día',
-      texto: 'Balance hídrico por ambiente y DPV contra los umbrales de tu cultivo en su etapa.',
-    },
-    {
-      id: 'alerta',
-      titulo: 'Te avisa y actuás',
-      texto: 'Alerta con severidad, ambiente y acción sugerida. Cargás lluvias y riegos, y el cálculo se ajusta.',
-    },
-  ],
-  // Títulos y acciones tal como los genera el motor, acortados.
-  alertas: [
-    {
-      severidad: 'alerta',
-      etiqueta: 'Alerta',
-      titulo: 'Estrés hídrico moderado en 4 días',
-      accion: 'Planificar riego o bioinsumo entre hoy y 3 días.',
-    },
-    {
-      severidad: 'info',
-      etiqueta: 'Preventiva',
-      titulo: 'Período crítico en 14 días',
-      accion: 'Bioinsumo preventivo antes del estadio.',
-    },
-    {
-      severidad: 'critico',
-      etiqueta: 'Crítica',
-      titulo: 'Estrés hídrico y térmico combinado',
-      accion: 'Bioinsumo hídrico más antiestrés térmico, ya.',
-    },
-  ],
+    'VigIA sigue cada ambiente día a día. Cuando se viene el estrés, te avisa con margen para aplicar el bioinsumo o regar.',
+  // Los dos canales son el valor principal: van primero y grandes.
   canales: [
-    {
-      id: 'plataforma',
-      titulo: 'En la plataforma',
-      texto: 'El panel del lote, con el balance hídrico y el DPV que explican la alerta.',
-    },
     {
       id: 'whatsapp',
       titulo: 'En tu WhatsApp',
-      texto: 'El aviso te llega al celular sin tener que entrar.',
+      texto: 'El aviso te llega al celular con la acción sugerida, sin tener que entrar a ningún lado.',
+    },
+    {
+      id: 'plataforma',
+      titulo: 'En la plataforma',
+      texto: 'El panel del lote, con el balance hídrico y el DPV que explican cada alerta.',
     },
   ],
+  // Qué te avisa: las tres alertas del motor (estrés hídrico a 4 días,
+  // período crítico a 14, estrés combinado) contadas en lenguaje de campo.
+  // `tono` = color de la severidad (alerta ámbar, info azul, crítico rojo).
+  alertas: [
+    {
+      id: 'hidrico',
+      tono: 'alerta',
+      titulo: 'Falta de agua que se viene',
+      texto: 'Te avisa 4 días antes de que al suelo le falte agua para tu cultivo.',
+    },
+    {
+      id: 'critico',
+      tono: 'info',
+      titulo: 'Etapa crítica del cultivo',
+      texto: '14 días antes de la etapa que define el rinde, para aplicar el bioinsumo preventivo.',
+    },
+    {
+      id: 'combinado',
+      tono: 'critico',
+      titulo: 'Calor y sequía juntos',
+      texto: 'Cuando se suman el estrés hídrico y el térmico, para actuar ese mismo día.',
+    },
+  ],
+  // Cómo lo hace: tres pasos cortos. Paso 1 con redacción neutral ("se
+  // cargan") hasta confirmar quién hace el alta de lotes (pregunta abierta 1
+  // de ESTRUCTURA_LANDING.md).
+  pasos: [
+    { id: 'lotes', titulo: 'Se cargan tus lotes', texto: 'Ambientes, suelo y cultivo. El clima se conecta solo.' },
+    { id: 'calculo', titulo: 'Calcula cada día', texto: 'Balance hídrico y DPV contra los umbrales de tu cultivo.' },
+    { id: 'alerta', titulo: 'Te avisa a tiempo', texto: 'Cargás lluvias y riegos, y el cálculo se ajusta.' },
+  ],
   // Mensaje de ejemplo del celular (WhatsAppMock.astro).
+  // Simple a propósito: la alerta, dónde y qué hacer.
   mensaje: {
-    lote: 'Lote 12 – Ambiente 2',
-    alerta: 'Estrés hídrico moderado en 4 días.',
-    accion: 'Acción sugerida: planificar riego o bioinsumo entre hoy y el jueves.',
+    alerta: 'Estrés hídrico en 4 días',
+    lote: 'Lote 12 · Ambiente 2',
+    accion: 'Planificá riego o bioinsumo.',
     hora: '07:30',
+    // Cierre después del video de resolución (MediaStory `cierre`). Narrativo:
+    // no afirma que la plataforma registre la aplicación.
+    resuelta: 'Resuelta a tiempo',
   },
   cultivoServicio: {
     pregunta: '¿Hacés cultivos de servicio?',
@@ -134,7 +131,9 @@ export const COMO_FUNCIONA = {
 };
 
 // 4. Frase destacada: una línea por renglón.
-export const FRASE = ['Que el bioinsumo llegue antes que el estrés,', 'no después del daño.'];
+// Palabras resaltadas con los colores de la historia: *verde* (a tiempo) y
+// _rojo_ (tarde).
+export const FRASE = ['Que el bioinsumo llegue *antes* que el estrés,', 'no _después del daño._'];
 
 // 5. Beneficios
 export const BENEFICIOS = {
@@ -144,19 +143,19 @@ export const BENEFICIOS = {
     {
       id: 'ventaja',
       titulo: 'Días de ventaja',
-      texto: 'El balance hídrico y el DPV marcan el estrés antes que la hoja. Te enterás con margen para actuar.',
-      resultado: 'Llegás a tiempo al déficit hídrico y a los golpes de calor.',
+      texto: 'El balance hídrico y el DPV marcan el estrés antes que la hoja.',
+      resultado: 'Llegás a tiempo a la falta de agua y al golpe de calor.',
     },
     {
       id: 'insumo',
       titulo: 'Insumo donde hace falta',
-      texto: 'VigIA trabaja por ambiente: aplicás o regás donde el estrés se viene, no en todo el lote.',
+      texto: 'VigIA mira cada ambiente: aplicás o regás donde se viene el estrés, no en todo el lote.',
       resultado: 'Menor costo por hectárea.',
     },
     {
       id: 'merma',
       titulo: 'Menos merma',
-      texto: 'Cada alerta dice la etapa del cultivo, la severidad y el ambiente. Sabés qué lote recorrer primero.',
+      texto: 'Cada alerta dice qué ambiente y en qué etapa. Sabés qué lote recorrer primero.',
       resultado: 'Campañas más previsibles.',
     },
   ],
@@ -165,15 +164,15 @@ export const BENEFICIOS = {
 // 6. Para quién es
 export const PARA_QUIEN = {
   etiqueta: 'Para quién es',
-  titulo: 'Para quien decide sobre el lote',
+  titulo: 'Pensado para el productor y su asesor',
   perfiles: [
     {
       id: 'productores',
-      titulo: 'Productores, extensivos e intensivos',
-      lema: 'Proteger el margen de cada hectárea.',
+      titulo: 'Productores',
+      lema: 'Extensivos e intensivos, en secano o bajo riego.',
       puntos: [
         'Todos tus lotes y ambientes en un solo lugar, campaña tras campaña.',
-        'Alertas antes de los períodos críticos que definen el rinde.',
+        'El aviso en tu WhatsApp antes de los períodos que definen el rinde.',
         'Bajo riego, un plan mensual con costo y rinde esperado.',
       ],
       clave: 'Menos merma y menos insumo desperdiciado.',
@@ -184,13 +183,12 @@ export const PARA_QUIEN = {
       lema: 'Más hectáreas bajo control, con el mismo tiempo.',
       puntos: [
         'Sabés qué lote y qué ambiente mirar antes de salir al campo.',
-        'Recomendaciones respaldadas por clima, balance hídrico y fenología.',
+        'Las alertas de todos tus clientes, en la plataforma y en WhatsApp.',
         'Reportes en PDF listos para compartir con cada productor.',
       ],
       clave: 'Recomendaciones más rápidas y fáciles de defender.',
     },
   ],
-  nota: 'En secano o bajo riego.',
 };
 
 // 8. Preguntas frecuentes (también van como JSON-LD FAQPage).

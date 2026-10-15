@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { PiSun, PiMoon, PiSignIn } from 'react-icons/pi';
+import { PiSun, PiMoon, PiSignIn, PiWhatsappLogo } from 'react-icons/pi';
 import vigiaLogo from '../assets/vigia-biostres-logo-light.png';
 import vigiaLogoDark from '../assets/vigia-biostres-logo-dark.png';
 import { useTheme } from '../hooks/useTheme';
-import { APP_URL } from '../data/social';
+import { APP_URL, WHATSAPP_URL } from '../data/social';
 import { MARCA } from '../data/vigia';
 import './Header.css';
 
@@ -21,6 +21,9 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [isHidden, setIsHidden] = useState(false);
+  // Arriba de todo el header se funde con la página; al bajar toma fondo y
+  // una línea fina para separarse del contenido que pasa por debajo.
+  const [isScrolled, setIsScrolled] = useState(false);
   const headerRef = useRef(null);
 
   // Oculta el header al bajar y lo muestra al subir. Para ocultarse exige un
@@ -37,6 +40,7 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
 
     const update = () => {
       const y = window.scrollY;
+      setIsScrolled(y > 8);
       const nextDirection = Math.sign(y - lastY);
       if (nextDirection !== 0 && nextDirection !== direction) {
         direction = nextDirection;
@@ -62,6 +66,7 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    update(); // estado correcto si la página carga ya scrolleada
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -80,7 +85,7 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
   return (
     <header
       ref={headerRef}
-      className={`header ${isMenuOpen ? 'header--menu-open' : ''} ${!showMenu ? 'header--no-menu' : ''} ${isHidden && !isMenuOpen ? 'header--hidden' : ''}`}
+      className={`header ${isMenuOpen ? 'header--menu-open' : ''} ${!showMenu ? 'header--no-menu' : ''} ${isHidden && !isMenuOpen ? 'header--hidden' : ''} ${isScrolled ? 'header--scrolled' : ''}`}
     >
       <div className="header-content">
         <a href="/" className="header-logo" aria-label={`${MARCA} — inicio`}>
@@ -125,6 +130,19 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
                 <span className="rp-theme-switch__knob" />
               </button>
             </div>
+
+            {/* En celular WhatsApp vive acá y no como botón flotante
+                (WhatsAppWidget se oculta por debajo de 768 px). */}
+            <a
+              className="header-nav__whatsapp"
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <PiWhatsappLogo aria-hidden="true" />
+              <span>Escribinos por WhatsApp</span>
+            </a>
           </nav>
         )}
 
@@ -143,22 +161,24 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
             <span>Ingresar</span>
             <PiSignIn />
           </a>
-
-          {showMenu && (
-            <button
-              type="button"
-              className={`hamburger-button ${isMenuOpen ? 'open' : ''}`}
-              onClick={() => setIsMenuOpen((open) => !open)}
-              aria-label="Abrir menú"
-              aria-expanded={isMenuOpen}
-              aria-controls="header-menu"
-            >
-              <span className="hamburger-line" />
-              <span className="hamburger-line" />
-              <span className="hamburger-line" />
-            </button>
-          )}
         </div>
+
+        {/* Fuera de .header-actions: en celular va a la izquierda del logo
+            centrado (ver Header.css). */}
+        {showMenu && (
+          <button
+            type="button"
+            className={`hamburger-button ${isMenuOpen ? 'open' : ''}`}
+            onClick={() => setIsMenuOpen((open) => !open)}
+            aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={isMenuOpen}
+            aria-controls="header-menu"
+          >
+            <span className="hamburger-line" />
+            <span className="hamburger-line" />
+            <span className="hamburger-line" />
+          </button>
+        )}
       </div>
     </header>
   );

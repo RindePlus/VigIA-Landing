@@ -2,12 +2,16 @@
 // Celular con un aviso de VigIA por WhatsApp. HTML + CSS (sin imagen) para
 // que siga al tema claro/oscuro. Es ilustrativo: los datos salen de
 // COMO_FUNCIONA.mensaje en src/data/vigia.js.
-// Animación (con `.is-playing`, la dispara MediaStory): "escribiendo…", llega
-// el mensaje y se marca el enlace al detalle. Sin ella, se ve el mensaje.
+// Ocupa todo el recuadro del medio (4:3, como el video), así no cambia de
+// tamaño al pasar al video. Mensaje simple: la alerta, dónde y qué hacer.
+// Animación (con `.is-playing`, la dispara MediaStory): "escribiendo…" y
+// llega el mensaje. Sin ella, se ve el mensaje.
+// Cierre (`data-stage="cierre"` en MediaStory, después del video): la alerta
+// pasa a "Resuelta", espejo del "Sin aviso" del gráfico del problema.
 import { PiWhatsappLogo } from 'react-icons/pi';
 import { COMO_FUNCIONA } from '../data/vigia';
 
-const { lote, alerta, accion, hora } = COMO_FUNCIONA.mensaje;
+const { lote, alerta, accion, hora, resuelta } = COMO_FUNCIONA.mensaje;
 ---
 
 <figure class="vg-phone" aria-label="Ejemplo de alerta de VigIA por WhatsApp">
@@ -24,13 +28,14 @@ const { lote, alerta, accion, hora } = COMO_FUNCIONA.mensaje;
     <div class="vg-phone__chat">
       <span class="vg-phone__typing" aria-hidden="true"><i></i><i></i><i></i></span>
       <div class="vg-phone__bubble">
-        <p class="vg-phone__lote">VigIA · {lote}</p>
-        <p class="vg-phone__alerta"><span aria-hidden="true">⚠️</span> {alerta}</p>
+        <p class="vg-phone__alerta">
+          <span class="vg-phone__aviso"><span aria-hidden="true">⚠️</span> {alerta}</span>
+          <span class="vg-phone__resuelta" aria-hidden="true"><span>✅</span> {resuelta}</span>
+        </p>
+        <p class="vg-phone__lote">{lote}</p>
         <p>{accion}</p>
-        <p class="vg-phone__link">Ver detalle en la plataforma →</p>
         <span class="vg-phone__time">{hora}</span>
       </div>
     </div>
   </div>
-  <figcaption class="vg-phone__note">Ejemplo ilustrativo</figcaption>
 </figure>

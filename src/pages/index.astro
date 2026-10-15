@@ -13,15 +13,26 @@ import JourneyThread from '../components/JourneyThread.astro';
 import TaglineReveal from '../components/TaglineReveal.astro';
 import TrustedCompanies from '../components/TrustedCompanies.jsx';
 import {
-  PiStack,
-  PiCalculator,
+  PiSquaresFour,
+  PiWhatsappLogo,
+  PiPlant,
+  PiHourglassMedium,
+  PiCloudSun,
+  PiDrop,
+  PiThermometerHot,
+  PiCalendarDots,
+  PiWarningDiamond,
   PiBellRinging,
   PiMonitor,
-  PiDeviceMobile,
   PiClockCountdown,
   PiCrosshair,
   PiChartLineUp,
   PiCaretDown,
+  PiArrowRight,
+  PiCheck,
+  PiCheckCircle,
+  PiTractor,
+  PiClipboardText,
 } from 'react-icons/pi';
 import {
   CTA,
@@ -39,8 +50,12 @@ import { buildWhatsAppUrl } from '../data/social';
 import { VIDEOS, DESCRIPCION_PENDIENTE } from '../data/videos';
 import '../styles/sections.css';
 
-const ICONOS_PASOS = { lotes: PiStack, calculo: PiCalculator, alerta: PiBellRinging };
-const ICONOS_CANALES = { plataforma: PiMonitor, whatsapp: PiDeviceMobile };
+const ICONOS_HERO = { aviso: PiBellRinging, ambiente: PiSquaresFour, whatsapp: PiWhatsappLogo };
+const ICONOS_RAZONES = { sintoma: PiPlant, bioinsumo: PiHourglassMedium, pronostico: PiCloudSun };
+const ICONOS_ESTRES = { hidrico: PiDrop, termico: PiThermometerHot, combinado: PiWarningDiamond };
+const ICONOS_CANALES = { plataforma: PiMonitor, whatsapp: PiWhatsappLogo };
+const ICONOS_ALERTAS = { hidrico: PiDrop, critico: PiCalendarDots, combinado: PiThermometerHot };
+const ICONOS_PERFILES = { productores: PiTractor, asesores: PiClipboardText };
 const ICONOS_BENEFICIOS = { ventaja: PiClockCountdown, insumo: PiCrosshair, merma: PiChartLineUp };
 // Escalonado de las apariciones al hacer scroll ([data-reveal], global.css).
 const delay = (i: number) => `--reveal-delay: ${i * 100}ms`;
@@ -71,14 +86,20 @@ const faqJsonLd = {
         <p class="vg-eyebrow vg-eyebrow--lime" data-vg-node="1">{HERO.etiqueta}</p>
         <h1 class="vg-hero__title" data-reveal>{HERO.titulo}</h1>
         <p class="vg-hero__subtitle" data-reveal style={delay(1)}>{HERO.bajada}</p>
-        <ul class="vg-checks vg-hero__points" data-reveal style={delay(2)}>
-          {HERO.puntos.map((p) => <li>{p}</li>)}
+        <ul class="vg-hero__cards">
+          {
+            HERO.puntos.map((p, i) => {
+              const Icon = ICONOS_HERO[p.id as keyof typeof ICONOS_HERO];
+              return (
+                <li class="vg-hero__card" data-reveal style={delay(i + 2)}>
+                  <span class="vg-hero__card-icon" aria-hidden="true"><Icon /></span>
+                  <strong>{p.titulo}</strong>
+                  <span>{p.texto}</span>
+                </li>
+              );
+            })
+          }
         </ul>
-        <div class="vg-hero__ctas" data-reveal style={delay(3)}>
-          <a class="vg-btn" href={ctaUrl} target="_blank" rel="noopener noreferrer">{CTA.texto}</a>
-          <a class="vg-btn vg-btn--ghost" href={HERO.secundario.href}>{HERO.secundario.texto}</a>
-        </div>
-        <p class="vg-hero__prueba" data-reveal style={delay(4)}>{HERO.prueba}</p>
       </div>
       <div class="vg-media" data-reveal style={delay(2)}>
         <MediaStory duracion={7500}>
@@ -86,26 +107,43 @@ const faqJsonLd = {
         </MediaStory>
       </div>
     </div>
+    <!-- Botones en su propia fila, centrados bajo las dos columnas: así la
+         columna de texto termina en las tarjetas, a la altura del gráfico. -->
+    <div class="vg-wrap vg-hero__ctas" data-reveal style={delay(5)}>
+      <a class="vg-btn vg-btn--lg" href={ctaUrl} target="_blank" rel="noopener noreferrer">
+        {CTA.texto}
+        <PiArrowRight aria-hidden="true" />
+      </a>
+      <a class="vg-btn vg-btn--ghost vg-btn--lg" href={HERO.secundario.href}>{HERO.secundario.texto}</a>
+    </div>
   </section>
 
   <!-- 2. El problema -->
   <section class="vg-section" id="problema">
     <div class="vg-wrap">
-      <p class="vg-eyebrow vg-eyebrow--amber" data-vg-node="2">{PROBLEMA.etiqueta}</p>
-      <h2 class="vg-section__title" data-reveal>{PROBLEMA.titulo}</h2>
-      <p class="vg-section__lead" data-reveal style={delay(1)}>{PROBLEMA.bajada}</p>
-
+      <!-- Título, bajada y razones en la columna izquierda: el gráfico queda
+           centrado a la derecha, entre el título y las razones. -->
       <div class="vg-problema">
-        <div class="vg-problems">
-          {
-            PROBLEMA.razones.map((r, i) => (
-              <article class="vg-problem" data-reveal style={delay(i)}>
-                <span class="vg-problem__num">0{i + 1}</span>
-                <h3>{r.titulo}</h3>
-                <p>{r.texto}</p>
-              </article>
-            ))
-          }
+        <div class="vg-problema__texto">
+          <p class="vg-eyebrow vg-eyebrow--amber" data-vg-node="2">{PROBLEMA.etiqueta}</p>
+          <h2 class="vg-section__title" data-reveal>{PROBLEMA.titulo}</h2>
+          <p class="vg-section__lead" data-reveal style={delay(1)}>{PROBLEMA.bajada}</p>
+          <ul class="vg-razones">
+            {
+              PROBLEMA.razones.map((r, i) => {
+                const Icon = ICONOS_RAZONES[r.id as keyof typeof ICONOS_RAZONES];
+                return (
+                  <li class="vg-razon" data-reveal style={delay(i)}>
+                    <span class="vg-razon__icon" aria-hidden="true"><Icon /></span>
+                    <div>
+                      <h3>{r.titulo}</h3>
+                      <p>{r.texto}</p>
+                    </div>
+                  </li>
+                );
+              })
+            }
+          </ul>
         </div>
 
         <div class="vg-media" data-reveal style={delay(1)}>
@@ -115,65 +153,50 @@ const faqJsonLd = {
         </div>
       </div>
 
-      <div class="vg-stress" data-reveal>
-        <p class="vg-stress__label">Qué estrés mitiga VigIA</p>
-        {
-          PROBLEMA.estreses.map((e) => (
-            <p class={`vg-stress__item vg-stress__item--${e.id}`}>
-              <strong>{e.nombre}.</strong> {e.texto}
-            </p>
-          ))
-        }
+      <div class="vg-estres">
+        <p class="vg-estres__label" data-reveal>Qué estrés mitiga VigIA</p>
+        <ul class="vg-estres__list">
+          {
+            PROBLEMA.estreses.map((e, i) => {
+              const Icon = ICONOS_ESTRES[e.id as keyof typeof ICONOS_ESTRES];
+              return (
+                <li class={`vg-estres__item vg-estres__item--${e.id}`} data-reveal style={delay(i)}>
+                  <span class="vg-estres__bar" aria-hidden="true" />
+                  <h3>
+                    <span class="vg-estres__icon" aria-hidden="true"><Icon /></span>
+                    {e.nombre}
+                  </h3>
+                  <p>{e.texto}</p>
+                </li>
+              );
+            })
+          }
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- 3. Cómo funciona -->
+  <!-- 3. Cómo funciona: los dos canales de la alerta son lo principal -->
   <section class="vg-section" id="como-funciona">
     <div class="vg-wrap">
-      <p class="vg-eyebrow vg-eyebrow--lime" data-vg-node="3">{COMO_FUNCIONA.etiqueta}</p>
-      <h2 class="vg-section__title" data-reveal>{COMO_FUNCIONA.titulo}</h2>
-      <p class="vg-section__lead" data-reveal style={delay(1)}>{COMO_FUNCIONA.bajada}</p>
-
-      <ol class="vg-pasos">
-        {
-          COMO_FUNCIONA.pasos.map((p, i) => {
-            const Icon = ICONOS_PASOS[p.id as keyof typeof ICONOS_PASOS];
-            return (
-              <li class="vg-paso" data-reveal style={delay(i)}>
-                <span class="vg-paso__head">
-                  <span class="vg-paso__num">{i + 1}</span>
-                  <span class="vg-paso__icon" aria-hidden="true"><Icon /></span>
-                </span>
-                <h3>{p.titulo}</h3>
-                <p>{p.texto}</p>
-              </li>
-            );
-          })
-        }
-      </ol>
-
-      <div class="vg-mejora">
-        <div class="vg-mejora__alertas">
-          {
-            COMO_FUNCIONA.alertas.map((a, i) => (
-              <div class={`vg-alert vg-alert--${a.severidad}`} data-reveal style={delay(i)}>
-                <span class="vg-alert__chip">{a.etiqueta}</span>
-                <p class="vg-alert__title">{a.titulo}</p>
-                <p class="vg-alert__action">{a.accion}</p>
-              </div>
-            ))
-          }
-          <ul class="vg-canales" data-reveal style={delay(COMO_FUNCIONA.alertas.length)}>
+      <!-- Título, bajada y canales a la izquierda; el WhatsApp con el video a
+           la derecha, terminando a la altura de la tarjeta de la plataforma. -->
+      <div class="vg-avisos">
+        <div class="vg-avisos__texto">
+          <p class="vg-eyebrow vg-eyebrow--lime" data-vg-node="3">{COMO_FUNCIONA.etiqueta}</p>
+          <h2 class="vg-section__title" data-reveal>{COMO_FUNCIONA.titulo}</h2>
+          <p class="vg-section__lead" data-reveal style={delay(1)}>{COMO_FUNCIONA.bajada}</p>
+          <ul class="vg-canales">
             {
-              COMO_FUNCIONA.canales.map((c) => {
+              COMO_FUNCIONA.canales.map((c, i) => {
                 const Icon = ICONOS_CANALES[c.id as keyof typeof ICONOS_CANALES];
                 return (
-                  <li>
-                    <span class="vg-canales__icon" aria-hidden="true"><Icon /></span>
-                    <span>
-                      <strong>{c.titulo}.</strong> {c.texto}
-                    </span>
+                  <li class={`vg-canal vg-canal--${c.id}`} data-reveal style={delay(i)}>
+                    <span class="vg-canal__icon" aria-hidden="true"><Icon /></span>
+                    <div>
+                      <h3>{c.titulo}</h3>
+                      <p>{c.texto}</p>
+                    </div>
                   </li>
                 );
               })
@@ -182,9 +205,49 @@ const faqJsonLd = {
         </div>
 
         <div class="vg-media" data-reveal style={delay(1)}>
-          <MediaStory duracion={4500} video={VIDEOS.resolucion} pendiente={DESCRIPCION_PENDIENTE.resolucion}>
+          <MediaStory duracion={4500} cierre={3200} video={VIDEOS.resolucion} pendiente={DESCRIPCION_PENDIENTE.resolucion}>
             <WhatsAppMock />
           </MediaStory>
+        </div>
+      </div>
+
+      <!-- Un panel con dos subsecciones: qué te avisa y cómo lo hace. -->
+      <div class="vg-detalle" data-reveal>
+        <div class="vg-detalle__col">
+          <h3 class="vg-detalle__label">Qué te avisa</h3>
+          <ul class="vg-detalle__list">
+            {
+              COMO_FUNCIONA.alertas.map((a) => {
+                const Icon = ICONOS_ALERTAS[a.id as keyof typeof ICONOS_ALERTAS];
+                return (
+                  <li class={`vg-aviso vg-aviso--${a.tono}`}>
+                    <span class="vg-aviso__icon" aria-hidden="true"><Icon /></span>
+                    <div>
+                      <p class="vg-aviso__titulo">{a.titulo}</p>
+                      <p>{a.texto}</p>
+                    </div>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </div>
+
+        <div class="vg-detalle__col">
+          <h3 class="vg-detalle__label">Cómo lo hace</h3>
+          <ol class="vg-detalle__list">
+            {
+              COMO_FUNCIONA.pasos.map((p, i) => (
+                <li class="vg-aviso">
+                  <span class="vg-paso-num">{i + 1}</span>
+                  <div>
+                    <p class="vg-aviso__titulo">{p.titulo}</p>
+                    <p>{p.texto}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
         </div>
       </div>
 
@@ -213,7 +276,10 @@ const faqJsonLd = {
                 <span class="vg-beneficio__icon" aria-hidden="true"><Icon /></span>
                 <h3>{b.titulo}</h3>
                 <p>{b.texto}</p>
-                <p class="vg-beneficio__resultado">{b.resultado}</p>
+                <p class="vg-beneficio__resultado">
+                  <PiCheckCircle aria-hidden="true" />
+                  <span>{b.resultado}</span>
+                </p>
               </article>
             );
           })
@@ -229,19 +295,36 @@ const faqJsonLd = {
       <h2 class="vg-section__title" data-reveal>{PARA_QUIEN.titulo}</h2>
       <div class="vg-perfiles">
         {
-          PARA_QUIEN.perfiles.map((p, i) => (
-            <article class="vg-perfil" data-reveal style={delay(i)}>
-              <h3>{p.titulo}</h3>
-              <p class="vg-perfil__lema">{p.lema}</p>
-              <ul class="vg-checks vg-perfil__puntos">
-                {p.puntos.map((punto) => <li>{punto}</li>)}
-              </ul>
-              <p class="vg-perfil__clave"><strong>Beneficio clave:</strong> {p.clave}</p>
-            </article>
-          ))
+          PARA_QUIEN.perfiles.map((p, i) => {
+            const Icon = ICONOS_PERFILES[p.id as keyof typeof ICONOS_PERFILES];
+            return (
+              <article class="vg-perfil" data-reveal style={delay(i)}>
+                <header class="vg-perfil__head">
+                  <span class="vg-perfil__icon" aria-hidden="true"><Icon /></span>
+                  <div>
+                    <h3>{p.titulo}</h3>
+                    <p class="vg-perfil__lema">{p.lema}</p>
+                  </div>
+                </header>
+                <ul class="vg-perfil__puntos">
+                  {
+                    p.puntos.map((punto) => (
+                      <li>
+                        <PiCheck aria-hidden="true" />
+                        <span>{punto}</span>
+                      </li>
+                    ))
+                  }
+                </ul>
+                <p class="vg-perfil__clave">
+                  <span>Beneficio clave</span>
+                  {p.clave}
+                </p>
+              </article>
+            );
+          })
         }
       </div>
-      <p class="vg-perfiles__nota">{PARA_QUIEN.nota}</p>
     </div>
   </section>
 

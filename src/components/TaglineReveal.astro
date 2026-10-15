@@ -7,11 +7,24 @@
 // - Sin JS o con movimiento reducido (sin la clase `vg-reveal-on` en <html>)
 //   el texto se ve completo, en color pleno.
 interface Props {
-  /** Una entrada por renglón. */
+  /** Una entrada por renglón. `*texto*` se resalta en verde y `_texto_` en
+      rojo (los colores de la historia: a tiempo / tarde). */
   lineas: string[];
 }
 
 const { lineas } = Astro.props;
+
+// Parte cada renglón en palabras, cada una con su tono (o ninguno).
+const TONOS: Record<string, string> = { '*': 'ok', _: 'critico' };
+const palabras = (linea: string) =>
+  linea
+    .split(/(\*[^*]+\*|_[^_]+_)/)
+    .filter(Boolean)
+    .flatMap((tramo) => {
+      const tono = TONOS[tramo[0]] && tramo.endsWith(tramo[0]) ? TONOS[tramo[0]] : undefined;
+      const texto = tono ? tramo.slice(1, -1) : tramo;
+      return texto.split(' ').filter(Boolean).map((p) => ({ p, tono }));
+    });
 ---
 
 <section class="vg-tagline" data-vg-tagline>
@@ -20,9 +33,9 @@ const { lineas } = Astro.props;
       {
         lineas.map((linea) => (
           <span class="vg-tagline__line">
-            {linea.split(' ').map((palabra) => (
+            {palabras(linea).map(({ p, tono }) => (
               <>
-                <span class="vg-tagline__word">{palabra}</span>{' '}
+                <span class={tono ? `vg-tagline__word vg-tagline__word--${tono}` : 'vg-tagline__word'}>{p}</span>{' '}
               </>
             ))}
           </span>

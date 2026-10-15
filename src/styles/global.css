@@ -167,7 +167,9 @@ h6 {
   font-family: var(--font-heading);
   font-weight: 600;
   color: var(--secondary);
-  text-wrap: balance;
+  /* Cada renglón se llena lo más posible; `pretty` sólo evita dejar una
+     palabra suelta al final (balance repartía el texto en renglones parejos). */
+  text-wrap: pretty;
 }
 
 p,
@@ -366,10 +368,22 @@ img {
   --vg-sev-info-soft: #e8eeff;
   /* Fondo de los tres módulos: muy claros, para que el hilo (más intenso)
      siempre se vea encima. */
-  --vg-bg-sano: #e8f3e4;
-  --vg-bg-seco: #f7ecda;
-  --vg-bg-agua: #e2f1ed;
+  --vg-bg-seco: #f2dfbd;
+  --vg-bg-agua: #cfe9e0;
   --vg-thread-ok: #3f8f1f;
+  /* Íconos verdes sin fondo: más oscuro en claro para contrastar sobre blanco. */
+  --vg-icon-green: #3f8f1f;
+  /* Verde de WhatsApp (botón del menú y widget flotante). */
+  --vg-whatsapp: #25d366;
+  --vg-whatsapp-hover: #1da851;
+  /* Sobre video (siempre con fondo oscuro, en los dos temas). */
+  /* CTA principal: azul de marca, más intenso en oscuro para que no se apague. */
+  --vg-cta: #1f5bff;
+  --vg-cta-hover: #1749d6;
+  --vg-on-video: #ffffff;
+  --vg-on-video-critico: #ff7b72;
+  --vg-on-video-ok: #8fd14f;
+  --vg-video-scrim: rgba(0, 0, 0, 0.55);
 }
 
 [data-rp-theme="dark"] {
@@ -384,8 +398,11 @@ img {
   --vg-sev-alerta-soft: #2e2a13;
   --vg-sev-info: #6b93ff;
   --vg-sev-info-soft: #131d33;
-  --vg-bg-sano: #0f1a12;
-  --vg-bg-seco: #1e170c;
-  --vg-bg-agua: #0b1a1b;
+  /* Tonos apagados en oscuro: tierra y verde petróleo, sin saturar. */
+  --vg-bg-seco: #221c14;
+  --vg-bg-agua: #111f1e;
   --vg-thread-ok: #8fd14f;
+  --vg-cta: #3d6bff;
+  --vg-cta-hover: #5580ff;
+  --vg-icon-green: #8fd14f;
 }

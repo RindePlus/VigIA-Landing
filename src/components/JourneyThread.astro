@@ -6,7 +6,13 @@
 //   hilo termina en el elemento con `data-vg-end`.
 // - La línea se dibuja con el scroll: verde (VigIA vigila) → ámbar y rojo
 //   (el lote sin aviso) → verde (el lote se salva).
-// - El fondo usa las mismas posiciones: sano → seco → agua → neutro.
+// - Al final no corta en seco: baja por el costado y dobla para entrar de
+//   costado en la frase destacada (.vg-tagline__text), a la altura de su
+//   renglón del medio, con un punto verde que late al llegar.
+// - El avance se mide por el largo de la línea (no sólo por la altura), así
+//   los tramos de costado también se dibujan de a poco.
+// - El fondo cambia en el borde de cada sección: página → seco → agua →
+//   página, con un fundido corto.
 // - Con movimiento reducido el hilo aparece completo y quieto. Sin JS no se
 //   dibuja el hilo y queda el fondo de respaldo de sections.css.
 ---
@@ -43,8 +49,18 @@
     const anchors = [...journey.querySelectorAll<HTMLElement>('[data-vg-node]')];
     const end = journey.querySelector<HTMLElement>('[data-vg-end]');
 
-    let geo: { nodes: { x: number; y: number }[]; yStart: number; yEnd: number; length: number } | null = null;
+    let geo: {
+      nodes: { x: number; y: number }[];
+      yStart: number;
+      yEnd: number;
+      length: number;
+      // Muestras del recorrido: largo de la línea y "avance" acumulado
+      // (vertical completo + la mitad del horizontal) en px de scroll.
+      largos: number[];
+      avances: number[];
+    } | null = null;
     let nodeEls: SVGGElement[] = [];
+    let endEl: SVGGElement | null = null;
 
     const setStop = (name: string, offset: number) => {
       grad.querySelector(`[data-stop="${name}"]`)?.setAttribute('offset', String(Math.min(1, Math.max(0, offset))));
@@ -62,8 +78,31 @@
       });
       const x = Math.max(18, Math.min(...nodes.map((n) => n.x)));
       nodes.forEach((n) => (n.x = x));
-      const yEnd = end ? end.getBoundingClientRect().bottom - jr.top : H - 40;
+      const yServicio = end ? end.getBoundingClientRect().bottom - jr.top : H - 40;
       const amp = W > 960 ? 16 : 6;
+
+      // Desemboque en la frase destacada (está después del recorrido, fuera
+      // de .vg-journey; el SVG dibuja por fuera con overflow visible).
+      // Punto de llegada: a la izquierda del renglón visual del medio de la
+      // frase (el texto se parte distinto según el ancho, así que se miden
+      // las palabras: la fila más cercana al centro y su palabra de más a la
+      // izquierda).
+      const frase = document.querySelector<HTMLElement>('.vg-tagline__text');
+      const palabras = [...document.querySelectorAll<HTMLElement>('.vg-tagline__word')].map((w) =>
+        w.getBoundingClientRect(),
+      );
+      let fin: { x: number; y: number } | null = null;
+      if (frase && palabras.length) {
+        const fr = frase.getBoundingClientRect();
+        const centro = fr.top + fr.height / 2;
+        const fila = palabras.reduce((best, r) =>
+          Math.abs(r.top + r.height / 2 - centro) < Math.abs(best.top + best.height / 2 - centro) ? r : best,
+        );
+        const enFila = palabras.filter((r) => Math.abs(r.top - fila.top) < fila.height / 2);
+        const izq = Math.min(...enFila.map((r) => r.left));
+        fin = { x: Math.max(x + 40, izq - jr.left - 28), y: fila.top - jr.top + fila.height / 2 };
+      }
+      const yEnd = fin ? fin.y : yServicio;
 
       // Curvas suaves entre puntos: el hilo serpentea como un trazado de campo.
       let d = `M${x} ${nodes[0].y}`;
@@ -73,7 +112,12 @@
         const dy = y2 - y1;
         d += ` C${x + amp} ${y1 + dy / 3} ${x - amp} ${y1 + (2 * dy) / 3} ${x} ${y2}`;
       }
-      d += ` L${x} ${yEnd}`;
+      d += ` L${x} ${yServicio}`;
+      if (fin) {
+        // Baja por el costado y dobla hacia la derecha: llega en horizontal.
+        const dx = fin.x - x;
+        d += ` C${x} ${fin.y} ${x + dx * 0.35} ${fin.y} ${fin.x} ${fin.y}`;
+      }
 
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
       svg.setAttribute('width', String(W));
@@ -114,19 +158,57 @@
         return g;
       });
 
-      // Fondo: sano → seco → agua → neutro, con las mismas posiciones. Cada
-      // cambio se funde a lo largo de ~520 px, así al bajar el color pasa de
-      // un tono al otro de a poco y nunca de golpe.
-      const y2 = nodes[1]?.y ?? H * 0.4;
-      const y3 = nodes[2]?.y ?? H * 0.7;
-      const BLEND = 520;
+      // Punto final sobre la frase: late cuando el hilo llega.
+      endEl = null;
+      if (fin) {
+        const g = document.createElementNS(SVG_NS, 'g');
+        g.setAttribute('class', 'vg-thread__end');
+        const ring = document.createElementNS(SVG_NS, 'circle');
+        ring.setAttribute('class', 'vg-thread__end-ring');
+        ring.setAttribute('cx', String(fin.x));
+        ring.setAttribute('cy', String(fin.y));
+        ring.setAttribute('r', '14');
+        const dot = document.createElementNS(SVG_NS, 'circle');
+        dot.setAttribute('class', 'vg-thread__end-dot');
+        dot.setAttribute('cx', String(fin.x));
+        dot.setAttribute('cy', String(fin.y));
+        dot.setAttribute('r', '6');
+        g.append(ring, dot);
+        nodesGroup.append(g);
+        endEl = g;
+      }
+
+      // Fondo: página → seco (problema) → agua (cómo funciona) → página. Cada
+      // cambio se funde en BLEND px centrados en el borde real de la sección,
+      // dentro de su margen: el salto se nota y no invade el contenido.
+      const secciones = [...journey.querySelectorAll<HTMLElement>(':scope > section')];
+      const borde = (i: number, fallback: number) =>
+        secciones[i] ? secciones[i].getBoundingClientRect().top - jr.top : fallback;
+      const b2 = borde(1, H * 0.35);
+      const b3 = borde(2, H * 0.65);
+      const BLEND = 80;
+      const h = BLEND / 2;
       journey.style.background = `linear-gradient(to bottom,
-        var(--vg-bg-sano) 0px, var(--vg-bg-sano) ${y2 - 60 - BLEND}px,
-        var(--vg-bg-seco) ${y2 - 60}px, var(--vg-bg-seco) ${y3 - 60 - BLEND}px,
-        var(--vg-bg-agua) ${y3 - 60}px, var(--vg-bg-agua) ${H - BLEND}px,
+        var(--gh-canvas) 0px, var(--gh-canvas) ${b2 - h}px,
+        var(--vg-bg-seco) ${b2 + h}px, var(--vg-bg-seco) ${b3 - h}px,
+        var(--vg-bg-agua) ${b3 + h}px, var(--vg-bg-agua) ${H - BLEND}px,
         var(--gh-canvas) ${H}px)`;
 
-      geo = { nodes, yStart, yEnd, length: line.getTotalLength() };
+      const length = line.getTotalLength();
+      const largos: number[] = [];
+      const avances: number[] = [];
+      const N = 300;
+      let prev = line.getPointAtLength(0);
+      let acc = 0;
+      for (let i = 0; i <= N; i++) {
+        const L = (length * i) / N;
+        const p = line.getPointAtLength(L);
+        acc += Math.abs(p.y - prev.y) + Math.abs(p.x - prev.x) * 0.5;
+        largos.push(L);
+        avances.push(acc);
+        prev = p;
+      }
+      geo = { nodes, yStart, yEnd, length, largos, avances };
       line.style.strokeDasharray = String(geo.length);
       update();
     };
@@ -135,9 +217,20 @@
       if (!geo) return;
       const jr = journey.getBoundingClientRect();
       const target = reduceMotion ? Infinity : window.innerHeight * 0.62 - jr.top;
-      const frac = Math.min(1, Math.max(0, (target - geo.yStart) / (geo.yEnd - geo.yStart)));
-      line.style.strokeDashoffset = String(geo.length * (1 - frac));
+      // Avance en px de scroll desde el primer punto → largo dibujado.
+      const avance = target - geo.yStart;
+      const { largos, avances } = geo;
+      let dibujado = 0;
+      if (avance >= avances[avances.length - 1]) dibujado = geo.length;
+      else if (avance > 0) {
+        const i = avances.findIndex((a) => a >= avance);
+        const a0 = avances[i - 1] ?? 0;
+        const t = (avance - a0) / (avances[i] - a0 || 1);
+        dibujado = (largos[i - 1] ?? 0) + t * (largos[i] - (largos[i - 1] ?? 0));
+      }
+      line.style.strokeDashoffset = String(geo.length - dibujado);
       geo.nodes.forEach((n, i) => nodeEls[i]?.classList.toggle('is-reached', target >= n.y));
+      endEl?.classList.toggle('is-reached', dibujado >= geo.length - 12);
     };
 
     let ticking = false;
