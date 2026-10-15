@@ -1,14 +1,15 @@
 /* Secciones de las páginas de VigIA. Tokens --gh-* (base, cambian con el
-   tema) + --vg-* (marca y severidades), ambos en global.css. */
+   tema), --vg-* (marca y severidades) y las escalas --text-*, --space-*,
+   --ease-* de landing-page-design, todos en global.css. */
 
 .vg-wrap {
   max-width: 1160px;
   margin: 0 auto;
-  padding-inline: 24px;
+  padding-inline: var(--space-300);
 }
 
 .vg-section {
-  padding-block: 96px;
+  padding-block: var(--space-900);
 }
 
 .vg-section--tint {
@@ -17,35 +18,44 @@
 }
 
 .vg-eyebrow {
-  margin-bottom: 12px;
+  margin-bottom: var(--space-100);
   color: var(--vg-blue);
-  font-size: 0.8125rem;
-  font-weight: 700;
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .vg-section__title {
-  max-width: 720px;
-  margin-bottom: 16px;
+  max-width: 680px;
+  margin-bottom: var(--space-200);
   color: var(--vg-forest);
-  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
-  line-height: 1.15;
+  font-size: var(--text-3xl);
+  line-height: var(--leading-3xl);
   letter-spacing: -0.02em;
 }
 
 .vg-section__lead {
   max-width: 640px;
-  margin-bottom: 40px;
+  margin-bottom: var(--space-500);
   color: var(--gh-fg-muted);
-  font-size: 1.0625rem;
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
 }
 
 h3 {
   color: var(--gh-fg);
-  font-size: 1.0625rem;
-  line-height: 1.3;
-  margin-bottom: 8px;
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+  margin-bottom: var(--space-75);
+}
+
+@media (min-width: 768px) {
+  .vg-section__title {
+    font-size: var(--text-4xl);
+    line-height: var(--leading-4xl);
+  }
 }
 
 /* ---------- Botones ---------- */
@@ -53,18 +63,23 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px;
-  padding: 12px 24px;
+  padding: var(--space-75) var(--space-100);
   border: 1px solid transparent;
   border-radius: var(--gh-radius-btn);
   background: var(--vg-blue);
   color: #fff;
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
   font-weight: 600;
-  transition: filter 0.15s ease, background-color 0.15s ease;
+  transition:
+    transform var(--dur-base) var(--ease-fluid),
+    background-color var(--dur-base) var(--ease-fluid),
+    border-color var(--dur-base) var(--ease-fluid),
+    filter var(--dur-base) var(--ease-fluid);
 }
 
-.vg-btn:hover { filter: brightness(1.08); }
-.vg-btn:active { filter: brightness(0.95); }
+.vg-btn:hover { filter: brightness(1.08); transform: translateY(-2px); }
+.vg-btn:active { transform: scale(0.98); transition-duration: var(--dur-fast); }
 
 .vg-btn--ghost {
   background: transparent;
@@ -74,6 +89,7 @@ h3 {
 
 .vg-btn--ghost:hover {
   background: var(--gh-surface-2);
+  border-color: var(--gh-border-strong);
   filter: none;
 }
 
@@ -84,38 +100,89 @@ h3 {
 
 /* ---------- Hero ---------- */
 .vg-hero {
-  padding-block: 152px 96px;
+  /* Alto del header + aire propio de la sección. */
+  padding-block: calc(var(--space-800) + var(--space-700)) var(--space-900);
 }
 
 .vg-hero__grid {
   display: grid;
   grid-template-columns: 1.05fr 1fr;
-  gap: 56px;
-  align-items: center;
+  gap: var(--space-700);
+  /* El gráfico termina a la altura de las tarjetas de la columna de texto. */
+  align-items: end;
 }
 
 .vg-hero__title {
-  color: var(--vg-forest);
-  font-size: clamp(2.25rem, 4.6vw, 3.5rem);
-  line-height: 1.08;
+  max-width: 680px;
+  font-size: var(--text-4xl);
+  line-height: var(--leading-4xl);
   letter-spacing: -0.03em;
+  /* Degradé de izquierda a derecha sólo sobre el texto, nunca de fondo. */
+  background: linear-gradient(90deg, var(--hero-title-from), var(--hero-title-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.vg-hero__title span {
-  color: var(--vg-blue);
+@media (min-width: 768px) {
+  .vg-hero__title {
+    font-size: var(--text-5xl);
+    line-height: var(--leading-5xl);
+  }
 }
 
 .vg-hero__subtitle {
-  max-width: 560px;
-  margin-block: 24px 32px;
+  max-width: 680px;
+  margin-block: var(--space-300) var(--space-400);
   color: var(--gh-fg-muted);
-  font-size: 1.125rem;
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
 }
 
 .vg-hero__ctas {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  justify-content: center;
+  gap: var(--space-200);
+  margin-top: var(--space-800);
+}
+
+/* Botones grandes del hero. */
+.vg-btn--lg {
+  gap: var(--space-100);
+  text-align: center;
+  padding: var(--space-200) var(--space-400);
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+}
+
+.vg-btn--lg:not(.vg-btn--ghost) {
+  background: var(--vg-cta);
+}
+
+.vg-btn--lg:not(.vg-btn--ghost):hover {
+  background: var(--vg-cta-hover);
+  filter: none;
+}
+
+.vg-btn--lg svg {
+  transition: transform var(--dur-base) var(--ease-fluid);
+}
+
+.vg-btn--lg:hover svg {
+  transform: translateX(var(--space-50));
+}
+
+.vg-btn--ghost.vg-btn--lg {
+  border-color: var(--gh-border-strong);
+  background: var(--gh-surface);
+}
+
+@media (max-width: 480px) {
+  .vg-hero__ctas {
+    flex-direction: column;
+    margin-top: var(--space-500);
+  }
 }
 
 /* Páginas simples (pricing, 404) */
@@ -123,19 +190,21 @@ h3 {
   text-align: center;
 }
 
+.vg-hero--simple .vg-hero__title,
 .vg-hero--simple .vg-hero__subtitle {
   margin-inline: auto;
 }
 
 /* ---------- Clientes (carrusel) ---------- */
 .vg-trusted {
-  padding-block: 8px 72px;
+  padding-block: var(--space-75) var(--space-700);
 }
 
 .vg-trusted__title {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-300);
   color: var(--gh-fg-muted);
-  font-size: 0.875rem;
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-align: center;
@@ -145,7 +214,7 @@ h3 {
 /* ---------- Gráfico del hero ---------- */
 .vg-chart {
   position: relative;
-  padding: 20px 20px 24px;
+  padding: var(--space-300);
   border: 1px solid var(--gh-border);
   border-radius: 16px;
   background: var(--gh-surface);
@@ -155,15 +224,15 @@ h3 {
 .vg-chart__head {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-  font-size: 0.8125rem;
+  gap: var(--space-100);
+  margin-bottom: var(--space-75);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
 }
 
 .vg-chart__title { color: var(--gh-fg); font-weight: 600; }
-.vg-chart__note { color: var(--gh-fg-subtle); }
 
-.vg-chart svg { display: block; width: 100%; height: auto; }
+.vg-chart > svg { display: block; width: 100%; height: auto; }
 
 .vg-chart__forecast { fill: var(--vg-blue-soft); }
 .vg-chart__axis { stroke: var(--gh-border); stroke-width: 1; }
@@ -181,15 +250,22 @@ h3 {
 .vg-chart__label--umbral { fill: var(--vg-sev-alerta); font-weight: 600; }
 .vg-chart__label--au { fill: var(--vg-lime); font-weight: 700; }
 
-.vg-chart__callout {
-  margin-top: 12px;
+/* Gráficos altos (hero y problema): etiquetas grandes, para leerse de un
+   vistazo. Son unidades del viewBox (560 de ancho): en celular el SVG se
+   achica, así que suben más. Las posiciones de los textos están pensadas
+   para estos tamaños: si suben, revisar que no se salgan ni pisen la línea. */
+.vg-chart--alto .vg-chart__label { font-size: 24px; }
+.vg-chart--alto .vg-chart__head { font-size: var(--text-base); line-height: var(--leading-base); }
+
+@media (max-width: 680px) {
+  .vg-chart--alto .vg-chart__label { font-size: 30px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .vg-chart__alert-ring {
     transform-box: fill-box;
     transform-origin: center;
-    animation: vg-pulse 2.4s ease-out infinite;
+    animation: vg-pulse 2.4s var(--ease-fluid) infinite;
   }
 }
 
@@ -203,12 +279,9 @@ h3 {
 .vg-eyebrow--amber { color: var(--vg-sev-alerta); }
 
 .vg-section--compact {
-  padding-block: 72px;
+  padding-block: var(--space-700);
 }
 
-.vg-hero__points {
-  margin-bottom: 32px;
-}
 
 /* Lugar reservado para el video de cada módulo (etapa 2). Hoy contiene el
    visual estático; el video lo reemplaza sin cambiar el layout. */
@@ -217,181 +290,299 @@ h3 {
   min-width: 0;
 }
 
-/* ---------- Checks (listas) ---------- */
-.vg-checks {
-  display: grid;
-  gap: 12px;
-  list-style: none;
-}
-
-.vg-checks li {
-  position: relative;
-  padding-left: 28px;
-  color: var(--gh-fg);
-}
-
-.vg-checks li::before {
-  content: '';
-  position: absolute;
-  left: 4px;
-  top: 0.45em;
-  width: 10px;
-  height: 6px;
-  border-left: 2px solid var(--vg-lime);
-  border-bottom: 2px solid var(--vg-lime);
-  transform: rotate(-45deg);
-}
-
 /* ---------- 2. Problema ---------- */
-.vg-problems {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-}
-
-.vg-problem__num {
-  display: block;
-  margin-bottom: 12px;
-  color: var(--vg-sev-alerta);
-  font-size: 0.875rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-.vg-problem p,
-.vg-datos__item p,
+.vg-beneficio p,
 .vg-perfil p {
   color: var(--gh-fg-muted);
 }
 
-/* Franja compacta con los tres tipos de estrés */
-.vg-stress {
+/* Razones con ícono ámbar (el color de este capítulo), sin numerar. */
+.vg-razones {
   display: grid;
-  grid-template-columns: auto repeat(3, 1fr);
-  gap: 12px 24px;
-  align-items: center;
-  margin-top: 48px;
-  padding: 20px 24px;
-  border: 1px solid var(--gh-border);
-  border-radius: var(--gh-radius-card);
-  background: var(--gh-surface);
+  list-style: none;
 }
 
-.vg-stress__label {
-  color: var(--gh-fg-subtle);
-  font-size: 0.8125rem;
+.vg-razon {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-200);
+  align-items: start;
+  padding-block: var(--space-300);
+  border-top: 1px solid var(--gh-border-muted);
+}
+
+.vg-razon:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.vg-razon__icon {
+  display: inline-flex;
+  color: var(--vg-sev-alerta);
+  font-size: var(--text-3xl);
+  line-height: 1;
+}
+
+.vg-razon h3 {
+  margin-bottom: var(--space-50);
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+}
+
+.vg-razon p {
+  color: var(--gh-fg-muted);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+/* Tipos de estrés: tres columnas a todo el ancho de la sección, sin caja.
+   Cada uno con su color (barra arriba e ícono): azul hídrico, ámbar térmico,
+   rojo combinado. */
+.vg-estres {
+  margin-top: var(--space-600);
+}
+
+/* Rótulo centrado entre dos líneas, abarcando las tres columnas. */
+.vg-estres__label {
+  display: flex;
+  gap: var(--space-300);
+  align-items: center;
+  margin-bottom: var(--space-400);
+  color: var(--gh-fg);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
+  text-align: center;
   text-transform: uppercase;
 }
 
-.vg-stress__item {
-  padding-left: 12px;
-  border-left: 3px solid var(--vg-blue);
-  color: var(--gh-fg-muted);
-  font-size: 0.9375rem;
+.vg-estres__label::before,
+.vg-estres__label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--gh-border-strong);
 }
 
-.vg-stress__item strong { color: var(--gh-fg); }
-.vg-stress__item--termico { border-left-color: var(--vg-sev-alerta); }
-.vg-stress__item--combinado { border-left-color: var(--vg-sev-critico); }
-
-/* ---------- 3. La mejora real ---------- */
-.vg-mejora {
+.vg-estres__list {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 48px;
-  align-items: center;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-500);
+  list-style: none;
 }
 
-.vg-mejora__alertas {
-  display: grid;
-  gap: 12px;
+.vg-estres__item {
+  --tono: var(--vg-sev-info);
 }
 
-.vg-alert {
-  --sev: var(--vg-sev-info);
-  --sev-soft: var(--vg-sev-info-soft);
-  padding: 14px 18px;
-  border: 1px solid var(--gh-border);
-  border-left: 4px solid var(--sev);
-  border-radius: var(--gh-radius-card);
-  background: var(--gh-surface);
-}
+.vg-estres__item--termico { --tono: var(--vg-sev-alerta); }
+.vg-estres__item--combinado { --tono: var(--vg-sev-critico); }
 
-.vg-alert--alerta { --sev: var(--vg-sev-alerta); --sev-soft: var(--vg-sev-alerta-soft); }
-.vg-alert--critico { --sev: var(--vg-sev-critico); --sev-soft: var(--vg-sev-critico-soft); }
-
-.vg-alert__chip {
-  display: inline-block;
-  margin-bottom: 4px;
-  padding: 2px 8px;
+.vg-estres__bar {
+  display: block;
+  width: 48px;
+  height: 4px;
+  margin-bottom: var(--space-200);
   border-radius: 999px;
-  background: var(--sev-soft);
-  color: var(--sev);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  background: var(--tono);
 }
 
-.vg-alert__title {
-  color: var(--gh-fg);
-  font-weight: 600;
+.vg-estres__item h3 {
+  display: flex;
+  gap: var(--space-100);
+  align-items: center;
+  margin-bottom: var(--space-75);
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
 }
 
-.vg-alert__action {
+.vg-estres__icon {
+  display: inline-flex;
+  color: var(--tono);
+  font-size: var(--text-2xl);
+}
+
+.vg-estres__item p {
   color: var(--gh-fg-muted);
-  font-size: 0.9375rem;
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+
+/* ---------- 3. Cómo funciona ----------
+   Arriba, título y canales a la izquierda y el WhatsApp/video a la derecha,
+   alineados abajo (terminan a la altura de la tarjeta de la plataforma).
+   Debajo, un panel con dos subsecciones: qué te avisa y cómo lo hace. */
+.vg-avisos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-700);
+  align-items: end;
+}
+
+/* La bajada se limita al ancho de su columna. */
+.vg-avisos__texto .vg-section__lead {
+  max-width: none;
 }
 
 .vg-canales {
   display: grid;
-  gap: 12px;
-  margin-top: 12px;
+  gap: var(--space-200);
   list-style: none;
 }
 
-.vg-canales li {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  color: var(--gh-fg-muted);
+.vg-canal {
+  --tono: var(--vg-blue);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-200);
+  align-items: center;
+  padding: var(--space-200) var(--space-300);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-card);
+  background: var(--gh-surface);
 }
 
-.vg-canales strong { color: var(--gh-fg); }
+/* Cada canal con su color en el ícono (sin fondo). */
+.vg-canal--whatsapp {
+  --tono: var(--vg-whatsapp);
+}
 
-.vg-canales__icon {
-  flex-shrink: 0;
+.vg-canal__icon {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--vg-blue-soft);
-  color: var(--vg-blue);
-  font-size: 16px;
+  color: var(--tono);
+  font-size: var(--text-4xl);
+  line-height: 1;
+}
+
+.vg-canal h3 {
+  margin-bottom: var(--space-25);
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+}
+
+.vg-canal p {
+  color: var(--gh-fg-muted);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+/* Panel: qué te avisa | cómo lo hace. */
+.vg-detalle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-700);
+  margin-top: var(--space-700);
+  padding: var(--space-500);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-card);
+  background: var(--gh-surface);
+}
+
+.vg-detalle__label {
+  margin-bottom: var(--space-300);
+  color: var(--gh-fg);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vg-detalle__list {
+  display: grid;
+  gap: var(--space-300);
+  list-style: none;
+}
+
+.vg-aviso {
+  --tono: var(--vg-sev-info);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-200);
+  align-items: start;
+}
+
+.vg-aviso--alerta { --tono: var(--vg-sev-alerta); }
+.vg-aviso--critico { --tono: var(--vg-sev-critico); }
+
+.vg-aviso__icon {
+  display: inline-flex;
+  color: var(--tono);
+  font-size: var(--text-3xl);
+  line-height: 1;
+}
+
+.vg-aviso p {
+  color: var(--gh-fg-muted);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+.vg-aviso .vg-aviso__titulo {
+  margin-bottom: var(--space-25);
+  color: var(--gh-fg);
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+  font-weight: 600;
+}
+
+/* Número del paso: sólo la cifra, sin fondo, alineada con el título. */
+.vg-paso-num {
+  min-width: 24px;
+  color: var(--gh-fg-subtle);
+  font-size: var(--text-xl);
+  line-height: var(--leading-lg);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 960px) {
+  .vg-avisos,
+  .vg-detalle {
+    grid-template-columns: 1fr;
+    gap: var(--space-500);
+  }
+}
+
+@media (max-width: 480px) {
+  .vg-detalle { padding: var(--space-300); }
+  .vg-canal { padding: var(--space-200); }
 }
 
 /* Celular con el WhatsApp (WhatsAppMock.astro) */
+/* Llena el recuadro del medio, que en esta sección es 4:3 como el video:
+   así el WhatsApp y el video ocupan el mismo lugar. */
+.vg-avisos .vg-story {
+  aspect-ratio: 4 / 3;
+}
+
+.vg-avisos .vg-story__anim {
+  height: 100%;
+}
+
 .vg-phone {
-  width: min(100%, 320px);
-  margin-inline: auto;
+  width: 100%;
+  height: 100%;
 }
 
 .vg-phone__screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   overflow: hidden;
-  border: 10px solid #1f2328;
-  border-radius: 36px;
+  border: 6px solid #1f2328;
+  border-radius: 16px;
   background: var(--gh-surface-2);
   box-shadow: var(--gh-shadow-overlay);
 }
 
 .vg-phone__bar {
   display: flex;
-  gap: 10px;
+  gap: var(--space-100);
   align-items: center;
-  padding: 18px 14px 12px;
+  padding: var(--space-200) var(--space-300);
   background: #075e54;
   color: #fff;
 }
@@ -400,135 +591,163 @@ h3 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #fff;
   color: #0e3b36;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .vg-phone__contact {
   display: grid;
-  line-height: 1.2;
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
 }
 
-.vg-phone__contact small { opacity: 0.8; font-size: 0.75rem; }
+.vg-phone__contact small {
+  opacity: 0.8;
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
 
 .vg-phone__wa {
   margin-left: auto;
-  font-size: 20px;
+  font-size: var(--text-2xl);
 }
 
 .vg-phone__chat {
-  min-height: 260px;
-  padding: 20px 14px 28px;
+  flex: 1;
+  padding: var(--space-300);
 }
 
 .vg-phone__bubble {
   position: relative;
   display: grid;
-  gap: 6px;
-  max-width: 92%;
-  padding: 10px 12px 22px;
-  border-radius: 4px 12px 12px 12px;
+  gap: var(--space-50);
+  max-width: 85%;
+  padding: var(--space-200) var(--space-300) var(--space-400);
+  border-radius: 4px 16px 16px 16px;
   background: var(--gh-surface);
   box-shadow: var(--gh-shadow-card);
   color: var(--gh-fg);
-  font-size: 0.875rem;
-  line-height: 1.45;
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
 }
 
-.vg-phone__lote { font-weight: 700; }
-.vg-phone__alerta { font-weight: 600; }
-.vg-phone__link { color: var(--vg-blue); font-weight: 600; }
+.vg-phone__lote {
+  color: var(--gh-fg-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 600;
+}
+
+/* El aviso y su desenlace ocupan la misma celda: en el cierre se cruzan. */
+.vg-phone__alerta {
+  display: grid;
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  font-weight: 700;
+}
+
+.vg-phone__aviso,
+.vg-phone__resuelta {
+  grid-area: 1 / 1;
+  align-self: center;
+  transition:
+    opacity var(--dur-slow) var(--ease-fluid),
+    transform var(--dur-slow) var(--ease-fluid);
+}
+
+.vg-phone__resuelta {
+  color: var(--gh-detail-green);
+  opacity: 0;
+  transform: translateY(var(--space-50));
+}
+
+.vg-phone__bubble {
+  transition: box-shadow var(--dur-slow) var(--ease-fluid);
+}
+
+.vg-story[data-stage="cierre"] .vg-phone__aviso {
+  opacity: 0;
+  transform: translateY(calc(var(--space-50) * -1));
+}
+
+.vg-story[data-stage="cierre"] .vg-phone__resuelta {
+  opacity: 1;
+  transform: none;
+  transition-delay: var(--dur-base);
+}
+
+.vg-story[data-stage="cierre"] .vg-phone__bubble {
+  box-shadow: 0 0 0 2px var(--gh-detail-green), var(--gh-shadow-card);
+}
+
+/* En celular el recuadro 4:3 es bajo: barra, mensaje y márgenes más chicos
+   para que el mensaje entre entero. */
+@media (max-width: 480px) {
+  .vg-phone__bar { padding: var(--space-100) var(--space-200); }
+  .vg-phone__avatar { width: 32px; height: 32px; }
+  .vg-phone__contact { font-size: var(--text-base); line-height: var(--leading-base); }
+  .vg-phone__contact small { font-size: var(--text-xs); line-height: var(--leading-xs); }
+  .vg-phone__wa { font-size: var(--text-xl); }
+  .vg-phone__chat { padding: var(--space-200); }
+  .vg-phone__bubble {
+    max-width: 100%;
+    padding: var(--space-100) var(--space-200) var(--space-300);
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+  }
+  .vg-phone__alerta { font-size: var(--text-lg); line-height: var(--leading-lg); }
+}
 
 .vg-phone__time {
   position: absolute;
-  right: 10px;
-  bottom: 6px;
+  right: var(--space-75);
+  bottom: var(--space-50);
   color: var(--gh-fg-subtle);
-  font-size: 0.6875rem;
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
 }
 
-.vg-phone__note {
-  margin-top: 10px;
-  color: var(--gh-fg-subtle);
-  font-size: 0.75rem;
-  text-align: center;
-}
 
-/* Cómo lo logra: fila compacta de cuatro datos */
-.vg-datos {
-  margin-top: 64px;
-}
-
-.vg-datos__label {
-  margin-bottom: 20px;
-  color: var(--gh-fg-subtle);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.vg-datos__list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  list-style: none;
-}
-
-.vg-datos__item h3 {
-  margin-bottom: 4px;
-  font-size: 1rem;
-}
-
-.vg-datos__item p {
-  font-size: 0.9375rem;
-}
-
-.vg-datos__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  margin-bottom: 12px;
-  border-radius: 10px;
-  background: var(--vg-lime-soft);
-  color: var(--vg-lime);
-  font-size: 18px;
-}
-
-/* Cultivos de servicio: una línea al pie del módulo */
+/* Cultivos de servicio: una línea al pie de la sección */
 .vg-servicio {
-  margin-top: 48px;
-  padding-top: 24px;
+  margin-top: var(--space-600);
+  padding-top: var(--space-300);
   border-top: 1px solid var(--gh-border-muted);
   color: var(--gh-fg-muted);
 }
 
 .vg-servicio strong { color: var(--gh-fg); }
 
-/* ---------- Para quién es ---------- */
+/* ---------- Para quién es ----------
+   Dos tarjetas: encabezado con ícono verde, puntos con tilde y el beneficio
+   clave en una franja tintada al pie. */
 .vg-perfiles {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-300);
 }
 
 .vg-perfil {
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   border: 1px solid var(--gh-border);
   border-radius: var(--gh-radius-card);
   background: var(--gh-surface);
+  transition:
+    transform var(--dur-slow) var(--ease-fluid),
+    border-color var(--dur-base) var(--ease-fluid),
+    box-shadow var(--dur-slow) var(--ease-fluid);
 }
 
-.vg-perfiles__nota {
-  margin-top: 16px;
-  color: var(--gh-fg-subtle);
-  font-size: 0.875rem;
+.vg-perfil:hover {
+  transform: translateY(calc(var(--space-50) * -1));
+  border-color: var(--gh-border-strong);
+  box-shadow: var(--gh-shadow-overlay);
 }
 
 /* ---------- CTA final ---------- */
@@ -539,52 +758,387 @@ h3 {
 }
 
 .vg-cta h2 {
+  max-width: 680px;
+  margin-inline: auto;
   color: #fff;
-  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  font-size: var(--text-3xl);
+  line-height: var(--leading-3xl);
   letter-spacing: -0.02em;
 }
 
+@media (min-width: 768px) {
+  .vg-cta h2 {
+    font-size: var(--text-4xl);
+    line-height: var(--leading-4xl);
+  }
+}
+
 .vg-cta p {
-  margin-block: 12px 28px;
+  margin-block: var(--space-100) var(--space-400);
   color: rgba(255, 255, 255, 0.78);
-  font-size: 1.0625rem;
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
 }
 
 [data-rp-theme="dark"] .vg-cta {
-  background: #0f2a26;
+  background: #131209;
   border-top: 1px solid var(--gh-border);
+}
+
+/* ---------- Hero: tres tarjetas con ícono ----------
+   Ícono verde monocromo, sin fondo, centrado arriba; texto centrado. */
+.vg-hero__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-100);
+  list-style: none;
+}
+
+.vg-hero__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-50);
+  padding: var(--space-200) var(--space-100);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-card);
+  background: var(--gh-surface);
+  text-align: center;
+  transition:
+    transform var(--dur-slow) var(--ease-fluid),
+    border-color var(--dur-base) var(--ease-fluid),
+    box-shadow var(--dur-slow) var(--ease-fluid);
+}
+
+.vg-hero__card:hover {
+  transform: translateY(calc(var(--space-50) * -1));
+  border-color: var(--gh-border-strong);
+  box-shadow: var(--gh-shadow-overlay);
+}
+
+.vg-hero__card-icon {
+  display: inline-flex;
+  margin-bottom: var(--space-50);
+  color: var(--vg-icon-green);
+  font-size: var(--text-4xl);
+  line-height: 1;
+  transition: transform var(--dur-slow) var(--ease-fluid);
+}
+
+.vg-hero__card:hover .vg-hero__card-icon {
+  transform: translateY(calc(var(--space-50) * -1)) scale(1.08);
+}
+
+.vg-hero__card strong {
+  color: var(--gh-fg);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+.vg-hero__card span:last-child {
+  color: var(--gh-fg-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
+/* En celular, filas: ícono a la izquierda y texto a la derecha. */
+@media (max-width: 480px) {
+  .vg-hero__cards { grid-template-columns: 1fr; }
+
+  .vg-hero__card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-200);
+    align-items: center;
+    padding: var(--space-100) var(--space-200);
+    text-align: left;
+  }
+
+  .vg-hero__card-icon {
+    grid-row: span 2;
+    margin-bottom: 0;
+    font-size: var(--text-3xl);
+  }
+}
+
+/* ---------- 4. Frase destacada (TaglineReveal) ---------- */
+.vg-tagline {
+  padding-block: var(--space-900);
+}
+
+.vg-tagline__text {
+  max-width: 900px;
+  margin-inline: auto;
+  color: var(--vg-forest);
+  font-family: var(--font-heading);
+  font-size: var(--text-4xl);
+  line-height: var(--leading-4xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.vg-tagline__line { display: block; }
+
+@media (min-width: 768px) {
+  .vg-tagline__text {
+    font-size: var(--text-5xl);
+    line-height: var(--leading-5xl);
+  }
+}
+
+/* Sin la clase vg-reveal-on (sin JS o con movimiento reducido) el texto
+   queda en color pleno. */
+/* Palabras resaltadas: verde (a tiempo) y rojo (tarde). Se ven así también
+   sin JS o con movimiento reducido. */
+.vg-tagline__word { --tono: var(--vg-forest); color: var(--tono); }
+.vg-tagline__word--ok { --tono: var(--vg-icon-green); }
+.vg-tagline__word--critico { --tono: var(--vg-sev-critico); }
+
+.vg-reveal-on .vg-tagline__word {
+  color: color-mix(in srgb, var(--tono) 28%, transparent);
+  transition: color var(--dur-slow) var(--ease-fluid);
+}
+
+.vg-reveal-on .vg-tagline__word.is-on {
+  color: var(--tono);
+}
+
+/* ---------- 5. Beneficios ----------
+   Ícono verde sin fondo, texto grande y el resultado marcado al pie. */
+.vg-beneficios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-300);
+}
+
+.vg-beneficio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-400) var(--space-300) var(--space-300);
+  text-align: center;
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-card);
+  background: var(--gh-surface);
+  transition:
+    transform var(--dur-slow) var(--ease-fluid),
+    border-color var(--dur-base) var(--ease-fluid),
+    box-shadow var(--dur-slow) var(--ease-fluid);
+}
+
+.vg-beneficio:hover {
+  transform: translateY(calc(var(--space-50) * -1));
+  border-color: var(--gh-border-strong);
+  box-shadow: var(--gh-shadow-overlay);
+}
+
+.vg-beneficio__icon {
+  display: inline-flex;
+  margin-bottom: var(--space-200);
+  color: var(--vg-icon-green);
+  font-size: var(--text-5xl);
+  line-height: 1;
+  transition: transform var(--dur-slow) var(--ease-fluid);
+}
+
+.vg-beneficio:hover .vg-beneficio__icon {
+  transform: translateY(calc(var(--space-50) * -1)) scale(1.08);
+}
+
+.vg-beneficio h3 {
+  margin-bottom: var(--space-75);
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+}
+
+.vg-beneficio p {
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+.vg-beneficio .vg-beneficio__resultado {
+  display: flex;
+  gap: var(--space-75);
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: var(--space-300);
+  color: var(--gh-fg);
+  font-weight: 600;
+}
+
+.vg-beneficio__resultado svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--vg-icon-green);
+  font-size: var(--text-lg);
+}
+
+/* ---------- 6. Para quién es: detalle de cada perfil ---------- */
+.vg-perfil__head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-200);
+  align-items: center;
+  padding: var(--space-400) var(--space-400) var(--space-300);
+}
+
+.vg-perfil__icon {
+  display: inline-flex;
+  color: var(--vg-icon-green);
+  font-size: var(--text-5xl);
+  line-height: 1;
+}
+
+.vg-perfil h3 {
+  margin-bottom: var(--space-25);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-2xl);
+}
+
+.vg-perfil .vg-perfil__lema {
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+.vg-perfil__puntos {
+  display: grid;
+  gap: var(--space-200);
+  padding: 0 var(--space-400) var(--space-400);
+  list-style: none;
+}
+
+.vg-perfil__puntos li {
+  display: flex;
+  gap: var(--space-100);
+  align-items: flex-start;
+  color: var(--gh-fg);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+.vg-perfil__puntos svg {
+  flex-shrink: 0;
+  margin-top: 4px;
+  color: var(--vg-icon-green);
+  font-size: var(--text-lg);
+}
+
+/* Beneficio clave: al pie de la tarjeta, separado por una línea fina. */
+.vg-perfil .vg-perfil__clave {
+  display: grid;
+  gap: var(--space-25);
+  margin-top: auto;
+  padding: var(--space-200) var(--space-400) var(--space-300);
+  border-top: 1px solid var(--gh-border-muted);
+  color: var(--gh-fg);
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+  font-weight: 600;
+}
+
+.vg-perfil__clave span {
+  color: var(--gh-fg-subtle);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+  .vg-perfil__head { padding: var(--space-300) var(--space-300) var(--space-200); }
+  .vg-perfil__puntos { padding: 0 var(--space-300) var(--space-300); }
+  .vg-perfil .vg-perfil__clave { padding: var(--space-200) var(--space-300); }
+  .vg-perfil__icon { font-size: var(--text-4xl); }
+}
+
+/* ---------- 8. Preguntas frecuentes ---------- */
+.vg-faq {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: var(--space-700);
+  align-items: start;
+}
+
+.vg-faq__list {
+  border-top: 1px solid var(--gh-border);
+}
+
+.vg-faq__item {
+  border-bottom: 1px solid var(--gh-border);
+}
+
+.vg-faq__item summary {
+  display: flex;
+  gap: var(--space-200);
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-200);
+  color: var(--gh-fg);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--dur-base) var(--ease-fluid);
+}
+
+.vg-faq__item summary::-webkit-details-marker { display: none; }
+.vg-faq__item summary:hover { color: var(--vg-blue); }
+
+.vg-faq__item summary:focus-visible {
+  outline: 2px solid var(--vg-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.vg-faq__caret {
+  flex-shrink: 0;
+  color: var(--gh-fg-subtle);
+  transition: transform var(--dur-base) var(--ease-fluid);
+}
+
+.vg-faq__item[open] .vg-faq__caret { transform: rotate(180deg); }
+
+.vg-faq__item p {
+  max-width: 640px;
+  padding-bottom: var(--space-200);
+  color: var(--gh-fg-muted);
 }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
-  .vg-hero__grid,
-  .vg-mejora {
+  .vg-hero__grid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: var(--space-500);
   }
 
-  .vg-stress {
+  .vg-estres__list {
+    grid-template-columns: 1fr;
+    gap: var(--space-300);
+  }
+
+  .vg-beneficios {
     grid-template-columns: 1fr;
   }
 
-  .vg-datos__list {
-    grid-template-columns: repeat(2, 1fr);
+  .vg-faq {
+    grid-template-columns: 1fr;
+    gap: var(--space-300);
   }
 }
 
 @media (max-width: 680px) {
-  .vg-section { padding-block: 64px; }
-  .vg-section--compact { padding-block: 56px; }
-  .vg-hero { padding-block: 120px 48px; }
-  .vg-wrap { padding-inline: 16px; }
+  .vg-section { padding-block: var(--space-700); }
+  .vg-section--compact { padding-block: var(--space-600); }
+  .vg-hero { padding-block: calc(var(--space-800) + var(--space-500)) var(--space-600); }
+  .vg-wrap { padding-inline: var(--space-200); }
 
-  .vg-problems,
-  .vg-perfiles,
-  .vg-datos__list {
+  .vg-perfiles {
     grid-template-columns: 1fr;
   }
 
-  .vg-problems { gap: 28px; }
 }
 
 /* ============================================================
@@ -607,39 +1161,191 @@ h3 {
   border-radius: 16px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.6s ease;
+  transition: opacity var(--dur-slow) var(--ease-fluid);
 }
 
 .vg-story[data-stage="video"] .vg-story__video {
   opacity: 1;
 }
 
+/* Rótulo de capítulo del video: arriba a la izquierda, sin caja, ícono +
+   texto en mayúsculas. Un degradé oscuro arriba (sólo sobre el video, no es
+   fondo de página) hace legible el blanco sobre el cielo claro. Aparece un
+   poco después que la imagen. */
+.vg-story__rotulo {
+  --tono: var(--vg-on-video-ok);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: var(--space-100);
+  align-items: flex-start;
+  margin: 0;
+  padding: var(--space-200) var(--space-300) var(--space-700);
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(to bottom, var(--vg-video-scrim), transparent);
+  color: var(--vg-on-video);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease-fluid);
+}
+
+.vg-story__rotulo svg {
+  flex-shrink: 0;
+  color: var(--tono);
+  font-size: var(--text-xl);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
+
+.vg-story__rotulo--critico { --tono: var(--vg-on-video-critico); }
+
+.vg-story[data-stage="video"] .vg-story__rotulo {
+  opacity: 1;
+  /* Primero se ve el campo; el rótulo llega después, con la escena ya leída. */
+  transition-delay: 1.2s;
+}
+
 .vg-story__pendiente {
-  margin-top: 12px;
-  padding: 10px 12px;
+  margin-top: var(--space-100);
+  padding: var(--space-75) var(--space-100);
   border: 1px dashed var(--gh-border-strong);
   border-radius: 8px;
   color: var(--gh-fg-muted);
-  font-size: 0.8125rem;
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
 }
 
-/* ---------- Datos de entrada del gráfico (módulo 1) ---------- */
-.vg-chart__inputs {
+/* ---------- Notificación del gráfico del hero (módulo 1) ----------
+   Va sobre el gráfico, arriba a la derecha, donde la zona de pronóstico está
+   vacía: así la tarjeta no reserva espacio abajo. En celular pasa debajo del
+   gráfico para no tapar la línea. */
+.vg-chart__toast {
+  position: absolute;
+  top: var(--space-600);
+  right: var(--space-300);
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 4px;
-  list-style: none;
+  gap: var(--space-100);
+  align-items: center;
+  padding: var(--space-75) var(--space-200) var(--space-75) var(--space-75);
+  border: 1px solid var(--vg-sev-alerta);
+  border-radius: var(--gh-radius-card);
+  background: var(--gh-surface);
+  box-shadow: var(--gh-shadow-overlay);
 }
 
-.vg-chart__input {
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: var(--vg-blue-soft);
-  color: var(--vg-blue);
-  font-size: 0.75rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+.vg-chart__toast-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--vg-sev-alerta);
+  font-size: var(--text-2xl);
+}
+
+.vg-chart__toast-text {
+  display: grid;
+  color: var(--gh-fg-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+}
+
+.vg-chart__toast-text strong {
+  color: var(--gh-fg);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
+.vg-chart__toast-wa {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding-left: var(--space-50);
+  color: var(--vg-whatsapp);
+  font-size: var(--text-xl);
+}
+
+/* ---------- Cierre del gráfico del problema ----------
+   Cuelga del borde inferior de la tarjeta, debajo de la línea "Lo ves a
+   campo", como final del gráfico. Durante el video se oculta (visibility,
+   porque la animación ya maneja la opacidad). */
+.vg-chart__end {
+  position: absolute;
+  right: var(--space-200);
+  bottom: calc(var(--space-500) * -1);
+  display: flex;
+  gap: var(--space-100);
+  align-items: center;
+  padding: var(--space-100) var(--space-200) var(--space-100) var(--space-100);
+  border: 1px solid var(--vg-sev-critico);
+  border-radius: var(--gh-radius-card);
+  background: var(--gh-surface);
+  box-shadow: var(--gh-shadow-overlay);
+}
+
+/* Piquito hacia arriba, apuntando a la línea "Lo ves a campo". */
+.vg-chart__end::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  right: var(--space-300);
+  width: 12px;
+  height: 12px;
+  border-top: 1px solid var(--vg-sev-critico);
+  border-left: 1px solid var(--vg-sev-critico);
+  background: var(--gh-surface);
+  transform: rotate(45deg);
+}
+
+.vg-chart__end-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--vg-sev-critico);
+  font-size: var(--text-3xl);
+}
+
+.vg-chart__end-text {
+  display: grid;
+  color: var(--gh-fg-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
+.vg-chart__end-text strong {
+  color: var(--gh-fg);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+}
+
+.vg-story[data-stage="video"] .vg-chart__end,
+.vg-story[data-stage="cierre"] .vg-chart__end {
+  visibility: hidden;
+}
+
+/* Espacio para la parte que cuelga fuera de la tarjeta. */
+.vg-problema .vg-media {
+  margin-bottom: var(--space-500);
+}
+
+@media (max-width: 680px) {
+  .vg-chart__end {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    margin-top: var(--space-200);
+  }
+
+  .vg-problema .vg-media { margin-bottom: 0; }
+}
+
+@media (max-width: 680px) {
+  .vg-chart__toast {
+    position: static;
+    margin-top: var(--space-100);
+  }
 }
 
 /* ---------- Gráfico sin VigIA (módulo 2) ---------- */
@@ -651,21 +1357,16 @@ h3 {
 .vg-chart__label--loss,
 .vg-chart__label--critico { fill: var(--vg-sev-critico); font-weight: 600; }
 
-.vg-alert--sin {
-  --sev: var(--gh-fg-subtle);
-  --sev-soft: var(--gh-surface-2);
-}
-
 /* ---------- Celular: "escribiendo…" ---------- */
 .vg-phone__chat { position: relative; }
 
 .vg-phone__typing {
   position: absolute;
-  top: 20px;
-  left: 14px;
+  top: var(--space-200);
+  left: var(--space-100);
   display: inline-flex;
-  gap: 4px;
-  padding: 10px 12px;
+  gap: var(--space-50);
+  padding: var(--space-75) var(--space-100);
   border-radius: 4px 12px 12px 12px;
   background: var(--gh-surface);
   box-shadow: var(--gh-shadow-card);
@@ -701,6 +1402,20 @@ h3 {
   100% { opacity: 1; transform: scale(1); }
 }
 
+@keyframes vg-toast {
+  from { opacity: 0; transform: translateY(calc(var(--space-100) * -1)) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+/* La campana se sacude al llegar la notificación. */
+@keyframes vg-ring {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-16deg); }
+  40% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  80% { transform: rotate(4deg); }
+}
+
 @keyframes vg-typing {
   0%, 85% { opacity: 1; }
   100% { opacity: 0; }
@@ -709,12 +1424,6 @@ h3 {
 @keyframes vg-dot {
   0%, 60%, 100% { transform: translateY(0); }
   30% { transform: translateY(-3px); }
-}
-
-@keyframes vg-flash {
-  0% { background: transparent; }
-  50% { background: var(--vg-blue-soft); }
-  100% { background: transparent; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -729,61 +1438,64 @@ h3 {
     transform-origin: center;
   }
 
-  /* Módulo 1: datos → línea → pronóstico → alerta */
-  .is-playing .vg-chart__input { animation: vg-in 0.4s ease-out var(--d, 0s) both; }
-  .is-playing .vg-chart:not(.vg-chart--sin) .vg-chart__reveal { animation: vg-reveal 3s linear 1.5s both; }
-  .is-playing .vg-chart__fc { animation: vg-fade 0.6s ease-out 3s both; }
-  .is-playing .vg-chart:not(.vg-chart--sin) .vg-chart__alertg { animation: vg-pop 0.5s ease-out 4.5s both; }
-  .is-playing .vg-chart:not(.vg-chart--sin) .vg-chart__callout { animation: vg-in 0.5s ease-out 4.7s both; }
+  /* Módulo 1: línea → pronóstico → notificación (un poco antes de tocar el
+     umbral, ~2,7 s) → pulso en el cruce. */
+  .is-playing .vg-chart--hero .vg-chart__reveal { animation: vg-reveal 3s linear 0.3s both; }
+  .is-playing .vg-chart__fc { animation: vg-fade var(--dur-slow) var(--ease-fluid) 1.8s both; }
+  .is-playing .vg-chart__toast { animation: vg-toast var(--dur-slow) var(--ease-fluid) 2.3s both; }
+  .is-playing .vg-chart__toast-icon svg { animation: vg-ring 0.9s var(--ease-fluid) 2.8s both; }
+  .is-playing .vg-chart--hero .vg-chart__alertg { animation: vg-pop var(--dur-slow) var(--ease-fluid) 2.7s both; }
 
   /* Módulo 2: la línea cruza el umbral sin aviso y se ve a campo tarde */
   .is-playing .vg-chart--sin .vg-chart__reveal { animation: vg-reveal 3.5s linear 0.3s both; }
-  .is-playing .vg-chart--sin .vg-chart__alertg { animation: vg-fade 0.5s ease-out 4s both; }
-  .is-playing .vg-chart--sin .vg-chart__callout { animation: vg-in 0.5s ease-out 4.4s both; }
+  .is-playing .vg-chart--sin .vg-chart__alertg { animation: vg-fade var(--dur-slow) var(--ease-fluid) 4s both; }
+  .is-playing .vg-chart__end { animation: vg-toast var(--dur-slow) var(--ease-fluid) 4.2s both; }
 
   /* Módulo 3: escribiendo… → llega el mensaje → se marca el enlace */
   .is-playing .vg-phone__typing { animation: vg-typing 1.3s linear both; }
-  .is-playing .vg-phone__typing i { animation: vg-dot 0.9s ease-in-out infinite; }
+  .is-playing .vg-phone__typing i { animation: vg-dot 0.9s var(--ease-fluid) infinite; }
   .is-playing .vg-phone__typing i:nth-child(2) { animation-delay: 0.15s; }
   .is-playing .vg-phone__typing i:nth-child(3) { animation-delay: 0.3s; }
-  .is-playing .vg-phone__bubble { animation: vg-in 0.4s ease-out 1.3s both; }
-  .is-playing .vg-phone__link { border-radius: 4px; animation: vg-flash 0.9s ease-in-out 2.6s both; }
+  .is-playing .vg-phone__bubble { animation: vg-in var(--dur-slow) var(--ease-fluid) 1.3s both; }
 }
 
 /* ---------- Módulo 2 en dos columnas: razones | gráfico + video ---------- */
 .vg-problema {
   display: grid;
   grid-template-columns: 1fr 1.15fr;
-  gap: 56px;
+  gap: var(--space-700);
   align-items: center;
 }
 
-.vg-problema .vg-problems {
-  grid-template-columns: 1fr;
-  gap: 28px;
+/* La bajada se limita al ancho de su columna: no choca con el gráfico. */
+.vg-problema__texto .vg-section__lead {
+  max-width: none;
+  margin-bottom: var(--space-500);
 }
 
 @media (max-width: 960px) {
   .vg-problema {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: var(--space-500);
   }
 }
 
 /* ============================================================
    Recorrido de los tres módulos: fondo que cambia + hilo (JourneyThread)
+   Excepción provisoria a los fondos planos de landing-page-design: se
+   mantiene mientras se prueban otros estilos de fondo (ver CLAUDE.md).
    ============================================================ */
 .vg-journey {
   position: relative;
   /* Respaldo sin JS; con JS se recalcula con las posiciones reales. */
   background: linear-gradient(
     to bottom,
-    var(--vg-bg-sano) 0%,
-    var(--vg-bg-sano) 22%,
-    var(--vg-bg-seco) 38%,
-    var(--vg-bg-seco) 52%,
-    var(--vg-bg-agua) 66%,
-    var(--vg-bg-agua) 88%,
+    var(--gh-canvas) 0%,
+    var(--gh-canvas) 30%,
+    var(--vg-bg-seco) 33%,
+    var(--vg-bg-seco) 62%,
+    var(--vg-bg-agua) 65%,
+    var(--vg-bg-agua) 97%,
     var(--gh-canvas) 100%
   );
 }
@@ -823,7 +1535,7 @@ h3 {
   fill: var(--gh-surface);
   stroke: var(--c);
   stroke-width: 2;
-  transition: fill 0.35s ease;
+  transition: fill var(--dur-base) var(--ease-fluid);
 }
 
 .vg-thread__node text {
@@ -831,18 +1543,43 @@ h3 {
   font: 700 12px var(--font-body);
   text-anchor: middle;
   dominant-baseline: central;
-  transition: fill 0.35s ease;
+  transition: fill var(--dur-base) var(--ease-fluid);
 }
 
 .vg-thread__node.is-reached circle { fill: var(--c); }
 .vg-thread__node.is-reached text { fill: var(--gh-surface); }
 
+/* Punto final del hilo, sobre la frase destacada. */
+.vg-thread__end-dot {
+  fill: var(--gh-surface);
+  stroke: var(--vg-thread-ok);
+  stroke-width: 2;
+  transition: fill var(--dur-base) var(--ease-fluid);
+}
+
+.vg-thread__end-ring {
+  fill: none;
+  stroke: var(--vg-thread-ok);
+  stroke-width: 1.5;
+  opacity: 0;
+}
+
+.vg-thread__end.is-reached .vg-thread__end-dot { fill: var(--vg-thread-ok); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .vg-thread__end.is-reached .vg-thread__end-ring {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: vg-pulse 2.4s var(--ease-fluid) infinite;
+  }
+}
+
 /* Lugar para el hilo cuando el margen lateral es angosto */
 @media (max-width: 1260px) {
-  .vg-journey .vg-wrap { padding-left: 72px; }
+  .vg-journey .vg-wrap { padding-left: var(--space-700); }
 }
 
 @media (max-width: 680px) {
-  .vg-journey .vg-wrap { padding-left: 40px; }
+  .vg-journey .vg-wrap { padding-left: var(--space-500); }
   .vg-thread__node text { font-size: 9px; }
 }

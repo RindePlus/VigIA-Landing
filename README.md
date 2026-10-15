@@ -71,8 +71,10 @@ src/
 | Widget de WhatsApp dentro de `App.jsx`    | `WhatsAppWidget.jsx` (isla propia)         |
 | `vite.config.js` (plugin 404.html)        | `astro.config.mjs` (`outDir: ./docs`)      |
 
-Estructura y contenido planificado de la home: [ESTRUCTURA_LANDING.md](ESTRUCTURA_LANDING.md).
+Estructura y contenido planificado de la home: [doc/landing/ESTRUCTURA_LANDING.md](doc/landing/ESTRUCTURA_LANDING.md).
 
-Prompts para generar los videos de los módulos y el fondo: [PROMPTS_VIDEOS.md](PROMPTS_VIDEOS.md).
+Prompts para generar los videos de los módulos y el fondo: [doc/landing/PROMPTS_VIDEOS.md](doc/landing/PROMPTS_VIDEOS.md).
 
-Documentación funcional y técnica del módulo VigIA: [MODULO_VIGIA.md](MODULO_VIGIA.md). No va en `docs/` porque esa carpeta es la salida del build y se regenera.
+Prompts de las imágenes base de esos videos (Nano Banana): [doc/landing/PROMPTS_IMAGENES.md](doc/landing/PROMPTS_IMAGENES.md).
+
+Documentación funcional y técnica del módulo VigIA: [doc/landing/MODULO_VIGIA.md](doc/landing/MODULO_VIGIA.md). No va en `docs/` porque esa carpeta es la salida del build y se regenera.

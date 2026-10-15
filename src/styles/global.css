@@ -10,8 +10,8 @@
   --bg-card: #ffffff;
   --text-main: #1e293b;
   --text-muted: #64748b;
-  --font-heading: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Geist', ui-sans-serif, system-ui, sans-serif;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -43,21 +43,65 @@
   --gh-detail-pink: #bf3989;
   --gh-danger: #cf222e;
   --gh-radius: 6px;
-  --gh-radius-btn: 10px; /* interactive buttons (header, hero, CTAs) */
-  --gh-radius-card: 10px; /* cards share the button curve for a unified look */
+  --gh-radius-btn: 8px; /* botones (header, hero, CTAs) */
+  --gh-radius-card: 12px; /* tarjetas */
   --gh-shadow-sm: 0 1px 0 rgba(31, 35, 40, 0.04);
   --gh-shadow-card: 0 1px 3px rgba(31, 35, 40, 0.12), 0 1px 2px rgba(31, 35, 40, 0.06);
   --gh-shadow-overlay: 0 8px 24px rgba(31, 35, 40, 0.12);
+
+  /* ============================================================
+     Sistema visual de landing-page-design (ver CLAUDE.md)
+     ============================================================ */
+  /* Escala tipográfica: sólo estos pasos, cada uno con su interlineado. */
+  --text-xs: 0.75rem;   --leading-xs: 1rem;
+  --text-sm: 0.875rem;  --leading-sm: 1.25rem;
+  --text-base: 1rem;    --leading-base: 1.5rem;
+  --text-lg: 1.125rem;  --leading-lg: 1.75rem;
+  --text-xl: 1.25rem;   --leading-xl: 1.75rem;
+  --text-2xl: 1.5rem;   --leading-2xl: 2rem;
+  --text-3xl: 1.875rem; --leading-3xl: 2.25rem;
+  --text-4xl: 2.25rem;  --leading-4xl: 2.5rem;
+  --text-5xl: 3rem;     --leading-5xl: 1;
+  --text-6xl: 3.75rem;  --leading-6xl: 1;
+
+  /* Espaciado: sólo estos valores. */
+  --space-25: 2px;
+  --space-50: 4px;
+  --space-75: 8px;
+  --space-100: 12px;
+  --space-200: 16px;
+  --space-300: 24px;
+  --space-400: 32px;
+  --space-500: 40px;
+  --space-600: 48px;
+  --space-700: 64px;
+  --space-800: 80px;
+  --space-900: 96px;
+
+  /* Movimiento: curva con masa (arranca rápido y asienta lento). Nunca las
+     curvas por defecto del navegador. */
+  --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-fast: 200ms;
+  --dur-base: 400ms;
+  --dur-slow: 700ms;
+  --dur-reveal: 900ms;
+
+  /* Título del hero: degradé sólo sobre el texto, nunca de fondo. */
+  --hero-title-from: #000000;
+  --hero-title-to: #666666;
 }
 
 /* Modo oscuro — BaseLayout.astro fija data-rp-theme en <html> antes del
    primer paint (sin flash) y useTheme lo actualiza al usar el toggle. */
 [data-rp-theme="dark"] {
-  --gh-canvas: #0d1117;
-  --gh-surface: #161b22;
-  --gh-surface-2: #21262d;
-  --gh-border: #30363d;
-  --gh-border-muted: #21262d;
+  /* Fondos oscuros: sólo la paleta neutra de landing-page-design. */
+  --gh-canvas: #181818;
+  --gh-surface: #1f1f1f;
+  --gh-surface-2: #272727;
+  --gh-border: #313131;
+  --gh-border-muted: #272727;
+  --hero-title-from: #ffffff;
+  --hero-title-to: #9b9b9b;
   --gh-border-strong: #6e7681;
   --gh-fg: #e6edf3;
   --gh-fg-muted: #8b949e;
@@ -81,8 +125,8 @@
 
 /* Canvas + overscroll background follow the home dark theme */
 [data-rp-theme="dark"] body {
-  background-color: #0d1117;
-  color: #e6edf3;
+  background-color: var(--gh-canvas);
+  color: var(--gh-fg);
 }
 
 * {
@@ -106,7 +150,8 @@ body {
 
 body {
   font-family: var(--font-body);
-  line-height: 1.6;
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
   color: var(--text-main);
   background-color: var(--bg-main);
   -webkit-font-smoothing: antialiased;
@@ -120,39 +165,57 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--secondary);
+  /* Cada renglón se llena lo más posible; `pretty` sólo evita dejar una
+     palabra suelta al final (balance repartía el texto en renglones parejos). */
+  text-wrap: pretty;
 }
 
-/* Base Animation Utilities */
-.fade-in-up {
+p,
+li {
+  text-wrap: pretty;
+}
+
+/* Aparición al hacer scroll: subida lenta con desenfoque que se aclara.
+   El estado oculto sólo existe si BaseLayout marcó <html> con .vg-reveal-on
+   (JS activo y movimiento permitido); sin eso, todo se ve de entrada.
+   `--reveal-delay` escalona elementos hermanos. */
+.vg-reveal-on [data-reveal] {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-  will-change: opacity, transform;
+  filter: blur(8px);
+  transform: translateY(var(--space-700));
+  transition:
+    opacity var(--dur-reveal) var(--ease-fluid),
+    filter var(--dur-reveal) var(--ease-fluid),
+    transform var(--dur-reveal) var(--ease-fluid);
+  transition-delay: var(--reveal-delay, 0ms);
 }
 
-.fade-in-up.visible {
+.vg-reveal-on [data-reveal].is-revealed {
   opacity: 1;
-  transform: translateY(0);
+  filter: none;
+  transform: none;
 }
 
-.stagger-1 {
-  transition-delay: 100ms;
+/* Salto al contenido para teclado */
+.vg-skip {
+  position: fixed;
+  top: var(--space-100);
+  left: var(--space-100);
+  z-index: 2000;
+  padding: var(--space-75) var(--space-100);
+  border-radius: var(--gh-radius-btn);
+  background: var(--gh-accent);
+  color: var(--gh-accent-fg);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform var(--dur-base) var(--ease-fluid);
 }
 
-.stagger-2 {
-  transition-delay: 200ms;
-}
-
-.stagger-3 {
-  transition-delay: 300ms;
-}
-
-/* Mejoras para dispositivos móviles */
-/* Removed font-size reduction for mobile to keep text readable */
-@media (max-width: 768px) {
-  /* optional: specific tweaks if needed, but keeping 16px base is better */
+.vg-skip:focus-visible {
+  transform: none;
 }
 
 
@@ -305,10 +368,22 @@ img {
   --vg-sev-info-soft: #e8eeff;
   /* Fondo de los tres módulos: muy claros, para que el hilo (más intenso)
      siempre se vea encima. */
-  --vg-bg-sano: #e8f3e4;
-  --vg-bg-seco: #f7ecda;
-  --vg-bg-agua: #e2f1ed;
+  --vg-bg-seco: #f2dfbd;
+  --vg-bg-agua: #cfe9e0;
   --vg-thread-ok: #3f8f1f;
+  /* Íconos verdes sin fondo: más oscuro en claro para contrastar sobre blanco. */
+  --vg-icon-green: #3f8f1f;
+  /* Verde de WhatsApp (botón del menú y widget flotante). */
+  --vg-whatsapp: #25d366;
+  --vg-whatsapp-hover: #1da851;
+  /* Sobre video (siempre con fondo oscuro, en los dos temas). */
+  /* CTA principal: azul de marca, más intenso en oscuro para que no se apague. */
+  --vg-cta: #1f5bff;
+  --vg-cta-hover: #1749d6;
+  --vg-on-video: #ffffff;
+  --vg-on-video-critico: #ff7b72;
+  --vg-on-video-ok: #8fd14f;
+  --vg-video-scrim: rgba(0, 0, 0, 0.55);
 }
 
 [data-rp-theme="dark"] {
@@ -323,8 +398,11 @@ img {
   --vg-sev-alerta-soft: #2e2a13;
   --vg-sev-info: #6b93ff;
   --vg-sev-info-soft: #131d33;
-  --vg-bg-sano: #0f1a12;
-  --vg-bg-seco: #1e170c;
-  --vg-bg-agua: #0b1a1b;
+  /* Tonos apagados en oscuro: tierra y verde petróleo, sin saturar. */
+  --vg-bg-seco: #221c14;
+  --vg-bg-agua: #111f1e;
   --vg-thread-ok: #8fd14f;
+  --vg-cta: #3d6bff;
+  --vg-cta-hover: #5580ff;
+  --vg-icon-green: #8fd14f;
 }
