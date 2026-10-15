@@ -33,7 +33,25 @@ Requiere Node `>=22.12`.
 ## Deploy
 
 Igual que Landing: GitHub Pages publicando la carpeta `docs/` de `main`. A `main` solo llegan releases desde `develop`.
-Pendiente: definir dominio, agregar `public/CNAME` y `site` en `astro.config.mjs`.
+
+Dominio: **https://vigiabioestres.com/** (también `www.`).
+
+### Puntos a tener en cuenta
+
+1. **No borrar el `CNAME`.**
+   - GitHub lo creó en la raíz de `main` (commit `fdf3724`) con el contenido `vigiabioestres.com`. `develop` todavía no lo tiene. Mergear `develop → main` no lo borra, pero conviene traerlo con `git fetch` y no sacarlo de `main`.
+   - Si se borra, o si un deploy lo pisa, el sitio deja de responder en el dominio.
+   - GitHub Pages lee el `CNAME` de la carpeta que publica. Como Astro vacía `docs/` en cada `pnpm build`, ahí no se puede crear a mano: va en `public/CNAME`, y el build lo copia a `docs/CNAME`. Lo mismo vale si algún día se publica con GitHub Actions.
+
+2. **Cómo publicar.**
+   - Para que se vea el build de Astro, Settings → Pages → Source tiene que ser **Deploy from a branch → `main` / `/docs`**. Si apunta a la raíz de `main` (`/`), ahí no hay `index.html` y el sitio no carga.
+   - Alternativa: Source → **GitHub Actions**, con un workflow que corra `pnpm build` y publique `docs/`. Es un cambio de deploy y requiere un ADR nuevo.
+
+3. **Rutas en la raíz del dominio.**
+   - El sitio se sirve en `https://vigiabioestres.com/`, no en `rindeplus.github.io/VigIA-Landing/`. Por eso `base` en `astro.config.mjs` queda en `/` y no lleva el nombre del repo. `site` tiene que ser `https://vigiabioestres.com`.
+   - Los assets se importan desde `src/` o se referencian desde `public/` con rutas que empiezan en `/` (por ejemplo, `/vigia.png`). Nunca con el nombre del repo adelante.
+
+`public/CNAME` y `site` en `astro.config.mjs` ya apuntan a `vigiabioestres.com`. Si cambia el dominio, se actualizan los dos juntos.
 
 ## Estructura
 
