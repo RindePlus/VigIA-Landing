@@ -52,6 +52,7 @@ Indicá al usuario qué mirar en `pnpm dev` (http://localhost:4321):
 - `alt` en imágenes (`alt=""` si son decorativas), `aria-hidden` en íconos decorativos.
 - Jerarquía de headings sin saltos (un solo `h1` por página).
 - Ortografía, tono y cifras del copy verificados; los datos viven en `src/data/`.
+- Si cambió el copy: checklist de contenido de `vigia-landing-structure` (cada afirmación con respaldo en `doc/landing/MODULO_VIGIA.md` §10, sin IA, satélite, estrés biótico ni Herbicidas).
 - `<title>` y meta description correctos si cambió una página.
 
 ## 6. Criterios de aceptación

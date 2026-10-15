@@ -1,10 +1,11 @@
 ---
 // Astro genera docs/404.html, que GitHub Pages sirve para rutas inexistentes.
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { MARCA } from '../data/vigia';
 import '../styles/sections.css';
 ---
 
-<BaseLayout title="Página no encontrada · VigIA" showMenu={false}>
+<BaseLayout title={`Página no encontrada · ${MARCA}`} showMenu={false}>
   <section class="vg-hero vg-hero--simple"><div class="vg-wrap">
     <h1 class="vg-hero__title">404</h1>
     <p class="vg-hero__subtitle">La página que buscás no existe.</p>

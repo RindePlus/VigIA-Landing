@@ -1,4 +1,5 @@
-/* Widget flotante de WhatsApp — portado de Landing/src/App.css */
+/* Widget flotante de WhatsApp — portado de Landing/src/App.css.
+   Sólo en escritorio: en celular WhatsApp está al pie del menú del header. */
 /* ============================================================
    WhatsApp widget — FAB that morphs into panel
    ============================================================ */
@@ -13,23 +14,23 @@
   right: 24px;
   bottom: 24px;
   z-index: 9999;
-  width: 90px;
-  height: 90px;
-  border-radius: 45px;
-  background: #25d366;
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
+  background: var(--vg-whatsapp);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   transition:
-    width 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-    height 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-    border-radius 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-    background 0.35s ease,
-    box-shadow 0.55s ease;
+    width var(--dur-slow) var(--ease-fluid),
+    height var(--dur-slow) var(--ease-fluid),
+    border-radius var(--dur-slow) var(--ease-fluid),
+    background var(--dur-base) var(--ease-fluid),
+    box-shadow var(--dur-slow) var(--ease-fluid);
 }
 
 /* darken on hover like the green CTAs — only while closed (open = white panel) */
 .wa-widget:not(.wa-widget--open):hover {
-  background: #1da851;
+  background: var(--vg-whatsapp-hover);
 }
 
 .wa-widget--open {
@@ -46,9 +47,9 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 90px;
-  height: 90px;
-  border-radius: 45px;
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -56,9 +57,9 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
-  transition: width 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-              height 0.55s cubic-bezier(0.32, 0.72, 0, 1),
-              border-radius 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: width var(--dur-slow) var(--ease-fluid),
+              height var(--dur-slow) var(--ease-fluid),
+              border-radius var(--dur-slow) var(--ease-fluid);
 }
 
 .wa-widget--open .wa-widget__fab {
@@ -72,13 +73,13 @@
 .wa-widget__fab-icon {
   position: absolute;
   color: #fff;
-  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+  transition: opacity var(--dur-base) var(--ease-fluid), transform var(--dur-slow) var(--ease-fluid);
 }
 
 .wa-widget__fab-icon--wa {
   opacity: 1;
   transform: scale(1);
-  font-size: 54px;
+  font-size: 36px;
 }
 
 .wa-widget__fab-icon--close {
@@ -108,7 +109,7 @@
   padding: 44px 24px 20px;
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 0.15s ease 0.15s, transform 0.15s ease 0.15s;
+  transition: opacity var(--dur-fast) var(--ease-fluid) 0.15s, transform var(--dur-fast) var(--ease-fluid) 0.15s;
   pointer-events: none;
 }
 
@@ -116,22 +117,22 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
-  transition: opacity 0.3s ease 0.15s, transform 0.3s ease 0.15s;
+  transition: opacity var(--dur-base) var(--ease-fluid) 0.15s, transform var(--dur-base) var(--ease-fluid) 0.15s;
 }
 
 .wa-widget__greeting {
   font-family: var(--font-body);
-  font-size: 1.15rem;
+  font-size: var(--text-lg);
   color: var(--rp-gray-700);
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity var(--dur-fast) var(--ease-fluid), transform var(--dur-fast) var(--ease-fluid);
 }
 
 .wa-widget--open .wa-widget__greeting {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.25s ease 0.3s, transform 0.25s ease 0.3s;
+  transition: opacity var(--dur-base) var(--ease-fluid) 0.3s, transform var(--dur-base) var(--ease-fluid) 0.3s;
   line-height: 1.5;
   margin: 0;
 }
@@ -144,49 +145,22 @@
   margin-top: auto;
   padding: 12px 20px;
   border-radius: 14px;
-  background: #25d366;
+  background: var(--vg-whatsapp);
   color: #fff;
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
   font-weight: 700;
   text-decoration: none;
   transition: background 0.2s;
 }
 
 .wa-widget__send:hover {
-  background: #1ebe5d;
+  background: var(--vg-whatsapp-hover);
 }
 
-@media (max-width: 600px) {
-  .wa-widget {
-    right: 16px;
-    bottom: 20px;
-    width: 72px;
-    height: 72px;
-    border-radius: 36px;
+@media (max-width: 767px) {
+  .wa-widget,
+  .wa-overlay {
+    display: none;
   }
-
-  .wa-widget__fab {
-    width: 72px;
-    height: 72px;
-    border-radius: 36px;
-  }
-
-  .wa-widget__fab-icon--wa { font-size: 42px; }
-
-  .wa-widget--open {
-    width: calc(100vw - 32px);
-    height: 210px;
-    border-radius: 20px;
-  }
-
-  .wa-widget--open .wa-widget__fab {
-    top: 12px;
-    right: 12px;
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-  }
-
-  .wa-widget__panel { padding: 40px 20px 20px; }
 }

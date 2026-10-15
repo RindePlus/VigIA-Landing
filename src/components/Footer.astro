@@ -1,7 +1,6 @@
 ---
 // Componente estático (sin JS en el cliente): los contactos son links reales.
-import { LuMail, LuMapPin } from 'react-icons/lu';
-import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
+import { PiEnvelopeSimple, PiMapPin, PiWhatsappLogo, PiInstagramLogo } from 'react-icons/pi';
 import {
   CONTACT_EMAIL,
   INSTAGRAM_URL,
@@ -10,6 +9,7 @@ import {
   WHATSAPP_DISPLAY,
   OFFICE_ADDRESS,
 } from '../data/social';
+import { MARCA } from '../data/vigia';
 import './Footer.css';
 
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_ADDRESS)}`;
@@ -24,7 +24,7 @@ const year = new Date().getFullYear();
     <ul class="rp-footer__contact">
       <li>
         <a class="rp-footer__contact-item" href={`mailto:${CONTACT_EMAIL}`}>
-          <span class="rp-footer__contact-icon rp-footer__contact-icon--blue"><LuMail /></span>
+          <span class="rp-footer__contact-icon rp-footer__contact-icon--blue"><PiEnvelopeSimple /></span>
           <span class="rp-footer__contact-text">
             <span class="rp-footer__contact-label">Email</span>
             <span class="rp-footer__contact-value">{CONTACT_EMAIL}</span>
@@ -33,7 +33,7 @@ const year = new Date().getFullYear();
       </li>
       <li>
         <a class="rp-footer__contact-item" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
-          <span class="rp-footer__contact-icon rp-footer__contact-icon--instagram"><FaInstagram /></span>
+          <span class="rp-footer__contact-icon rp-footer__contact-icon--instagram"><PiInstagramLogo /></span>
           <span class="rp-footer__contact-text">
             <span class="rp-footer__contact-label">Instagram</span>
             <span class="rp-footer__contact-value">{INSTAGRAM_HANDLE}</span>
@@ -42,7 +42,7 @@ const year = new Date().getFullYear();
       </li>
       <li>
         <a class="rp-footer__contact-item" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-          <span class="rp-footer__contact-icon rp-footer__contact-icon--whatsapp"><FaWhatsapp /></span>
+          <span class="rp-footer__contact-icon rp-footer__contact-icon--whatsapp"><PiWhatsappLogo /></span>
           <span class="rp-footer__contact-text">
             <span class="rp-footer__contact-label">WhatsApp</span>
             <span class="rp-footer__contact-value">{WHATSAPP_DISPLAY}</span>
@@ -51,7 +51,7 @@ const year = new Date().getFullYear();
       </li>
       <li>
         <a class="rp-footer__contact-item" href={mapsUrl} target="_blank" rel="noopener noreferrer">
-          <span class="rp-footer__contact-icon rp-footer__contact-icon--amber"><LuMapPin /></span>
+          <span class="rp-footer__contact-icon rp-footer__contact-icon--amber"><PiMapPin /></span>
           <span class="rp-footer__contact-text">
             <span class="rp-footer__contact-label">Oficina</span>
             <span class="rp-footer__contact-value">Concejal Lorusso 762 · Alta Gracia</span>
@@ -64,7 +64,7 @@ const year = new Date().getFullYear();
 
     <div class="rp-footer__bottom">
       <p class="rp-footer__copyright">
-        © {year} <strong>VigIA</strong> · una solución de Rinde Plus. Todos los derechos reservados.
+        © {year} <strong>{MARCA}</strong> · una solución de Rinde Plus. Todos los derechos reservados.
       </p>
     </div>
   </div>

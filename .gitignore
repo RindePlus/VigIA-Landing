@@ -41,3 +41,7 @@ Thumbs.db
 
 # Configuración local de Claude Code (por desarrollador)
 .claude/settings.local.json
+
+# Material de trabajo de imágenes y videos (Nano Banana, Higgsfield, edición).
+# Pesado y con muchas versiones: no se commitea. Lo final va a public/videos/.
+media-src/

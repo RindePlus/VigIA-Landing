@@ -17,3 +17,12 @@ export const UMBRAL_Y = 148;
 export const DIA_CRUCE = 22 + ((UMBRAL_Y - 136) / (150 - 136)) * 2;
 
 export const path = (pts) => pts.map(([d, y], i) => `${i ? 'L' : 'M'}${x(d)} ${y}`).join(' ');
+
+// Versión alta de los gráficos (hero y problema): misma serie, pero se estira
+// sólo la escala vertical para llenar la tarjeta, sin deformar textos ni
+// puntos. `y` pasa una coordenada de la serie a la versión alta.
+const K = 1.45;
+export const y = (v) => 20 + (v - 20) * K;
+export const BASE = y(230); // eje inferior
+export const UMBRAL = y(UMBRAL_Y);
+export const pathAlto = (pts) => pts.map(([d, v], i) => `${i ? 'L' : 'M'}${x(d)} ${y(v)}`).join(' ');

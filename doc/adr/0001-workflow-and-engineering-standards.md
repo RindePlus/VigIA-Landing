@@ -1,6 +1,6 @@
 # ADR 0001 — Adopción del estándar de ingeniería y flujo de desarrollo frontend
 
-- **Estado:** Aceptado
+- **Estado:** Aceptado. El modelo de ramas (punto 2 de la decisión y la fila sobre `develop`) fue reemplazado por [ADR 0002](0002-develop-integration-branch.md).
 - **Fecha:** 2026-10-13
 - **Ámbito:** repositorio `RindePlus/VigIA-Landing`
 

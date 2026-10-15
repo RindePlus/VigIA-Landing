@@ -25,13 +25,14 @@ Requiere Node `>=22.12`.
 
 ## Flujo de trabajo
 
-- Ramas `<type>/<slug>` desde `main`, commits en conventional commits y PR contra `main` con [la plantilla](.github/PULL_REQUEST_TEMPLATE.md).
+- Ramas `<type>/<slug>` desde `develop`, commits en conventional commits y PR contra `develop` con [la plantilla](.github/PULL_REQUEST_TEMPLATE.md).
+- Publicación: PR de release `develop → main` (`/release`). Al mergear a `main`, GitHub Pages publica `docs/`.
 - Validación local de commits (una vez por clone): `pnpm hooks:install`.
-- Reglas para Claude Code: [CLAUDE.md](CLAUDE.md). Racional: [ADR 0001](doc/adr/0001-workflow-and-engineering-standards.md).
+- Reglas para Claude Code: [CLAUDE.md](CLAUDE.md). Racional: [ADR 0001](doc/adr/0001-workflow-and-engineering-standards.md) y [ADR 0002](doc/adr/0002-develop-integration-branch.md).
 
 ## Deploy
 
-Igual que Landing: GitHub Pages publicando la carpeta `docs/` de `main`.
+Igual que Landing: GitHub Pages publicando la carpeta `docs/` de `main`. A `main` solo llegan releases desde `develop`.
 Pendiente: definir dominio, agregar `public/CNAME` y `site` en `astro.config.mjs`.
 
 ## Estructura
@@ -70,8 +71,10 @@ src/
 | Widget de WhatsApp dentro de `App.jsx`    | `WhatsAppWidget.jsx` (isla propia)         |
 | `vite.config.js` (plugin 404.html)        | `astro.config.mjs` (`outDir: ./docs`)      |
 
-Estructura y contenido planificado de la home: [ESTRUCTURA_LANDING.md](ESTRUCTURA_LANDING.md).
+Estructura y contenido planificado de la home: [doc/landing/ESTRUCTURA_LANDING.md](doc/landing/ESTRUCTURA_LANDING.md).
 
-Prompts para generar los videos de los módulos y el fondo: [PROMPTS_VIDEOS.md](PROMPTS_VIDEOS.md).
+Prompts para generar los videos de los módulos y el fondo: [doc/landing/PROMPTS_VIDEOS.md](doc/landing/PROMPTS_VIDEOS.md).
 
-Documentación funcional y técnica del módulo VigIA: [MODULO_VIGIA.md](MODULO_VIGIA.md). No va en `docs/` porque esa carpeta es la salida del build y se regenera.
+Prompts de las imágenes base de esos videos (Nano Banana): [doc/landing/PROMPTS_IMAGENES.md](doc/landing/PROMPTS_IMAGENES.md).
+
+Documentación funcional y técnica del módulo VigIA: [doc/landing/MODULO_VIGIA.md](doc/landing/MODULO_VIGIA.md). No va en `docs/` porque esa carpeta es la salida del build y se regenera.
