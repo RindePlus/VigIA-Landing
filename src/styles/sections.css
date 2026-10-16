@@ -1015,10 +1015,32 @@ h3 {
   filter: grayscale(1) brightness(0) invert(1);
 }
 
+/* En celular, de a dos por fila y la impar centrada abajo, con el mismo
+   ancho que las otras (grilla de cuatro columnas, cada tarjeta ocupa dos).
+   Tarjetas más compactas: foto, aire y caja del logo más chicos. */
 @media (max-width: 680px) {
   .vg-equipo {
-    grid-template-columns: 1fr;
-    max-width: 320px;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 400px;
+  }
+  .vg-persona {
+    grid-column: span 2;
+    padding: var(--space-200) var(--space-100) var(--space-100);
+  }
+  .vg-persona:last-child:nth-child(odd) {
+    grid-column: 2 / span 2;
+  }
+  .vg-persona__foto {
+    width: 64px;
+    height: 64px;
+  }
+  .vg-persona h3 {
+    margin-bottom: var(--space-100);
+    text-align: center;
+  }
+  .vg-persona__empresa {
+    height: 72px;
+    padding-top: var(--space-100);
   }
 }
 
@@ -1484,9 +1506,17 @@ h3 {
 
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
+  /* En una columna el CTA va debajo del gráfico: la bajada dice qué hace,
+     el gráfico lo muestra y recién ahí se pide la acción. La columna de
+     texto se disuelve (display: contents) para poder reordenar el botón. */
   .vg-hero__grid {
     grid-template-columns: 1fr;
-    gap: var(--space-500);
+    gap: 0;
+  }
+  .vg-hero__copy { display: contents; }
+  .vg-hero__ctas {
+    order: 1;
+    margin-top: var(--space-500);
   }
 
 

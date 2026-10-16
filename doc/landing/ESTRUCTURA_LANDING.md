@@ -67,7 +67,7 @@ Header ─ Cómo funciona · Impacto · Nosotros · Contacto · Educación (/edu
 | Etiqueta | ESTRÉS HÍDRICO Y TÉRMICO |
 | Título (h1) | **Detectá el estrés antes de que se convierta en pérdida** |
 | Bajada | VigIA BioEstrés sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos. |
-| Botón | Sólo **Contactanos para empezar a usar VigIA** (WhatsApp, con flecha), monocromo: negro en tema claro y blanco en oscuro (decisión 33). Va en la columna de texto, **debajo de la bajada** y alineado a la izquierda con el texto (decisión 47). Sin botón secundario (decisión 31). En celular queda antes del gráfico. |
+| Botón | Sólo **Contactanos para empezar a usar VigIA** (WhatsApp, con flecha), monocromo: negro en tema claro y blanco en oscuro (decisión 33). Va en la columna de texto, **debajo de la bajada** y alineado a la izquierda con el texto (decisión 47). Sin botón secundario (decisión 31). En celular y tablet (una columna) va debajo del gráfico: primero se ve lo que hace y después se pide la acción. |
 | Visual | El gráfico termina a la altura del botón. `BalanceChart.astro`, simplificado: sólo la línea de agua útil, el umbral, "Hoy" y la zona de pronóstico (sin chips de datos, lluvia ni "Ejemplo ilustrativo"). La línea se dibuja y, justo antes de tocar el umbral, aparece la notificación, colgada de una línea punteada ámbar que sube desde el punto de **Hoy** (la alerta se envía hoy, cuando el pronóstico ya muestra el cruce; el punto ámbar del cruce es lo que se anticipa), con el logo de WhatsApp grande (el aviso llega por WhatsApp) y el texto **Alerta enviada · Estrés hídrico en 14 días**, y late el punto del cruce. El gráfico muestra 18 días de historia y los 14 del pronóstico (el horizonte del motor): la línea toca el umbral justo al final del pronóstico. En escritorio la notificación va sobre el gráfico (arriba a la derecha); en celular, debajo. Sin video. |
 
 ## 2. El problema (`#problema`)
@@ -217,7 +217,7 @@ Reemplaza a Para quién es (decisión 21).
 | Título | **Las personas detrás de VigIA BioEstrés** |
 | Bajada | Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos. (Pendiente de revisar con el equipo.) |
 
-Encabezado centrado y tres tarjetas chicas en un bloque angosto y centrado (hasta 760 px; en celular, una debajo de otra): foto redonda, nombre y, al pie bajo una línea fina, el logo de la empresa con el mismo alto que tiene en el carrusel de clientes (Rinde Plus, que no está en el carrusel, en la misma proporción). Los logos van a color en tema claro y en blanco en oscuro, como en el carrusel. Datos en `src/data/equipo.js`.
+Encabezado centrado y tres tarjetas chicas en un bloque angosto y centrado (hasta 760 px; en celular, de a dos por fila y la tercera centrada abajo, más compactas): foto redonda, nombre y, al pie bajo una línea fina, el logo de la empresa con el mismo alto que tiene en el carrusel de clientes (Rinde Plus, que no está en el carrusel, en la misma proporción). Los logos van a color en tema claro y en blanco en oscuro, como en el carrusel. Datos en `src/data/equipo.js`.
 
 | Persona | Empresa | Foto |
 |---|---|---|
