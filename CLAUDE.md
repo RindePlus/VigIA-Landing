@@ -49,7 +49,8 @@ Cómo se aplica en la práctica:
 - "Terminé la tarea" **no** es un pedido de commit. Al terminar, resumí qué cambió y qué conviene mirar en el navegador; no ofrezcas commitear en cada turno.
 - Tampoco ejecutes `git add`, `git stash`, `git reset`, `git checkout -- <archivo>` ni `git restore` sobre cambios del desarrollador sin pedido explícito.
 - Refuerzos técnicos (en `.claude/settings.json`):
-  - `git commit`, `git push` y `gh pr create` piden confirmación siempre (reglas `ask`).
+  - `git push` y `gh pr create` piden confirmación siempre (reglas `ask`).
+  - `git commit` no pide confirmación en consola: el pedido explícito del usuario ("haz commit", `/commit`) ya es la aprobación, y se ejecuta directo, sin mostrar el mensaje para un OK previo. Sin ese pedido, sigue sin commitearse nada.
   - `gh pr merge` y `gh pr review` están denegados: los merges a `develop` y a `main` los hace una persona.
   - El hook `git-guard.sh` bloquea commits en `main`/`develop`/`master`, pushes hacia esas ramas y mensajes fuera de conventional commits.
   - El hook `stop.sh` muestra al final de cada turno los archivos sin commitear, como recordatorio para el desarrollador.
@@ -109,7 +110,7 @@ La guía de diseño es la skill **`landing-page-design`** (ver [ADR 0003](doc/ad
 
 - **Escalas como tokens CSS**, no clases de Tailwind: `--text-*` / `--leading-*` (tipografía), `--space-*` (espaciado), `--ease-fluid` y `--dur-*` (movimiento), todos en `src/styles/global.css`. Ningún tamaño, espaciado ni curva suelta en los componentes.
 - **Tipografía**: Geist (Google Fonts), pesos hasta 700, sin itálicas. `text-wrap: pretty` en títulos y texto (los renglones se llenan al máximo, sin palabra suelta al final); `balance` sólo en la frase destacada centrada.
-- **Íconos**: Phosphor vía `react-icons/pi`. Monocromos en su color (verde `--vg-icon-green`, severidades, WhatsApp, etc.), **sin fondo ni círculo tintado**. Lo mismo para números de pasos y rótulos: nada de "badges" con fondo de color y texto flúor.
+- **Íconos**: Phosphor vía `react-icons/pi`. Monocromos en su color (verde `--vg-icon-green`, severidades, WhatsApp, etc.), **sin fondo ni círculo tintado**. Lo mismo para números de pasos y rótulos: nada de "badges" con fondo de color y texto flúor. Única excepción: el botón flotante de WhatsApp usa el logo oficial (`SiWhatsapp` de `react-icons/si`), porque es un logo de marca y la versión a línea de Phosphor no se reconoce bien sobre el verde.
 - **Movimiento**: toda transición usa `var(--ease-fluid)`. Las apariciones al hacer scroll se activan con el atributo `data-reveal` (y `style="--reveal-delay: …"` para escalonar). El observer está en `BaseLayout.astro`. No pongas `data-reveal` en elementos que usa el hilo como ancla (`data-vg-node`, `data-vg-end`). Todo respeta `prefers-reduced-motion`.
 - **Modo oscuro**: fondos neutros de la paleta de la skill (`#181818`, `#1f1f1f`, `#272727`, `#313131`, `#131209`).
 
