@@ -128,54 +128,43 @@ export const COMO_FUNCIONA = {
       texto: 'El panel del lote, con el balance hídrico y el DPV que explican cada alerta.',
     },
   ],
-  // Qué te avisa: las tres alertas del motor (estrés hídrico a 4 días,
-  // período crítico a 14, estrés combinado) contadas en lenguaje de campo.
-  // `tono` = color de la severidad (alerta ámbar, info azul, crítico rojo).
-  // `momento` = cuándo llega el aviso: va arriba, como dato principal.
+  // Qué te avisa: las alertas del motor (estrés hídrico, período crítico a
+  // 14 días, estrés combinado) más el térmico, en lenguaje de campo. Cada
+  // una: el tipo (título), qué pasa (`titulo`) y la acción concreta
+  // (`accion`, de alertEngine.ts: bioinsumo hídrico, antiestrés térmico,
+  // bioinsumo preventivo o riego).
+  // `momento` = cuándo llega el aviso. Hoy no se muestra; queda por si se
+  // recupera (p. ej. "14 días antes" en Etapa crítica).
   alertas: [
-    // Unifica las alertas del motor con los tipos de estrés que antes
-    // estaban en Qué hace VigIA. Cada una: cuándo avisa (`momento`), qué
-    // pasa y la acción concreta (`accion`, de alertEngine.ts: bioinsumo
-    // hídrico, antiestrés térmico, bioinsumo preventivo o riego).
-    // `tono` = color de la tarjeta.
     {
       id: 'hidrico',
-      tono: 'hidrico',
-      tipo: 'Hídrico',
+      tipo: 'Estrés hídrico',
       momento: 'Con margen',
       titulo: 'Falta de agua que se viene',
-      texto: 'Antes de que al suelo le falte agua para la etapa de tu cultivo.',
       accion: 'Aplicá bioinsumo hídrico o regá.',
     },
     {
       id: 'termico',
-      tono: 'termico',
-      tipo: 'Térmico',
+      tipo: 'Estrés térmico',
       momento: 'DPV sobre el umbral',
       titulo: 'El aire seca a la planta',
-      texto: 'Cuando el DPV pasa el umbral de tu cultivo y la planta pierde agua más rápido de lo que repone.',
       accion: 'Aplicá un antiestrés térmico.',
     },
     {
       id: 'combinado',
-      tono: 'combinado',
-      tipo: 'Combinado',
+      tipo: 'Estrés combinado',
       momento: 'Mismo día',
       titulo: 'Calor y sequía juntos',
-      texto: 'Se suman el estrés hídrico y el térmico: el escenario más dañino.',
       accion: 'Actuá ese día: bioinsumo o riego.',
     },
     {
       id: 'critico',
-      tono: 'critico',
       tipo: 'Etapa crítica',
       momento: '14 días antes',
       titulo: 'Se acerca la etapa que define el rinde',
-      texto: 'Te avisa antes del período crítico de tu cultivo, para llegar protegido.',
       accion: 'Aplicá el bioinsumo preventivo antes de la etapa.',
     },
   ],
-  etiquetaAccion: 'Qué hacer',
   // Cómo lo hace: tres pasos cortos. Paso 1 con redacción neutral ("se
   // cargan") hasta confirmar quién hace el alta de lotes (pregunta abierta 1
   // de ESTRUCTURA_LANDING.md).

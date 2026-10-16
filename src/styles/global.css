@@ -387,9 +387,6 @@ img {
 
   /* Íconos verdes sin fondo: más oscuro en claro para contrastar sobre blanco. */
   --vg-icon-green: #3f8f1f;
-  /* Franja "qué hacer" de las alertas: verde oscuro de marca, letra blanca. */
-  --vg-accion-bg: #1e4d3a;
-  --vg-accion-fg: #ffffff;
   /* Verde de WhatsApp (botón del menú y widget flotante). */
   --vg-whatsapp: #25d366;
   --vg-whatsapp-hover: #1da851;
@@ -440,8 +437,6 @@ img {
   --vg-cta: #3d6bff;
   --vg-cta-hover: #5580ff;
   --vg-icon-green: #8fd14f;
-  --vg-accion-bg: #2a4a38;
-  --vg-accion-fg: #ffffff;
   --vg-wa-bar: #202c33;
   --vg-wa-bar-fg: #e9edef;
   --vg-wa-wallpaper: #0b141a;

@@ -79,7 +79,8 @@
 .wa-widget__fab-icon--wa {
   opacity: 1;
   transform: scale(1);
-  font-size: 36px;
+  /* El logo relleno pesa más que el de línea: un poco más chico. */
+  font-size: 30px;
 }
 
 .wa-widget__fab-icon--close {

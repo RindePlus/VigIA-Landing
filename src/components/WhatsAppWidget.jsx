@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { PiWhatsappLogo, PiX } from 'react-icons/pi';
+import { PiX } from 'react-icons/pi';
+// Logo oficial de WhatsApp (Simple Icons): el de Phosphor es una versión a
+// línea fina que no se reconoce bien sobre el botón verde.
+import { SiWhatsapp } from 'react-icons/si';
 import { WHATSAPP_URL } from '../data/social';
 import './WhatsAppWidget.css';
 
@@ -46,7 +49,7 @@ const WhatsAppWidget = () => {
           onClick={() => setOpen((v) => !v)}
           aria-label="WhatsApp"
         >
-          <PiWhatsappLogo className="wa-widget__fab-icon wa-widget__fab-icon--wa" />
+          <SiWhatsapp className="wa-widget__fab-icon wa-widget__fab-icon--wa" aria-hidden="true" />
           <PiX className="wa-widget__fab-icon wa-widget__fab-icon--close" />
         </button>
 

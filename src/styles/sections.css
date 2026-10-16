@@ -377,7 +377,8 @@ h3 {
   aspect-ratio: 4 / 3;
   object-fit: cover;
   margin-bottom: var(--space-200);
-  border-radius: var(--radius-md);
+  /* Esquinas rectas: las fotos de campo van al ras, sin redondeo. */
+  border-radius: 0;
 }
 
 .vg-punto h3 {
@@ -468,8 +469,9 @@ h3 {
    Qué te avisa: cuatro alertas con forma de aviso (barra izquierda de su
    color, tipo y momento, qué pasa y la acción al pie), en 2×2. Cómo lo
    hace: tres pasos en una tira, unidos por una línea. */
+/* Bien separado del bloque de los canales y el WhatsApp: es otra parte. */
 .vg-detalle {
-  margin-top: var(--space-700);
+  margin-top: var(--space-900);
 }
 
 /* Subtítulo de cada bloque (Qué te avisa VigIA, Cómo lo hace): centrado
@@ -538,10 +540,12 @@ h3 {
   .vg-alerta:not(:first-child)::before { display: none; }
 }
 
+/* Un paso más chico que los pasos de abajo: "Estrés combinado" entra en
+   un renglón en las columnas de 880px / 4. */
 .vg-alerta .vg-alerta__tipo {
   color: var(--gh-fg);
-  font-size: var(--text-2xl);
-  line-height: var(--leading-2xl);
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
   font-weight: 700;
 }
 
