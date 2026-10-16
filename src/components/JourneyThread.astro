@@ -209,11 +209,19 @@
       const solucion = 'var(--vg-bg-solucion)';
       const agua = 'var(--vg-bg-agua)';
       const pagina = 'var(--vg-bg-pagina)';
+      // El verde de "agua" vuelve a la página al llegar a Qué te avisa
+      // (.vg-detalle): el fundido arranca un poco antes del bloque y termina
+      // ya dentro de él. Sin ese bloque, al final del recorrido como antes.
+      const detalle = journey.querySelector<HTMLElement>('.vg-detalle');
+      const yDetalle = detalle ? detalle.getBoundingClientRect().top - jr.top : H;
+      const finAgua = Math.min(H, yDetalle + 2 * T);
+      const inicioPagina = Math.max(b4 + T, Math.min(yDetalle - T, H - 2 * T));
       journey.style.background = `linear-gradient(to bottom, ${canvas} 0px,
         ${fundido(canvas, seco, b2 - T, b2 + T)},
         ${fundido(seco, solucion, b3 - T, b3 + T)},
         ${fundido(solucion, agua, b4 - T, b4 + T)},
-        ${fundido(agua, pagina, Math.max(b4 + T, H - 2 * T), H)})`;
+        ${fundido(agua, pagina, inicioPagina, finAgua)},
+        ${pagina} ${finAgua}px)`;
 
       const length = line.getTotalLength();
       const largos: number[] = [];

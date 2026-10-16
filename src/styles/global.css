@@ -387,9 +387,26 @@ img {
 
   /* Íconos verdes sin fondo: más oscuro en claro para contrastar sobre blanco. */
   --vg-icon-green: #3f8f1f;
+  /* Franja "qué hacer" de las alertas: verde oscuro de marca, letra blanca. */
+  --vg-accion-bg: #1e4d3a;
+  --vg-accion-fg: #ffffff;
   /* Verde de WhatsApp (botón del menú y widget flotante). */
   --vg-whatsapp: #25d366;
   --vg-whatsapp-hover: #1da851;
+  /* Chat de WhatsApp de ejemplo (WhatsAppMock.astro): colores de la app. */
+  --vg-wa-bar: #008069;
+  --vg-wa-bar-fg: #ffffff;
+  --vg-wa-wallpaper: #efeae2;
+  --vg-wa-doodle: rgba(17, 27, 33, 0.06);
+  --vg-wa-bubble: #ffffff;
+  --vg-wa-fg: #111b21;
+  --vg-wa-meta: #667781;
+  --vg-wa-chip: #ffffff;
+  --vg-wa-input-bar: #f0f2f5;
+  --vg-wa-input: #ffffff;
+  --vg-wa-accent: #00a884;
+  --vg-wa-accent-fg: #ffffff;
+  --vg-wa-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
   /* Sobre video (siempre con fondo oscuro, en los dos temas). */
   /* CTA principal: azul de marca, más intenso en oscuro para que no se apague. */
   --vg-cta: #1f5bff;
@@ -423,6 +440,21 @@ img {
   --vg-cta: #3d6bff;
   --vg-cta-hover: #5580ff;
   --vg-icon-green: #8fd14f;
+  --vg-accion-bg: #2a4a38;
+  --vg-accion-fg: #ffffff;
+  --vg-wa-bar: #202c33;
+  --vg-wa-bar-fg: #e9edef;
+  --vg-wa-wallpaper: #0b141a;
+  --vg-wa-doodle: rgba(233, 237, 239, 0.04);
+  --vg-wa-bubble: #202c33;
+  --vg-wa-fg: #e9edef;
+  --vg-wa-meta: #8696a0;
+  --vg-wa-chip: #182229;
+  --vg-wa-input-bar: #202c33;
+  --vg-wa-input: #2a3942;
+  --vg-wa-accent: #00a884;
+  --vg-wa-accent-fg: #111b21;
+  --vg-wa-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 1260px) {

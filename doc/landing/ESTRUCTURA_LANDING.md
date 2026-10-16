@@ -131,7 +131,7 @@ Es el capítulo "con VigIA" del recorrido. **Lo principal son los dos canales de
 | Título | **Te avisa a tiempo para actuar** (sin nombrar los canales: ya los presentan las tarjetas) |
 | Bajada | VigIA sigue cada ambiente día a día. Cuando se viene el estrés, te avisa con margen para aplicar el bioinsumo o regar. |
 
-**Bloque principal (dos columnas):** a la izquierda, la etiqueta, el título, la bajada y los dos canales flotando, sin tarjeta ni línea entre ellos; sólo el ícono va en el color de cada canal: **En tu WhatsApp** (verde WhatsApp) y **En la plataforma** (azul). A la derecha, alineado abajo (termina a la altura de la tarjeta de la plataforma y no se cruza con el título), un recuadro 4:3 (la proporción del video) que llena `WhatsAppMock.astro`, así no cambia de tamaño al pasar al video. El mensaje es simple: **⚠️ Estrés hídrico en 4 días** · Lote 12 · Ambiente 2 · Planificá riego o bioinsumo. Después, el video `resolucion` y el cierre **✅ Resuelta a tiempo**.
+**Bloque principal (dos columnas):** a la izquierda, la etiqueta, el título, la bajada y los dos canales flotando, sin tarjeta ni línea entre ellos; sólo el ícono va en el color de cada canal: **En tu WhatsApp** (verde WhatsApp) y **En la plataforma** (azul). A la derecha, alineado abajo (termina a la altura de la tarjeta de la plataforma y no se cruza con el título), un recuadro 4:3 (la proporción del video) que llena `WhatsAppMock.astro`, así no cambia de tamaño al pasar al video. El mensaje es simple: **⚠️ Estrés hídrico en 14 días** · Lote 12 · Ambiente 2 · Planificá riego o bioinsumo. Después, el video `resolucion` y el cierre **✅ Resuelta a tiempo**.
 
 **Qué te avisa y cómo lo hace** (decisión 24): un panel en dos columnas, sin íconos. Las columnas comparten filas (subgrid) y cada ítem tiene la misma forma a los dos lados: barra de color a la izquierda, rótulo corto en ese color, título y texto. Así cada renglón queda a la altura del de enfrente. En celular, una columna debajo de la otra.
 
@@ -316,7 +316,7 @@ Cada sección del recorrido tiene **un** medio, dentro de `MediaStory.astro`: pr
 
 ### Cierre espejo en Cómo funciona
 
-Al terminar el video de resolución vuelve el celular y, durante 3,2 s, el aviso "⚠️ Estrés hídrico en 4 días" se cruza con "✅ Resuelta a tiempo", con un borde verde en el mensaje. Después reinicia el ciclo. Es el espejo del "Sin aviso" del gráfico del problema.
+Al terminar el video de resolución vuelve el celular y, durante 3,2 s, el aviso "⚠️ Estrés hídrico en 14 días" se cruza con "✅ Resuelta a tiempo", con un borde verde en el mensaje. Después reinicia el ciclo. Es el espejo del "Sin aviso" del gráfico del problema.
 
 - Lo maneja `MediaStory` con la prop `cierre` (ms) y la etapa `data-stage="cierre"`; el texto está en `COMO_FUNCIONA.mensaje.resuelta`.
 - Es narrativo: no afirma que la plataforma registre la aplicación ni que el balance vuelva sobre el umbral (el video muestra una aplicación de bioinsumo, no un riego).

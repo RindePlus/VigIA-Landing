@@ -1,14 +1,23 @@
 ---
-// Celular con un aviso de VigIA por WhatsApp. HTML + CSS (sin imagen) para
-// que siga al tema claro/oscuro. Es ilustrativo: los datos salen de
-// COMO_FUNCIONA.mensaje en src/data/vigia.js.
+// Chat de WhatsApp con un aviso de VigIA. HTML + CSS (sin imagen) para que
+// siga al tema claro/oscuro con los colores de la app (tokens `--vg-wa-*`).
+// Es ilustrativo: los datos salen de COMO_FUNCIONA.mensaje en src/data/vigia.js.
 // Ocupa todo el recuadro del medio (4:3, como el video), así no cambia de
 // tamaño al pasar al video. Mensaje simple: la alerta, dónde y qué hacer.
-// Animación (con `.is-playing`, la dispara MediaStory): "escribiendo…" y
-// llega el mensaje. Sin ella, se ve el mensaje.
+// Animación (con `.is-playing`, la dispara MediaStory): "escribiendo…" en la
+// barra y en el chat, y llega el mensaje. Sin ella, se ve el mensaje.
 // Cierre (`data-stage="cierre"` en MediaStory, después del video): la alerta
 // pasa a "Resuelta", espejo del "Sin aviso" del gráfico del problema.
-import { PiWhatsappLogo } from 'react-icons/pi';
+import {
+  PiArrowLeft,
+  PiCamera,
+  PiDotsThreeVertical,
+  PiMicrophoneFill,
+  PiPaperclip,
+  PiPhone,
+  PiSmiley,
+  PiVideoCamera,
+} from 'react-icons/pi';
 import { COMO_FUNCIONA } from '../data/vigia';
 
 const { lote, alerta, accion, hora, resuelta } = COMO_FUNCIONA.mensaje;
@@ -16,26 +25,47 @@ const { lote, alerta, accion, hora, resuelta } = COMO_FUNCIONA.mensaje;
 
 <figure class="vg-phone" aria-label="Ejemplo de alerta de VigIA por WhatsApp">
   <div class="vg-phone__screen">
-    <div class="vg-phone__bar">
-      <span class="vg-phone__avatar" aria-hidden="true">V</span>
+    <div class="vg-phone__bar" aria-hidden="true">
+      <PiArrowLeft className="vg-phone__back" />
+      <span class="vg-phone__avatar">V</span>
       <span class="vg-phone__contact">
         <strong>VigIA</strong>
-        <small>Alertas de tus lotes</small>
+        <small class="vg-phone__status">
+          <span class="vg-phone__status-idle">Alertas de tus lotes</span>
+          <span class="vg-phone__status-typing">escribiendo…</span>
+        </small>
       </span>
-      <PiWhatsappLogo className="vg-phone__wa" aria-hidden="true" />
+      <span class="vg-phone__actions">
+        <PiVideoCamera />
+        <PiPhone />
+        <PiDotsThreeVertical />
+      </span>
     </div>
 
     <div class="vg-phone__chat">
-      <span class="vg-phone__typing" aria-hidden="true"><i></i><i></i><i></i></span>
-      <div class="vg-phone__bubble">
-        <p class="vg-phone__alerta">
-          <span class="vg-phone__aviso"><span aria-hidden="true">⚠️</span> {alerta}</span>
-          <span class="vg-phone__resuelta" aria-hidden="true"><span>✅</span> {resuelta}</span>
-        </p>
-        <p class="vg-phone__lote">{lote}</p>
-        <p>{accion}</p>
-        <span class="vg-phone__time">{hora}</span>
+      <span class="vg-phone__day" aria-hidden="true">Hoy</span>
+      <div class="vg-phone__msgs">
+        <span class="vg-phone__typing" aria-hidden="true"><i></i><i></i><i></i></span>
+        <div class="vg-phone__bubble">
+          <p class="vg-phone__alerta">
+            <span class="vg-phone__aviso"><span aria-hidden="true">⚠️</span> {alerta}</span>
+            <span class="vg-phone__resuelta" aria-hidden="true"><span>✅</span> {resuelta}</span>
+          </p>
+          <p class="vg-phone__lote">{lote}</p>
+          <p>{accion}</p>
+          <span class="vg-phone__time">{hora}</span>
+        </div>
       </div>
+    </div>
+
+    <div class="vg-phone__input" aria-hidden="true">
+      <span class="vg-phone__field">
+        <PiSmiley />
+        <span class="vg-phone__placeholder">Mensaje</span>
+        <PiPaperclip />
+        <PiCamera />
+      </span>
+      <span class="vg-phone__mic"><PiMicrophoneFill /></span>
     </div>
   </div>
 </figure>

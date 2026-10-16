@@ -31,18 +31,18 @@ export const EQUIPO = [
     id: 'marcos-flesia',
     nombre: 'Marcos Flesia',
     foto: fotoMarcos,
-    empresa: { nombre: 'Rinde Plus', logo: rindeplus, logoAlto: 36 },
+    empresa: { nombre: 'Rinde Plus', logo: rindeplus, logoAlto: 46 },
   },
   {
     id: 'juan-dallorso',
     nombre: 'Juan Dall’Orso',
     foto: fotoJuan,
-    empresa: { nombre: 'Agroconsultor', logo: agroconsultor, logoAlto: 28 },
+    empresa: { nombre: 'Agroconsultor', logo: agroconsultor, logoAlto: 40 },
   },
   {
     id: 'lucas-andreoni',
     nombre: 'Lucas Andreoni',
     foto: fotoLucas,
-    empresa: { nombre: 'BioRed', logo: biored, logoAlto: 52 },
+    empresa: { nombre: 'BioRed', logo: biored, logoAlto: 66 },
   },
 ];

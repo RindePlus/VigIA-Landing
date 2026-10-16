@@ -71,15 +71,15 @@ export const QUE_HACE = {
     'Sigue cada ambiente desde antes de la siembra hasta el final del ciclo, y te dice cuándo cuidar el agua y cuándo aplicar el bioinsumo.',
   // Cuatro tarjetas con foto, primero en la sección. La de los picos de
   // estrés va primera: es lo principal y la desarrollan los tres tipos de
-  // abajo. Fotos provisorias de media-src/imagenes (siembra y agua no
-  // muestran todavía lo que dicen).
+  // abajo. Fotos de la serie de media-src/imagenes (qh-*.png), generadas
+  // con Nano Banana Pro y la imagen 0 (el lote) como referencia.
   puntos: [
     {
       id: 'picos',
-      titulo: 'Detecta los picos de estrés',
+      titulo: 'Detecta picos de estrés',
       texto: 'Encuentra los picos de estrés hídrico y térmico en cada ambiente y te sugiere la acción para cada uno.',
       imagen: imgEstres,
-      alt: 'Mano revisando plantas de soja marchitas sobre suelo seco',
+      alt: 'Hojas de soja que empiezan a plegarse bajo el sol fuerte del mediodía',
     },
     {
       // Sin número a propósito: lo que importa es que acompaña todo el proceso.
@@ -87,7 +87,7 @@ export const QUE_HACE = {
       titulo: 'Desde antes de la siembra',
       texto: 'Sigue el agua del suelo antes de que siembres y acompaña todo el ciclo, no sólo el día del aviso.',
       imagen: imgSiembra,
-      alt: 'Suelo seco y agrietado entre dos surcos de soja',
+      alt: 'Sembradora entrando a un lote en barbecho con rastrojo al amanecer',
     },
     {
       // Balance por ambiente y plan de riego.
@@ -95,7 +95,7 @@ export const QUE_HACE = {
       titulo: 'Cuida el uso del agua',
       texto: 'Sabés cuánta agua útil tiene cada ambiente y regás sólo cuando hace falta.',
       imagen: imgAgua,
-      alt: 'Lote de soja bajo el sol de la tarde',
+      alt: 'Equipo de riego por pivote regando un lote de soja al atardecer',
     },
     {
       // Las acciones son bioinsumo o riego; dicho en positivo.
@@ -103,7 +103,7 @@ export const QUE_HACE = {
       titulo: 'Orientado a bioinsumos',
       texto: 'Cada alerta te sugiere el bioinsumo o el riego en el momento en que más protege al cultivo.',
       imagen: imgBioinsumos,
-      alt: 'Pulverizadora aplicando sobre un lote de soja al amanecer',
+      alt: 'Gotas finas de una aplicación sobre hojas de soja al amanecer',
     },
   ],
 };
@@ -150,7 +150,7 @@ export const COMO_FUNCIONA = {
     {
       id: 'termico',
       tono: 'termico',
-      tipo: 'Térmico (DPV)',
+      tipo: 'Térmico',
       momento: 'DPV sobre el umbral',
       titulo: 'El aire seca a la planta',
       texto: 'Cuando el DPV pasa el umbral de tu cultivo y la planta pierde agua más rápido de lo que repone.',
@@ -187,7 +187,7 @@ export const COMO_FUNCIONA = {
   // Mensaje de ejemplo del celular (WhatsAppMock.astro).
   // Simple a propósito: la alerta, dónde y qué hacer.
   mensaje: {
-    alerta: 'Estrés hídrico en 4 días',
+    alerta: 'Estrés hídrico en 14 días',
     lote: 'Lote 12 · Ambiente 2',
     accion: 'Planificá riego o bioinsumo.',
     hora: '07:30',
@@ -195,7 +195,8 @@ export const COMO_FUNCIONA = {
     // no afirma que la plataforma registre la aplicación.
     resuelta: 'Resuelta a tiempo',
   },
-  // Al pie de la sección: otros módulos, con enlace a su página.
+  // Otros módulos, con enlace a su página. Se muestran al pie de las
+  // preguntas frecuentes, no en esta sección.
   // Carry-over de herbicidas es de RindePlus, no de VigIA BioEstrés
   // (decisión 18 de ESTRUCTURA_LANDING.md); respaldo en MODULO_VIGIA, anexo A.
   // PENDIENTE: las URL. Con `href: null` el enlace no se muestra.
@@ -359,8 +360,9 @@ export const FOOTER = {
   contacto: { titulo: 'Contacto' },
   rindeplus: {
     titulo: 'Rinde Plus',
-    texto: `${MARCA} es parte de Rinde Plus, que reúne otras soluciones agtech para el campo.`,
-    enlace: 'Conocé Rinde Plus',
+    // Sin decir que VigIA es de Rinde Plus: la plataforma tiene otros socios.
+    texto: '¿Buscás más servicios especializados para tu producción? Rinde Plus tiene otras soluciones agtech para el campo.',
+    enlace: 'Visitá Rinde Plus',
     href: 'https://rindeplus.com',
   },
   ayuda: {
@@ -375,5 +377,5 @@ export const FOOTER = {
     { texto: 'Política de privacidad', href: '/privacidad' },
     { texto: 'Términos y condiciones', href: '/terminos' },
   ],
-  pie: 'una solución de Rinde Plus.',
+  pie: 'Todos los derechos reservados.',
 };

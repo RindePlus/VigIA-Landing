@@ -214,36 +214,36 @@ const faqJsonLd = {
         </div>
       </div>
 
-      <!-- Qué te avisa: cuatro alertas con forma de aviso real (barra de su
-           color, tipo y cuándo avisa, qué pasa y la acción concreta al pie),
-           en 2×2. Cómo lo hace: los tres pasos en una tira unida por una
-           línea. Sin íconos: manda el dato. -->
-      <div class="vg-detalle">
-        <h3 class="vg-detalle__label">Qué te avisa</h3>
+      <!-- Qué te avisa: las cuatro alertas en fila, sin tarjetas, como las
+           cifras de impacto. Monocromo y en dos grupos: qué pasa (el tipo en
+           grande y la frase debajo) y qué hacer (la acción, en verde).
+           Tipo, frase y acción alineados entre columnas (subgrid).
+           Cómo lo hace: los tres pasos en una tira unida por una línea. Es el
+           ancla final del hilo (data-vg-end): no lleva data-reveal. -->
+      <div class="vg-detalle" data-vg-end>
+        <h3 class="vg-detalle__label">Qué te avisa VigIA</h3>
         <ul class="vg-alertas">
           {
             COMO_FUNCIONA.alertas.map((a, i) => (
-              <li class={`vg-alerta vg-alerta--${a.tono}`} data-reveal style={delay(i)}>
-                <p class="vg-alerta__rotulo">
-                  <span>{a.tipo}</span> · {a.momento}
-                </p>
-                <p class="vg-alerta__titulo">{a.titulo}</p>
-                <p class="vg-alerta__texto">{a.texto}</p>
-                <p class="vg-alerta__accion">
-                  <span>{COMO_FUNCIONA.etiquetaAccion}</span>
-                  {a.accion}
-                </p>
+              <li class="vg-alerta" data-reveal style={delay(i)}>
+                <div>
+                  <p class="vg-alerta__tipo">{a.tipo}</p>
+                  <p class="vg-alerta__titulo">{a.titulo}</p>
+                </div>
+                <p class="vg-alerta__accion">{a.accion}</p>
               </li>
             ))
           }
         </ul>
 
         <h3 class="vg-detalle__label">Cómo lo hace</h3>
-        <ol class="vg-pasos">
+        <!-- Línea de tiempo: un punto por paso; al entrar en pantalla la línea
+             se dibuja de izquierda a derecha y cada paso aparece cuando la
+             línea llega a él (estilos en sections.css, .vg-pasos). -->
+        <ol class="vg-pasos" data-reveal>
           {
             COMO_FUNCIONA.pasos.map((p, i) => (
-              <li class="vg-paso" data-reveal style={delay(i)}>
-                <span class="vg-paso__num" aria-hidden="true">{i + 1}</span>
+              <li class="vg-paso" style={`--i: ${i}`}>
                 <p class="vg-paso__titulo">{p.titulo}</p>
                 <p class="vg-paso__texto">{p.texto}</p>
               </li>
@@ -251,26 +251,6 @@ const faqJsonLd = {
           }
         </ol>
       </div>
-
-      <!-- Otros módulos, con enlace a su página. Es el ancla final del hilo
-           (data-vg-end): no lleva data-reveal. -->
-      <ul class="vg-modulos" data-vg-end>
-        {
-          COMO_FUNCIONA.modulos.map((m) => (
-            <li class="vg-modulo">
-              <p>
-                <strong>{m.pregunta}</strong> {m.texto}
-              </p>
-              {m.enlace.href && (
-                <a class="vg-modulo__link" href={m.enlace.href} target="_blank" rel="noopener noreferrer">
-                  {m.enlace.texto}
-                  <PiArrowRight aria-hidden="true" />
-                </a>
-              )}
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </section>
 
@@ -538,8 +518,79 @@ const faqJsonLd = {
           ))
         }
       </div>
+
+      <!-- Otros módulos, con enlace a su página: al pie de las preguntas,
+           a todo el ancho, para no cargar la sección de la solución. -->
+      <ul class="vg-modulos">
+        {
+          COMO_FUNCIONA.modulos.map((m, i) => (
+            <li class="vg-modulo" data-reveal style={delay(i)}>
+              <p>
+                <strong>{m.pregunta}</strong> {m.texto}
+              </p>
+              {m.enlace.href && (
+                <a class="vg-modulo__link" href={m.enlace.href} target="_blank" rel="noopener noreferrer">
+                  {m.enlace.texto}
+                  <PiArrowRight aria-hidden="true" />
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
+
+  <!-- Acordeón de preguntas: <details> abre y cierra de golpe, así que la
+       altura se anima con la Web Animations API, con la curva y duración de
+       los tokens. La respuesta además se funde. Con movimiento reducido o sin
+       JS queda el comportamiento nativo. -->
+  <script>
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) {
+      const css = getComputedStyle(document.documentElement);
+      const duration = parseFloat(css.getPropertyValue('--dur-slow')) || 700;
+      const easing = css.getPropertyValue('--ease-fluid').trim() || 'ease-out';
+
+      document.querySelectorAll<HTMLDetailsElement>('.vg-faq__item').forEach((item) => {
+        const summary = item.querySelector('summary')!;
+        const answer = item.querySelector('p');
+        let anim: Animation | null = null;
+        let closing = false;
+
+        const run = (from: number, to: number, cerrar: boolean) => {
+          item.style.overflow = 'hidden';
+          anim = item.animate({ height: [`${from}px`, `${to}px`] }, { duration, easing });
+          answer?.animate({ opacity: cerrar ? [1, 0] : [0, 1] }, { duration, easing, fill: 'forwards' });
+          closing = cerrar;
+          // Para que la flecha gire al empezar a cerrar, no al terminar.
+          item.classList.toggle('is-closing', cerrar);
+          anim.onfinish = () => {
+            if (cerrar) item.open = false;
+            closing = false;
+            item.classList.remove('is-closing');
+            anim = null;
+            item.style.overflow = '';
+            answer?.getAnimations().forEach((a) => a.cancel());
+          };
+        };
+
+        summary.addEventListener('click', (event) => {
+          event.preventDefault();
+          // Altura actual (a mitad de una animación, la del momento).
+          const from = item.offsetHeight;
+          anim?.cancel();
+          if (closing || !item.open) {
+            item.open = true;
+            run(from, item.offsetHeight, false);
+          } else {
+            const borde = item.offsetHeight - item.clientHeight;
+            run(from, summary.offsetHeight + borde, true);
+          }
+        });
+      });
+    }
+  </script>
 
   <!-- 10. Cierre -->
   <section class="vg-section vg-cta">
