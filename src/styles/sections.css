@@ -184,9 +184,18 @@ h3 {
   transform: translateX(var(--space-50));
 }
 
+/* En celular el CTA (el del hero y el del cierre) no ocupa todo el ancho:
+   texto un punto más chico y, en el hero, sin flecha (como el del cierre),
+   para que entre en un solo renglón dentro de la columna del contenido. */
 @media (max-width: 480px) {
   .vg-hero__ctas { margin-top: var(--space-600); }
-  .vg-hero__ctas .vg-btn { width: 100%; }
+  .vg-hero__ctas .vg-btn { padding: var(--space-75) var(--space-200); }
+  .vg-hero__ctas .vg-btn svg { display: none; }
+  .vg-hero__ctas .vg-btn,
+  .vg-cta .vg-btn {
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+  }
 }
 
 /* Páginas simples (pricing, 404) */
@@ -627,12 +636,12 @@ h3 {
     opacity var(--dur-reveal) var(--ease-fluid),
     filter var(--dur-reveal) var(--ease-fluid),
     transform var(--dur-reveal) var(--ease-fluid);
-  transition-delay: calc(var(--i) * var(--dur-slow));
+  transition-delay: calc(var(--i) * var(--reveal-step));
 }
 
 .vg-reveal-on .vg-pasos[data-reveal] .vg-paso::after {
-  transition: transform var(--dur-slow) var(--ease-fluid);
-  transition-delay: calc(var(--i) * var(--dur-slow) + var(--dur-fast));
+  transition: transform var(--reveal-step) var(--ease-fluid);
+  transition-delay: calc(var(--i) * var(--reveal-step) + var(--dur-fast));
 }
 
 .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso {
@@ -1818,8 +1827,12 @@ h3 {
   .vg-problema .vg-media { margin-bottom: 0; }
 }
 
-/* En celular el gráfico es chico: la notificación también. */
+/* En celular el gráfico es chico: la notificación también. Como la
+   notificación no se achica al mismo ritmo que el gráfico, sobresale por
+   arriba del área: el título se separa para que no lo tape. */
 @media (max-width: 680px) {
+  .vg-chart--hero .vg-chart__head { margin-bottom: var(--space-500); }
+
   .vg-chart__toast {
     gap: var(--space-100);
     padding: var(--space-50) var(--space-100);
@@ -2060,7 +2073,8 @@ h3 {
 /* En celular el margen general es angosto: el recorrido suma lugar a la
    izquierda para el hilo. (Entre 680 y 1260 px el margen general ya lo da.) */
 @media (max-width: 680px) {
-  .vg-journey .vg-wrap { padding-left: var(--space-500); }
+  .vg-journey .vg-wrap,
+  .vg-journey .vg-hero__ctas { padding-left: var(--space-500); }
   .vg-thread__node text { font-size: 9px; }
 }
 

@@ -89,6 +89,13 @@
   --dur-base: 400ms;
   --dur-slow: 700ms;
   --dur-reveal: 900ms;
+  /* Aparición al hacer scroll ([data-reveal]): cuánto sube, cuánto
+     desenfoque trae, factor del escalonado entre hermanos y pausa entre
+     pasos de la línea de tiempo. En celular se achican (ver abajo). */
+  --reveal-shift: var(--space-700);
+  --reveal-blur: 8px;
+  --reveal-stagger: 1;
+  --reveal-step: var(--dur-slow);
 
   /* Título del hero: degradé sólo sobre el texto, nunca de fondo. */
   --hero-title-from: #000000;
@@ -187,13 +194,13 @@ li {
    `--reveal-delay` escalona elementos hermanos. */
 .vg-reveal-on [data-reveal] {
   opacity: 0;
-  filter: blur(8px);
-  transform: translateY(var(--space-700));
+  filter: blur(var(--reveal-blur));
+  transform: translateY(var(--reveal-shift));
   transition:
     opacity var(--dur-reveal) var(--ease-fluid),
     filter var(--dur-reveal) var(--ease-fluid),
     transform var(--dur-reveal) var(--ease-fluid);
-  transition-delay: var(--reveal-delay, 0ms);
+  transition-delay: calc(var(--reveal-delay, 0ms) * var(--reveal-stagger));
 }
 
 .vg-reveal-on [data-reveal].is-revealed {
@@ -484,4 +491,15 @@ img {
 
 @media (max-width: 680px) {
   :root { --page-gutter: var(--space-200); }
+
+  /* En celular la página es larga y se baja mucho: las apariciones son más
+     cortas y sutiles (menos recorrido, menos desenfoque, casi sin espera
+     entre hermanos) para que el contenido no se haga esperar. */
+  :root {
+    --dur-reveal: 500ms;
+    --reveal-shift: var(--space-300);
+    --reveal-blur: 2px;
+    --reveal-stagger: 0.4;
+    --reveal-step: var(--dur-base);
+  }
 }

@@ -140,6 +140,9 @@ const hreflang = alt.tieneEn
     <script>
       const root = document.documentElement;
       if (root.classList.contains('vg-reveal-on')) {
+        // En celular se dispara apenas el elemento asoma: al bajar rápido no
+        // quedan huecos esperando a que el contenido aparezca.
+        const celular = window.matchMedia('(max-width: 680px)').matches;
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -158,7 +161,7 @@ const hreflang = alt.tieneEn
               el.addEventListener('transitionend', done);
             });
           },
-          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+          celular ? { rootMargin: '0px', threshold: 0 } : { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
         );
         document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
       }

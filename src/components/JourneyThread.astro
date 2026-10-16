@@ -99,12 +99,28 @@
       if (frase && palabras.length) {
         const fr = frase.getBoundingClientRect();
         const centro = fr.top + fr.height / 2;
-        const fila = palabras.reduce((best, r) =>
-          Math.abs(r.top + r.height / 2 - centro) < Math.abs(best.top + best.height / 2 - centro) ? r : best,
-        );
-        const enFila = palabras.filter((r) => Math.abs(r.top - fila.top) < fila.height / 2);
-        const izq = Math.min(...enFila.map((r) => r.left));
-        fin = { x: Math.max(x + 40, izq - jr.left - 28), y: fila.top - jr.top + fila.height / 2 };
+        // Renglones: borde izquierdo y centro vertical de cada uno.
+        const filas: { izq: number; cy: number }[] = [];
+        palabras.forEach((r) => {
+          const f = filas.find((o) => Math.abs(o.cy - (r.top + r.height / 2)) < r.height / 2);
+          if (f) f.izq = Math.min(f.izq, r.left);
+          else filas.push({ izq: r.left, cy: r.top + r.height / 2 });
+        });
+        // El punto va 28px a la izquierda del renglón y nunca a menos de 40px
+        // del hilo. Con la ventana angosta el renglón del medio puede no
+        // tener ese lugar (el punto quedaría pegado a la palabra): entonces
+        // se usa el renglón con lugar (al menos 22px libres) más cercano al
+        // centro. Si ninguno tiene lugar, el hilo llega centrado arriba de
+        // la frase.
+        const conLugar = filas.filter((f) => f.izq - jr.left - 22 >= x + 40);
+        if (conLugar.length) {
+          const fila = conLugar.reduce((best, f) =>
+            Math.abs(f.cy - centro) < Math.abs(best.cy - centro) ? f : best,
+          );
+          fin = { x: Math.max(x + 40, fila.izq - jr.left - 28), y: fila.cy - jr.top };
+        } else {
+          fin = { x: fr.left + fr.width / 2 - jr.left, y: fr.top - jr.top - 28 };
+        }
       }
       const yEnd = fin ? fin.y : yServicio;
 
