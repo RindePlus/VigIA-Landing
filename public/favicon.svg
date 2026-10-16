@@ -1,8 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 431 431">
-  <!-- Favicon de VigIA: "V" + "iA" con las formas y colores del logo.
-       Sin placa: la "V" verde y el "iA" azul se distinguen en pestañas claras y oscuras. -->
-  <g transform="translate(30 125.5)">
-    <polygon fill="#7EC241" points="0,22 33,22 75.5,147 118,22 151,22 94,177 57,177"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Favicon de VigIA: placa blanca de esquinas redondeadas a todo el lienzo,
+       "V" negra e "iA" azul del logo. El texto ocupa el ancho con un margen de 36. -->
+  <rect width="512" height="512" rx="104" fill="#FFFFFF"/>
+  <g transform="translate(36 149.28) scale(1.18919)">
+    <polygon fill="#000000" points="0,22 33,22 75.5,147 118,22 151,22 94,177 57,177"/>
     <g fill="#1C57FF">
       <circle cx="187.5" cy="21" r="18.5"/>
       <rect x="172" y="56" width="31" height="121"/>

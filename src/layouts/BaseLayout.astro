@@ -2,7 +2,7 @@
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.astro';
 import WhatsAppWidget from '../components/WhatsAppWidget.jsx';
-import { MARCA, SEO } from '../data/vigia';
+import { IDIOMAS, alternativas, contenido, idiomaDe } from '../i18n/idiomas';
 import '../styles/global.css';
 
 interface Props {
@@ -13,6 +13,14 @@ interface Props {
   jsonLd?: Record<string, unknown>;
 }
 
+// Idioma de la página (ADR 0004): sale de la ruta (/en/… = inglés).
+const lang = idiomaDe(Astro.currentLocale);
+const idioma = IDIOMAS.find((i) => i.code === lang) ?? IDIOMAS[0];
+const otroIdioma = IDIOMAS.find((i) => i.code !== lang) ?? IDIOMAS[1];
+const { MARCA, SEO, UI, WHATSAPP_URL } = contenido(lang);
+// Rutas de esta misma página en cada idioma (para el selector y hreflang).
+const alt = alternativas(Astro.url.pathname);
+
 const { title = SEO.titulo, description = SEO.descripcion, showMenu = true, jsonLd } = Astro.props;
 
 // Las etiquetas para redes necesitan URLs absolutas. `site` se define en
@@ -20,10 +28,18 @@ const { title = SEO.titulo, description = SEO.descripcion, showMenu = true, json
 const site = Astro.site ?? new URL('https://vigiabioestres.com');
 const pageUrl = new URL(Astro.url.pathname, site).href;
 const ogImage = new URL('/og.jpg', site).href;
+// hreflang: sólo si la página existe en los dos idiomas (las legales no).
+const hreflang = alt.tieneEn
+  ? [
+      { lang: 'es', href: new URL(alt.es, site).href },
+      { lang: 'en', href: new URL(alt.en, site).href },
+      { lang: 'x-default', href: new URL(alt.es, site).href },
+    ]
+  : [];
 ---
 
 <!doctype html>
-<html lang="es-AR">
+<html lang={idioma.html}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,8 +49,10 @@ const ogImage = new URL('/og.jpg', site).href;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={pageUrl} />
+    {hreflang.map((h) => <link rel="alternate" hreflang={h.lang} href={h.href} />)}
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="es_AR" />
+    <meta property="og:locale" content={idioma.og} />
+    {alt.tieneEn && <meta property="og:locale:alternate" content={otroIdioma.og} />}
     <meta property="og:site_name" content={MARCA} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -70,13 +88,51 @@ const ogImage = new URL('/og.jpg', site).href;
     </script>
   </head>
   <body class="rp-home">
-    <a class="vg-skip" href="#contenido">Saltar al contenido</a>
-    <Header client:load showMenu={showMenu} />
+    <a class="vg-skip" href="#contenido">{UI.saltar}</a>
+    <Header
+      client:load
+      showMenu={showMenu}
+      lang={lang}
+      menuItems={UI.menu}
+      textos={UI.header}
+      inicioHref={lang === 'en' ? '/en/' : '/'}
+      inicioLabel={`${MARCA} — ${UI.inicio}`}
+      whatsappUrl={WHATSAPP_URL}
+      rutas={{ es: alt.es, en: alt.en }}
+    />
     <main id="contenido">
       <slot />
     </main>
     <Footer />
-    <WhatsAppWidget client:idle />
+    <WhatsAppWidget client:idle textos={UI.widget} whatsappUrl={WHATSAPP_URL} />
+
+    <!-- Cambio de idioma: el selector del header guarda en qué sección y a
+         qué altura de ella estaba el usuario; acá, en la página del otro
+         idioma, se vuelve a ese punto (los textos miden distinto, así que se
+         usa la proporción dentro de la sección, no los píxeles). Lo que ya
+         queda a la vista se muestra sin la animación de aparición, para que
+         el cambio sea sólo el fundido de la transición. Inline: corre antes
+         del primer paint y antes del observer de abajo. -->
+    <script is:inline>
+      (function () {
+        var dato = null;
+        try {
+          dato = JSON.parse(sessionStorage.getItem('vg-idioma-scroll') || 'null');
+          sessionStorage.removeItem('vg-idioma-scroll');
+        } catch (e) {}
+        var limpiar = function (r) { return r.replace(/\/+$/, '') || '/'; };
+        if (!dato || limpiar(dato.destino) !== limpiar(location.pathname) || location.hash) return;
+        var el = dato.id && document.getElementById(dato.id);
+        if (!el) return;
+        var r = el.getBoundingClientRect();
+        window.scrollTo({ top: window.scrollY + r.top + r.height * dato.proporcion, behavior: 'instant' });
+        var alto = window.innerHeight;
+        document.querySelectorAll('[data-reveal]').forEach(function (n) {
+          var b = n.getBoundingClientRect();
+          if (b.top < alto && b.bottom > -alto * 0.1) n.removeAttribute('data-reveal');
+        });
+      })();
+    </script>
 
     <!-- Apariciones al hacer scroll ([data-reveal], estilos en global.css).
          IntersectionObserver en lugar de un listener de scroll: no fuerza
@@ -84,6 +140,9 @@ const ogImage = new URL('/og.jpg', site).href;
     <script>
       const root = document.documentElement;
       if (root.classList.contains('vg-reveal-on')) {
+        // En celular se dispara apenas el elemento asoma: al bajar rápido no
+        // quedan huecos esperando a que el contenido aparezca.
+        const celular = window.matchMedia('(max-width: 680px)').matches;
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -102,7 +161,7 @@ const ogImage = new URL('/og.jpg', site).href;
               el.addEventListener('transitionend', done);
             });
           },
-          { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+          celular ? { rootMargin: '0px', threshold: 0 } : { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
         );
         document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
       }

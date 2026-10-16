@@ -49,7 +49,7 @@ Dominio: **https://vigiabioestres.com/** (también `www.`).
 
 3. **Rutas en la raíz del dominio.**
    - El sitio se sirve en `https://vigiabioestres.com/`, no en `rindeplus.github.io/VigIA-Landing/`. Por eso `base` en `astro.config.mjs` queda en `/` y no lleva el nombre del repo. `site` tiene que ser `https://vigiabioestres.com`.
-   - Los assets se importan desde `src/` o se referencian desde `public/` con rutas que empiezan en `/` (por ejemplo, `/vigia.png`). Nunca con el nombre del repo adelante.
+   - Los assets se importan desde `src/` o se referencian desde `public/` con rutas que empiezan en `/` (por ejemplo, `/marca/vigia.png`). Nunca con el nombre del repo adelante.
 
 `public/CNAME` y `site` en `astro.config.mjs` ya apuntan a `vigiabioestres.com`. Si cambia el dominio, se actualizan los dos juntos.
 

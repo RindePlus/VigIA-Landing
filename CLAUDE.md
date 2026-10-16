@@ -6,11 +6,13 @@ Reglas para Claude (y para quien use Claude Code en este repo) sobre código, ra
 
 Landing page de **VigIA**, el sistema de monitoreo de cultivos de RindePlus. Es un **sitio estático de marketing**: no tiene backend, base de datos, API ni autenticación propia. El botón "Ingresar" solo enlaza a la app, que vive en otro repositorio.
 
+El sitio está en **español** (raíz: `/`, `/pricing`…) **e inglés** (`/en/`, `/en/pricing`…), ver [ADR 0004](doc/adr/0004-sitio-bilingue-es-en.md). Las legales están sólo en español.
+
 ## Stack técnico
 
 | Capa | Stack |
 |---|---|
-| **Framework** | Astro 7 (salida estática, una página HTML por archivo de `src/pages/`) |
+| **Framework** | Astro 7 (salida estática, una página HTML por archivo de `src/pages/`; i18n nativo, `es` + `en`) |
 | **Interactividad** | React 19 como **islas** (`client:load` / `client:idle` / `client:visible`) |
 | **Estilos** | CSS plano con design tokens `--gh-*` en `src/styles/global.css`. Sin Tailwind |
 | **Lenguaje** | JavaScript/JSX + TypeScript para chequeo de tipos (`astro/tsconfigs/strict`) |
@@ -49,7 +51,8 @@ Cómo se aplica en la práctica:
 - "Terminé la tarea" **no** es un pedido de commit. Al terminar, resumí qué cambió y qué conviene mirar en el navegador; no ofrezcas commitear en cada turno.
 - Tampoco ejecutes `git add`, `git stash`, `git reset`, `git checkout -- <archivo>` ni `git restore` sobre cambios del desarrollador sin pedido explícito.
 - Refuerzos técnicos (en `.claude/settings.json`):
-  - `git commit`, `git push` y `gh pr create` piden confirmación siempre (reglas `ask`).
+  - `git push` y `gh pr create` piden confirmación siempre (reglas `ask`).
+  - `git commit` no pide confirmación en consola: el pedido explícito del usuario ("haz commit", `/commit`) ya es la aprobación, y se ejecuta directo, sin mostrar el mensaje para un OK previo. Sin ese pedido, sigue sin commitearse nada.
   - `gh pr merge` y `gh pr review` están denegados: los merges a `develop` y a `main` los hace una persona.
   - El hook `git-guard.sh` bloquea commits en `main`/`develop`/`master`, pushes hacia esas ramas y mensajes fuera de conventional commits.
   - El hook `stop.sh` muestra al final de cada turno los archivos sin commitear, como recordatorio para el desarrollador.
@@ -109,7 +112,7 @@ La guía de diseño es la skill **`landing-page-design`** (ver [ADR 0003](doc/ad
 
 - **Escalas como tokens CSS**, no clases de Tailwind: `--text-*` / `--leading-*` (tipografía), `--space-*` (espaciado), `--ease-fluid` y `--dur-*` (movimiento), todos en `src/styles/global.css`. Ningún tamaño, espaciado ni curva suelta en los componentes.
 - **Tipografía**: Geist (Google Fonts), pesos hasta 700, sin itálicas. `text-wrap: pretty` en títulos y texto (los renglones se llenan al máximo, sin palabra suelta al final); `balance` sólo en la frase destacada centrada.
-- **Íconos**: Phosphor vía `react-icons/pi`. Monocromos en su color (verde `--vg-icon-green`, severidades, WhatsApp, etc.), **sin fondo ni círculo tintado**. Lo mismo para números de pasos y rótulos: nada de "badges" con fondo de color y texto flúor.
+- **Íconos**: Phosphor vía `react-icons/pi`. Monocromos en su color (verde `--vg-icon-green`, severidades, WhatsApp, etc.), **sin fondo ni círculo tintado**. Lo mismo para números de pasos y rótulos: nada de "badges" con fondo de color y texto flúor. Única excepción: el botón flotante de WhatsApp usa el logo oficial (`SiWhatsapp` de `react-icons/si`), porque es un logo de marca y la versión a línea de Phosphor no se reconoce bien sobre el verde.
 - **Movimiento**: toda transición usa `var(--ease-fluid)`. Las apariciones al hacer scroll se activan con el atributo `data-reveal` (y `style="--reveal-delay: …"` para escalonar). El observer está en `BaseLayout.astro`. No pongas `data-reveal` en elementos que usa el hilo como ancla (`data-vg-node`, `data-vg-end`). Todo respeta `prefers-reduced-motion`.
 - **Modo oscuro**: fondos neutros de la paleta de la skill (`#181818`, `#1f1f1f`, `#272727`, `#313131`, `#131209`).
 
@@ -126,6 +129,7 @@ Excepciones acordadas a la skill:
 - **Nombres**: componentes `PascalCase.astro` / `PascalCase.jsx`, hooks `useCamelCase.js`, datos `camelCase.js`.
 - **Estilos**: CSS plano con tokens (`--gh-*` tema, `--vg-*` marca, escalas de arriba). Sin hex sueltos en componentes: si falta un token, se agrega. Claro y oscuro se resuelven con los tokens, no con overrides por componente.
 - **Contenido** (copy, clientes, números) en `src/data/`, no en el markup.
+- **Dos idiomas** (ADR 0004): el copy está en `src/data/vigia.js` (español, la fuente) y `src/data/vigia.en.js` (inglés), **con las mismas claves**. Todo texto nuevo o cambiado va en los dos, y el inglés sigue [`doc/landing/TRADUCCION_EN.md`](doc/landing/TRADUCCION_EN.md) (adaptación, no traducción literal; glosario agronómico). Los componentes toman el idioma de `Astro.currentLocale` con `contenido(idiomaDe(...))` de `src/i18n/idiomas.js`; las islas React reciben los textos por props. Las vistas compartidas viven en `src/views/`; `src/pages/` y `src/pages/en/` sólo las montan.
 - **Medios**: imágenes por Astro assets con dimensiones; videos `muted playsinline` con poster.
 - **Props de React en `.astro`**: `className`, no `class` (`pnpm typecheck` lo exige).
 
@@ -149,7 +153,8 @@ Viven en [`doc/adr/`](doc/adr/) (no en `docs/`, que es la salida del build). Un 
 
 ## Convenciones de lenguaje
 
-- **Español**: `CLAUDE.md`, ADRs, skills, comentarios que explican por qué, copy del sitio, body de PRs.
+- **Español**: `CLAUDE.md`, ADRs, skills, comentarios que explican por qué (también en `vigia.en.js`), copy del sitio, body de PRs.
+- **Copy en inglés**: sólo en `src/data/vigia.en.js`, con las reglas de `doc/landing/TRADUCCION_EN.md`.
 - **Inglés**: commits, títulos de PR, nombres de ramas, identificadores de código.
 
 ## Secretos

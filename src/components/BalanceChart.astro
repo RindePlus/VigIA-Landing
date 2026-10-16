@@ -1,29 +1,57 @@
 ---
 // Módulo 1: gráfico con VigIA, simplificado para leerse de un vistazo. Se
 // dibuja el agua útil, entra el pronóstico y, justo antes de que la línea
-// toque el umbral, llega la notificación "Alerta enviada" (WhatsApp y
-// plataforma). SVG sin JS; los colores salen de tokens (sigue al tema).
+// toque el umbral, llega la notificación: logo de WhatsApp y "Alerta
+// enviada" (el aviso llega por WhatsApp). SVG sin JS; los colores salen de tokens (sigue al tema).
 // La animación la dispara MediaStory con `.is-playing` (ver sections.css);
 // sin ella se ve el estado final, con la notificación visible.
-import { PiBellRinging, PiWhatsappLogo } from 'react-icons/pi';
-import { x, y, AU, BASE, UMBRAL as UMBRAL_Y, pathAlto as path } from '../data/balanceEjemplo';
+import { PiWhatsappLogo } from 'react-icons/pi';
+import { y, AU, BASE, UMBRAL as UMBRAL_Y, UMBRAL_Y as UMBRAL_SERIE } from '../data/balanceEjemplo';
+import { contenido, idiomaDe } from '../i18n/idiomas';
 
-const HOY = 20;
-const AVISO = 24; // día en que se cruza el umbral según el pronóstico
-const pasado = AU.filter(([d]) => d <= HOY);
-const futuro = AU.filter(([d]) => d >= HOY);
+// Textos en UI.graficos.conVigia (idioma de la página).
+const T = contenido(idiomaDe(Astro.currentLocale)).UI.graficos.conVigia;
+
+// Escala de tiempo propia: 18 días de historia y los 14 del pronóstico
+// (el horizonte del motor), en el mismo ancho que el gráfico del problema.
+// La historia es la misma serie compartida, comprimida hasta HOY.
+const HOY = 18;
+const PRONOSTICO = 14;
+const AVISO = HOY + PRONOSTICO; // el pronóstico muestra el cruce en 14 días
+const x = (d: number) => 40 + (d * 480) / AVISO;
+const path = (pts: number[][]) => pts.map(([d, v], i) => `${i ? 'L' : 'M'}${x(d)} ${y(v)}`).join(' ');
+const HOY_SERIE = 125;
+const pasado = AU.filter(([d]) => d <= 20).map(([d, v]) => [(d * HOY) / 20, v]);
+// Bajada pareja que se acelera un poco y toca el umbral al final del pronóstico.
+const futuro = [
+  [HOY, HOY_SERIE],
+  [HOY + 4, 129],
+  [HOY + 8, 134.5],
+  [HOY + 11, 140],
+  [AVISO, UMBRAL_SERIE],
+];
+
+// La alerta se envía HOY (el punto verde), cuando el pronóstico ya muestra
+// que el agua va a cruzar el umbral en AVISO. La notificación cuelga de una
+// línea punteada que sale de ese punto. Es HTML (lleva los íconos) y se
+// ubica en % del área del SVG para quedar pegada a la punta de la línea a
+// cualquier tamaño.
+const VB = { x: 0, y: 20, w: 560, h: BASE + 22 };
+const AVISO_Y = UMBRAL_Y;
+const HOY_Y = y(HOY_SERIE);
+const LINEA_ARRIBA = 70; // punta de arriba de la línea, en el viewBox
+const calloutX = ((x(HOY) - VB.x) / VB.w) * 100;
+const calloutY = ((LINEA_ARRIBA - VB.y) / VB.h) * 100;
 ---
 
 <figure class="vg-chart vg-chart--hero vg-chart--alto">
   <figcaption class="vg-chart__head">
-    <span class="vg-chart__title">Agua del suelo · Lote 12</span>
+    <span class="vg-chart__title">{T.titulo}</span>
   </figcaption>
 
-  <svg viewBox={`0 20 560 ${BASE + 22}`} role="img" aria-labelledby="vg-chart-desc">
-    <desc id="vg-chart-desc">
-      El agua útil del suelo baja día a día. El pronóstico muestra que va a
-      cruzar el umbral del cultivo en 4 días, y VigIA envía la alerta antes.
-    </desc>
+  <div class="vg-chart__plot">
+  <svg viewBox={`${VB.x} ${VB.y} ${VB.w} ${VB.h}`} role="img" aria-labelledby="vg-chart-desc">
+    <desc id="vg-chart-desc">{T.descripcion}</desc>
     <defs>
       <clipPath id="vg-chart-reveal">
         <rect class="vg-chart__reveal" x="40" y="0" width="480" height={BASE + 30} />
@@ -31,37 +59,43 @@ const futuro = AU.filter(([d]) => d >= HOY);
     </defs>
 
     <g class="vg-chart__fc">
-      <rect class="vg-chart__forecast" x={x(HOY)} y="20" width={x(30) - x(HOY)} height={BASE - 20} />
-      <text class="vg-chart__label" x={(x(HOY) + x(30)) / 2} y={BASE - 12} text-anchor="middle">Pronóstico</text>
+      <rect class="vg-chart__forecast" x={x(HOY)} y="20" width={x(AVISO) - x(HOY)} height={BASE - 20} />
+      <text class="vg-chart__label" x={(x(HOY) + x(AVISO)) / 2} y={BASE - 12} text-anchor="middle">{T.pronostico}</text>
     </g>
 
     <line class="vg-chart__axis" x1="40" y1={BASE} x2="520" y2={BASE} />
     <line class="vg-chart__umbral" x1="40" y1={UMBRAL_Y} x2="520" y2={UMBRAL_Y} />
-    <text class="vg-chart__label vg-chart__label--umbral" x="44" y={UMBRAL_Y + 32}>Umbral del cultivo</text>
-    <text class="vg-chart__label vg-chart__label--au" x="44" y={y(70)}>Agua útil</text>
+    <text class="vg-chart__label vg-chart__label--umbral" x="44" y={UMBRAL_Y + 32}>{T.umbral}</text>
+    <text class="vg-chart__label vg-chart__label--au" x="44" y={y(70)}>{T.aguaUtil}</text>
 
     <g class="vg-chart__data" clip-path="url(#vg-chart-reveal)">
       <path class="vg-chart__au" d={path(pasado)} />
       <path class="vg-chart__au vg-chart__au--forecast" d={path(futuro)} />
       <line class="vg-chart__today" x1={x(HOY)} y1="20" x2={x(HOY)} y2={BASE} />
-      <circle class="vg-chart__dot" cx={x(HOY)} cy={y(125)} r="5" />
+      <circle class="vg-chart__dot" cx={x(HOY)} cy={HOY_Y} r="5" />
     </g>
 
-    <text class="vg-chart__label vg-chart__label--strong" x={x(HOY)} y={BASE + 32} text-anchor="middle">Hoy</text>
+    <text class="vg-chart__label vg-chart__label--strong" x={x(HOY)} y={BASE + 32} text-anchor="middle">{T.hoy}</text>
+
+    <line class="vg-chart__leader" x1={x(HOY)} y1={LINEA_ARRIBA} x2={x(HOY)} y2={HOY_Y - 9} />
 
     <g class="vg-chart__alertg">
-      <circle class="vg-chart__alert-ring" cx={x(AVISO)} cy={y(150)} r="13" />
-      <circle class="vg-chart__alert" cx={x(AVISO)} cy={y(150)} r="6" />
+      <circle class="vg-chart__alert-ring" cx={x(AVISO)} cy={AVISO_Y} r="13" />
+      <circle class="vg-chart__alert" cx={x(AVISO)} cy={AVISO_Y} r="6" />
     </g>
   </svg>
 
-  <!-- Notificación: llega justo antes de que la línea toque el umbral. -->
-  <div class="vg-chart__toast">
-    <span class="vg-chart__toast-icon" aria-hidden="true"><PiBellRinging /></span>
-    <span class="vg-chart__toast-text">
-      <strong>Alerta enviada</strong>
-      <span>Estrés hídrico en 4 días</span>
-    </span>
-    <PiWhatsappLogo className="vg-chart__toast-wa" aria-label="Por WhatsApp" />
+  <!-- Notificación: sale hoy (punto verde), colgada de la línea punteada
+       que sube desde ese punto; el punto ámbar es el cruce que anticipa.
+       El logo de WhatsApp, grande, dice por dónde llega; al lado, el texto. -->
+  <div class="vg-chart__callout" style={`left: ${calloutX.toFixed(2)}%; top: ${calloutY.toFixed(2)}%`}>
+    <div class="vg-chart__toast">
+      <PiWhatsappLogo className="vg-chart__toast-wa" aria-label={T.porWhatsApp} />
+      <span class="vg-chart__toast-text">
+        <strong>{T.alertaEnviada}</strong>
+        <span>{T.alerta}</span>
+      </span>
+    </div>
+  </div>
   </div>
 </figure>

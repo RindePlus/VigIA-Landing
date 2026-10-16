@@ -1,18 +1,32 @@
-// Contenido de la home, un objeto por sección (ver doc/landing/ESTRUCTURA_LANDING.md,
-// versión 2). Cada afirmación tiene respaldo en doc/landing/MODULO_VIGIA.md §10:
+// Contenido en español, un objeto por sección (ver doc/landing/ESTRUCTURA_LANDING.md,
+// versión 2). La versión en inglés es src/data/vigia.en.js, con las mismas
+// claves: si agregás o cambiás un texto acá, hacelo también allá (reglas en
+// doc/landing/TRADUCCION_EN.md). Cada afirmación tiene respaldo en doc/landing/MODULO_VIGIA.md §10:
 // balance hídrico FAO-56 por ambiente, DPV contra umbrales por cultivo,
 // pronóstico a 14 días y las alertas de alertEngine.ts.
 // Reglas (skill vigia-landing-structure): sin IA, satélite, estrés biótico ni
 // Herbicidas; acciones genéricas (bioinsumo o riego), sin productos ni marcas.
 
+import { buildWhatsAppUrl } from './social';
+import { HA_TOTAL, GRANO_T, CO2_DESTACADO, formateador, filasImpacto } from './impactoDatos';
+import imgEstres from '../assets/quehace/estres.webp';
+import imgSiembra from '../assets/quehace/siembra.webp';
+import imgAgua from '../assets/quehace/agua.webp';
+import imgBioinsumos from '../assets/quehace/bioinsumos.webp';
+
 // Grafía del logo. Si cambia la marca, se cambia acá.
 export const MARCA = 'VigIA BioEstrés';
 
 // CTA único de la página: mismo texto en el hero y en el cierre.
+// `nota`: aclaración debajo del botón del cierre (vacía en español).
 export const CTA = {
   texto: 'Contactanos para empezar a usar VigIA',
   mensajeWhatsApp: `Hola, quiero empezar a usar ${MARCA}`,
+  nota: '',
 };
+
+// WhatsApp general (header, footer y botón flotante).
+export const WHATSAPP_URL = buildWhatsAppUrl('Hola, quiero más información sobre VigIA');
 
 export const SEO = {
   titulo: MARCA,
@@ -23,15 +37,15 @@ export const SEO = {
 // 1. Hero
 export const HERO = {
   etiqueta: 'Estrés hídrico y térmico',
-  titulo: 'Detectá el estrés antes de que se convierta en merma',
+  titulo: 'Detectá el estrés antes de que se convierta en pérdida',
   bajada: `${MARCA} cruza el clima, el balance hídrico y el suelo de cada ambiente, y te avisa días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos.`,
-  // Tres tarjetas con ícono (los íconos se asignan por id en index.astro).
+  // Tres palabras clave con ícono, en una línea (los íconos se asignan por id
+  // en index.astro).
   puntos: [
-    { id: 'aviso', titulo: 'Aviso anticipado', texto: 'Alerta a 4 días y el período crítico a 14.' },
-    { id: 'ambiente', titulo: 'Por ambiente', texto: 'En secano o bajo riego.' },
-    { id: 'whatsapp', titulo: 'En tu WhatsApp', texto: 'Y en la plataforma, con el detalle.' },
+    { id: 'siembra', titulo: 'Desde antes de la siembra' },
+    { id: 'ambiente', titulo: 'Por ambiente' },
+    { id: 'whatsapp', titulo: 'Alertas por WhatsApp' },
   ],
-  secundario: { texto: 'Cómo funciona', href: '#como-funciona' },
 };
 
 // 2. El problema
@@ -42,13 +56,8 @@ export const PROBLEMA = {
   razones: [
     {
       id: 'sintoma',
-      titulo: 'El síntoma llega tarde',
-      texto: 'Cuando la hoja se enrolla, el rinde ya está comprometido.',
-    },
-    {
-      id: 'bioinsumo',
-      titulo: 'El bioinsumo necesita llegar antes',
-      texto: 'Aplicado cuando el estrés ya pasó, protege poco.',
+      titulo: 'El síntoma llega tarde para el bioinsumo',
+      texto: 'Cuando la hoja se enrolla, el rinde ya está comprometido y aplicar el bioinsumo protege poco.',
     },
     {
       id: 'pronostico',
@@ -56,17 +65,62 @@ export const PROBLEMA = {
       texto: 'No sabe cuánta agua le queda a tu suelo ni en qué etapa está tu cultivo.',
     },
   ],
-  estreses: [
-    { id: 'hidrico', nombre: 'Hídrico', texto: 'Falta agua útil en el suelo para la etapa del cultivo.' },
-    { id: 'termico', nombre: 'Térmico (DPV)', texto: 'El aire seca a la planta más rápido de lo que repone.' },
-    { id: 'combinado', nombre: 'Combinado', texto: 'Las dos cosas el mismo día: el escenario más dañino.' },
+};
+
+// 3. Qué hace VigIA. Los tres tipos de estrés que vigila, contados desde lo
+// que hace el motor (balance hídrico, DPV contra umbral, combinado) y con la
+// acción genérica que sugiere cada alerta (alertEngine.ts, MODULO_VIGIA §10.2).
+export const QUE_HACE = {
+  etiqueta: 'Qué hace VigIA',
+  titulo: `${MARCA} vigila el estrés toda la campaña`,
+  // Abarca las cuatro tarjetas: acompaña todo el ciclo (ventana siembra
+  // −60 / +150, MODULO_VIGIA §10.2) y la acción es agua o bioinsumo.
+  bajada:
+    'Sigue cada ambiente desde antes de la siembra hasta el final del ciclo, y te dice cuándo cuidar el agua y cuándo aplicar el bioinsumo.',
+  // Cuatro tarjetas con foto, primero en la sección. La de los picos de
+  // estrés va primera: es lo principal y la desarrollan los tres tipos de
+  // abajo. Fotos de la serie de media-src/imagenes (qh-*.png), generadas
+  // con Nano Banana Pro y la imagen 0 (el lote) como referencia.
+  puntos: [
+    {
+      id: 'picos',
+      titulo: 'Detecta picos de estrés',
+      texto: 'Encuentra los picos de estrés hídrico y térmico en cada ambiente y te sugiere la acción para cada uno.',
+      imagen: imgEstres,
+      alt: 'Hojas de soja que empiezan a plegarse bajo el sol fuerte del mediodía',
+    },
+    {
+      // Sin número a propósito: lo que importa es que acompaña todo el proceso.
+      id: 'siembra',
+      titulo: 'Desde antes de la siembra',
+      texto: 'Sigue el agua del suelo antes de que siembres y acompaña todo el ciclo, no sólo el día del aviso.',
+      imagen: imgSiembra,
+      alt: 'Sembradora entrando a un lote en barbecho con rastrojo al amanecer',
+    },
+    {
+      // Balance por ambiente y plan de riego.
+      id: 'agua',
+      titulo: 'Cuida el uso del agua',
+      texto: 'Sabés cuánta agua útil tiene cada ambiente y regás sólo cuando hace falta.',
+      imagen: imgAgua,
+      alt: 'Equipo de riego por pivote regando un lote de soja al atardecer',
+    },
+    {
+      // Las acciones son bioinsumo o riego; dicho en positivo.
+      id: 'bioinsumo',
+      titulo: 'Orientado a bioinsumos',
+      texto: 'Cada alerta te sugiere el bioinsumo o el riego en el momento en que más protege al cultivo.',
+      imagen: imgBioinsumos,
+      alt: 'Gotas finas de una aplicación sobre hojas de soja al amanecer',
+    },
   ],
 };
 
-// 3. Cómo funciona
+// 4. La solución (cómo funciona: canales, avisos y pasos)
 export const COMO_FUNCIONA = {
-  etiqueta: 'Cómo funciona',
-  titulo: 'Te avisa antes, por WhatsApp y en la plataforma',
+  etiqueta: 'La solución',
+  // Sin nombrar los canales: ya los presentan las dos tarjetas de abajo.
+  titulo: 'Te avisa a tiempo para actuar',
   bajada:
     'VigIA sigue cada ambiente día a día. Cuando se viene el estrés, te avisa con margen para aplicar el bioinsumo o regar.',
   // Los dos canales son el valor principal: van primero y grandes.
@@ -82,29 +136,46 @@ export const COMO_FUNCIONA = {
       texto: 'El panel del lote, con el balance hídrico y el DPV que explican cada alerta.',
     },
   ],
-  // Qué te avisa: las tres alertas del motor (estrés hídrico a 4 días,
-  // período crítico a 14, estrés combinado) contadas en lenguaje de campo.
-  // `tono` = color de la severidad (alerta ámbar, info azul, crítico rojo).
+  // Qué te avisa: las alertas del motor (estrés hídrico, período crítico a
+  // 14 días, estrés combinado) más el térmico, en lenguaje de campo. Cada
+  // una: el tipo (título), qué pasa (`titulo`) y la acción concreta
+  // (`accion`, de alertEngine.ts: bioinsumo hídrico, antiestrés térmico,
+  // bioinsumo preventivo o riego).
+  // `momento` = cuándo llega el aviso. Hoy no se muestra; queda por si se
+  // recupera (p. ej. "14 días antes" en Etapa crítica).
   alertas: [
     {
       id: 'hidrico',
-      tono: 'alerta',
+      tipo: 'Estrés hídrico',
+      momento: 'Con margen',
       titulo: 'Falta de agua que se viene',
-      texto: 'Te avisa 4 días antes de que al suelo le falte agua para tu cultivo.',
+      accion: 'Aplicá bioinsumo hídrico o regá.',
     },
     {
-      id: 'critico',
-      tono: 'info',
-      titulo: 'Etapa crítica del cultivo',
-      texto: '14 días antes de la etapa que define el rinde, para aplicar el bioinsumo preventivo.',
+      id: 'termico',
+      tipo: 'Estrés térmico',
+      momento: 'DPV sobre el umbral',
+      titulo: 'El aire seca a la planta',
+      accion: 'Aplicá un antiestrés térmico.',
     },
     {
       id: 'combinado',
-      tono: 'critico',
+      tipo: 'Estrés combinado',
+      momento: 'Mismo día',
       titulo: 'Calor y sequía juntos',
-      texto: 'Cuando se suman el estrés hídrico y el térmico, para actuar ese mismo día.',
+      accion: 'Actuá ese día: bioinsumo o riego.',
+    },
+    {
+      id: 'critico',
+      tipo: 'Etapa crítica',
+      momento: '14 días antes',
+      titulo: 'Se acerca la etapa que define el rinde',
+      accion: 'Aplicá el bioinsumo preventivo antes de la etapa.',
     },
   ],
+  // Subtítulos de los dos bloques de detalle.
+  tituloAlertas: 'Qué te avisa VigIA',
+  tituloPasos: 'Cómo lo hace',
   // Cómo lo hace: tres pasos cortos. Paso 1 con redacción neutral ("se
   // cargan") hasta confirmar quién hace el alta de lotes (pregunta abierta 1
   // de ESTRUCTURA_LANDING.md).
@@ -116,7 +187,7 @@ export const COMO_FUNCIONA = {
   // Mensaje de ejemplo del celular (WhatsAppMock.astro).
   // Simple a propósito: la alerta, dónde y qué hacer.
   mensaje: {
-    alerta: 'Estrés hídrico en 4 días',
+    alerta: 'Estrés hídrico en 14 días',
     lote: 'Lote 12 · Ambiente 2',
     accion: 'Planificá riego o bioinsumo.',
     hora: '07:30',
@@ -124,74 +195,92 @@ export const COMO_FUNCIONA = {
     // no afirma que la plataforma registre la aplicación.
     resuelta: 'Resuelta a tiempo',
   },
-  cultivoServicio: {
-    pregunta: '¿Hacés cultivos de servicio?',
-    texto: 'VigIA también sigue su consumo de agua frente al barbecho y te marca el momento de secado.',
-  },
+  // Otros módulos, con enlace a su página. Se muestran al pie de las
+  // preguntas frecuentes, no en esta sección.
+  // Carry-over de herbicidas es de RindePlus, no de VigIA BioEstrés
+  // (decisión 18 de ESTRUCTURA_LANDING.md); respaldo en MODULO_VIGIA, anexo A.
+  // PENDIENTE: las URL. Con `href: null` el enlace no se muestra.
+  modulos: [
+    {
+      id: 'servicio',
+      pregunta: '¿Hacés cultivos de servicio?',
+      texto: 'VigIA también sigue su consumo de agua frente al barbecho y te marca el momento de secado.',
+      enlace: { texto: 'Conocé cultivos de servicio', href: null },
+    },
+    {
+      id: 'herbicidas',
+      pregunta: '¿Aplicaste herbicidas residuales?',
+      texto: 'Con el carry-over de herbicidas de RindePlus sabés cuándo es seguro sembrar el cultivo siguiente.',
+      enlace: { texto: 'Conocé carry-over de herbicidas', href: null },
+    },
+  ],
 };
 
-// 4. Frase destacada: una línea por renglón.
+// 5. Frase destacada: una línea por renglón.
 // Palabras resaltadas con los colores de la historia: *verde* (a tiempo) y
 // _rojo_ (tarde).
 export const FRASE = ['Que el bioinsumo llegue *antes* que el estrés,', 'no _después del daño._'];
 
-// 5. Beneficios
-export const BENEFICIOS = {
-  etiqueta: 'Beneficios',
-  titulo: 'Lo que ganás en cada campaña',
-  items: [
+// 6. Impacto: resultados medidos en campo. Los números están en
+// src/data/impactoDatos.js (compartidos con la versión en inglés).
+const fmt = formateador('es-AR');
+const FILAS = filasImpacto(fmt, { maiz: 'Maíz', soja: 'Soja', trigo: 'Trigo' }, 'Total');
+
+export const IMPACTO = {
+  etiqueta: 'Impacto',
+  titulo: 'Más grano y más carbono en el suelo',
+  bajada: 'Resultados de cinco campañas continuas en lotes de maíz, soja y trigo.',
+
+  // Cuatro indicadores grandes con una línea corta debajo. Los dos últimos
+  // abren su tabla por cultivo (un panel centrado debajo, de a uno).
+  indicadores: [
+    { id: 'hectareas', valor: `+${fmt(HA_TOTAL)}`, unidad: 'ha', texto: 'monitoreadas' },
+    { id: 'efectividad', valor: '96', unidad: '%', texto: 'de efectividad en la respuesta del bioinsumo' },
     {
-      id: 'ventaja',
-      titulo: 'Días de ventaja',
-      texto: 'El balance hídrico y el DPV marcan el estrés antes que la hoja.',
-      resultado: 'Llegás a tiempo a la falta de agua y al golpe de calor.',
+      id: 'grano',
+      valor: `+${fmt(GRANO_T)}`,
+      unidad: 't',
+      texto: 'de grano recuperado',
+      tabla: {
+        titulo: 'Recupero de rinde por cultivo',
+        columnas: ['Cultivo', 'Hectáreas', 'kg/ha', 'Total'],
+        filas: FILAS.grano,
+        nota: 'Con los mismos insumos, labores y costos, protegés el rinde que ya invertiste.',
+      },
     },
     {
-      id: 'insumo',
-      titulo: 'Insumo donde hace falta',
-      texto: 'VigIA mira cada ambiente: aplicás o regás donde se viene el estrés, no en todo el lote.',
-      resultado: 'Menor costo por hectárea.',
-    },
-    {
-      id: 'merma',
-      titulo: 'Menos merma',
-      texto: 'Cada alerta dice qué ambiente y en qué etapa. Sabés qué lote recorrer primero.',
-      resultado: 'Campañas más previsibles.',
+      id: 'carbono',
+      valor: `~${fmt(CO2_DESTACADO)}`,
+      unidad: 't',
+      texto: 'de CO₂ capturadas en el suelo',
+      tabla: {
+        titulo: 'Carbono capturado por cultivo (t CO₂)',
+        columnas: ['Cultivo', 'Fijado', 'Vuelve al suelo', 'Queda estable'],
+        filas: FILAS.carbono,
+        // El grano se cosecha y su carbono vuelve a la atmósfera; lo que
+        // puede quedar es el del rastrojo y las raíces.
+        nota: 'Equivale a neutralizar las emisiones de 650 a 900 autos por año. El carbono que queda es el del rastrojo y las raíces; las raíces aportan el más estable.',
+      },
     },
   ],
+  // Aviso que aparece una sola vez, cuando la sección entra en pantalla.
+  pista: 'Tocá un indicador para ver el detalle',
+  cerrar: 'Cerrar detalle',
 };
 
-// 6. Para quién es
-export const PARA_QUIEN = {
-  etiqueta: 'Para quién es',
-  titulo: 'Pensado para el productor y su asesor',
-  perfiles: [
-    {
-      id: 'productores',
-      titulo: 'Productores',
-      lema: 'Extensivos e intensivos, en secano o bajo riego.',
-      puntos: [
-        'Todos tus lotes y ambientes en un solo lugar, campaña tras campaña.',
-        'El aviso en tu WhatsApp antes de los períodos que definen el rinde.',
-        'Bajo riego, un plan mensual con costo y rinde esperado.',
-      ],
-      clave: 'Menos merma y menos insumo desperdiciado.',
-    },
-    {
-      id: 'asesores',
-      titulo: 'Asesores e ingenieros agrónomos',
-      lema: 'Más hectáreas bajo control, con el mismo tiempo.',
-      puntos: [
-        'Sabés qué lote y qué ambiente mirar antes de salir al campo.',
-        'Las alertas de todos tus clientes, en la plataforma y en WhatsApp.',
-        'Reportes en PDF listos para compartir con cada productor.',
-      ],
-      clave: 'Recomendaciones más rápidas y fáciles de defender.',
-    },
-  ],
+// 7. Sobre nosotros (reemplaza a "Para quién es", decisión 21). Las personas,
+// con foto y logo, están en src/data/equipo.js.
+// PENDIENTE: revisar la bajada con el equipo.
+export const NOSOTROS = {
+  etiqueta: 'Sobre nosotros',
+  titulo: `Las personas detrás de ${MARCA}`,
+  bajada: 'Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos.',
 };
 
-// 8. Preguntas frecuentes (también van como JSON-LD FAQPage).
+// 8. Clientes (el carrusel está en src/data/clientes.js).
+export const CLIENTES = { titulo: 'Confían en nosotros' };
+
+// 9. Preguntas frecuentes (también van como JSON-LD FAQPage).
 export const PREGUNTAS = {
   etiqueta: 'Preguntas frecuentes',
   titulo: 'Lo que suelen preguntarnos',
@@ -221,20 +310,138 @@ export const PREGUNTAS = {
       respuesta:
         'Sí. En secano te avisa a tiempo para el bioinsumo. Bajo riego, además, te arma un plan mensual con su costo.',
     },
-    {
-      pregunta: '¿Me recomienda productos?',
-      respuesta:
-        'Te sugiere la acción (bioinsumo hídrico, antiestrés térmico o riego), sin marcas. Vos o tu asesor elegís el producto.',
-    },
-    {
-      pregunta: '¿Cuánto cuesta?',
-      respuesta: 'Depende de la cantidad de lotes. En la demo vemos tus lotes y te armamos la propuesta.',
-    },
   ],
 };
 
-// 9. Cierre
+// 10. Cierre
 export const CIERRE = {
-  titulo: 'La próxima merma ya se está gestando en algún lote. Encontrala primero.',
+  titulo: 'La próxima pérdida ya se está gestando en algún lote. Encontrala primero.',
   texto: `Agendá una demo de 20 minutos y te mostramos ${MARCA} funcionando sobre tus lotes, con datos de tu campaña actual.`,
+};
+
+// Página /educacion (src/views/EducacionPage.astro), enlazada al final del menú.
+// PENDIENTE: contenido definitivo. Por ahora, una página provisoria.
+export const EDUCACION = {
+  etiqueta: 'Educación',
+  titulo: 'Educación',
+  bajada: `Estamos preparando contenidos sobre estrés hídrico y térmico, bioinsumos y uso del agua, para sacarle más provecho a ${MARCA}.`,
+  volver: 'Volver al inicio',
+};
+
+// Página /pricing (src/views/PricingPage.astro). PENDIENTE: el modelo de
+// precios propio de VigIA.
+export const PRECIOS = {
+  titulo: 'Precios',
+  bajada: `Estamos definiendo los planes de ${MARCA}. Escribinos y te contamos.`,
+  boton: 'Consultar',
+  mensajeWhatsApp: `Hola, quiero conocer los precios de ${MARCA}`,
+};
+
+// Footer (src/components/Footer.astro). No repite el menú del header: suma
+// Rinde Plus (con sus otras soluciones), ayuda y los enlaces legales.
+export const FOOTER = {
+  contacto: { titulo: 'Contacto' },
+  rindeplus: {
+    titulo: 'Rinde Plus',
+    // Sin decir que VigIA es de Rinde Plus: la plataforma tiene otros socios.
+    texto: '¿Buscás más servicios especializados para tu producción? Rinde Plus tiene otras soluciones agtech para el campo.',
+    enlace: 'Visitá Rinde Plus',
+    href: 'https://rindeplus.com',
+  },
+  ayuda: {
+    titulo: 'Ayuda',
+    enlaces: [
+      { texto: 'Preguntas frecuentes', href: '/#preguntas', externo: false },
+      { texto: 'Escribinos por WhatsApp', href: WHATSAPP_URL, externo: true },
+    ],
+  },
+  // Páginas en src/pages (textos en src/data/legal.js, borrador a revisar).
+  legales: [
+    { texto: 'Política de privacidad', href: '/privacidad' },
+    { texto: 'Términos y condiciones', href: '/terminos' },
+  ],
+  legalesLabel: 'Legales',
+  pie: 'Todos los derechos reservados.',
+};
+
+// Textos de la interfaz que no son de una sección: header, botón de
+// WhatsApp, gráficos, chat de ejemplo y rótulos de los videos.
+export const UI = {
+  saltar: 'Saltar al contenido',
+  inicio: 'inicio',
+  menu: [
+    { label: 'Cómo funciona', href: '/#como-funciona' },
+    { label: 'Impacto', href: '/#impacto' },
+    { label: 'Nosotros', href: '/#nosotros' },
+    { label: 'Contacto', href: '/#contacto' },
+    // Página propia (no una sección de la home): va al final.
+    { label: 'Educación', href: '/educacion' },
+  ],
+  header: {
+    idioma: 'Idioma',
+    modoClaro: 'Modo claro',
+    modoOscuro: 'Modo oscuro',
+    activarClaro: 'Activar modo claro',
+    activarOscuro: 'Activar modo oscuro',
+    cambiarTema: 'Cambiar entre modo claro y oscuro',
+    whatsapp: 'Escribinos por WhatsApp',
+    ingresar: 'Ingresar',
+    ingresarLabel: 'Ingresar a la plataforma',
+    abrirMenu: 'Abrir menú',
+    cerrarMenu: 'Cerrar menú',
+  },
+  widget: {
+    saludo: 'Hola',
+    saludoLabel: 'saludo',
+    pregunta: '¿En qué podemos ayudarte?',
+    boton: 'Escribinos por WhatsApp',
+    nota: '',
+  },
+  graficos: {
+    conVigia: {
+      titulo: 'Agua del suelo · Lote 12',
+      descripcion:
+        'El agua útil del suelo baja día a día. El pronóstico muestra que va a cruzar el umbral del cultivo en 14 días, y VigIA envía la alerta antes.',
+      pronostico: 'Pronóstico',
+      umbral: 'Umbral del cultivo',
+      aguaUtil: 'Agua útil',
+      hoy: 'Hoy',
+      porWhatsApp: 'Por WhatsApp',
+      alertaEnviada: 'Alerta enviada',
+      alerta: 'Estrés hídrico en 14 días',
+    },
+    sinVigia: {
+      titulo: 'Agua del suelo · sin VigIA',
+      descripcion:
+        'Sin pronóstico ni alertas, el agua útil cruza el umbral del cultivo sin que nadie avise. El estrés se detecta a campo seis días después.',
+      umbral: 'Umbral del cultivo',
+      aguaUtil: 'Agua útil',
+      rindePerdido: 'Rinde perdido',
+      loVesACampo: 'Lo ves a campo',
+      tarde: 'Se ve a campo 6 días tarde',
+      tardeTexto: 'El bioinsumo ya no llega a tiempo.',
+    },
+  },
+  chat: {
+    label: 'Ejemplo de alerta de VigIA por WhatsApp',
+    estado: 'Alertas de tus lotes',
+    escribiendo: 'escribiendo…',
+    hoy: 'Hoy',
+    mensaje: 'Mensaje',
+  },
+  // Rótulo de capítulo sobre cada video (MediaStory).
+  videos: {
+    problema: 'Sin aviso · el daño se ve a campo',
+    resolucion: 'Con el aviso · se aplica a tiempo',
+  },
+  // Aviso junto a enlaces a páginas que no existen en este idioma (vacío
+  // en español: todas existen).
+  soloEspanol: '',
+};
+
+// Página 404 (única: GitHub Pages sirve un solo 404.html).
+export const NO_ENCONTRADA = {
+  titulo: 'Página no encontrada',
+  texto: 'La página que buscás no existe.',
+  volver: 'Volver al inicio',
 };

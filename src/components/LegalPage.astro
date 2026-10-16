@@ -1,0 +1,34 @@
+---
+// Página legal (privacidad, términos): título, fecha de actualización y
+// secciones de texto corrido. El contenido viene de src/data/legal.js.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { MARCA } from '../data/vigia';
+import '../styles/sections.css';
+
+interface Props {
+  texto: {
+    titulo: string;
+    actualizado: string;
+    secciones: { titulo: string; parrafos: string[] }[];
+  };
+}
+
+const { texto } = Astro.props;
+---
+
+<BaseLayout title={`${texto.titulo} · ${MARCA}`} description={`${texto.titulo} de ${MARCA}.`}>
+  <section class="vg-section vg-legal">
+    <div class="vg-wrap">
+      <h1 class="vg-legal__titulo">{texto.titulo}</h1>
+      <p class="vg-legal__fecha">Última actualización: {texto.actualizado}</p>
+      {
+        texto.secciones.map((s) => (
+          <section class="vg-legal__seccion">
+            <h2>{s.titulo}</h2>
+            {s.parrafos.map((p) => <p>{p}</p>)}
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
