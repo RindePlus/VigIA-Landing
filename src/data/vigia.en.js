@@ -43,12 +43,7 @@ export const HERO = {
   etiqueta: 'Water and heat stress',
   // "Pérdida" se concreta como yield loss: "loss" solo queda vago en inglés.
   titulo: 'Catch crop stress before it turns into yield loss',
-  bajada: `${MARCA} combines weather, the soil water balance and soil data for every management zone, and alerts you days before stress shows up in the field. For growers and agronomists who make data-driven decisions.`,
-  puntos: [
-    { id: 'siembra', titulo: 'From pre-planting' },
-    { id: 'ambiente', titulo: 'By management zone' },
-    { id: 'whatsapp', titulo: 'WhatsApp alerts' },
-  ],
+  bajada: `${MARCA} tracks every management zone from before planting and alerts you on WhatsApp days before stress shows up in the field. For growers and agronomists who make data-driven decisions.`,
 };
 
 // 2. El problema
@@ -71,7 +66,7 @@ export const PROBLEMA = {
   ],
 };
 
-// 3. Qué hace VigIA
+// 3. Lo que hace VigIA
 export const QUE_HACE = {
   etiqueta: 'What VigIA does',
   // "Campaña" → season (growing season); "campaign" no se usa en el agro.
@@ -82,30 +77,49 @@ export const QUE_HACE = {
     {
       id: 'picos',
       titulo: 'Spots stress peaks',
-      texto: 'Finds water and heat stress peaks in every management zone and suggests what to do about each one.',
+      // "Aire que seca a la planta": la demanda del aire, como en el glosario.
+      texto: 'A water shortage, dry air pulling water from the plant, or both at once. Alerts per management zone, with lead time.',
       imagen: imgEstres,
       alt: 'Soybean leaves starting to fold under the strong midday sun',
     },
     {
       id: 'siembra',
       titulo: 'From pre-planting',
-      texto: 'Tracks soil water before you plant and follows the whole season, not just the day of the alert.',
+      texto: 'Tracks soil water from before planting and alerts you 14 days ahead of the critical stage.',
       imagen: imgSiembra,
       alt: 'Planter entering a fallow field with crop residue at dawn',
     },
     {
       id: 'agua',
       titulo: 'Smarter water use',
-      texto: 'Know how much plant-available water each management zone has, and irrigate only when it is needed.',
+      texto: 'Know how much plant-available water each management zone has. When a shortage is coming, irrigate right when it is needed.',
       imagen: imgAgua,
       alt: 'Center pivot irrigating a soybean field at sunset',
     },
     {
       id: 'bioinsumo',
       titulo: 'Built for biostimulants',
-      texto: 'Every alert suggests a biostimulant or irrigation at the moment it protects the crop the most.',
+      // "Bioinsumo hídrico / antiestrés térmico" → drought-stress / heat-stress
+      // biostimulant (glosario).
+      texto: 'Every alert comes with its biostimulant: drought-stress, heat-stress, or preventive ahead of the critical stage.',
       imagen: imgBioinsumos,
       alt: 'Fine spray droplets on soybean leaves at dawn',
+    },
+  ],
+  // Otros módulos, debajo de las tarjetas (decisión 46).
+  modulos: [
+    {
+      id: 'servicio',
+      // "Cultivos de servicio" → cover crops; "secado" → termination.
+      pregunta: 'Growing cover crops?',
+      texto: 'VigIA also tracks their water use against fallow and tells you when to terminate them.',
+      enlace: { texto: 'Learn about cover crops', href: null },
+    },
+    {
+      id: 'herbicidas',
+      pregunta: 'Used residual herbicides?',
+      texto: 'With herbicide carryover tracking, you know when it is safe to plant the next crop.',
+      enlace: { texto: 'Learn about herbicide carryover', href: null },
     },
   ],
 };
@@ -129,40 +143,6 @@ export const COMO_FUNCIONA = {
       texto: 'The field dashboard, with the water balance and VPD behind every alert.',
     },
   ],
-  alertas: [
-    {
-      id: 'hidrico',
-      tipo: 'Water stress',
-      momento: 'With lead time',
-      titulo: 'A water shortage is coming',
-      // "Bioinsumo hídrico": bioestimulante para estrés por sequía.
-      accion: 'Apply a drought-stress biostimulant or irrigate.',
-    },
-    {
-      id: 'termico',
-      tipo: 'Heat stress',
-      momento: 'VPD above threshold',
-      // "El aire seca a la planta": la idea en inglés es la demanda del aire.
-      titulo: 'Dry air pulls water from the plant',
-      accion: 'Apply a heat-stress biostimulant.',
-    },
-    {
-      id: 'combinado',
-      tipo: 'Combined stress',
-      momento: 'Same day',
-      titulo: 'Heat and drought at once',
-      accion: 'Act that day: biostimulant or irrigation.',
-    },
-    {
-      id: 'critico',
-      tipo: 'Critical stage',
-      momento: '14 days ahead',
-      // "La etapa que define el rinde": critical period / yield-determining.
-      titulo: 'The yield-defining stage is coming',
-      accion: 'Apply a preventive biostimulant before that stage.',
-    },
-  ],
-  tituloAlertas: 'What VigIA alerts you to',
   tituloPasos: 'How it works',
   pasos: [
     // "Se cargan tus lotes": voz pasiva neutral, igual que en español
@@ -178,21 +158,6 @@ export const COMO_FUNCIONA = {
     hora: '07:30',
     resuelta: 'Resolved in time',
   },
-  modulos: [
-    {
-      id: 'servicio',
-      // "Cultivos de servicio" → cover crops; "secado" → termination.
-      pregunta: 'Growing cover crops?',
-      texto: 'VigIA also tracks their water use against fallow and tells you when to terminate them.',
-      enlace: { texto: 'Learn about cover crops', href: null },
-    },
-    {
-      id: 'herbicidas',
-      pregunta: 'Used residual herbicides?',
-      texto: "With RindePlus's herbicide carryover tool, you know when it is safe to plant the next crop.",
-      enlace: { texto: 'Learn about herbicide carryover', href: null },
-    },
-  ],
 };
 
 // 5. Frase destacada. Misma lógica de colores: *verde* (a tiempo), _rojo_
@@ -207,7 +172,7 @@ const FILAS = filasImpacto(fmt, { maiz: 'Corn', soja: 'Soybean', trigo: 'Wheat' 
 export const IMPACTO = {
   etiqueta: 'Impact',
   titulo: 'More grain, more carbon in the soil',
-  bajada: 'Results from five consecutive seasons in corn, soybean and wheat fields.',
+  bajada: "Results from five consecutive seasons on growers' fields, in corn, soybean and wheat.",
   indicadores: [
     { id: 'hectareas', valor: `+${fmt(HA_TOTAL)}`, unidad: 'ha', texto: 'monitored' },
     { id: 'efectividad', valor: '96', unidad: '%', texto: 'biostimulant response effectiveness' },
@@ -217,24 +182,26 @@ export const IMPACTO = {
       unidad: 't',
       // "Grano recuperado": yield que se protegió, no grano "recuperado"
       // de algún lado.
-      texto: 'of grain yield protected',
+      // "Lotes que no siguieron a VigIA" en vez de "check plots": se dice
+      // lo que significa, igual que en español.
+      texto: "of grain yield protected vs. fields that didn't follow VigIA",
       tabla: {
         titulo: 'Yield protected by crop',
-        columnas: ['Crop', 'Hectares', 'kg/ha', 'Total'],
+        columnas: ['Crop', 'Hectares', 'Extra kg/ha', 'Total'],
         filas: FILAS.grano,
-        nota: 'With the same inputs, field operations and costs, you protect the yield you have already invested in.',
+        nota: "Yield difference between fields that applied biostimulants following VigIA alerts and fields that didn't follow its alerts or recommendations.",
       },
     },
     {
       id: 'carbono',
       valor: `~${fmt(CO2_DESTACADO)}`,
       unidad: 't',
-      texto: 'of CO₂ stored in the soil',
+      texto: 'of extra CO₂ stored in the soil',
       tabla: {
-        titulo: 'Carbon captured by crop (t CO₂)',
+        titulo: 'Extra carbon captured by crop (t CO₂)',
         columnas: ['Crop', 'Fixed', 'Returned to soil', 'Stays stable'],
         filas: FILAS.carbono,
-        nota: 'Equivalent to offsetting the emissions of 650 to 900 cars a year. The carbon that stays comes from crop residue and roots, and roots provide the most stable share.',
+        nota: 'This is the extra carbon from the protected yield. Equivalent to offsetting the emissions of about 750 cars a year. The carbon that stays comes from crop residue and roots, and roots provide the most stable share.',
       },
     },
   ],

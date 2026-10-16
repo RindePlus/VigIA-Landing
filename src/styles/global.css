@@ -167,6 +167,15 @@ body {
   background-color: var(--bg-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* El footer siempre llega al fondo de la ventana: en páginas con poco
+     contenido (educación, precios, 404) el main se estira y ocupa el resto. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+#contenido {
+  flex: 1 0 auto;
 }
 
 h1,

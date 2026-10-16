@@ -18,7 +18,7 @@ Plan de contenido de la home. Define qué secciones tiene la página, en qué or
 - **No mencionar inteligencia artificial.** Ni "IA", ni "modelos", ni "algoritmos inteligentes". "VigIA" es sólo nombre de marca. El respaldo es agronómico: clima, DPV, balance hídrico, fenología y suelo.
 - **Sólo lo que el producto hace.** Sin imágenes satelitales ni índices espectrales, sin estrés biótico (plagas, enfermedades), sin mapas, sin diagnóstico. La tabla de [MODULO_VIGIA §10.4](MODULO_VIGIA.md#104-el-copy-propuesto-punto-por-punto) dice qué se puede decir y cómo.
 - **Marca:** **VigIA BioEstrés** en títulos, SEO y cierre; "VigIA" solo, dentro del texto corrido, cuando ya se nombró.
-- **Herbicidas no aparece.**
+- **Herbicidas:** sólo el carry-over de herbicidas, debajo de las tarjetas de Lo que hace VigIA, como parte de VigIA (decisión 46).
 - **Acciones genéricas:** "bioinsumo" o "riego", sin productos ni marcas.
 - **Alertas en dos canales:** la plataforma y WhatsApp, presentado como disponible.
 - **Sin números inventados.** Sólo los que salen del motor: 4 días, 14 días, 210 días. Nada de "reducí 30 % la pérdida".
@@ -66,10 +66,9 @@ Header ─ Cómo funciona · Impacto · Nosotros · Contacto · Educación (/edu
 |---|---|
 | Etiqueta | ESTRÉS HÍDRICO Y TÉRMICO |
 | Título (h1) | **Detectá el estrés antes de que se convierta en pérdida** |
-| Bajada | VigIA BioEstrés cruza el clima, el balance hídrico y el suelo de cada ambiente, y te avisa días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos. |
-| Palabras clave | Tres palabras con ícono, en una línea y sin tarjeta (en celular, una debajo de otra):<br>• **Desde antes de la siembra** (planta)<br>• **Por ambiente** (cuadrícula)<br>• **Alertas por WhatsApp** (logo de WhatsApp), centrado debajo de los otros dos |
-| Botón | Sólo **Contactanos para empezar a usar VigIA** (WhatsApp, con flecha), monocromo: negro en tema claro y blanco en oscuro (decisión 33). Va en una fila propia, **centrado debajo de las dos columnas** y con aire arriba. Sin botón secundario (decisión 31). En celular, a todo el ancho, debajo del gráfico. |
-| Visual | El gráfico termina a la altura de las palabras clave (la columna de texto ya no lleva los botones). `BalanceChart.astro`, simplificado: sólo la línea de agua útil, el umbral, "Hoy" y la zona de pronóstico (sin chips de datos, lluvia ni "Ejemplo ilustrativo"). La línea se dibuja y, justo antes de tocar el umbral, aparece la notificación, colgada de una línea punteada ámbar que sube desde el punto de **Hoy** (la alerta se envía hoy, cuando el pronóstico ya muestra el cruce; el punto ámbar del cruce es lo que se anticipa), con el logo de WhatsApp grande (el aviso llega por WhatsApp) y el texto **Alerta enviada · Estrés hídrico en 14 días**, y late el punto del cruce. El gráfico muestra 18 días de historia y los 14 del pronóstico (el horizonte del motor): la línea toca el umbral justo al final del pronóstico. En escritorio la notificación va sobre el gráfico (arriba a la derecha); en celular, debajo. Sin video. |
+| Bajada | VigIA BioEstrés sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos. |
+| Botón | Sólo **Contactanos para empezar a usar VigIA** (WhatsApp, con flecha), monocromo: negro en tema claro y blanco en oscuro (decisión 33). Va en la columna de texto, **debajo de la bajada** y alineado a la izquierda con el texto (decisión 47). Sin botón secundario (decisión 31). En celular y tablet (una columna) va debajo del gráfico: primero se ve lo que hace y después se pide la acción. |
+| Visual | El gráfico termina a la altura del botón. `BalanceChart.astro`, simplificado: sólo la línea de agua útil, el umbral, "Hoy" y la zona de pronóstico (sin chips de datos, lluvia ni "Ejemplo ilustrativo"). La línea se dibuja y, justo antes de tocar el umbral, aparece la notificación, colgada de una línea punteada ámbar que sube desde el punto de **Hoy** (la alerta se envía hoy, cuando el pronóstico ya muestra el cruce; el punto ámbar del cruce es lo que se anticipa), con el logo de WhatsApp grande (el aviso llega por WhatsApp) y el texto **Alerta enviada · Estrés hídrico en 14 días**, y late el punto del cruce. El gráfico muestra 18 días de historia y los 14 del pronóstico (el horizonte del motor): la línea toca el umbral justo al final del pronóstico. En escritorio la notificación va sobre el gráfico (arriba a la derecha); en celular, debajo. Sin video. |
 
 ## 2. El problema (`#problema`)
 
@@ -83,20 +82,20 @@ Se mantiene de la versión 1.
 
 **Disposición:** etiqueta, título, bajada y razones van en la columna izquierda; el gráfico, a la derecha, queda centrado verticalmente entre el título y las razones.
 
-**Dos razones**, sin numerar, cada una con un ícono ámbar (el color de este capítulo) y separadas por una línea fina: planta (el síntoma llega tarde para el bioinsumo) y nube con sol (el pronóstico regional no conoce tu lote). Son dos y no tres por la decisión 15: el síntoma tardío y el bioinsumo que llega tarde son la misma idea.
+**Dos razones**, sin numerar, cada una con un ícono ámbar (el color de este capítulo), separadas sólo por aire, sin línea: planta (el síntoma llega tarde para el bioinsumo) y nube con sol (el pronóstico regional no conoce tu lote). Son dos y no tres por la decisión 15: el síntoma tardío y el bioinsumo que llega tarde son la misma idea.
 
 1. **El síntoma llega tarde para el bioinsumo.** Cuando la hoja se enrolla, el rinde ya está comprometido y aplicar el bioinsumo protege poco.
 2. **El pronóstico regional no conoce tu lote.** No sabe cuánta agua le queda a tu suelo ni en qué etapa está tu cultivo.
 
 **Visual:** `ProblemChart.astro`, simplificado como el del hero (mismas etiquetas grandes, sin lluvia ni "+6 días"): la línea gris cruza el umbral en silencio, el área roja "Rinde perdido" y la línea roja "Lo ves a campo" al final. Como cierre, una alerta roja **"Se ve a campo 6 días tarde · El bioinsumo ya no llega a tiempo"** cuelga del borde inferior de la tarjeta, debajo de "Lo ves a campo" (en celular, debajo del gráfico). Después, el video `problema`.
 
-## 3. Qué hace VigIA (`#que-hace`)
+## 3. Lo que hace VigIA (`#que-hace`)
 
-Sección nueva (decisión 15). Cuenta qué hace VigIA: acompaña desde antes de la siembra, cuida el agua, detecta los picos de estrés durante toda la campaña y está orientado a bioinsumos. Además, toma los tipos de estrés que antes cerraban El problema. Punto 3 del hilo y fondo en celeste (decisión 23). La etiqueta "La solución" pasó a la sección 4 (decisión 30).
+Sección nueva (decisión 15). Cuenta qué hace VigIA: acompaña desde antes de la siembra, cuida el agua, detecta los picos de estrés durante toda la campaña y está orientado a bioinsumos. Además, toma los tipos de estrés que antes cerraban El problema. Punto 3 del hilo y fondo en celeste (decisión 23). La etiqueta "La solución" pasó a la sección 4 (decisión 30). Desde la decisión 42 se llama **Lo que hace VigIA** y sus cuatro tarjetas cuentan también las cuatro alertas.
 
 | Elemento | Contenido |
 |---|---|
-| Etiqueta | QUÉ HACE VIGIA (en celeste) |
+| Etiqueta | LO QUE HACE VIGIA (en celeste) |
 | Título | **VigIA BioEstrés vigila el estrés toda la campaña** |
 | Bajada | Sigue cada ambiente desde antes de la siembra hasta el final del ciclo, y te dice cuándo cuidar el agua y cuándo aplicar el bioinsumo. |
 
@@ -104,14 +103,28 @@ Sección nueva (decisión 15). Cuenta qué hace VigIA: acompaña desde antes de 
 
 | Tarjeta | Texto | Foto (provisoria) |
 |---|---|---|
-| Detecta picos de estrés | Encuentra los picos de estrés hídrico y térmico en cada ambiente y te sugiere la acción para cada uno. | 2.3, mano sobre soja marchita |
-| Desde antes de la siembra | Sigue el agua del suelo antes de que siembres y acompaña todo el ciclo, no sólo el día del aviso. | 2.2, suelo agrietado (falta una de barbecho) |
-| Cuida el uso del agua | Sabés cuánta agua útil tiene cada ambiente y regás sólo cuando hace falta. | 1.2, lote al sol (falta una de riego) |
-| Orientado a bioinsumos | Cada alerta te sugiere el bioinsumo o el riego en el momento en que más protege al cultivo. | 3.2, pulverizadora |
+| Detecta picos de estrés | Falta de agua, aire que seca a la planta o los dos juntos. Te avisa por ambiente, con margen. | 2.3, mano sobre soja marchita |
+| Desde antes de la siembra | Sigue el agua del suelo desde antes de sembrar y te avisa 14 días antes de la etapa crítica. | 2.2, suelo agrietado (falta una de barbecho) |
+| Cuida el uso del agua | Sabés cuánta agua útil tiene cada ambiente. Si se viene la falta de agua, regás justo cuando hace falta. | 1.2, lote al sol (falta una de riego) |
+| Orientado a bioinsumos | Cada aviso trae su bioinsumo: hídrico, antiestrés térmico o preventivo antes de la etapa crítica. | 3.2, pulverizadora |
 
 "Desde antes de la siembra" va sin número a propósito: el balance arranca 60 días antes de la siembra, pero lo que importa es que acompaña todo el proceso. "Orientado a bioinsumos" se dice en positivo. Las fotos salen de `media-src/imagenes/`, achicadas a 800 px en `src/assets/quehace/`.
 
-Los tipos de estrés ya no van en esta sección: pasaron a "Qué te avisa", en La solución (decisión 38).
+Las cuatro alertas se reparten entre las tarjetas (decisión 42), sin sumar ítems:
+
+| Alerta | Qué pasa | Acción |
+|---|---|---|
+| Estrés hídrico | Tarjeta 1 | Riego en la 3, bioinsumo hídrico en la 4 |
+| Estrés térmico | Tarjeta 1 | Antiestrés térmico en la 4 |
+| Estrés combinado | Tarjeta 1 ("los dos juntos") | Riego en la 3, bioinsumo en la 4 |
+| Etapa crítica | Tarjeta 2 (aviso 14 días antes) | Bioinsumo preventivo en la 4 |
+
+**Debajo de las tarjetas, otros módulos** (decisión 46), al ancho de las tarjetas, en dos columnas y sin línea divisoria, cada una con su enlace "Conocé …" con flecha (el enlace aparece cuando se carga la URL):
+
+| Pregunta | Texto | Enlace |
+|---|---|---|
+| **¿Hacés cultivos de servicio?** | VigIA también sigue su consumo de agua frente al barbecho y te marca el momento de secado. | Conocé cultivos de servicio (URL pendiente) |
+| **¿Aplicaste herbicidas residuales?** | Con el carry-over de herbicidas sabés cuándo es seguro sembrar el cultivo siguiente. | Conocé carry-over de herbicidas (URL pendiente) |
 
 Las fotos de las tarjetas son el único medio: la sección sigue haciendo de puente entre el problema y la solución.
 
@@ -125,20 +138,9 @@ Es el capítulo "con VigIA" del recorrido. **Lo principal son los dos canales de
 | Título | **Te avisa a tiempo para actuar** (sin nombrar los canales: ya los presentan las tarjetas) |
 | Bajada | VigIA sigue cada ambiente día a día. Cuando se viene el estrés, te avisa con margen para aplicar el bioinsumo o regar. |
 
-**Bloque principal (dos columnas):** a la izquierda, la etiqueta, el título, la bajada y los dos canales flotando, sin tarjeta ni línea entre ellos, con íconos **monocromos** (en el color del texto): **En tu WhatsApp** y **En la plataforma**. En escritorio los canales van más angostos (hasta 420 px) y centrados en su columna, con aire a los costados. A la derecha, alineado abajo (termina a la altura de la tarjeta de la plataforma y no se cruza con el título), un recuadro 4:3 (la proporción del video) que llena `WhatsAppMock.astro`, así no cambia de tamaño al pasar al video. El mensaje es simple: **⚠️ Estrés hídrico en 14 días** · Lote 12 · Ambiente 2 · Planificá riego o bioinsumo. Después, el video `resolucion` y el cierre **✅ Resuelta a tiempo**.
+**Bloque principal (dos columnas):** a la izquierda, la etiqueta, el título, la bajada y los dos canales flotando, sin tarjeta ni línea entre ellos, con íconos **monocromos** (en el color del texto): **En tu WhatsApp** y **En la plataforma**. Mismo formato que las razones de El problema (decisión 48): alineados a la izquierda, a todo el ancho de la columna, ícono arriba y los mismos tamaños de texto. A la derecha, alineado abajo (termina a la altura de la tarjeta de la plataforma y no se cruza con el título), un recuadro 4:3 (la proporción del video) que llena `WhatsAppMock.astro`, así no cambia de tamaño al pasar al video. El mensaje es simple: **⚠️ Estrés hídrico en 14 días** · Lote 12 · Ambiente 2 · Planificá riego o bioinsumo. Después, el video `resolucion` y el cierre **✅ Resuelta a tiempo**.
 
-**Qué te avisa y cómo lo hace** (decisión 39): debajo del bloque principal, bien separados de él (96 px) y sobre el color normal de la página (el verde agua se funde al llegar a este bloque). Cada uno con su subtítulo **centrado**, un paso más grande que los títulos de adentro. Los dos bloques miden hasta 880 px y van centrados.
-
-- **Qué te avisa VigIA:** cuatro alertas en fila, **sin tarjetas**, al estilo de las cifras de Impacto: título en negrita, frase sin negrita y en gris, y la acción en el verde de los puntos de la línea de tiempo (`--vg-icon-green`). Monocromo salvo la acción. Una línea vertical muy leve entre columnas (sin líneas en celular). Título, frase y acción comparten renglones (subgrid): si una frase ocupa menos renglones que la de al lado, va centrada en el suyo. En tablet, 2×2; en celular, una columna.
-
-  | Título | Frase | Acción |
-  |---|---|---|
-  | Estrés hídrico | Falta de agua que se viene | Aplicá bioinsumo hídrico o regá. |
-  | Estrés térmico | El aire seca a la planta | Aplicá un antiestrés térmico. |
-  | Estrés combinado | Calor y sequía juntos | Actuá ese día: bioinsumo o riego. |
-  | Etapa crítica | Se acerca la etapa que define el rinde | Aplicá el bioinsumo preventivo antes de la etapa. |
-
-  Cuándo avisa cada una (`momento`: con margen, DPV sobre el umbral, mismo día, 14 días antes) queda en `src/data/vigia.js` pero no se muestra.
+**Cómo lo hace** (decisión 39): debajo del bloque principal, bien separado de él (96 px) y sobre el color normal de la página (el verde agua se funde al llegar a este bloque). Con su subtítulo **centrado**, un paso más grande que los títulos de adentro. Mide hasta 880 px y va centrado. El bloque "Qué te avisa VigIA" se quitó: sus cuatro alertas pasaron a las tarjetas de la sección 3 (decisión 42).
 
 - **Cómo lo hace:** línea de tiempo **sin números**: cada paso centrado, con un punto verde encima del título y una línea fina de punto a punto. Al entrar en pantalla la línea se dibuja de izquierda a derecha y cada paso aparece cuando la línea llega a él. En celular la línea es vertical (punto a la izquierda). Con movimiento reducido se ve fija.
 
@@ -150,7 +152,7 @@ Es el capítulo "con VigIA" del recorrido. **Lo principal son los dos canales de
 
   El paso 1 usa una redacción neutral ("se cargan") hasta confirmar quién hace el alta de lotes (pregunta abierta 1).
 
-Los otros módulos (cultivos de servicio y carry-over de herbicidas) ya no van al pie de esta sección: pasaron al pie de las preguntas frecuentes.
+Los otros módulos (cultivos de servicio y carry-over de herbicidas) ya no van al pie de esta sección: están debajo de las tarjetas de Lo que hace VigIA (decisión 46).
 
 ## 5. Frase destacada
 
@@ -172,7 +174,7 @@ Impacto medible con datos del informe técnico (decisiones 19, 25 y 32): escenar
 |---|---|
 | Etiqueta | IMPACTO |
 | Título | **Más grano y más carbono en el suelo** |
-| Bajada | Resultados de cinco campañas continuas en lotes de maíz, soja y trigo. |
+| Bajada | Resultados de cinco campañas continuas en lotes de productores, con maíz, soja y trigo. |
 
 **Cuatro indicadores** grandes y centrados, con una línea corta debajo en letra chica, sin caja (en tablet, dos por fila):
 
@@ -180,28 +182,28 @@ Impacto medible con datos del informe técnico (decisiones 19, 25 y 32): escenar
 |---|---|---|
 | **+20.000 ha** | monitoreadas | — |
 | **96 %** | de efectividad en la respuesta del bioinsumo | — |
-| **+8.680 t** | de grano recuperado | Recupero de rinde por cultivo |
-| **~3.300 t** | de CO₂ capturadas en el suelo (pendiente de confirmar: el informe da 2.800 a 4.100 t estables) | Carbono capturado por cultivo |
+| **+8.680 t** | de grano recuperado frente a lotes que no siguieron a VigIA | Rinde recuperado por cultivo |
+| **~3.300 t** | de CO₂ extra capturadas en el suelo (sólo el extra del rinde recuperado; suma de los valores por cultivo, el informe da 2.800 a 4.100 t estables) | Carbono extra capturado por cultivo |
 
 **Tablas:** los dos últimos indicadores son botones, marcados sólo con una flechita discreta debajo. La primera vez que la sección entra en pantalla aparece un aviso corto debajo de los dos indicadores que se despliegan, **Tocá un indicador para ver el detalle**, que se va solo a los pocos segundos. Al tocar un indicador se despliega su tabla en un panel centrado debajo de los cuatro, **de a una** (abrir una cierra la otra; el mismo indicador, la cruz o Escape la cierran). El indicador activo no lleva fondo: sólo el número toma su color (grano verde, carbono turquesa). Una **flecha** en el borde del panel apunta a él. Al cambiar de tabla (con una ya abierta), el recuadro queda fijo (la flecha se apoya en su borde y su línea cambia de color con una transición) y adentro sólo se desplaza el contenido, como un carrusel: la tabla que sale se va hacia un lado y la nueva entra desde el otro, sin desvanecerse, junto con la flecha y con la misma curva y duración. El panel se despliega con una animación de alto y opacidad (todo sin animación con movimiento reducido).
 
-| Recupero de rinde | Hectáreas | kg/ha | Total |
+| Rinde recuperado | Hectáreas | kg/ha extra | Total |
 |---|---|---|---|
 | Maíz | 8.000 | 740 | 5.920 t |
 | Soja | 7.000 | 230 | 1.610 t |
 | Trigo | 5.000 | 230 | 1.150 t |
 | **Total** | **20.000** | | **8.680 t** |
 
-Nota: *Con los mismos insumos, labores y costos, protegés el rinde que ya invertiste.*
+Nota: *Diferencia de rinde entre lotes que aplicaron el bioinsumo según las alertas de VigIA y lotes que no siguieron sus alertas o recomendaciones.*
 
 | Carbono (t CO₂) | Fijado | Vuelve al suelo | Queda estable |
 |---|---|---|---|
-| Maíz | 20.378 | 12.026 | 1.750–2.540 |
-| Soja | 6.836 | 4.538 | 620–900 |
-| Trigo | 4.818 | 3.186 | 460–660 |
-| **Total** | **~32.000** | **~19.750** | **2.800–4.100** |
+| Maíz | 20.378 | 12.026 | 2.050 |
+| Soja | 6.836 | 4.538 | 700 |
+| Trigo | 4.818 | 3.186 | 550 |
+| **Total** | **~32.000** | **~19.750** | **3.300** |
 
-Nota: *Equivale a neutralizar las emisiones de 650 a 900 autos por año. El carbono que queda es el del rastrojo y las raíces; las raíces aportan el más estable.*
+Nota: *Es el carbono extra del rinde recuperado. Equivale a neutralizar las emisiones de unos 750 autos por año. El carbono que queda es el del rastrojo y las raíces; las raíces aportan el más estable.*
 
 Sin calculadora (se quitó, decisión 32).
 
@@ -215,7 +217,7 @@ Reemplaza a Para quién es (decisión 21).
 | Título | **Las personas detrás de VigIA BioEstrés** |
 | Bajada | Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos. (Pendiente de revisar con el equipo.) |
 
-Encabezado centrado y tres tarjetas chicas en un bloque angosto y centrado (hasta 760 px; en celular, una debajo de otra): foto redonda, nombre y, al pie bajo una línea fina, el logo de la empresa con el mismo alto que tiene en el carrusel de clientes (Rinde Plus, que no está en el carrusel, en la misma proporción). Los logos van a color en tema claro y en blanco en oscuro, como en el carrusel. Datos en `src/data/equipo.js`.
+Encabezado centrado y tres tarjetas chicas en un bloque angosto y centrado (hasta 760 px; en celular, de a dos por fila y la tercera centrada abajo, más compactas): foto redonda, nombre y, al pie bajo una línea fina, el logo de la empresa con el mismo alto que tiene en el carrusel de clientes (Rinde Plus, que no está en el carrusel, en la misma proporción). Los logos van a color en tema claro y en blanco en oscuro, como en el carrusel. Datos en `src/data/equipo.js`.
 
 | Persona | Empresa | Foto |
 |---|---|---|
@@ -238,13 +240,6 @@ Acordeón con `<details>`. Un script chico anima la altura al abrir y cerrar (0,
 | ¿Qué cultivos sigue? | Los cultivos de la campaña (en soja, con la fenología ajustada por latitud y grupo de madurez) y cultivos de servicio: centeno, cebada y vicia. |
 | ¿Cómo me llegan las alertas? | En la plataforma, en el panel de cada lote, y por WhatsApp, sin tener que entrar. |
 | ¿Sirve en secano? | Sí. En secano te avisa a tiempo para el bioinsumo. Bajo riego, además, te arma un plan mensual con su costo. |
-
-**Al pie, otros módulos**, a todo el ancho, en dos columnas y sin línea divisoria, cada una con su enlace "Conocé …" con flecha (el enlace aparece cuando se carga la URL). Van acá y no en La solución para no cargar esa sección:
-
-| Pregunta | Texto | Enlace |
-|---|---|---|
-| **¿Hacés cultivos de servicio?** | VigIA también sigue su consumo de agua frente al barbecho y te marca el momento de secado. | Conocé cultivos de servicio (URL pendiente) |
-| **¿Aplicaste herbicidas residuales?** | Con el carry-over de herbicidas de RindePlus sabés cuándo es seguro sembrar el cultivo siguiente. | Conocé carry-over de herbicidas (URL pendiente) |
 
 ## 10. Cierre (CTA final)
 
@@ -332,7 +327,7 @@ Las secciones 1 a 4 comparten un contenedor (`.vg-journey`) con un fondo que cam
 | 3. Qué hace VigIA | Celeste: aparece la respuesta. Punto **3**. | Celeste (`--vg-bg-solucion`). |
 | 4. La solución | Verde: el lote se salvó. Punto **4**. | Verde agua (`--vg-bg-agua`). |
 
-- El color cambia **en el borde de cada sección**, con un fundido largo (hasta 480 px, centrado en el borde) y curva suave, mezclado en oklab: no hay escalón ni bandas. El verde agua vuelve al color de la página al llegar a "Qué te avisa VigIA" (`.vg-detalle`): el fundido arranca un poco antes del bloque y termina dentro de él. Arena, celeste y verde agua van apagados y con saturación pareja, para que se lean como una sola familia. El hilo no termina en seco: pasa por el final de "Cómo lo hace" (`.vg-detalle`, `data-vg-end`), baja por el costado y dobla para entrar de costado en la frase destacada, a la altura de su renglón del medio, en un punto verde que se rellena y late cuando el hilo llega, con la frase más o menos a mitad de pantalla (la punta del hilo va al 55 % de la pantalla y el tramo horizontal final pide poco scroll). Así el recorrido del lote termina en la moraleja.
+- El color cambia **en el borde de cada sección**, con un fundido largo (hasta 480 px, centrado en el borde) y curva suave, mezclado en oklab: no hay escalón ni bandas. El verde agua vuelve al color de la página al llegar a "Cómo lo hace" (`.vg-detalle`): el fundido arranca un poco antes del bloque y termina dentro de él. Arena, celeste y verde agua van apagados y con saturación pareja, para que se lean como una sola familia. El hilo no termina en seco: pasa por el final de "Cómo lo hace" (`.vg-detalle`, `data-vg-end`), baja por el costado y dobla para entrar de costado en la frase destacada, a la altura de su renglón del medio, en un punto verde que se rellena y late cuando el hilo llega, con la frase más o menos a mitad de pantalla (la punta del hilo va al 55 % de la pantalla y el tramo horizontal final pide poco scroll). Así el recorrido del lote termina en la moraleja.
 - Con movimiento reducido, el hilo aparece completo y quieto.
 - El fondo por etapas es una **excepción provisoria** a la regla de fondos planos (ver `CLAUDE.md`).
 
@@ -362,7 +357,7 @@ De la versión 1 a la versión 2. Cada paso deja la página funcionando.
 
 - `pnpm validate` en verde y `docs/` reconstruido.
 - Capturas en escritorio (1440 px) y celular (390 px), en tema claro y oscuro.
-- Búsqueda en `src/`: sin "IA" fuera de "VigIA", sin "inteligencia artificial", "satélite", "NDVI", "plaga", "fungicida" ni "Herbicidas".
+- Búsqueda en `src/`: sin "IA" fuera de "VigIA", sin "inteligencia artificial", "satélite", "NDVI", "plaga" ni "fungicida". "Herbicidas" sólo en el carry-over (decisión 46).
 - Teclado: foco visible en menú, botones, preguntas frecuentes y carrusel.
 - `prefers-reduced-motion`: el hilo, las animaciones y la frase destacada quedan quietas y completas.
 - Videos: con la red en "Fast 4G", arrancan sin quedarse en el poster.
@@ -415,6 +410,13 @@ De la versión 1 a la versión 2. Cada paso deja la página funcionando.
 | 39 | Qué te avisa y cómo lo hace, simples | Las alertas pasan a cuatro columnas sin tarjetas, al estilo de las cifras de Impacto: título "Estrés …" en negrita, frase en gris y acción en verde; sin colores por severidad ni rótulo "Qué hacer". "Cómo lo hace" pasa a línea de tiempo sin números que se dibuja de izquierda a derecha. Los dos bloques, centrados y de hasta 880 px. Los otros módulos pasan al pie de las preguntas frecuentes. |
 | 40 | Rinde Plus sin pertenencia | El footer ya no dice que VigIA BioEstrés sea parte ni "una solución" de Rinde Plus (la plataforma tiene otros socios): invita a visitar Rinde Plus por otros servicios. Las páginas legales todavía lo dicen (pregunta abierta 2). |
 | 41 | Versión en inglés | El sitio pasa a tener versión en inglés en `/en/` (home, precios y educación), con el contenido en `src/data/vigia.en.js`. Es una adaptación con glosario agronómico propio (`TRADUCCION_EN.md`), no una traducción literal. El selector del header cambia de página con un fundido y conserva la sección. Las legales quedan en español. Ver ADR 0004. |
+| 42 | Lo que hace VigIA absorbe las alertas | Se quita "Qué te avisa VigIA" de La solución. Sus cuatro alertas y acciones se reparten en las cuatro tarjetas con foto de la sección 3, sin sumar ítems: qué pasa en picos de estrés, el aviso a 14 días en desde antes de la siembra, el riego en el uso del agua y los bioinsumos en la última. La sección 3 pasa a llamarse **Lo que hace VigIA**. Reemplaza el bloque de alertas de las decisiones 38 y 39. |
+| 43 | Contra qué se mide el impacto | El grano y el carbono son lo **extra**: la diferencia frente a lotes que no siguieron las alertas o recomendaciones de VigIA (muchos ensayos distintos; a veces se avisó pero no se usó el producto sugerido). Se dice así, sin la palabra "testigo" (suena a ensayo). Para que quede claro que son clientes reales, la bajada dice "en lotes de productores". La nota de la tabla de grano define la comparación; la del carbono aclara que es sólo el extra del rinde recuperado. El 96 % queda como estaba. |
+| 44 | Carbono sin rangos | La columna "Queda estable" muestra un valor por cultivo, no el rango del informe: el promedio de cada rango, ajustado y redondeado para sumar un número redondo (maíz 2.050, soja 700, trigo 550; los tres dentro de su rango). El total, **3.300 t**, es el indicador de arriba y se calcula de la tabla, así coinciden. Los rangos quedan en `impactoDatos.js`. La equivalencia de la nota pasa de 650 a 900 autos a unos 750, en línea con las 3.300 t. |
+| 45 | Socios fuera de clientes | BioRed y Agroconsultor salen del carrusel "Confían en nosotros": son socios con los que se hace VigIA BioEstrés y ya aparecen en Sobre nosotros. |
+| 46 | Otros módulos en Lo que hace VigIA | Cultivos de servicio y carry-over de herbicidas pasan del pie de las preguntas frecuentes a debajo de las tarjetas de la sección 3. El carry-over de herbicidas va a ser parte de VigIA (decisión del equipo, 2026-10-16): se deja de nombrar a RindePlus. Reemplaza la decisión 18 y la parte de módulos de la 39. |
+| 47 | Hero sin palabras clave | Se quitan las tres palabras clave del hero (desde antes de la siembra, por ambiente, alertas por WhatsApp). Sus ideas pasan a la bajada, que ahora dice desde antes de la siembra, por ambiente y por WhatsApp. El CTA sube a la columna de texto, debajo de la bajada. Reemplaza la parte de palabras clave de la decisión 17 y la ubicación del botón de la 31. |
+| 48 | Canales como las razones | Los canales de La solución toman el formato de las razones de El problema, para que los dos capítulos del recorrido se lean iguales: a la izquierda y a todo el ancho de la columna (ya no centrados ni de 420 px), ícono arriba y los mismos tamaños de texto. Los íconos siguen monocromos. |
 
 ## Preguntas abiertas
 

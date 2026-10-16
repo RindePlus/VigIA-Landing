@@ -9,9 +9,8 @@ import conci from '../assets/clientes/conci.png';
 import aapresid from '../assets/clientes/aapresid.png';
 import adj from '../assets/clientes/adj.png';
 import halcon from '../assets/clientes/halcon.png';
-import biored from '../assets/clientes/biored.png';
-import agroconsultor from '../assets/clientes/agroconsultor.png';
 import biozelen from '../assets/clientes/biozelen.png';
+import speedagro from '../assets/clientes/speedagro.png';
 
 // Mismos clientes y ajustes que el carrusel de Landing (TrustedCompanies.jsx).
 // `mono: true` → logo de un solo color, sin versión de marca: en hover va a
@@ -19,6 +18,8 @@ import biozelen from '../assets/clientes/biozelen.png';
 // `h` → alto en px. Los assets están recortados al arte, así que estos valores
 // igualan el área visual de cada logo.
 // Las imágenes llegan como metadatos de Astro: se usa `.src`.
+// Sin BioRed ni Agroconsultor: son socios del producto y ya salen en Sobre
+// nosotros (equipo.js), no clientes (decisión 45).
 export const CLIENTES = [
   { id: 'altina', logo: altina.src, nombre: 'Altina', h: 41 },
   { id: 'chiaraviglio', logo: chiaraviglio.src, nombre: 'Chiaraviglio Hnos', h: 46 },
@@ -31,7 +32,6 @@ export const CLIENTES = [
   { id: 'aapresid', logo: aapresid.src, nombre: 'Aapresid', h: 40 },
   { id: 'adj', logo: adj.src, nombre: 'ADJ', h: 50 },
   { id: 'halcon', logo: halcon.src, nombre: 'Halcón', h: 50 },
-  { id: 'biored', logo: biored.src, nombre: 'BioRed', h: 66 },
-  { id: 'agroconsultor', logo: agroconsultor.src, nombre: 'Agroconsultor', h: 40 },
   { id: 'biozelen', logo: biozelen.src, nombre: 'Bio Zelen', h: 74 },
+  { id: 'speedagro', logo: speedagro.src, nombre: 'SpeedAgro', h: 40 },
 ];
