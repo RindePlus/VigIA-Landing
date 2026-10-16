@@ -1,6 +1,6 @@
 ---
 // Home de VigIA BioEstrés (versión 2 de doc/landing/ESTRUCTURA_LANDING.md):
-// Hero → El problema → Qué hace VigIA → La solución (recorrido del mismo
+// Hero → El problema → Lo que hace VigIA → La solución (recorrido del mismo
 // lote) → Frase destacada → Resultados → Sobre nosotros → Clientes → Preguntas
 // → Cierre.
 // Una sola home para los dos idiomas (ADR 0004): src/pages/index.astro la
@@ -17,7 +17,6 @@ import JourneyThread from '../components/JourneyThread.astro';
 import TaglineReveal from '../components/TaglineReveal.astro';
 import TrustedCompanies from '../components/TrustedCompanies.jsx';
 import {
-  PiSquaresFour,
   PiWhatsappLogo,
   PiPlant,
   PiCloudSun,
@@ -52,7 +51,6 @@ const {
 const videoProblema = { ...VIDEOS.problema, rotulo: UI.videos.problema };
 const videoResolucion = { ...VIDEOS.resolucion, rotulo: UI.videos.resolucion };
 
-const ICONOS_HERO = { siembra: PiPlant, ambiente: PiSquaresFour, whatsapp: PiWhatsappLogo };
 const ICONOS_RAZONES = { sintoma: PiPlant, pronostico: PiCloudSun };
 const ICONOS_CANALES = { plataforma: PiMonitor, whatsapp: PiWhatsappLogo };
 // Escalonado de las apariciones al hacer scroll ([data-reveal], global.css).
@@ -86,19 +84,13 @@ const faqJsonLd = {
         <p class="vg-eyebrow vg-eyebrow--lime" data-vg-node="1">{HERO.etiqueta}</p>
         <h1 class="vg-hero__title" data-reveal>{HERO.titulo}</h1>
         <p class="vg-hero__subtitle" data-reveal style={delay(1)}>{HERO.bajada}</p>
-        <ul class="vg-hero__puntos">
-          {
-            HERO.puntos.map((p, i) => {
-              const Icon = ICONOS_HERO[p.id as keyof typeof ICONOS_HERO];
-              return (
-                <li class="vg-hero__punto" data-reveal style={delay(i + 2)}>
-                  <Icon aria-hidden="true" />
-                  {p.titulo}
-                </li>
-              );
-            })
-          }
-        </ul>
+        <!-- CTA en la columna de texto, debajo de la bajada (decisión 47). -->
+        <div class="vg-hero__ctas" data-reveal style={delay(2)}>
+          <a class="vg-btn vg-btn--cta" href={ctaUrl} target="_blank" rel="noopener noreferrer">
+            {CTA.texto}
+            <PiArrowRight aria-hidden="true" />
+          </a>
+        </div>
       </div>
       <div class="vg-media" data-reveal style={delay(2)}>
         <!-- 11 s: la animación dura ~3,5 s y el final queda quieto el resto,
@@ -107,14 +99,6 @@ const faqJsonLd = {
           <BalanceChart />
         </MediaStory>
       </div>
-    </div>
-    <!-- CTA en su propia fila, centrado bajo las dos columnas: así la columna
-         de texto termina en las palabras clave, a la altura del gráfico. -->
-    <div class="vg-hero__ctas" data-reveal style={delay(5)}>
-      <a class="vg-btn vg-btn--cta" href={ctaUrl} target="_blank" rel="noopener noreferrer">
-        {CTA.texto}
-        <PiArrowRight aria-hidden="true" />
-      </a>
     </div>
   </section>
 
@@ -157,9 +141,8 @@ const faqJsonLd = {
     </div>
   </section>
 
-  <!-- 3. Qué hace VigIA: cuatro tarjetas con foto (los tipos de estrés y su
-       acción pasaron a las alertas de la sección 4). Punto 3 del hilo, en
-       celeste. -->
+  <!-- 3. Lo que hace VigIA: cuatro tarjetas con foto, que también cuentan
+       las cuatro alertas y su acción. Punto 3 del hilo, en celeste. -->
   <section class="vg-section vg-solucion" id="que-hace">
     <div class="vg-wrap">
       <p class="vg-eyebrow vg-eyebrow--sky" data-vg-node="3">{QUE_HACE.etiqueta}</p>
@@ -182,6 +165,26 @@ const faqJsonLd = {
               />
               <h3>{pt.titulo}</h3>
               <p>{pt.texto}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- Otros módulos, con enlace a su página: debajo de las tarjetas,
+           en dos columnas. -->
+      <ul class="vg-modulos">
+        {
+          QUE_HACE.modulos.map((m, i) => (
+            <li class="vg-modulo" data-reveal style={delay(i)}>
+              <p>
+                <strong>{m.pregunta}</strong> {m.texto}
+              </p>
+              {m.enlace.href && (
+                <a class="vg-modulo__link" href={m.enlace.href} target="_blank" rel="noopener noreferrer">
+                  {m.enlace.texto}
+                  <PiArrowRight aria-hidden="true" />
+                </a>
+              )}
             </li>
           ))
         }
@@ -225,28 +228,9 @@ const faqJsonLd = {
         </div>
       </div>
 
-      <!-- Qué te avisa: las cuatro alertas en fila, sin tarjetas, como las
-           cifras de impacto. Monocromo y en dos grupos: qué pasa (el tipo en
-           grande y la frase debajo) y qué hacer (la acción, en verde).
-           Tipo, frase y acción alineados entre columnas (subgrid).
-           Cómo lo hace: los tres pasos en una tira unida por una línea. Es el
+      <!-- Cómo lo hace: los tres pasos en una tira unida por una línea. Es el
            ancla final del hilo (data-vg-end): no lleva data-reveal. -->
       <div class="vg-detalle" data-vg-end>
-        <h3 class="vg-detalle__label">{COMO_FUNCIONA.tituloAlertas}</h3>
-        <ul class="vg-alertas">
-          {
-            COMO_FUNCIONA.alertas.map((a, i) => (
-              <li class="vg-alerta" data-reveal style={delay(i)}>
-                <div>
-                  <p class="vg-alerta__tipo">{a.tipo}</p>
-                  <p class="vg-alerta__titulo">{a.titulo}</p>
-                </div>
-                <p class="vg-alerta__accion">{a.accion}</p>
-              </li>
-            ))
-          }
-        </ul>
-
         <h3 class="vg-detalle__label">{COMO_FUNCIONA.tituloPasos}</h3>
         <!-- Línea de tiempo: un punto por paso; al entrar en pantalla la línea
              se dibuja de izquierda a derecha y cada paso aparece cuando la
@@ -529,26 +513,6 @@ const faqJsonLd = {
           ))
         }
       </div>
-
-      <!-- Otros módulos, con enlace a su página: al pie de las preguntas,
-           a todo el ancho, para no cargar la sección de la solución. -->
-      <ul class="vg-modulos">
-        {
-          COMO_FUNCIONA.modulos.map((m, i) => (
-            <li class="vg-modulo" data-reveal style={delay(i)}>
-              <p>
-                <strong>{m.pregunta}</strong> {m.texto}
-              </p>
-              {m.enlace.href && (
-                <a class="vg-modulo__link" href={m.enlace.href} target="_blank" rel="noopener noreferrer">
-                  {m.enlace.texto}
-                  <PiArrowRight aria-hidden="true" />
-                </a>
-              )}
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </section>
 

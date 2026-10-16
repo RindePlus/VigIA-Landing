@@ -60,6 +60,7 @@ Si una frase literal se entiende pero suena rara ("the crop shows the stress whe
 | secano | **rainfed** | Término internacional (FAO). *Dryland* es más de EE. UU. |
 | rinde | **yield** | ❌ *performance*, *output*. |
 | rinde perdido | **yield lost** / **yield loss** | |
+| lotes que no siguieron a VigIA | **fields that didn't follow VigIA** | Igual que en español, sin *check plots*: se dice lo que significa. |
 | grano recuperado | **grain yield protected** | En español "recuperado" es lo que no se perdió; en inglés *recovered* sugiere que se recuperó algo ya perdido. *Protected* dice lo correcto. |
 | campaña | **season** (growing season) | ❌ *campaign* (en inglés agrícola no se usa con ese sentido). |
 | siembra / sembrar | **planting / plant** | ❌ *sowing* (más británico; en EE. UU. se usa *planting*). |
@@ -99,11 +100,10 @@ Si una frase literal se entiende pero suena rara ("the crop shows the stress whe
 | Detecta picos de estrés | **Spots stress peaks** | *Spot* es más natural y corto que *detect*. |
 | Cuida el uso del agua | **Smarter water use** | El literal (*takes care of water use*) no suena a beneficio. |
 | Orientado a bioinsumos | **Built for biostimulants** | *Oriented to* es un calco. *Built for* es la forma habitual de decir "pensado para". |
+| Lo que hace VigIA | **What VigIA does** | Ya era la etiqueta en inglés; no cambia. |
+| Cada aviso trae su bioinsumo | **Every alert comes with its biostimulant** | *Comes with* = viene acompañado de, sin sonar a venta. |
 | Te avisa a tiempo para actuar | **Alerts in time to act** | Corto, como titular. |
-| Falta de agua que se viene | **A water shortage is coming** | |
-| El aire seca a la planta | **Dry air pulls water from the plant** | El literal (*the air dries the plant*) suena a la planta secándose al sol. Lo que pasa es la demanda atmosférica (VPD): el aire le saca agua. |
-| Calor y sequía juntos | **Heat and drought at once** | |
-| Se acerca la etapa que define el rinde | **The yield-defining stage is coming** | |
+| aire que seca a la planta | **dry air pulling water from the plant** | El literal (*the air dries the plant*) suena a la planta secándose al sol. Lo que pasa es la demanda atmosférica (VPD): el aire le saca agua. |
 | Se cargan tus lotes | **Your fields are set up** | Voz pasiva neutral, igual que en español: todavía no está definido quién hace el alta (pregunta abierta 1 de `ESTRUCTURA_LANDING.md`). |
 | Calcula cada día | **Daily calculations** | |
 | Te avisa a tiempo | **Timely alerts** | |

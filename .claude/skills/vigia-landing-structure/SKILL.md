@@ -31,7 +31,7 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 ## Estructura fija
 
 ```
-1. Hero · 2. El problema · 3. Qué hace VigIA · 4. La solución    ← recorrido del mismo lote (.vg-journey)
+1. Hero · 2. El problema · 3. Lo que hace VigIA · 4. La solución    ← recorrido del mismo lote (.vg-journey)
 5. Frase destacada · 6. Impacto · 7. Sobre nosotros
 8. Clientes · 9. Preguntas frecuentes · 10. Cierre · Footer
 ```
@@ -40,8 +40,8 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 |---|---|---|
 | 1. Hero | Resultado + para quién + CTA + gráfico animado. | Listar funciones. |
 | 2. El problema | Por qué el estrés se detecta tarde. | Hablar de VigIA. |
-| 3. Qué hace VigIA | Cuatro tarjetas con foto: picos de estrés, desde antes de la siembra, el agua y los bioinsumos. | Explicar canales o pasos (eso es Cómo funciona). |
-| 4. La solución | Canales (plataforma y WhatsApp), qué te avisa (cuatro alertas con su acción) y cómo lo hace (tres pasos). | Detallar fórmulas. |
+| 3. Lo que hace VigIA | Cuatro tarjetas con foto: picos de estrés, desde antes de la siembra, el agua y los bioinsumos. Cuentan también las cuatro alertas y su acción. Debajo, cultivos de servicio y carry-over de herbicidas. | Explicar canales o pasos (eso es Cómo funciona). |
+| 4. La solución | Canales (plataforma y WhatsApp) y cómo lo hace (tres pasos). | Detallar fórmulas. |
 | 5. Frase destacada | Una idea en dos líneas, grande. | Llevar botón ni título. |
 | 6. Impacto | Datos medidos en campo: contexto, grano y carbono con desglose por cultivo, y calculadora. | Repetir lo que hace el producto. |
 | 7. Sobre nosotros | Las personas detrás del producto, con foto y logo de su empresa. | Inventar cargos o trayectorias. |
@@ -57,7 +57,7 @@ Cambiar el orden, sumar o quitar una sección es una **decisión de estructura**
 - Imágenes satelitales, índices espectrales (NDVI, NDRE, NDWI), drones.
 - Estrés biótico: plagas, enfermedades, fungicidas, insecticidas. Tampoco estrés nutricional.
 - Mapas, "diagnóstico", "prescripción", "manejo variable".
-- Herbicidas. Única excepción: el carry-over de herbicidas al pie de las preguntas frecuentes, como módulo de RindePlus y con enlace (decisiones 18 y 39).
+- Herbicidas. Única excepción: el carry-over de herbicidas debajo de las tarjetas de Lo que hace VigIA, como módulo de VigIA y con enlace, sin nombrar a RindePlus (decisión 46).
 - Que VigIA BioEstrés es parte, producto o "una solución" de Rinde Plus: la plataforma tiene otros socios. Rinde Plus se nombra como lugar para buscar otros servicios (decisión 40).
 - Productos o marcas de insumos. Las acciones son genéricas: bioinsumo o riego.
 - Números que no salgan del motor. Sí valen: 4 días, 14 días, 210 días, USD/mm. Excepción: los resultados medidos en campo de la sección Impacto, siempre con fuente (decisión 19).
