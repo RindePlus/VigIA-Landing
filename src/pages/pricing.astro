@@ -1,18 +1,6 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { buildWhatsAppUrl } from '../data/social';
-import { MARCA } from '../data/vigia';
-import '../styles/sections.css';
-
-// TODO: definir el modelo de precios propio de VigIA (en Landing vive en
-// src/data/pricing.js con tramos por CUIT).
-const consultaUrl = buildWhatsAppUrl(`Hola, quiero conocer los precios de ${MARCA}`);
+// Página en español; la vista es compartida con /en/pricing.
+import PricingPage from '../views/PricingPage.astro';
 ---
 
-<BaseLayout title={`Precios · ${MARCA}`}>
-  <section class="vg-hero vg-hero--simple"><div class="vg-wrap">
-    <h1 class="vg-hero__title">Precios</h1>
-    <p class="vg-hero__subtitle">Estamos definiendo los planes de {MARCA}. Escribinos y te contamos.</p>
-    <a class="vg-btn" href={consultaUrl} target="_blank" rel="noopener noreferrer">Consultar</a>
-  </div></section>
-</BaseLayout>
+<PricingPage />

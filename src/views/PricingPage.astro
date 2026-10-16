@@ -1,0 +1,22 @@
+---
+// Página de precios, compartida por los dos idiomas (src/pages/pricing.astro
+// y src/pages/en/pricing.astro). Textos en PRECIOS (src/data/vigia.js y
+// vigia.en.js).
+// TODO: definir el modelo de precios propio de VigIA (en Landing vive en
+// src/data/pricing.js con tramos por CUIT).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { buildWhatsAppUrl } from '../data/social';
+import { contenido, idiomaDe } from '../i18n/idiomas';
+import '../styles/sections.css';
+
+const { MARCA, PRECIOS } = contenido(idiomaDe(Astro.currentLocale));
+const consultaUrl = buildWhatsAppUrl(PRECIOS.mensajeWhatsApp);
+---
+
+<BaseLayout title={`${PRECIOS.titulo} · ${MARCA}`}>
+  <section class="vg-hero vg-hero--simple"><div class="vg-wrap">
+    <h1 class="vg-hero__title">{PRECIOS.titulo}</h1>
+    <p class="vg-hero__subtitle">{PRECIOS.bajada}</p>
+    <a class="vg-btn" href={consultaUrl} target="_blank" rel="noopener noreferrer">{PRECIOS.boton}</a>
+  </div></section>
+</BaseLayout>

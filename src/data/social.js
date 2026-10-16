@@ -12,9 +12,8 @@ export function buildWhatsAppUrl(mensaje) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
 }
 
-export const WHATSAPP_URL = buildWhatsAppUrl(
-  'Hola, quiero más información sobre VigIA',
-);
+// El enlace general de WhatsApp (con su mensaje prearmado) depende del
+// idioma: es WHATSAPP_URL en src/data/vigia.js y vigia.en.js.
 
 // URL de la app de VigIA (sistema separado de Rinde Plus).
 // TODO: definir cuando el nuevo sistema tenga dominio.

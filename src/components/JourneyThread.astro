@@ -1,18 +1,18 @@
 ---
-// Hilo que conecta los tres módulos (Introducción → Problema → Mejora real)
+// Hilo que conecta los cuatro módulos (Hero → Problema → Solución → Cómo funciona)
 // y fondo que cambia de tono con la historia del lote. Va dentro de
 // `.vg-journey` (ver index.astro):
-// - Los puntos del hilo son los elementos con `data-vg-node` (1, 2, 3); el
+// - Los puntos del hilo son los elementos con `data-vg-node` (1 a 4); el
 //   hilo termina en el elemento con `data-vg-end`.
 // - La línea se dibuja con el scroll: verde (VigIA vigila) → ámbar y rojo
-//   (el lote sin aviso) → verde (el lote se salva).
+//   (el lote sin aviso) → celeste (la solución) → verde (el lote se salva).
 // - Al final no corta en seco: baja por el costado y dobla para entrar de
 //   costado en la frase destacada (.vg-tagline__text), a la altura de su
 //   renglón del medio, con un punto verde que late al llegar.
 // - El avance se mide por el largo de la línea (no sólo por la altura), así
 //   los tramos de costado también se dibujan de a poco.
-// - El fondo cambia en el borde de cada sección: página → seco → agua →
-//   página, con un fundido corto.
+// - El fondo cambia en el borde de cada sección: página → seco → solución
+//   → agua → página, con fundidos largos.
 // - Con movimiento reducido el hilo aparece completo y quieto. Sin JS no se
 //   dibuja el hilo y queda el fondo de respaldo de sections.css.
 ---
@@ -24,6 +24,8 @@
       <stop data-stop="ok-b" style="stop-color: var(--vg-thread-ok)" />
       <stop data-stop="amber" style="stop-color: var(--vg-sev-alerta)" />
       <stop data-stop="red" style="stop-color: var(--vg-sev-critico)" />
+      <stop data-stop="sky-a" style="stop-color: var(--vg-sky)" />
+      <stop data-stop="sky-b" style="stop-color: var(--vg-sky)" />
       <stop data-stop="ok-c" style="stop-color: var(--vg-thread-ok)" />
       <stop data-stop="ok-d" style="stop-color: var(--vg-thread-ok)" />
     </linearGradient>
@@ -35,7 +37,7 @@
 
 <script>
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const NODE_COLOR = ['var(--vg-thread-ok)', 'var(--vg-sev-alerta)', 'var(--vg-thread-ok)'];
+  const NODE_COLOR = ['var(--vg-thread-ok)', 'var(--vg-sev-alerta)', 'var(--vg-sky)', 'var(--vg-thread-ok)'];
 
   const journey = document.querySelector<HTMLElement>('.vg-journey');
   const svg = journey?.querySelector<SVGSVGElement>('[data-vg-thread]');
@@ -55,7 +57,9 @@
       yEnd: number;
       length: number;
       // Muestras del recorrido: largo de la línea y "avance" acumulado
-      // (vertical completo + la mitad del horizontal) en px de scroll.
+      // (vertical completo + un décimo del horizontal) en px de scroll. El
+      // horizontal pesa poco para que el tramo final, que dobla hacia la frase,
+      // no pida mucho scroll: el punto llega con la frase a mitad de pantalla.
       largos: number[];
       avances: number[];
     } | null = null;
@@ -95,12 +99,28 @@
       if (frase && palabras.length) {
         const fr = frase.getBoundingClientRect();
         const centro = fr.top + fr.height / 2;
-        const fila = palabras.reduce((best, r) =>
-          Math.abs(r.top + r.height / 2 - centro) < Math.abs(best.top + best.height / 2 - centro) ? r : best,
-        );
-        const enFila = palabras.filter((r) => Math.abs(r.top - fila.top) < fila.height / 2);
-        const izq = Math.min(...enFila.map((r) => r.left));
-        fin = { x: Math.max(x + 40, izq - jr.left - 28), y: fila.top - jr.top + fila.height / 2 };
+        // Renglones: borde izquierdo y centro vertical de cada uno.
+        const filas: { izq: number; cy: number }[] = [];
+        palabras.forEach((r) => {
+          const f = filas.find((o) => Math.abs(o.cy - (r.top + r.height / 2)) < r.height / 2);
+          if (f) f.izq = Math.min(f.izq, r.left);
+          else filas.push({ izq: r.left, cy: r.top + r.height / 2 });
+        });
+        // El punto va 28px a la izquierda del renglón y nunca a menos de 40px
+        // del hilo. Con la ventana angosta el renglón del medio puede no
+        // tener ese lugar (el punto quedaría pegado a la palabra): entonces
+        // se usa el renglón con lugar (al menos 22px libres) más cercano al
+        // centro. Si ninguno tiene lugar, el hilo llega centrado arriba de
+        // la frase.
+        const conLugar = filas.filter((f) => f.izq - jr.left - 22 >= x + 40);
+        if (conLugar.length) {
+          const fila = conLugar.reduce((best, f) =>
+            Math.abs(f.cy - centro) < Math.abs(best.cy - centro) ? f : best,
+          );
+          fin = { x: Math.max(x + 40, fila.izq - jr.left - 28), y: fila.cy - jr.top };
+        } else {
+          fin = { x: fr.left + fr.width / 2 - jr.left, y: fr.top - jr.top - 28 };
+        }
       }
       const yEnd = fin ? fin.y : yServicio;
 
@@ -132,11 +152,14 @@
       grad.setAttribute('y2', String(yEnd));
       const n2 = f(nodes[1]?.y ?? yEnd);
       const n3 = f(nodes[2]?.y ?? yEnd);
+      const n4 = f(nodes[3]?.y ?? yEnd);
       setStop('ok-a', 0);
       setStop('ok-b', n2 - 0.06);
       setStop('amber', n2);
-      setStop('red', (n2 + n3) / 2);
-      setStop('ok-c', n3);
+      setStop('red', n2 + (n3 - n2) * 0.6);
+      setStop('sky-a', n3);
+      setStop('sky-b', n4 - (n4 - n3) * 0.25);
+      setStop('ok-c', n4);
       setStop('ok-d', 1);
 
       // Puntos numerados.
@@ -178,21 +201,43 @@
         endEl = g;
       }
 
-      // Fondo: página → seco (problema) → agua (cómo funciona) → página. Cada
-      // cambio se funde en BLEND px centrados en el borde real de la sección,
-      // dentro de su margen: el salto se nota y no invade el contenido.
+      // Fondo: página → seco (problema) → solución → agua (cómo funciona) →
+      // página. Cada
+      // cambio es un fundido largo centrado en el borde real de la sección,
+      // con curva suave (smoothstep en pasos de color-mix, mezclado en oklab):
+      // sin escalón visible ni bandas en los extremos del fundido.
       const secciones = [...journey.querySelectorAll<HTMLElement>(':scope > section')];
       const borde = (i: number, fallback: number) =>
         secciones[i] ? secciones[i].getBoundingClientRect().top - jr.top : fallback;
-      const b2 = borde(1, H * 0.35);
-      const b3 = borde(2, H * 0.65);
-      const BLEND = 80;
-      const h = BLEND / 2;
-      journey.style.background = `linear-gradient(to bottom,
-        var(--gh-canvas) 0px, var(--gh-canvas) ${b2 - h}px,
-        var(--vg-bg-seco) ${b2 + h}px, var(--vg-bg-seco) ${b3 - h}px,
-        var(--vg-bg-agua) ${b3 + h}px, var(--vg-bg-agua) ${H - BLEND}px,
-        var(--gh-canvas) ${H}px)`;
+      const b2 = borde(1, H * 0.3);
+      const b3 = borde(2, H * 0.5);
+      const b4 = borde(3, H * 0.7);
+      const T = Math.min(240, (b3 - b2) / 4, (b4 - b3) / 4);
+      const PASOS = 8;
+      const fundido = (de: string, a: string, desde: number, hasta: number) =>
+        Array.from({ length: PASOS + 1 }, (_, i) => {
+          const t = i / PASOS;
+          const s = Math.round(t * t * (3 - 2 * t) * 100);
+          return `color-mix(in oklab, ${a} ${s}%, ${de}) ${(desde + (hasta - desde) * t).toFixed(1)}px`;
+        }).join(', ');
+      const canvas = 'var(--gh-canvas)';
+      const seco = 'var(--vg-bg-seco)';
+      const solucion = 'var(--vg-bg-solucion)';
+      const agua = 'var(--vg-bg-agua)';
+      const pagina = 'var(--vg-bg-pagina)';
+      // El verde de "agua" vuelve a la página al llegar a Qué te avisa
+      // (.vg-detalle): el fundido arranca un poco antes del bloque y termina
+      // ya dentro de él. Sin ese bloque, al final del recorrido como antes.
+      const detalle = journey.querySelector<HTMLElement>('.vg-detalle');
+      const yDetalle = detalle ? detalle.getBoundingClientRect().top - jr.top : H;
+      const finAgua = Math.min(H, yDetalle + 2 * T);
+      const inicioPagina = Math.max(b4 + T, Math.min(yDetalle - T, H - 2 * T));
+      journey.style.background = `linear-gradient(to bottom, ${canvas} 0px,
+        ${fundido(canvas, seco, b2 - T, b2 + T)},
+        ${fundido(seco, solucion, b3 - T, b3 + T)},
+        ${fundido(solucion, agua, b4 - T, b4 + T)},
+        ${fundido(agua, pagina, inicioPagina, finAgua)},
+        ${pagina} ${finAgua}px)`;
 
       const length = line.getTotalLength();
       const largos: number[] = [];
@@ -203,7 +248,7 @@
       for (let i = 0; i <= N; i++) {
         const L = (length * i) / N;
         const p = line.getPointAtLength(L);
-        acc += Math.abs(p.y - prev.y) + Math.abs(p.x - prev.x) * 0.5;
+        acc += Math.abs(p.y - prev.y) + Math.abs(p.x - prev.x) * 0.1;
         largos.push(L);
         avances.push(acc);
         prev = p;
@@ -216,7 +261,8 @@
     const update = () => {
       if (!geo) return;
       const jr = journey.getBoundingClientRect();
-      const target = reduceMotion ? Infinity : window.innerHeight * 0.62 - jr.top;
+      // Punta del hilo un poco arriba de la mitad de la pantalla.
+      const target = reduceMotion ? Infinity : window.innerHeight * 0.55 - jr.top;
       // Avance en px de scroll desde el primer punto → largo dibujado.
       const avance = target - geo.yStart;
       const { largos, avances } = geo;

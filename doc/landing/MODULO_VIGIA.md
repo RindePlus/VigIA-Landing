@@ -705,7 +705,7 @@ Resume las secciones 1 a 6 en lo que la landing puede decir, y filtra el copy co
 
 | Afirmación del copy | Veredicto | Cómo se dice en la landing |
 |---|---|---|
-| "Detectá el estrés antes de que se convierta en merma" | ✅ Sí | Título del hero. |
+| "Detectá el estrés antes de que se convierta en pérdida" | ✅ Sí | Título del hero. |
 | Índices espectrales (NDVI, NDRE, NDWI) e imágenes satelitales | ❌ No | No hay imágenes satelitales (2.6). El adelanto lo dan el balance hídrico y el DPV: "el balance hídrico marca el estrés antes que la hoja". |
 | "Procesamiento con IA", "modelos", "IA" | ❌ No | Regla de contenido. Se dice "VigIA calcula cada día…". |
 | Estrés biótico (plagas, enfermedades) y separación biótico/abiótico | ❌ No | El alcance es abiótico: hídrico, térmico (DPV) y combinado. El motor calcula riesgo fúngico, pero la landing no lo promete por ahora. |
@@ -715,7 +715,7 @@ Resume las secciones 1 a 6 en lo que la landing puede decir, y filtra el copy co
 | Ambientes y zonas de manejo | ✅ Sí | "Por ambiente". No decir "manejo variable" ni "prescripción". |
 | Mapa de la zona afectada | ❌ No | VigIA no usa mapas (4). Se dice "qué lote y qué ambiente". |
 | Contexto de cada alerta: fenología, severidad, ambiente | ✅ Sí | Tal cual. |
-| Impacto estimado sobre el rinde | ⚠️ Parcial | Las alertas no estiman merma. El plan de riego sí muestra el rinde esperado: decirlo sólo ahí. |
+| Impacto estimado sobre el rinde | ⚠️ Parcial | Las alertas no estiman la pérdida. El plan de riego sí muestra el rinde esperado: decirlo sólo ahí. |
 | "Conecta automáticamente imágenes, series climáticas, ambientes, siembra, híbrido, riegos" | ⚠️ Parcial | El clima se conecta solo. Lotes, ambientes y suelo se cargan al alta (hoy lo hace un admin por Excel). Lluvias y riegos los carga el usuario. |
 | "Sin planillas, sin configuraciones complejas" | ⚠️ Parcial | Sólo si el alta la hace el equipo de VigIA (pendiente de confirmar). |
 | Diagnóstico probable y recomendación de monitoreo | ⚠️ Parcial | "Acción sugerida". No "diagnóstico". |

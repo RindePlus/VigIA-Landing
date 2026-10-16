@@ -352,40 +352,148 @@ img.logo-image:hover {
   color: var(--gh-accent);
 }
 
-/* Platform / login button — renders only when onGoToPlatforms is passed */
-.header-platform-btn {
+/* Ingresar a la plataforma: sólo el ícono de usuario, mismo formato que el
+   botón del tema. Va a la derecha de todo. */
+.header-icon-btn,
+.header-lang__btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-75);
-  padding: var(--space-75) var(--space-100);
+  justify-content: center;
+  height: 34px;
   border-radius: var(--gh-radius-btn, 10px);
-  background: var(--gh-accent, #0969da);
-  color: var(--gh-accent-fg, #fff);
+  background: transparent;
   border: 1px solid transparent;
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  line-height: var(--leading-sm);
-  font-weight: 600;
+  color: var(--gh-fg-muted);
   cursor: pointer;
   transition:
     background var(--dur-fast) var(--ease-fluid),
+    border-color var(--dur-fast) var(--ease-fluid),
+    color var(--dur-fast) var(--ease-fluid),
     transform var(--dur-base) var(--ease-fluid);
 }
 
-.header-platform-btn:hover {
-  background: var(--gh-accent-hover, #0860ca);
+.header-icon-btn {
+  width: 34px;
+  margin-left: var(--space-50);
 }
 
-.header-platform-btn:active,
+.header-icon-btn:hover,
+.header-lang__btn:hover,
+.header-lang__btn[aria-expanded='true'] {
+  background: var(--gh-surface-2);
+  border-color: var(--gh-border);
+  color: var(--gh-fg);
+}
+
+.header-icon-btn:active,
+.header-lang__btn:active,
 .header-theme-toggle:active {
   transform: scale(0.98);
 }
 
-.header-platform-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+.header-icon-btn svg { width: 20px; height: 20px; }
 
-@media (max-width: 480px) {
-  .header-platform-btn { padding: var(--space-75); }
-  .header-platform-btn span { display: none; } /* icon-only on small screens */
+/* Selector de idioma: "ES" con una flecha chica; abre un menú debajo. */
+.header-lang {
+  position: relative;
+}
+
+.header-lang__btn {
+  gap: var(--space-25);
+  padding-inline: var(--space-75);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 600;
+}
+
+.header-lang__caret {
+  width: 12px;
+  height: 12px;
+  transition: transform var(--dur-base) var(--ease-fluid);
+}
+
+.header-lang__btn[aria-expanded='true'] .header-lang__caret {
+  transform: rotate(180deg);
+}
+
+.header-lang__menu {
+  position: absolute;
+  top: calc(100% + var(--space-75));
+  right: 0;
+  z-index: 10;
+  min-width: 168px;
+  padding: var(--space-50);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--radius-md);
+  background: var(--gh-surface);
+  box-shadow: var(--gh-shadow-overlay);
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transform-origin: top right;
+  transition:
+    opacity var(--dur-fast) var(--ease-fluid),
+    transform var(--dur-fast) var(--ease-fluid),
+    visibility 0s linear var(--dur-fast);
+}
+
+.header-lang__menu--open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity var(--dur-fast) var(--ease-fluid),
+    transform var(--dur-fast) var(--ease-fluid);
+}
+
+.header-lang__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
+  width: 100%;
+  padding: var(--space-75) var(--space-100);
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--gh-fg);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  text-align: left;
+  /* Es un enlace (a la misma página en el otro idioma): sin subrayado. */
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-fluid);
+}
+
+.header-lang__option:focus-visible {
+  outline: 2px solid var(--vg-blue);
+  outline-offset: -2px;
+}
+
+.header-lang__option:hover {
+  background: var(--gh-surface-2);
+}
+
+.header-lang__code {
+  width: 22px;
+  color: var(--gh-fg-muted);
+  font-weight: 600;
+}
+
+.header-lang__check {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--vg-icon-green);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-lang__menu,
+  .header-lang__menu--open,
+  .header-lang__caret { transition: none; }
 }
 
 /* ---- Responsive (base) ---- */
@@ -432,13 +540,14 @@ img.logo-image:hover {
     border-color var(--dur-base) var(--ease-fluid);
 }
 
-/* Al bajar (o con el menú de celular abierto): translúcido con desenfoque y
-   una línea fina, para separarse del contenido que pasa por debajo. */
+/* Al bajar (o con el menú de celular abierto): vidrio esmerilado con una
+   línea fina. Desenfoque fuerte y fondo a medias: se intuye que pasa algo
+   por debajo (un título, un gráfico) pero no se llega a leer. */
 .rp-home .header--scrolled,
 .rp-home .header--menu-open {
-  background-color: color-mix(in srgb, var(--gh-surface) 82%, transparent);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background-color: color-mix(in srgb, var(--gh-surface) 66%, transparent);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
   border-bottom-color: var(--gh-border);
 }
 
@@ -458,6 +567,12 @@ img.logo-image:hover {
   max-width: 1160px;
   margin: 0 auto;
   padding: 10px 24px;
+}
+
+/* Con lugar de sobra, el logo y las acciones se alinean con el margen de las
+   secciones (--page-gutter). Más angosto, el menú necesita ese espacio. */
+@media (min-width: 1100px) {
+  .rp-home .header-content { padding-inline: var(--page-gutter); }
 }
 
 @media (max-width: 767px) {
@@ -566,12 +681,51 @@ img.logo-image:hover {
     display: none;
   }
 
+  /* Sección actual: línea verde debajo del enlace, que crece desde el
+     centro. */
+  .rp-home .menu-item {
+    position: relative;
+  }
+
+  .rp-home .menu-item::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 2px;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--vg-icon-green);
+    transform: scaleX(0);
+    transition: transform var(--dur-base) var(--ease-fluid);
+  }
+
+  .rp-home .menu-item--active {
+    color: var(--gh-fg);
+  }
+
+  .rp-home .menu-item--active::after {
+    transform: scaleX(1);
+  }
+
   .rp-home .hamburger-button {
     display: none;
   }
 }
 
-/* ---- Celular (home): ☰ | logo centrado | Ingresar ----
+/* En el menú de celular, la sección actual va en verde. */
+@media (max-width: 767px) {
+  .rp-home .menu-item--active {
+    color: var(--vg-icon-green);
+    font-weight: 600;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rp-home .menu-item::after { transition: none; }
+}
+
+/* ---- Celular (home): ☰ | logo centrado | idioma + usuario ----
    El drawer es absoluto, así que no ocupa celda: la grilla queda con tres
    columnas iguales a los costados para que el logo quede centrado de verdad. */
 @media (max-width: 767px) {

@@ -1,14 +1,30 @@
 ---
 // Astro genera docs/404.html, que GitHub Pages sirve para rutas inexistentes.
+// Es uno solo para los dos idiomas: si la ruta pedida empieza con /en/, el
+// script de abajo cambia los textos y el enlace al inglés.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { MARCA } from '../data/vigia';
+import { MARCA, NO_ENCONTRADA } from '../data/vigia';
+import { NO_ENCONTRADA as NOT_FOUND } from '../data/vigia.en';
 import '../styles/sections.css';
 ---
 
-<BaseLayout title={`Página no encontrada · ${MARCA}`} showMenu={false}>
+<BaseLayout title={`${NO_ENCONTRADA.titulo} · ${MARCA}`} showMenu={false}>
   <section class="vg-hero vg-hero--simple"><div class="vg-wrap">
     <h1 class="vg-hero__title">404</h1>
-    <p class="vg-hero__subtitle">La página que buscás no existe.</p>
-    <a class="vg-btn" href="/">Volver al inicio</a>
+    <p class="vg-hero__subtitle" data-404-texto data-en={NOT_FOUND.texto}>{NO_ENCONTRADA.texto}</p>
+    <a class="vg-btn" href="/" data-404-volver data-en={NOT_FOUND.volver}>{NO_ENCONTRADA.volver}</a>
   </div></section>
 </BaseLayout>
+
+<script>
+  if (/^\/en(\/|$)/.test(window.location.pathname)) {
+    document.documentElement.lang = 'en';
+    const texto = document.querySelector<HTMLElement>('[data-404-texto]');
+    const volver = document.querySelector<HTMLAnchorElement>('[data-404-volver]');
+    if (texto?.dataset.en) texto.textContent = texto.dataset.en;
+    if (volver?.dataset.en) {
+      volver.textContent = volver.dataset.en;
+      volver.href = '/en/';
+    }
+  }
+</script>

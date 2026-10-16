@@ -14,6 +14,7 @@ Leelas antes de tocar contenido, en este orden:
 1. [`doc/landing/MODULO_VIGIA.md`](../../../doc/landing/MODULO_VIGIA.md), **sección 10**: qué se puede afirmar del producto y qué no. Si un texto no tiene respaldo ahí, no va.
 2. [`doc/landing/ESTRUCTURA_LANDING.md`](../../../doc/landing/ESTRUCTURA_LANDING.md): secciones, orden, copy aprobado, medios y decisiones.
 3. `src/data/vigia.js`: el copy implementado. El markup no lleva texto propio.
+4. `src/data/vigia.en.js` y [`doc/landing/TRADUCCION_EN.md`](../../../doc/landing/TRADUCCION_EN.md): la versión en inglés (mismas claves) y su glosario y reglas.
 
 Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actualizar el documento primero.
 
@@ -30,21 +31,22 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 ## Estructura fija
 
 ```
-1. Hero · 2. El problema · 3. Cómo funciona    ← recorrido del mismo lote (.vg-journey)
-4. Frase destacada · 5. Beneficios · 6. Para quién es
-7. Clientes · 8. Preguntas frecuentes · 9. Cierre · Footer
+1. Hero · 2. El problema · 3. Qué hace VigIA · 4. La solución    ← recorrido del mismo lote (.vg-journey)
+5. Frase destacada · 6. Impacto · 7. Sobre nosotros
+8. Clientes · 9. Preguntas frecuentes · 10. Cierre · Footer
 ```
 
 | Sección | Trabajo que hace | No hace |
 |---|---|---|
 | 1. Hero | Resultado + para quién + CTA + gráfico animado. | Listar funciones. |
-| 2. El problema | Por qué el estrés se detecta tarde. Tipos de estrés. | Hablar de VigIA. |
-| 3. Cómo funciona | Tres pasos, alertas de ejemplo, canales (plataforma y WhatsApp). | Detallar fórmulas. |
-| 4. Frase destacada | Una idea en dos líneas, grande. | Llevar botón ni título. |
-| 5. Beneficios | Tres resultados, cada uno con su prueba. | Repetir los pasos. |
-| 6. Para quién es | Productores y asesores: qué gana cada uno. | Sumar perfiles sin respaldo. |
-| 8. Preguntas | Objeciones reales: sensores, carga, cultivos, canales, secano, productos, precio. | Respuestas de más de 40 palabras. |
-| 9. Cierre | Urgencia + demo de 20 minutos + el mismo CTA. | Un CTA distinto. |
+| 2. El problema | Por qué el estrés se detecta tarde. | Hablar de VigIA. |
+| 3. Qué hace VigIA | Cuatro tarjetas con foto: picos de estrés, desde antes de la siembra, el agua y los bioinsumos. | Explicar canales o pasos (eso es Cómo funciona). |
+| 4. La solución | Canales (plataforma y WhatsApp), qué te avisa (cuatro alertas con su acción) y cómo lo hace (tres pasos). | Detallar fórmulas. |
+| 5. Frase destacada | Una idea en dos líneas, grande. | Llevar botón ni título. |
+| 6. Impacto | Datos medidos en campo: contexto, grano y carbono con desglose por cultivo, y calculadora. | Repetir lo que hace el producto. |
+| 7. Sobre nosotros | Las personas detrás del producto, con foto y logo de su empresa. | Inventar cargos o trayectorias. |
+| 9. Preguntas | Objeciones reales: sensores, carga, cultivos, canales, secano. | Respuestas de más de 40 palabras. |
+| 10. Cierre | Urgencia + demo de 20 minutos + el mismo CTA. | Un CTA distinto. |
 
 Cambiar el orden, sumar o quitar una sección es una **decisión de estructura**: se acuerda con el usuario y se registra en `ESTRUCTURA_LANDING.md` (tabla "Decisiones") antes de tocar código.
 
@@ -55,9 +57,10 @@ Cambiar el orden, sumar o quitar una sección es una **decisión de estructura**
 - Imágenes satelitales, índices espectrales (NDVI, NDRE, NDWI), drones.
 - Estrés biótico: plagas, enfermedades, fungicidas, insecticidas. Tampoco estrés nutricional.
 - Mapas, "diagnóstico", "prescripción", "manejo variable".
-- Herbicidas.
+- Herbicidas. Única excepción: el carry-over de herbicidas al pie de las preguntas frecuentes, como módulo de RindePlus y con enlace (decisiones 18 y 39).
+- Que VigIA BioEstrés es parte, producto o "una solución" de Rinde Plus: la plataforma tiene otros socios. Rinde Plus se nombra como lugar para buscar otros servicios (decisión 40).
 - Productos o marcas de insumos. Las acciones son genéricas: bioinsumo o riego.
-- Números que no salgan del motor. Sí valen: 4 días, 14 días, 210 días, USD/mm.
+- Números que no salgan del motor. Sí valen: 4 días, 14 días, 210 días, USD/mm. Excepción: los resultados medidos en campo de la sección Impacto, siempre con fuente (decisión 19).
 
 **Siempre:**
 - **VigIA BioEstrés** en títulos, SEO y cierre; "VigIA" solo cuando ya se nombró.
@@ -93,9 +96,10 @@ Si un texto no entra, se recorta la idea, no la letra.
 
 1. Ubicá la sección en `ESTRUCTURA_LANDING.md` y el respaldo en MODULO_VIGIA §10.
 2. Si cambia el copy aprobado, actualizá primero el documento y después `src/data/vigia.js`.
-3. El markup (`index.astro`) sólo lee de `src/data/`.
-4. SEO: si cambia el hero o las preguntas, revisá `<title>`, la meta description y el JSON-LD `FAQPage`.
-5. Cerrá con `self-review-checklist`.
+3. Hacé el mismo cambio en `src/data/vigia.en.js`, adaptado (no literal) con el glosario de `TRADUCCION_EN.md`. Si aparece un término o una frase nueva que no va literal, sumala al documento con el porqué.
+4. El markup (`src/views/HomePage.astro`) sólo lee de `src/data/`.
+5. SEO: si cambia el hero o las preguntas, revisá `<title>`, la meta description y el JSON-LD `FAQPage` (en los dos idiomas).
+6. Cerrá con `self-review-checklist`.
 
 ## Checklist de contenido
 
@@ -105,4 +109,5 @@ Si un texto no entra, se recorta la idea, no la letra.
 - [ ] Presupuesto de texto respetado.
 - [ ] "VigIA BioEstrés" en títulos, SEO y cierre.
 - [ ] Copy en `src/data/`, no en el markup.
+- [ ] El cambio está también en `vigia.en.js`, adaptado según `TRADUCCION_EN.md` y con las mismas afirmaciones.
 - [ ] `ESTRUCTURA_LANDING.md` refleja lo implementado.

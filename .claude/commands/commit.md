@@ -18,7 +18,7 @@ El usuario pidió commitear. Este comando es **la única vía** por la que Claud
    - `description` en **inglés**, minúsculas, imperativo, sin punto final, ≤ 72 caracteres.
    - Si el diff mezcla temas, proponé dividirlo en varios commits.
 
-4. **Confirmá con el usuario**: mostrá el mensaje en un bloque de código y esperá el OK. Iterá si pide cambios.
+4. **Sin confirmación previa:** el pedido del usuario ya es la aprobación; commiteá directo
 
 5. **Commiteá**:
    ```bash

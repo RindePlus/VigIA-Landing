@@ -77,6 +77,10 @@
   --space-700: 64px;
   --space-800: 80px;
   --space-900: 96px;
+  /* Margen lateral de la página: el mismo en todas las secciones, el header
+     y el footer, a los dos lados. Con la ventana angosta deja lugar para el
+     hilo del recorrido (que va a la izquierda del contenido). */
+  --page-gutter: var(--space-300);
 
   /* Movimiento: curva con masa (arranca rápido y asienta lento). Nunca las
      curvas por defecto del navegador. */
@@ -85,6 +89,13 @@
   --dur-base: 400ms;
   --dur-slow: 700ms;
   --dur-reveal: 900ms;
+  /* Aparición al hacer scroll ([data-reveal]): cuánto sube, cuánto
+     desenfoque trae, factor del escalonado entre hermanos y pausa entre
+     pasos de la línea de tiempo. En celular se achican (ver abajo). */
+  --reveal-shift: var(--space-700);
+  --reveal-blur: 8px;
+  --reveal-stagger: 1;
+  --reveal-step: var(--dur-slow);
 
   /* Título del hero: degradé sólo sobre el texto, nunca de fondo. */
   --hero-title-from: #000000;
@@ -183,13 +194,13 @@ li {
    `--reveal-delay` escalona elementos hermanos. */
 .vg-reveal-on [data-reveal] {
   opacity: 0;
-  filter: blur(8px);
-  transform: translateY(var(--space-700));
+  filter: blur(var(--reveal-blur));
+  transform: translateY(var(--reveal-shift));
   transition:
     opacity var(--dur-reveal) var(--ease-fluid),
     filter var(--dur-reveal) var(--ease-fluid),
     transform var(--dur-reveal) var(--ease-fluid);
-  transition-delay: var(--reveal-delay, 0ms);
+  transition-delay: calc(var(--reveal-delay, 0ms) * var(--reveal-stagger));
 }
 
 .vg-reveal-on [data-reveal].is-revealed {
@@ -248,6 +259,32 @@ img {
 :focus-visible {
   outline: 2px solid var(--gh-accent, #0969da);
   outline-offset: 2px;
+}
+
+/* Transición entre páginas (ADR 0004): al ir a otra página del sitio, en
+   especial al cambiar de idioma, el navegador funde la página vieja con la
+   nueva en vez de mostrar la recarga en blanco. Es la transición nativa
+   entre documentos (Chrome, Edge, Safari 18.2+); donde no existe, la página
+   carga como siempre. El header queda quieto: tiene su propio nombre y
+   mide lo mismo en los dos idiomas. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dur-base);
+  animation-timing-function: var(--ease-fluid);
+}
+
+.header {
+  view-transition-name: vg-header;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -366,16 +403,40 @@ img {
   --vg-sev-alerta-soft: #fff8c5;
   --vg-sev-info: #1f5bff;
   --vg-sev-info-soft: #e8eeff;
-  /* Fondo de los tres módulos: muy claros, para que el hilo (más intenso)
-     siempre se vea encima. */
-  --vg-bg-seco: #f2dfbd;
-  --vg-bg-agua: #cfe9e0;
+  /* Fondo de los tres módulos: muy claros y de saturación pareja, para que
+     el hilo (más intenso) siempre se vea encima y los fundidos no salten. */
+  --vg-bg-seco: #f5e8d2;
+  --vg-bg-solucion: #dcebf6;
+  --vg-bg-agua: #dcefe8;
+  /* Fondo del body: el recorrido termina en este color para fundirse con
+     la frase destacada sin escalón. */
+  --vg-bg-pagina: var(--bg-main);
+  /* Celeste de La solución: hilo, punto 3 y etiqueta. */
+  --vg-sky: #0b7cc1;
   --vg-thread-ok: #3f8f1f;
+  /* Acento de carbono (sección Impacto): turquesa, separado del verde del
+     rinde. */
+  --vg-carbono: #0e7c86;
+
   /* Íconos verdes sin fondo: más oscuro en claro para contrastar sobre blanco. */
   --vg-icon-green: #3f8f1f;
   /* Verde de WhatsApp (botón del menú y widget flotante). */
   --vg-whatsapp: #25d366;
   --vg-whatsapp-hover: #1da851;
+  /* Chat de WhatsApp de ejemplo (WhatsAppMock.astro): colores de la app. */
+  --vg-wa-bar: #008069;
+  --vg-wa-bar-fg: #ffffff;
+  --vg-wa-wallpaper: #efeae2;
+  --vg-wa-doodle: rgba(17, 27, 33, 0.06);
+  --vg-wa-bubble: #ffffff;
+  --vg-wa-fg: #111b21;
+  --vg-wa-meta: #667781;
+  --vg-wa-chip: #ffffff;
+  --vg-wa-input-bar: #f0f2f5;
+  --vg-wa-input: #ffffff;
+  --vg-wa-accent: #00a884;
+  --vg-wa-accent-fg: #ffffff;
+  --vg-wa-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
   /* Sobre video (siempre con fondo oscuro, en los dos temas). */
   /* CTA principal: azul de marca, más intenso en oscuro para que no se apague. */
   --vg-cta: #1f5bff;
@@ -400,9 +461,45 @@ img {
   --vg-sev-info-soft: #131d33;
   /* Tonos apagados en oscuro: tierra y verde petróleo, sin saturar. */
   --vg-bg-seco: #221c14;
+  --vg-bg-solucion: #111b25;
   --vg-bg-agua: #111f1e;
+  --vg-bg-pagina: var(--gh-canvas);
+  --vg-sky: #5cc8ff;
   --vg-thread-ok: #8fd14f;
+  --vg-carbono: #4fd1c5;
   --vg-cta: #3d6bff;
   --vg-cta-hover: #5580ff;
   --vg-icon-green: #8fd14f;
+  --vg-wa-bar: #202c33;
+  --vg-wa-bar-fg: #e9edef;
+  --vg-wa-wallpaper: #0b141a;
+  --vg-wa-doodle: rgba(233, 237, 239, 0.04);
+  --vg-wa-bubble: #202c33;
+  --vg-wa-fg: #e9edef;
+  --vg-wa-meta: #8696a0;
+  --vg-wa-chip: #182229;
+  --vg-wa-input-bar: #202c33;
+  --vg-wa-input: #2a3942;
+  --vg-wa-accent: #00a884;
+  --vg-wa-accent-fg: #111b21;
+  --vg-wa-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 1260px) {
+  :root { --page-gutter: var(--space-700); }
+}
+
+@media (max-width: 680px) {
+  :root { --page-gutter: var(--space-200); }
+
+  /* En celular la página es larga y se baja mucho: las apariciones son más
+     cortas y sutiles (menos recorrido, menos desenfoque, casi sin espera
+     entre hermanos) para que el contenido no se haga esperar. */
+  :root {
+    --dur-reveal: 500ms;
+    --reveal-shift: var(--space-300);
+    --reveal-blur: 2px;
+    --reveal-stagger: 0.4;
+    --reveal-step: var(--dur-base);
+  }
 }
