@@ -3,29 +3,50 @@ import { PiSun, PiMoon, PiUser, PiWhatsappLogo, PiCaretDown, PiCheck } from 'rea
 import vigiaLogo from '../assets/vigia-biostres-logo-light.png';
 import vigiaLogoDark from '../assets/vigia-biostres-logo-dark.png';
 import { useTheme } from '../hooks/useTheme';
-import { APP_URL, WHATSAPP_URL } from '../data/social';
+import { APP_URL } from '../data/social';
 import { MARCA } from '../data/vigia';
+import { IDIOMAS } from '../i18n/idiomas';
 import './Header.css';
 
 // Isla React (client:load). A diferencia de Landing, la navegación entre
 // páginas son <a href> reales: el ruteo lo resuelve Astro por archivo.
-const DEFAULT_ITEMS = [
-  { label: 'Cómo funciona', href: '/#como-funciona' },
-  { label: 'Impacto', href: '/#impacto' },
-  { label: 'Nosotros', href: '/#nosotros' },
-  { label: 'Contacto', href: '/#contacto' },
-  // Página propia (no una sección de la home): va al final.
-  { label: 'Educación', href: '/educacion' },
-];
+// Los textos y el menú llegan por props desde BaseLayout, en el idioma de la
+// página (UI en src/data/vigia.js y vigia.en.js).
 
-// Idiomas del selector. Por ahora sólo cambia la marca del botón: la página
-// en inglés todavía no existe.
-const IDIOMAS = [
-  { code: 'es', label: 'Español' },
-  { code: 'en', label: 'English' },
-];
+// Selector de idioma (ADR 0004): cada opción es un enlace a la misma página
+// en el otro idioma. Antes de salir guarda la sección visible y cuánto se
+// había leído de ella; BaseLayout la recupera en la página nueva, así el
+// cambio no lleva arriba de todo. El fundido lo hace la transición entre
+// páginas del navegador (@view-transition en global.css).
+const guardarPosicion = (destino) => {
+  const secciones = [...document.querySelectorAll('section[id], footer[id]')];
+  let actual = null;
+  for (const el of secciones) {
+    if (el.getBoundingClientRect().top <= 0) actual = el;
+  }
+  try {
+    if (!actual) {
+      sessionStorage.removeItem('vg-idioma-scroll');
+      return;
+    }
+    const r = actual.getBoundingClientRect();
+    const proporcion = r.height ? Math.min(1, -r.top / r.height) : 0;
+    sessionStorage.setItem('vg-idioma-scroll', JSON.stringify({ destino, id: actual.id, proporcion }));
+  } catch {
+    // Sin sessionStorage (modo privado estricto): se cambia igual, arriba.
+  }
+};
 
-const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
+const Header = ({
+  menuItems,
+  showMenu = true,
+  lang = 'es',
+  textos,
+  inicioHref = '/',
+  inicioLabel = MARCA,
+  whatsappUrl,
+  rutas = { es: '/', en: '/en/' },
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [isHidden, setIsHidden] = useState(false);
@@ -36,7 +57,6 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
   // marca con una línea verde debajo del enlace.
   const [activeHref, setActiveHref] = useState(null);
   const headerRef = useRef(null);
-  const [idioma, setIdioma] = useState('es');
   const [isLangOpen, setIsLangOpen] = useState(false);
   const langRef = useRef(null);
 
@@ -150,7 +170,7 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
       className={`header ${isMenuOpen ? 'header--menu-open' : ''} ${!showMenu ? 'header--no-menu' : ''} ${isHidden && !isMenuOpen ? 'header--hidden' : ''} ${isScrolled ? 'header--scrolled' : ''}`}
     >
       <div className="header-content">
-        <a href="/" className="header-logo" aria-label={`${MARCA} — inicio`}>
+        <a href={inicioHref} className="header-logo" aria-label={inicioLabel}>
           <img
             src={(theme === 'dark' ? vigiaLogoDark : vigiaLogo).src}
             alt={MARCA}
@@ -174,14 +194,14 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
 
             <div className="header-nav__theme">
               <span className="header-nav__theme-label">
-                {theme === 'dark' ? 'Modo oscuro' : 'Modo claro'}
+                {theme === 'dark' ? textos.modoOscuro : textos.modoClaro}
               </span>
               <button
                 type="button"
                 className="rp-theme-switch"
                 role="switch"
                 aria-checked={theme === 'dark'}
-                aria-label="Cambiar entre modo claro y oscuro"
+                aria-label={textos.cambiarTema}
                 onClick={toggleTheme}
               >
                 <span className="rp-theme-switch__icon rp-theme-switch__icon--sun">
@@ -198,13 +218,13 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
                 (WhatsAppWidget se oculta por debajo de 768 px). */}
             <a
               className="header-nav__whatsapp"
-              href={WHATSAPP_URL}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsMenuOpen(false)}
             >
               <PiWhatsappLogo aria-hidden="true" />
-              <span>Escribinos por WhatsApp</span>
+              <span>{textos.whatsapp}</span>
             </a>
           </nav>
         )}
@@ -214,8 +234,8 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
             type="button"
             className="header-theme-toggle"
             onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro'}
-            title={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+            aria-label={theme === 'dark' ? textos.activarClaro : textos.activarOscuro}
+            title={theme === 'dark' ? textos.modoClaro : textos.modoOscuro}
           >
             {theme === 'dark' ? <PiSun /> : <PiMoon />}
           </button>
@@ -226,36 +246,42 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
               className="header-lang__btn"
               aria-haspopup="menu"
               aria-expanded={isLangOpen}
-              aria-label="Idioma"
+              aria-label={textos.idioma}
               onClick={() => setIsLangOpen((open) => !open)}
             >
-              <span>{idioma.toUpperCase()}</span>
+              <span>{lang.toUpperCase()}</span>
               <PiCaretDown className="header-lang__caret" aria-hidden="true" />
             </button>
             <ul className={`header-lang__menu ${isLangOpen ? 'header-lang__menu--open' : ''}`} role="menu">
               {IDIOMAS.map((op) => (
                 <li key={op.code} role="none">
-                  <button
-                    type="button"
+                  <a
+                    href={rutas[op.code]}
+                    hrefLang={op.code}
+                    lang={op.code}
                     role="menuitemradio"
-                    aria-checked={idioma === op.code}
+                    aria-checked={lang === op.code}
                     className="header-lang__option"
                     tabIndex={isLangOpen ? 0 : -1}
-                    onClick={() => {
-                      setIdioma(op.code);
+                    onClick={(event) => {
                       setIsLangOpen(false);
+                      if (op.code === lang) {
+                        event.preventDefault();
+                        return;
+                      }
+                      guardarPosicion(rutas[op.code]);
                     }}
                   >
                     <span className="header-lang__code">{op.code.toUpperCase()}</span>
                     <span>{op.label}</span>
-                    {idioma === op.code && <PiCheck className="header-lang__check" aria-hidden="true" />}
-                  </button>
+                    {lang === op.code && <PiCheck className="header-lang__check" aria-hidden="true" />}
+                  </a>
                 </li>
               ))}
             </ul>
           </div>
 
-          <a className="header-icon-btn" href={APP_URL} aria-label="Ingresar a la plataforma" title="Ingresar">
+          <a className="header-icon-btn" href={APP_URL} aria-label={textos.ingresarLabel} title={textos.ingresar}>
             <PiUser />
           </a>
         </div>
@@ -267,7 +293,7 @@ const Header = ({ menuItems = DEFAULT_ITEMS, showMenu = true }) => {
             type="button"
             className={`hamburger-button ${isMenuOpen ? 'open' : ''}`}
             onClick={() => setIsMenuOpen((open) => !open)}
-            aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-label={isMenuOpen ? textos.cerrarMenu : textos.abrirMenu}
             aria-expanded={isMenuOpen}
             aria-controls="header-menu"
           >

@@ -462,8 +462,15 @@ img.logo-image:hover {
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
   text-align: left;
+  /* Es un enlace (a la misma página en el otro idioma): sin subrayado. */
+  text-decoration: none;
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-fluid);
+}
+
+.header-lang__option:focus-visible {
+  outline: 2px solid var(--vg-blue);
+  outline-offset: -2px;
 }
 
 .header-lang__option:hover {

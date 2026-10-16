@@ -7,6 +7,10 @@
 // (`.is-playing`); sin ella se ve el estado final.
 import { PiWarningCircle } from 'react-icons/pi';
 import { x, y, AU, BASE, UMBRAL, DIA_CRUCE, pathAlto } from '../data/balanceEjemplo';
+import { contenido, idiomaDe } from '../i18n/idiomas';
+
+// Textos en UI.graficos.sinVigia (idioma de la página).
+const T = contenido(idiomaDe(Astro.currentLocale)).UI.graficos.sinVigia;
 
 const CAMPO = 30; // día en que el estrés se ve a campo
 const bajoUmbral = AU.filter(([d]) => d > DIA_CRUCE);
@@ -20,14 +24,11 @@ const areaPerdida = [
 
 <figure class="vg-chart vg-chart--sin vg-chart--alto">
   <figcaption class="vg-chart__head">
-    <span class="vg-chart__title">Agua del suelo · sin VigIA</span>
+    <span class="vg-chart__title">{T.titulo}</span>
   </figcaption>
 
   <svg viewBox={`0 20 560 ${BASE + 16}`} role="img" aria-labelledby="vg-problem-desc">
-    <desc id="vg-problem-desc">
-      Sin pronóstico ni alertas, el agua útil cruza el umbral del cultivo sin
-      que nadie avise. El estrés se detecta a campo seis días después.
-    </desc>
+    <desc id="vg-problem-desc">{T.descripcion}</desc>
     <defs>
       <clipPath id="vg-problem-reveal">
         <rect class="vg-chart__reveal" x="40" y="0" width="480" height={BASE + 30} />
@@ -36,19 +37,19 @@ const areaPerdida = [
 
     <line class="vg-chart__axis" x1="40" y1={BASE} x2="520" y2={BASE} />
     <line class="vg-chart__umbral" x1="40" y1={UMBRAL} x2="520" y2={UMBRAL} />
-    <text class="vg-chart__label vg-chart__label--umbral" x="44" y={UMBRAL - 12}>Umbral del cultivo</text>
-    <text class="vg-chart__label vg-chart__label--au" x="44" y={y(70)}>Agua útil</text>
+    <text class="vg-chart__label vg-chart__label--umbral" x="44" y={UMBRAL - 12}>{T.umbral}</text>
+    <text class="vg-chart__label vg-chart__label--au" x="44" y={y(70)}>{T.aguaUtil}</text>
 
     <g class="vg-chart__data" clip-path="url(#vg-problem-reveal)">
       <path class="vg-chart__loss" d={areaPerdida} />
       <path class="vg-chart__au" d={pathAlto(AU)} />
       <circle class="vg-chart__cross" cx={x(DIA_CRUCE)} cy={UMBRAL} r="5" />
-      <text class="vg-chart__label vg-chart__label--loss" x={x(CAMPO) - 8} y={BASE - 12} text-anchor="end">Rinde perdido</text>
+      <text class="vg-chart__label vg-chart__label--loss" x={x(CAMPO) - 8} y={BASE - 12} text-anchor="end">{T.rindePerdido}</text>
     </g>
 
     <g class="vg-chart__alertg">
       <line class="vg-chart__field" x1={x(CAMPO)} y1="20" x2={x(CAMPO)} y2={BASE} />
-      <text class="vg-chart__label vg-chart__label--critico" x={x(CAMPO) - 8} y="50" text-anchor="end">Lo ves a campo</text>
+      <text class="vg-chart__label vg-chart__label--critico" x={x(CAMPO) - 8} y="50" text-anchor="end">{T.loVesACampo}</text>
     </g>
   </svg>
 
@@ -56,8 +57,8 @@ const areaPerdida = [
   <div class="vg-chart__end">
     <span class="vg-chart__end-icon" aria-hidden="true"><PiWarningCircle /></span>
     <span class="vg-chart__end-text">
-      <strong>Se ve a campo 6 días tarde</strong>
-      <span>El bioinsumo ya no llega a tiempo.</span>
+      <strong>{T.tarde}</strong>
+      <span>{T.tardeTexto}</span>
     </span>
   </div>
 </figure>

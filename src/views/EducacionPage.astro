@@ -1,0 +1,26 @@
+---
+// Página de Educación (enlazada al final del menú del header), compartida por
+// los dos idiomas (src/pages/educacion.astro y src/pages/en/educacion.astro).
+// Provisoria hasta tener el contenido: mismo esquema simple que /pricing.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PiArrowLeft } from 'react-icons/pi';
+import { contenido, idiomaDe, ruta } from '../i18n/idiomas';
+import '../styles/sections.css';
+
+const lang = idiomaDe(Astro.currentLocale);
+const { EDUCACION, MARCA } = contenido(lang);
+---
+
+<BaseLayout title={`${EDUCACION.titulo} · ${MARCA}`} description={EDUCACION.bajada}>
+  <section class="vg-hero vg-hero--simple">
+    <div class="vg-wrap">
+      <p class="vg-eyebrow">{EDUCACION.etiqueta}</p>
+      <h1 class="vg-hero__title">{EDUCACION.titulo}</h1>
+      <p class="vg-hero__subtitle">{EDUCACION.bajada}</p>
+      <a class="vg-btn vg-btn--ghost" href={ruta(lang, '/')}>
+        <PiArrowLeft aria-hidden="true" />
+        {EDUCACION.volver}
+      </a>
+    </div>
+  </section>
+</BaseLayout>

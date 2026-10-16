@@ -6,11 +6,13 @@ Reglas para Claude (y para quien use Claude Code en este repo) sobre código, ra
 
 Landing page de **VigIA**, el sistema de monitoreo de cultivos de RindePlus. Es un **sitio estático de marketing**: no tiene backend, base de datos, API ni autenticación propia. El botón "Ingresar" solo enlaza a la app, que vive en otro repositorio.
 
+El sitio está en **español** (raíz: `/`, `/pricing`…) **e inglés** (`/en/`, `/en/pricing`…), ver [ADR 0004](doc/adr/0004-sitio-bilingue-es-en.md). Las legales están sólo en español.
+
 ## Stack técnico
 
 | Capa | Stack |
 |---|---|
-| **Framework** | Astro 7 (salida estática, una página HTML por archivo de `src/pages/`) |
+| **Framework** | Astro 7 (salida estática, una página HTML por archivo de `src/pages/`; i18n nativo, `es` + `en`) |
 | **Interactividad** | React 19 como **islas** (`client:load` / `client:idle` / `client:visible`) |
 | **Estilos** | CSS plano con design tokens `--gh-*` en `src/styles/global.css`. Sin Tailwind |
 | **Lenguaje** | JavaScript/JSX + TypeScript para chequeo de tipos (`astro/tsconfigs/strict`) |
@@ -127,6 +129,7 @@ Excepciones acordadas a la skill:
 - **Nombres**: componentes `PascalCase.astro` / `PascalCase.jsx`, hooks `useCamelCase.js`, datos `camelCase.js`.
 - **Estilos**: CSS plano con tokens (`--gh-*` tema, `--vg-*` marca, escalas de arriba). Sin hex sueltos en componentes: si falta un token, se agrega. Claro y oscuro se resuelven con los tokens, no con overrides por componente.
 - **Contenido** (copy, clientes, números) en `src/data/`, no en el markup.
+- **Dos idiomas** (ADR 0004): el copy está en `src/data/vigia.js` (español, la fuente) y `src/data/vigia.en.js` (inglés), **con las mismas claves**. Todo texto nuevo o cambiado va en los dos, y el inglés sigue [`doc/landing/TRADUCCION_EN.md`](doc/landing/TRADUCCION_EN.md) (adaptación, no traducción literal; glosario agronómico). Los componentes toman el idioma de `Astro.currentLocale` con `contenido(idiomaDe(...))` de `src/i18n/idiomas.js`; las islas React reciben los textos por props. Las vistas compartidas viven en `src/views/`; `src/pages/` y `src/pages/en/` sólo las montan.
 - **Medios**: imágenes por Astro assets con dimensiones; videos `muted playsinline` con poster.
 - **Props de React en `.astro`**: `className`, no `class` (`pnpm typecheck` lo exige).
 
@@ -150,7 +153,8 @@ Viven en [`doc/adr/`](doc/adr/) (no en `docs/`, que es la salida del build). Un 
 
 ## Convenciones de lenguaje
 
-- **Español**: `CLAUDE.md`, ADRs, skills, comentarios que explican por qué, copy del sitio, body de PRs.
+- **Español**: `CLAUDE.md`, ADRs, skills, comentarios que explican por qué (también en `vigia.en.js`), copy del sitio, body de PRs.
+- **Copy en inglés**: sólo en `src/data/vigia.en.js`, con las reglas de `doc/landing/TRADUCCION_EN.md`.
 - **Inglés**: commits, títulos de PR, nombres de ramas, identificadores de código.
 
 ## Secretos

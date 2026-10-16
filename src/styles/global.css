@@ -254,6 +254,32 @@ img {
   outline-offset: 2px;
 }
 
+/* Transición entre páginas (ADR 0004): al ir a otra página del sitio, en
+   especial al cambiar de idioma, el navegador funde la página vieja con la
+   nueva en vez de mostrar la recarga en blanco. Es la transición nativa
+   entre documentos (Chrome, Edge, Safari 18.2+); donde no existe, la página
+   carga como siempre. El header queda quieto: tiene su propio nombre y
+   mide lo mismo en los dos idiomas. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dur-base);
+  animation-timing-function: var(--ease-fluid);
+}
+
+.header {
+  view-transition-name: vg-header;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

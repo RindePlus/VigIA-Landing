@@ -138,6 +138,23 @@
   margin: 0;
 }
 
+/* Nota chica (en inglés: el equipo responde en español). Aparece con el
+   saludo. */
+.wa-widget__nota {
+  margin: 0;
+  color: var(--rp-gray-500);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-fluid);
+}
+
+.wa-widget--open .wa-widget__nota {
+  opacity: 1;
+  transition: opacity var(--dur-base) var(--ease-fluid) 0.3s;
+}
+
 .wa-widget__send {
   display: flex;
   align-items: center;

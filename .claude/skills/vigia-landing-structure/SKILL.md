@@ -14,6 +14,7 @@ Leelas antes de tocar contenido, en este orden:
 1. [`doc/landing/MODULO_VIGIA.md`](../../../doc/landing/MODULO_VIGIA.md), **sección 10**: qué se puede afirmar del producto y qué no. Si un texto no tiene respaldo ahí, no va.
 2. [`doc/landing/ESTRUCTURA_LANDING.md`](../../../doc/landing/ESTRUCTURA_LANDING.md): secciones, orden, copy aprobado, medios y decisiones.
 3. `src/data/vigia.js`: el copy implementado. El markup no lleva texto propio.
+4. `src/data/vigia.en.js` y [`doc/landing/TRADUCCION_EN.md`](../../../doc/landing/TRADUCCION_EN.md): la versión en inglés (mismas claves) y su glosario y reglas.
 
 Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actualizar el documento primero.
 
@@ -95,9 +96,10 @@ Si un texto no entra, se recorta la idea, no la letra.
 
 1. Ubicá la sección en `ESTRUCTURA_LANDING.md` y el respaldo en MODULO_VIGIA §10.
 2. Si cambia el copy aprobado, actualizá primero el documento y después `src/data/vigia.js`.
-3. El markup (`index.astro`) sólo lee de `src/data/`.
-4. SEO: si cambia el hero o las preguntas, revisá `<title>`, la meta description y el JSON-LD `FAQPage`.
-5. Cerrá con `self-review-checklist`.
+3. Hacé el mismo cambio en `src/data/vigia.en.js`, adaptado (no literal) con el glosario de `TRADUCCION_EN.md`. Si aparece un término o una frase nueva que no va literal, sumala al documento con el porqué.
+4. El markup (`src/views/HomePage.astro`) sólo lee de `src/data/`.
+5. SEO: si cambia el hero o las preguntas, revisá `<title>`, la meta description y el JSON-LD `FAQPage` (en los dos idiomas).
+6. Cerrá con `self-review-checklist`.
 
 ## Checklist de contenido
 
@@ -107,4 +109,5 @@ Si un texto no entra, se recorta la idea, no la letra.
 - [ ] Presupuesto de texto respetado.
 - [ ] "VigIA BioEstrés" en títulos, SEO y cierre.
 - [ ] Copy en `src/data/`, no en el markup.
+- [ ] El cambio está también en `vigia.en.js`, adaptado según `TRADUCCION_EN.md` y con las mismas afirmaciones.
 - [ ] `ESTRUCTURA_LANDING.md` refleja lo implementado.

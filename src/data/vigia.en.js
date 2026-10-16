@@ -1,0 +1,407 @@
+// Contenido en inglés: mismas claves que src/data/vigia.js (español, la
+// fuente). Es una adaptación, no una traducción palabra por palabra: cada
+// término y frase está explicado en doc/landing/TRADUCCION_EN.md (glosario y
+// reglas). En resumen:
+// - Inglés de agronegocios internacional (ortografía de EE. UU.), unidades
+//   métricas.
+// - "lote" → field, "ambiente" → management zone, "agua útil" →
+//   plant-available water, "bioinsumo" → biostimulant (estrés abiótico; nunca
+//   "biologicals", que incluye control de plagas), "secano" → rainfed,
+//   "cultivos de servicio" → cover crops, "DPV" → VPD, "rinde" → yield.
+// - Las mismas afirmaciones que en español (skill vigia-landing-structure):
+//   sin IA, satélite ni estrés biótico; acciones genéricas (bioestimulante o
+//   riego).
+
+import { buildWhatsAppUrl } from './social';
+import { HA_TOTAL, GRANO_T, CO2_DESTACADO, formateador, filasImpacto } from './impactoDatos';
+import imgEstres from '../assets/quehace/estres.webp';
+import imgSiembra from '../assets/quehace/siembra.webp';
+import imgAgua from '../assets/quehace/agua.webp';
+import imgBioinsumos from '../assets/quehace/bioinsumos.webp';
+
+// La marca no se traduce (ver TRADUCCION_EN.md, "Marca").
+export const MARCA = 'VigIA BioEstrés';
+
+// El equipo atiende en español: la nota lo aclara debajo del botón del
+// cierre y en el botón flotante (decisión del usuario, TRADUCCION_EN.md).
+export const CTA = {
+  texto: 'Contact us to get started with VigIA',
+  mensajeWhatsApp: `Hi, I'd like to get started with ${MARCA}`,
+  nota: 'We are based in Argentina and our team replies in Spanish.',
+};
+
+export const WHATSAPP_URL = buildWhatsAppUrl("Hi, I'd like more information about VigIA");
+
+export const SEO = {
+  titulo: MARCA,
+  descripcion:
+    'Water and heat stress alerts for every management zone, with days of lead time to apply a biostimulant or irrigate. On the platform and on WhatsApp.',
+};
+
+// 1. Hero
+export const HERO = {
+  etiqueta: 'Water and heat stress',
+  // "Pérdida" se concreta como yield loss: "loss" solo queda vago en inglés.
+  titulo: 'Catch crop stress before it turns into yield loss',
+  bajada: `${MARCA} combines weather, the soil water balance and soil data for every management zone, and alerts you days before stress shows up in the field. For growers and agronomists who make data-driven decisions.`,
+  puntos: [
+    { id: 'siembra', titulo: 'From pre-planting' },
+    { id: 'ambiente', titulo: 'By management zone' },
+    { id: 'whatsapp', titulo: 'WhatsApp alerts' },
+  ],
+};
+
+// 2. El problema
+export const PROBLEMA = {
+  etiqueta: 'The problem',
+  titulo: 'By the time the crop shows stress, the yield is already lost',
+  bajada: "When you see it in the field, you're reacting too late and the damage is done.",
+  razones: [
+    {
+      id: 'sintoma',
+      titulo: 'Symptoms show up too late for biostimulants',
+      // "La hoja se enrolla": leaf rolling es el síntoma que se usa en inglés.
+      texto: 'Once leaves start rolling, yield is already compromised and a biostimulant does little to protect it.',
+    },
+    {
+      id: 'pronostico',
+      titulo: "A regional forecast doesn't know your field",
+      texto: "It can't tell how much water is left in your soil or what stage your crop is at.",
+    },
+  ],
+};
+
+// 3. Qué hace VigIA
+export const QUE_HACE = {
+  etiqueta: 'What VigIA does',
+  // "Campaña" → season (growing season); "campaign" no se usa en el agro.
+  titulo: `${MARCA} watches for stress all season long`,
+  bajada:
+    'It tracks every management zone from before planting to the end of the season, and tells you when to save water and when to apply a biostimulant.',
+  puntos: [
+    {
+      id: 'picos',
+      titulo: 'Spots stress peaks',
+      texto: 'Finds water and heat stress peaks in every management zone and suggests what to do about each one.',
+      imagen: imgEstres,
+      alt: 'Soybean leaves starting to fold under the strong midday sun',
+    },
+    {
+      id: 'siembra',
+      titulo: 'From pre-planting',
+      texto: 'Tracks soil water before you plant and follows the whole season, not just the day of the alert.',
+      imagen: imgSiembra,
+      alt: 'Planter entering a fallow field with crop residue at dawn',
+    },
+    {
+      id: 'agua',
+      titulo: 'Smarter water use',
+      texto: 'Know how much plant-available water each management zone has, and irrigate only when it is needed.',
+      imagen: imgAgua,
+      alt: 'Center pivot irrigating a soybean field at sunset',
+    },
+    {
+      id: 'bioinsumo',
+      titulo: 'Built for biostimulants',
+      texto: 'Every alert suggests a biostimulant or irrigation at the moment it protects the crop the most.',
+      imagen: imgBioinsumos,
+      alt: 'Fine spray droplets on soybean leaves at dawn',
+    },
+  ],
+};
+
+// 4. La solución
+export const COMO_FUNCIONA = {
+  etiqueta: 'The solution',
+  titulo: 'Alerts in time to act',
+  bajada:
+    'VigIA tracks every management zone, every day. When stress is coming, it alerts you with enough lead time to apply a biostimulant or irrigate.',
+  canales: [
+    {
+      id: 'whatsapp',
+      titulo: 'On WhatsApp',
+      texto: 'The alert reaches your phone with a suggested action, no need to log in anywhere.',
+    },
+    {
+      id: 'plataforma',
+      titulo: 'On the platform',
+      // DPV → VPD (vapor pressure deficit), la sigla que usa el inglés.
+      texto: 'The field dashboard, with the water balance and VPD behind every alert.',
+    },
+  ],
+  alertas: [
+    {
+      id: 'hidrico',
+      tipo: 'Water stress',
+      momento: 'With lead time',
+      titulo: 'A water shortage is coming',
+      // "Bioinsumo hídrico": bioestimulante para estrés por sequía.
+      accion: 'Apply a drought-stress biostimulant or irrigate.',
+    },
+    {
+      id: 'termico',
+      tipo: 'Heat stress',
+      momento: 'VPD above threshold',
+      // "El aire seca a la planta": la idea en inglés es la demanda del aire.
+      titulo: 'Dry air pulls water from the plant',
+      accion: 'Apply a heat-stress biostimulant.',
+    },
+    {
+      id: 'combinado',
+      tipo: 'Combined stress',
+      momento: 'Same day',
+      titulo: 'Heat and drought at once',
+      accion: 'Act that day: biostimulant or irrigation.',
+    },
+    {
+      id: 'critico',
+      tipo: 'Critical stage',
+      momento: '14 days ahead',
+      // "La etapa que define el rinde": critical period / yield-determining.
+      titulo: 'The yield-defining stage is coming',
+      accion: 'Apply a preventive biostimulant before that stage.',
+    },
+  ],
+  tituloAlertas: 'What VigIA alerts you to',
+  tituloPasos: 'How it works',
+  pasos: [
+    // "Se cargan tus lotes": voz pasiva neutral, igual que en español
+    // (pregunta abierta 1: quién hace el alta).
+    { id: 'lotes', titulo: 'Your fields are set up', texto: 'Management zones, soil and crop. Weather data connects automatically.' },
+    { id: 'calculo', titulo: 'Daily calculations', texto: 'Water balance and VPD against your crop thresholds.' },
+    { id: 'alerta', titulo: 'Timely alerts', texto: 'Log rainfall and irrigation, and the calculation adjusts.' },
+  ],
+  mensaje: {
+    alerta: 'Water stress in 14 days',
+    lote: 'Field 12 · Zone 2',
+    accion: 'Plan irrigation or a biostimulant.',
+    hora: '07:30',
+    resuelta: 'Resolved in time',
+  },
+  modulos: [
+    {
+      id: 'servicio',
+      // "Cultivos de servicio" → cover crops; "secado" → termination.
+      pregunta: 'Growing cover crops?',
+      texto: 'VigIA also tracks their water use against fallow and tells you when to terminate them.',
+      enlace: { texto: 'Learn about cover crops', href: null },
+    },
+    {
+      id: 'herbicidas',
+      pregunta: 'Used residual herbicides?',
+      texto: "With RindePlus's herbicide carryover tool, you know when it is safe to plant the next crop.",
+      enlace: { texto: 'Learn about herbicide carryover', href: null },
+    },
+  ],
+};
+
+// 5. Frase destacada. Misma lógica de colores: *verde* (a tiempo), _rojo_
+// (tarde).
+export const FRASE = ['Get the biostimulant on *before* stress hits,', 'not _after the damage is done._'];
+
+// 6. Impacto. Mismos números que en español (impactoDatos.js), con formato
+// en inglés (20,000).
+const fmt = formateador('en-US');
+const FILAS = filasImpacto(fmt, { maiz: 'Corn', soja: 'Soybean', trigo: 'Wheat' }, 'Total');
+
+export const IMPACTO = {
+  etiqueta: 'Impact',
+  titulo: 'More grain, more carbon in the soil',
+  bajada: 'Results from five consecutive seasons in corn, soybean and wheat fields.',
+  indicadores: [
+    { id: 'hectareas', valor: `+${fmt(HA_TOTAL)}`, unidad: 'ha', texto: 'monitored' },
+    { id: 'efectividad', valor: '96', unidad: '%', texto: 'biostimulant response effectiveness' },
+    {
+      id: 'grano',
+      valor: `+${fmt(GRANO_T)}`,
+      unidad: 't',
+      // "Grano recuperado": yield que se protegió, no grano "recuperado"
+      // de algún lado.
+      texto: 'of grain yield protected',
+      tabla: {
+        titulo: 'Yield protected by crop',
+        columnas: ['Crop', 'Hectares', 'kg/ha', 'Total'],
+        filas: FILAS.grano,
+        nota: 'With the same inputs, field operations and costs, you protect the yield you have already invested in.',
+      },
+    },
+    {
+      id: 'carbono',
+      valor: `~${fmt(CO2_DESTACADO)}`,
+      unidad: 't',
+      texto: 'of CO₂ stored in the soil',
+      tabla: {
+        titulo: 'Carbon captured by crop (t CO₂)',
+        columnas: ['Crop', 'Fixed', 'Returned to soil', 'Stays stable'],
+        filas: FILAS.carbono,
+        nota: 'Equivalent to offsetting the emissions of 650 to 900 cars a year. The carbon that stays comes from crop residue and roots, and roots provide the most stable share.',
+      },
+    },
+  ],
+  pista: 'Tap an indicator to see the details',
+  cerrar: 'Close details',
+};
+
+// 7. Sobre nosotros
+export const NOSOTROS = {
+  etiqueta: 'About us',
+  titulo: `The people behind ${MARCA}`,
+  bajada: 'A team that brings together ag technology, agronomic advice and biostimulants.',
+};
+
+// 8. Clientes
+export const CLIENTES = { titulo: 'Trusted by' };
+
+// 9. Preguntas frecuentes
+export const PREGUNTAS = {
+  etiqueta: 'FAQ',
+  titulo: 'Common questions',
+  items: [
+    {
+      pregunta: 'Do I need sensors or weather stations in the field?',
+      respuesta:
+        'No. VigIA pulls weather data for the coordinates of each field. If you measure rainfall or soil water, you can log it and the calculation adjusts.',
+    },
+    {
+      pregunta: 'What do I need to enter?',
+      respuesta:
+        'At the start, your fields, management zones and soil are set up. After that, you just log rainfall and irrigation as they happen.',
+    },
+    {
+      pregunta: 'Which crops does it cover?',
+      // Grupo de madurez → maturity group; centeno/cebada/vicia → cereal
+      // rye, barley y vetch.
+      respuesta:
+        'The main season crops (soybean development is adjusted for latitude and maturity group) and cover crops: cereal rye, barley and vetch.',
+    },
+    {
+      pregunta: 'How do I get the alerts?',
+      respuesta: 'On the platform, in each field dashboard, and on WhatsApp, without having to log in.',
+    },
+    {
+      // Secano → rainfed (más internacional que el "dryland" de EE. UU.).
+      pregunta: 'Does it work in rainfed fields?',
+      respuesta:
+        'Yes. In rainfed fields it alerts you in time to apply a biostimulant. Under irrigation, it also builds a monthly irrigation plan with its cost.',
+    },
+  ],
+};
+
+// 10. Cierre
+export const CIERRE = {
+  titulo: 'The next yield loss is already building in one of your fields. Find it first.',
+  texto: `Book a 20-minute demo and we'll show you ${MARCA} running on your own fields, with data from your current season.`,
+};
+
+export const EDUCACION = {
+  etiqueta: 'Learn',
+  titulo: 'Learn',
+  bajada: `We are preparing content on water and heat stress, biostimulants and water use, to help you get more out of ${MARCA}.`,
+  volver: 'Back to home',
+};
+
+export const PRECIOS = {
+  titulo: 'Pricing',
+  bajada: `We are defining the ${MARCA} plans. Get in touch and we'll tell you more.`,
+  boton: 'Ask about pricing',
+  mensajeWhatsApp: `Hi, I'd like to know the pricing for ${MARCA}`,
+};
+
+export const FOOTER = {
+  contacto: { titulo: 'Contact' },
+  rindeplus: {
+    titulo: 'Rinde Plus',
+    texto: 'Looking for more specialized services for your operation? Rinde Plus offers other agtech solutions for farming.',
+    enlace: 'Visit Rinde Plus',
+    href: 'https://rindeplus.com',
+  },
+  ayuda: {
+    titulo: 'Help',
+    enlaces: [
+      { texto: 'FAQ', href: '/en/#preguntas', externo: false },
+      { texto: 'Message us on WhatsApp', href: WHATSAPP_URL, externo: true },
+    ],
+  },
+  // Las legales sólo existen en español: el enlace lo aclara.
+  legales: [
+    { texto: 'Privacy policy (Spanish)', href: '/privacidad' },
+    { texto: 'Terms and conditions (Spanish)', href: '/terminos' },
+  ],
+  legalesLabel: 'Legal',
+  pie: 'All rights reserved.',
+};
+
+export const UI = {
+  saltar: 'Skip to content',
+  inicio: 'home',
+  menu: [
+    { label: 'How it works', href: '/en/#como-funciona' },
+    { label: 'Impact', href: '/en/#impacto' },
+    { label: 'About us', href: '/en/#nosotros' },
+    { label: 'Contact', href: '/en/#contacto' },
+    { label: 'Learn', href: '/en/educacion' },
+  ],
+  header: {
+    idioma: 'Language',
+    modoClaro: 'Light mode',
+    modoOscuro: 'Dark mode',
+    activarClaro: 'Switch to light mode',
+    activarOscuro: 'Switch to dark mode',
+    cambiarTema: 'Toggle light and dark mode',
+    whatsapp: 'Message us on WhatsApp',
+    ingresar: 'Log in',
+    ingresarLabel: 'Log in to the platform',
+    abrirMenu: 'Open menu',
+    cerrarMenu: 'Close menu',
+  },
+  widget: {
+    saludo: 'Hi',
+    saludoLabel: 'wave',
+    pregunta: 'How can we help?',
+    boton: 'Message us on WhatsApp',
+    nota: 'Our team replies in Spanish.',
+  },
+  graficos: {
+    conVigia: {
+      titulo: 'Soil water · Field 12',
+      descripcion:
+        'Plant-available water drops day by day. The forecast shows it will cross the crop threshold in 14 days, and VigIA sends the alert ahead of time.',
+      pronostico: 'Forecast',
+      umbral: 'Crop threshold',
+      aguaUtil: 'Available water',
+      hoy: 'Today',
+      porWhatsApp: 'Via WhatsApp',
+      alertaEnviada: 'Alert sent',
+      alerta: 'Water stress in 14 days',
+    },
+    sinVigia: {
+      titulo: 'Soil water · without VigIA',
+      descripcion:
+        'With no forecast or alerts, plant-available water crosses the crop threshold unnoticed. The stress is spotted in the field six days later.',
+      umbral: 'Crop threshold',
+      aguaUtil: 'Available water',
+      rindePerdido: 'Yield lost',
+      loVesACampo: 'Seen in the field',
+      tarde: 'Seen in the field 6 days late',
+      tardeTexto: 'Too late for the biostimulant to help.',
+    },
+  },
+  chat: {
+    label: 'Example of a VigIA alert on WhatsApp',
+    estado: 'Alerts for your fields',
+    escribiendo: 'typing…',
+    hoy: 'Today',
+    mensaje: 'Message',
+  },
+  videos: {
+    problema: 'No alert · damage shows in the field',
+    resolucion: 'With the alert · applied in time',
+  },
+  soloEspanol: 'Spanish only',
+};
+
+export const NO_ENCONTRADA = {
+  titulo: 'Page not found',
+  texto: "The page you're looking for doesn't exist.",
+  volver: 'Back to home',
+};

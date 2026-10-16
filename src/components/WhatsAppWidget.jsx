@@ -3,7 +3,6 @@ import { PiX } from 'react-icons/pi';
 // Logo oficial de WhatsApp (Simple Icons): el de Phosphor es una versión a
 // línea fina que no se reconoce bien sobre el botón verde.
 import { SiWhatsapp } from 'react-icons/si';
-import { WHATSAPP_URL } from '../data/social';
 import './WhatsAppWidget.css';
 
 export const OPEN_WHATSAPP_EVENT = 'vg:open-whatsapp';
@@ -15,7 +14,10 @@ export function openWhatsApp() {
   window.dispatchEvent(new CustomEvent(OPEN_WHATSAPP_EVENT));
 }
 
-const WhatsAppWidget = () => {
+// Textos y URL llegan por props desde BaseLayout, en el idioma de la página
+// (UI.widget y WHATSAPP_URL de src/data/vigia.js o vigia.en.js). `nota`
+// aclara en inglés que el equipo responde en español.
+const WhatsAppWidget = ({ textos, whatsappUrl }) => {
   const [open, setOpen] = useState(false);
   const popupRef = useRef(null);
 
@@ -55,17 +57,18 @@ const WhatsAppWidget = () => {
 
         <div className="wa-widget__panel">
           <p className="wa-widget__greeting">
-            Hola <span role="img" aria-label="saludo">👋</span>
+            {textos.saludo} <span role="img" aria-label={textos.saludoLabel}>👋</span>
             <br />
-            ¿En qué podemos ayudarte?
+            {textos.pregunta}
           </p>
+          {textos.nota && <p className="wa-widget__nota">{textos.nota}</p>}
           <a
-            href={WHATSAPP_URL}
+            href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="wa-widget__send"
           >
-            Escribinos por WhatsApp
+            {textos.boton}
           </a>
         </div>
       </div>

@@ -1,11 +1,14 @@
-// Contenido de la home, un objeto por sección (ver doc/landing/ESTRUCTURA_LANDING.md,
-// versión 2). Cada afirmación tiene respaldo en doc/landing/MODULO_VIGIA.md §10:
+// Contenido en español, un objeto por sección (ver doc/landing/ESTRUCTURA_LANDING.md,
+// versión 2). La versión en inglés es src/data/vigia.en.js, con las mismas
+// claves: si agregás o cambiás un texto acá, hacelo también allá (reglas en
+// doc/landing/TRADUCCION_EN.md). Cada afirmación tiene respaldo en doc/landing/MODULO_VIGIA.md §10:
 // balance hídrico FAO-56 por ambiente, DPV contra umbrales por cultivo,
 // pronóstico a 14 días y las alertas de alertEngine.ts.
 // Reglas (skill vigia-landing-structure): sin IA, satélite, estrés biótico ni
 // Herbicidas; acciones genéricas (bioinsumo o riego), sin productos ni marcas.
 
-import { WHATSAPP_URL } from './social';
+import { buildWhatsAppUrl } from './social';
+import { HA_TOTAL, GRANO_T, CO2_DESTACADO, formateador, filasImpacto } from './impactoDatos';
 import imgEstres from '../assets/quehace/estres.webp';
 import imgSiembra from '../assets/quehace/siembra.webp';
 import imgAgua from '../assets/quehace/agua.webp';
@@ -15,10 +18,15 @@ import imgBioinsumos from '../assets/quehace/bioinsumos.webp';
 export const MARCA = 'VigIA BioEstrés';
 
 // CTA único de la página: mismo texto en el hero y en el cierre.
+// `nota`: aclaración debajo del botón del cierre (vacía en español).
 export const CTA = {
   texto: 'Contactanos para empezar a usar VigIA',
   mensajeWhatsApp: `Hola, quiero empezar a usar ${MARCA}`,
+  nota: '',
 };
+
+// WhatsApp general (header, footer y botón flotante).
+export const WHATSAPP_URL = buildWhatsAppUrl('Hola, quiero más información sobre VigIA');
 
 export const SEO = {
   titulo: MARCA,
@@ -165,6 +173,9 @@ export const COMO_FUNCIONA = {
       accion: 'Aplicá el bioinsumo preventivo antes de la etapa.',
     },
   ],
+  // Subtítulos de los dos bloques de detalle.
+  tituloAlertas: 'Qué te avisa VigIA',
+  tituloPasos: 'Cómo lo hace',
   // Cómo lo hace: tres pasos cortos. Paso 1 con redacción neutral ("se
   // cargan") hasta confirmar quién hace el alta de lotes (pregunta abierta 1
   // de ESTRUCTURA_LANDING.md).
@@ -210,26 +221,10 @@ export const COMO_FUNCIONA = {
 // _rojo_ (tarde).
 export const FRASE = ['Que el bioinsumo llegue *antes* que el estrés,', 'no _después del daño._'];
 
-// 6. Impacto: resultados medidos en campo (decisiones 19, 25, 32 y 34 de ESTRUCTURA_LANDING.md).
-// Datos del informe técnico: escenario base de 20.000 ha, cinco campañas
-// continuas. Son resultados de campo, no del motor. Los totales se calculan
-// a partir de los cultivos, así no hay dos números que puedan desparejarse.
-// CO₂ en t: fijado por fotosíntesis (toda la biomasa extra), el que vuelve
-// al suelo con rastrojo y raíces, y el rango que queda estable.
-const CULTIVOS_IMPACTO = [
-  { id: 'maiz', nombre: 'Maíz', kgHa: 740, hectareas: 8000, co2: { fijado: 20378, suelo: 12026, estable: [1750, 2540] } },
-  { id: 'soja', nombre: 'Soja', kgHa: 230, hectareas: 7000, co2: { fijado: 6836, suelo: 4538, estable: [620, 900] } },
-  { id: 'trigo', nombre: 'Trigo', kgHa: 230, hectareas: 5000, co2: { fijado: 4818, suelo: 3186, estable: [460, 660] } },
-];
-
-const fmt = (n) => new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 }).format(n);
-const suma = (f) => CULTIVOS_IMPACTO.reduce((t, c) => t + f(c), 0);
-const HA_TOTAL = suma((c) => c.hectareas); // 20.000
-const GRANO_T = suma((c) => (c.kgHa * c.hectareas) / 1000); // 8.680
-const CO2_FIJADO = suma((c) => c.co2.fijado); // 32.032 → "~32.000"
-const CO2_SUELO = suma((c) => c.co2.suelo); // 19.750
-// Rango estable del informe (2.800 a 4.100); la suma de mínimos da 2.830.
-const CO2_ESTABLE = { min: 2800, max: 4100 };
+// 6. Impacto: resultados medidos en campo. Los números están en
+// src/data/impactoDatos.js (compartidos con la versión en inglés).
+const fmt = formateador('es-AR');
+const FILAS = filasImpacto(fmt, { maiz: 'Maíz', soja: 'Soja', trigo: 'Trigo' }, 'Total');
 
 export const IMPACTO = {
   etiqueta: 'Impacto',
@@ -238,8 +233,6 @@ export const IMPACTO = {
 
   // Cuatro indicadores grandes con una línea corta debajo. Los dos últimos
   // abren su tabla por cultivo (un panel centrado debajo, de a uno).
-  // PENDIENTE: confirmar "~3.300 t" de carbono; el informe da un rango
-  // estable de 2.800 a 4.100 t (punto medio 3.450).
   indicadores: [
     { id: 'hectareas', valor: `+${fmt(HA_TOTAL)}`, unidad: 'ha', texto: 'monitoreadas' },
     { id: 'efectividad', valor: '96', unidad: '%', texto: 'de efectividad en la respuesta del bioinsumo' },
@@ -251,30 +244,19 @@ export const IMPACTO = {
       tabla: {
         titulo: 'Recupero de rinde por cultivo',
         columnas: ['Cultivo', 'Hectáreas', 'kg/ha', 'Total'],
-        filas: [
-          ...CULTIVOS_IMPACTO.map((c) => [c.nombre, fmt(c.hectareas), fmt(c.kgHa), `${fmt((c.kgHa * c.hectareas) / 1000)} t`]),
-          ['Total', fmt(HA_TOTAL), '', `${fmt(GRANO_T)} t`],
-        ],
+        filas: FILAS.grano,
         nota: 'Con los mismos insumos, labores y costos, protegés el rinde que ya invertiste.',
       },
     },
     {
       id: 'carbono',
-      valor: '~3.300',
+      valor: `~${fmt(CO2_DESTACADO)}`,
       unidad: 't',
       texto: 'de CO₂ capturadas en el suelo',
       tabla: {
         titulo: 'Carbono capturado por cultivo (t CO₂)',
         columnas: ['Cultivo', 'Fijado', 'Vuelve al suelo', 'Queda estable'],
-        filas: [
-          ...CULTIVOS_IMPACTO.map((c) => [
-            c.nombre,
-            fmt(c.co2.fijado),
-            fmt(c.co2.suelo),
-            `${fmt(c.co2.estable[0])}–${fmt(c.co2.estable[1])}`,
-          ]),
-          ['Total', `~${fmt(Math.round(CO2_FIJADO / 1000) * 1000)}`, `~${fmt(CO2_SUELO)}`, `${fmt(CO2_ESTABLE.min)}–${fmt(CO2_ESTABLE.max)}`],
-        ],
+        filas: FILAS.carbono,
         // El grano se cosecha y su carbono vuelve a la atmósfera; lo que
         // puede quedar es el del rastrojo y las raíces.
         nota: 'Equivale a neutralizar las emisiones de 650 a 900 autos por año. El carbono que queda es el del rastrojo y las raíces; las raíces aportan el más estable.',
@@ -294,6 +276,9 @@ export const NOSOTROS = {
   titulo: `Las personas detrás de ${MARCA}`,
   bajada: 'Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos.',
 };
+
+// 8. Clientes (el carrusel está en src/data/clientes.js).
+export const CLIENTES = { titulo: 'Confían en nosotros' };
 
 // 9. Preguntas frecuentes (también van como JSON-LD FAQPage).
 export const PREGUNTAS = {
@@ -334,13 +319,22 @@ export const CIERRE = {
   texto: `Agendá una demo de 20 minutos y te mostramos ${MARCA} funcionando sobre tus lotes, con datos de tu campaña actual.`,
 };
 
-// Página /educacion (src/pages/educacion.astro), enlazada al final del menú.
+// Página /educacion (src/views/EducacionPage.astro), enlazada al final del menú.
 // PENDIENTE: contenido definitivo. Por ahora, una página provisoria.
 export const EDUCACION = {
   etiqueta: 'Educación',
   titulo: 'Educación',
   bajada: `Estamos preparando contenidos sobre estrés hídrico y térmico, bioinsumos y uso del agua, para sacarle más provecho a ${MARCA}.`,
   volver: 'Volver al inicio',
+};
+
+// Página /pricing (src/views/PricingPage.astro). PENDIENTE: el modelo de
+// precios propio de VigIA.
+export const PRECIOS = {
+  titulo: 'Precios',
+  bajada: `Estamos definiendo los planes de ${MARCA}. Escribinos y te contamos.`,
+  boton: 'Consultar',
+  mensajeWhatsApp: `Hola, quiero conocer los precios de ${MARCA}`,
 };
 
 // Footer (src/components/Footer.astro). No repite el menú del header: suma
@@ -366,5 +360,88 @@ export const FOOTER = {
     { texto: 'Política de privacidad', href: '/privacidad' },
     { texto: 'Términos y condiciones', href: '/terminos' },
   ],
+  legalesLabel: 'Legales',
   pie: 'Todos los derechos reservados.',
+};
+
+// Textos de la interfaz que no son de una sección: header, botón de
+// WhatsApp, gráficos, chat de ejemplo y rótulos de los videos.
+export const UI = {
+  saltar: 'Saltar al contenido',
+  inicio: 'inicio',
+  menu: [
+    { label: 'Cómo funciona', href: '/#como-funciona' },
+    { label: 'Impacto', href: '/#impacto' },
+    { label: 'Nosotros', href: '/#nosotros' },
+    { label: 'Contacto', href: '/#contacto' },
+    // Página propia (no una sección de la home): va al final.
+    { label: 'Educación', href: '/educacion' },
+  ],
+  header: {
+    idioma: 'Idioma',
+    modoClaro: 'Modo claro',
+    modoOscuro: 'Modo oscuro',
+    activarClaro: 'Activar modo claro',
+    activarOscuro: 'Activar modo oscuro',
+    cambiarTema: 'Cambiar entre modo claro y oscuro',
+    whatsapp: 'Escribinos por WhatsApp',
+    ingresar: 'Ingresar',
+    ingresarLabel: 'Ingresar a la plataforma',
+    abrirMenu: 'Abrir menú',
+    cerrarMenu: 'Cerrar menú',
+  },
+  widget: {
+    saludo: 'Hola',
+    saludoLabel: 'saludo',
+    pregunta: '¿En qué podemos ayudarte?',
+    boton: 'Escribinos por WhatsApp',
+    nota: '',
+  },
+  graficos: {
+    conVigia: {
+      titulo: 'Agua del suelo · Lote 12',
+      descripcion:
+        'El agua útil del suelo baja día a día. El pronóstico muestra que va a cruzar el umbral del cultivo en 14 días, y VigIA envía la alerta antes.',
+      pronostico: 'Pronóstico',
+      umbral: 'Umbral del cultivo',
+      aguaUtil: 'Agua útil',
+      hoy: 'Hoy',
+      porWhatsApp: 'Por WhatsApp',
+      alertaEnviada: 'Alerta enviada',
+      alerta: 'Estrés hídrico en 14 días',
+    },
+    sinVigia: {
+      titulo: 'Agua del suelo · sin VigIA',
+      descripcion:
+        'Sin pronóstico ni alertas, el agua útil cruza el umbral del cultivo sin que nadie avise. El estrés se detecta a campo seis días después.',
+      umbral: 'Umbral del cultivo',
+      aguaUtil: 'Agua útil',
+      rindePerdido: 'Rinde perdido',
+      loVesACampo: 'Lo ves a campo',
+      tarde: 'Se ve a campo 6 días tarde',
+      tardeTexto: 'El bioinsumo ya no llega a tiempo.',
+    },
+  },
+  chat: {
+    label: 'Ejemplo de alerta de VigIA por WhatsApp',
+    estado: 'Alertas de tus lotes',
+    escribiendo: 'escribiendo…',
+    hoy: 'Hoy',
+    mensaje: 'Mensaje',
+  },
+  // Rótulo de capítulo sobre cada video (MediaStory).
+  videos: {
+    problema: 'Sin aviso · el daño se ve a campo',
+    resolucion: 'Con el aviso · se aplica a tiempo',
+  },
+  // Aviso junto a enlaces a páginas que no existen en este idioma (vacío
+  // en español: todas existen).
+  soloEspanol: '',
+};
+
+// Página 404 (única: GitHub Pages sirve un solo 404.html).
+export const NO_ENCONTRADA = {
+  titulo: 'Página no encontrada',
+  texto: 'La página que buscás no existe.',
+  volver: 'Volver al inicio',
 };

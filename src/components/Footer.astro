@@ -2,21 +2,25 @@
 // Footer estático (sin JS en el cliente). Cuatro columnas a la misma altura:
 // la marca (logo monocromo y redes, a la izquierda para que no las tape el
 // WhatsApp flotante), contacto, Rinde Plus y ayuda; no repiten el menú del
-// header. Abajo, los enlaces legales y el copyright. Textos en
-// FOOTER (src/data/vigia.js), canales en src/data/social.js.
+// header. Abajo, los enlaces legales y el copyright. Textos en FOOTER
+// (src/data/vigia.js o vigia.en.js, según el idioma de la página), canales en
+// src/data/social.js.
 import { PiArrowUpRight, PiEnvelopeSimple, PiInstagramLogo, PiWhatsappLogo } from 'react-icons/pi';
 import logo from '../assets/vigia-biostres-logo-light.png';
 import {
   CONTACT_EMAIL,
   INSTAGRAM_URL,
   INSTAGRAM_HANDLE,
-  WHATSAPP_URL,
   WHATSAPP_DISPLAY,
   OFFICE_ADDRESS,
 } from '../data/social';
-import { FOOTER, MARCA } from '../data/vigia';
+import { contenido, idiomaDe, ruta } from '../i18n/idiomas';
 import './Footer.css';
 
+const lang = idiomaDe(Astro.currentLocale);
+const { FOOTER, MARCA, UI, WHATSAPP_URL } = contenido(lang);
+// En inglés la dirección lleva el país: el público no es sólo argentino.
+const direccion = lang === 'en' ? OFFICE_ADDRESS : 'Concejal Lorusso 762, Alta Gracia, Córdoba';
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_ADDRESS)}`;
 const year = new Date().getFullYear();
 const LOGO_ALTO = 80;
@@ -34,7 +38,7 @@ const redes = [
     <div class="rp-footer__main">
       <div class="rp-footer__marca">
         <!-- Logo monocromo en los dos temas (negro en claro, blanco en oscuro). -->
-        <a class="rp-footer__logo" href="/" aria-label={`${MARCA}, inicio`}>
+        <a class="rp-footer__logo" href={ruta(lang, '/')} aria-label={`${MARCA}, ${UI.inicio}`}>
           <img src={logo.src} alt={MARCA} width={logoAncho} height={LOGO_ALTO} loading="lazy" decoding="async" />
         </a>
 
@@ -59,7 +63,7 @@ const redes = [
         <address class="rp-footer__datos">
           <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">{WHATSAPP_DISPLAY}</a>
-          <a href={mapsUrl} target="_blank" rel="noopener noreferrer">Concejal Lorusso 762, Alta Gracia, Córdoba</a>
+          <a href={mapsUrl} target="_blank" rel="noopener noreferrer">{direccion}</a>
         </address>
       </div>
 
@@ -93,8 +97,8 @@ const redes = [
     </div>
 
     <div class="rp-footer__bottom">
-      <nav class="rp-footer__legal" aria-label="Legales">
-        {FOOTER.legales.map((l) => <a href={l.href}>{l.texto}</a>)}
+      <nav class="rp-footer__legal" aria-label={FOOTER.legalesLabel}>
+        {FOOTER.legales.map((l) => <a href={l.href} hreflang={lang === 'en' ? 'es' : undefined}>{l.texto}</a>)}
       </nav>
       <p class="rp-footer__copyright">
         © {year} {MARCA} · {FOOTER.pie}

@@ -7,6 +7,10 @@
 // sin ella se ve el estado final, con la notificación visible.
 import { PiWhatsappLogo } from 'react-icons/pi';
 import { y, AU, BASE, UMBRAL as UMBRAL_Y, UMBRAL_Y as UMBRAL_SERIE } from '../data/balanceEjemplo';
+import { contenido, idiomaDe } from '../i18n/idiomas';
+
+// Textos en UI.graficos.conVigia (idioma de la página).
+const T = contenido(idiomaDe(Astro.currentLocale)).UI.graficos.conVigia;
 
 // Escala de tiempo propia: 18 días de historia y los 14 del pronóstico
 // (el horizonte del motor), en el mismo ancho que el gráfico del problema.
@@ -42,15 +46,12 @@ const calloutY = ((LINEA_ARRIBA - VB.y) / VB.h) * 100;
 
 <figure class="vg-chart vg-chart--hero vg-chart--alto">
   <figcaption class="vg-chart__head">
-    <span class="vg-chart__title">Agua del suelo · Lote 12</span>
+    <span class="vg-chart__title">{T.titulo}</span>
   </figcaption>
 
   <div class="vg-chart__plot">
   <svg viewBox={`${VB.x} ${VB.y} ${VB.w} ${VB.h}`} role="img" aria-labelledby="vg-chart-desc">
-    <desc id="vg-chart-desc">
-      El agua útil del suelo baja día a día. El pronóstico muestra que va a
-      cruzar el umbral del cultivo en 14 días, y VigIA envía la alerta antes.
-    </desc>
+    <desc id="vg-chart-desc">{T.descripcion}</desc>
     <defs>
       <clipPath id="vg-chart-reveal">
         <rect class="vg-chart__reveal" x="40" y="0" width="480" height={BASE + 30} />
@@ -59,13 +60,13 @@ const calloutY = ((LINEA_ARRIBA - VB.y) / VB.h) * 100;
 
     <g class="vg-chart__fc">
       <rect class="vg-chart__forecast" x={x(HOY)} y="20" width={x(AVISO) - x(HOY)} height={BASE - 20} />
-      <text class="vg-chart__label" x={(x(HOY) + x(AVISO)) / 2} y={BASE - 12} text-anchor="middle">Pronóstico</text>
+      <text class="vg-chart__label" x={(x(HOY) + x(AVISO)) / 2} y={BASE - 12} text-anchor="middle">{T.pronostico}</text>
     </g>
 
     <line class="vg-chart__axis" x1="40" y1={BASE} x2="520" y2={BASE} />
     <line class="vg-chart__umbral" x1="40" y1={UMBRAL_Y} x2="520" y2={UMBRAL_Y} />
-    <text class="vg-chart__label vg-chart__label--umbral" x="44" y={UMBRAL_Y + 32}>Umbral del cultivo</text>
-    <text class="vg-chart__label vg-chart__label--au" x="44" y={y(70)}>Agua útil</text>
+    <text class="vg-chart__label vg-chart__label--umbral" x="44" y={UMBRAL_Y + 32}>{T.umbral}</text>
+    <text class="vg-chart__label vg-chart__label--au" x="44" y={y(70)}>{T.aguaUtil}</text>
 
     <g class="vg-chart__data" clip-path="url(#vg-chart-reveal)">
       <path class="vg-chart__au" d={path(pasado)} />
@@ -74,7 +75,7 @@ const calloutY = ((LINEA_ARRIBA - VB.y) / VB.h) * 100;
       <circle class="vg-chart__dot" cx={x(HOY)} cy={HOY_Y} r="5" />
     </g>
 
-    <text class="vg-chart__label vg-chart__label--strong" x={x(HOY)} y={BASE + 32} text-anchor="middle">Hoy</text>
+    <text class="vg-chart__label vg-chart__label--strong" x={x(HOY)} y={BASE + 32} text-anchor="middle">{T.hoy}</text>
 
     <line class="vg-chart__leader" x1={x(HOY)} y1={LINEA_ARRIBA} x2={x(HOY)} y2={HOY_Y - 9} />
 
@@ -89,10 +90,10 @@ const calloutY = ((LINEA_ARRIBA - VB.y) / VB.h) * 100;
        El logo de WhatsApp, grande, dice por dónde llega; al lado, el texto. -->
   <div class="vg-chart__callout" style={`left: ${calloutX.toFixed(2)}%; top: ${calloutY.toFixed(2)}%`}>
     <div class="vg-chart__toast">
-      <PiWhatsappLogo className="vg-chart__toast-wa" aria-label="Por WhatsApp" />
+      <PiWhatsappLogo className="vg-chart__toast-wa" aria-label={T.porWhatsApp} />
       <span class="vg-chart__toast-text">
-        <strong>Alerta enviada</strong>
-        <span>Estrés hídrico en 14 días</span>
+        <strong>{T.alertaEnviada}</strong>
+        <span>{T.alerta}</span>
       </span>
     </div>
   </div>

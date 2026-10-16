@@ -414,6 +414,7 @@ De la versión 1 a la versión 2. Cada paso deja la página funcionando.
 | 38 | Qué hace VigIA con tarjetas | La sección abre con cuatro tarjetas con foto: los picos de estrés (lo que antes era la bajada), desde antes de la siembra, el agua y los bioinsumos. La bajada pasa a resumir todo el ciclo. Los tipos de estrés quedan debajo, en formato simple (ícono, título, texto y acción en una línea), sin barra de color. |
 | 39 | Qué te avisa y cómo lo hace, simples | Las alertas pasan a cuatro columnas sin tarjetas, al estilo de las cifras de Impacto: título "Estrés …" en negrita, frase en gris y acción en verde; sin colores por severidad ni rótulo "Qué hacer". "Cómo lo hace" pasa a línea de tiempo sin números que se dibuja de izquierda a derecha. Los dos bloques, centrados y de hasta 880 px. Los otros módulos pasan al pie de las preguntas frecuentes. |
 | 40 | Rinde Plus sin pertenencia | El footer ya no dice que VigIA BioEstrés sea parte ni "una solución" de Rinde Plus (la plataforma tiene otros socios): invita a visitar Rinde Plus por otros servicios. Las páginas legales todavía lo dicen (pregunta abierta 2). |
+| 41 | Versión en inglés | El sitio pasa a tener versión en inglés en `/en/` (home, precios y educación), con el contenido en `src/data/vigia.en.js`. Es una adaptación con glosario agronómico propio (`TRADUCCION_EN.md`), no una traducción literal. El selector del header cambia de página con un fundido y conserva la sección. Las legales quedan en español. Ver ADR 0004. |
 
 ## Preguntas abiertas
 

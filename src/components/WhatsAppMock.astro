@@ -1,7 +1,8 @@
 ---
 // Chat de WhatsApp con un aviso de VigIA. HTML + CSS (sin imagen) para que
 // siga al tema claro/oscuro con los colores de la app (tokens `--vg-wa-*`).
-// Es ilustrativo: los datos salen de COMO_FUNCIONA.mensaje en src/data/vigia.js.
+// Es ilustrativo: los datos salen de COMO_FUNCIONA.mensaje y UI.chat
+// (src/data/vigia.js o vigia.en.js, según el idioma de la página).
 // Ocupa todo el recuadro del medio (4:3, como el video), así no cambia de
 // tamaño al pasar al video. Mensaje simple: la alerta, dónde y qué hacer.
 // Animación (con `.is-playing`, la dispara MediaStory): "escribiendo…" en la
@@ -18,12 +19,13 @@ import {
   PiSmiley,
   PiVideoCamera,
 } from 'react-icons/pi';
-import { COMO_FUNCIONA } from '../data/vigia';
+import { contenido, idiomaDe } from '../i18n/idiomas';
 
+const { COMO_FUNCIONA, UI } = contenido(idiomaDe(Astro.currentLocale));
 const { lote, alerta, accion, hora, resuelta } = COMO_FUNCIONA.mensaje;
 ---
 
-<figure class="vg-phone" aria-label="Ejemplo de alerta de VigIA por WhatsApp">
+<figure class="vg-phone" aria-label={UI.chat.label}>
   <div class="vg-phone__screen">
     <div class="vg-phone__bar" aria-hidden="true">
       <PiArrowLeft className="vg-phone__back" />
@@ -31,8 +33,8 @@ const { lote, alerta, accion, hora, resuelta } = COMO_FUNCIONA.mensaje;
       <span class="vg-phone__contact">
         <strong>VigIA</strong>
         <small class="vg-phone__status">
-          <span class="vg-phone__status-idle">Alertas de tus lotes</span>
-          <span class="vg-phone__status-typing">escribiendo…</span>
+          <span class="vg-phone__status-idle">{UI.chat.estado}</span>
+          <span class="vg-phone__status-typing">{UI.chat.escribiendo}</span>
         </small>
       </span>
       <span class="vg-phone__actions">
@@ -43,7 +45,7 @@ const { lote, alerta, accion, hora, resuelta } = COMO_FUNCIONA.mensaje;
     </div>
 
     <div class="vg-phone__chat">
-      <span class="vg-phone__day" aria-hidden="true">Hoy</span>
+      <span class="vg-phone__day" aria-hidden="true">{UI.chat.hoy}</span>
       <div class="vg-phone__msgs">
         <span class="vg-phone__typing" aria-hidden="true"><i></i><i></i><i></i></span>
         <div class="vg-phone__bubble">
@@ -61,7 +63,7 @@ const { lote, alerta, accion, hora, resuelta } = COMO_FUNCIONA.mensaje;
     <div class="vg-phone__input" aria-hidden="true">
       <span class="vg-phone__field">
         <PiSmiley />
-        <span class="vg-phone__placeholder">Mensaje</span>
+        <span class="vg-phone__placeholder">{UI.chat.mensaje}</span>
         <PiPaperclip />
         <PiCamera />
       </span>
