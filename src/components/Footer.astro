@@ -1,6 +1,11 @@
 ---
-// Componente estático (sin JS en el cliente): los contactos son links reales.
-import { PiEnvelopeSimple, PiMapPin, PiWhatsappLogo, PiInstagramLogo } from 'react-icons/pi';
+// Footer estático (sin JS en el cliente). Cuatro columnas a la misma altura:
+// la marca (logo monocromo y redes, a la izquierda para que no las tape el
+// WhatsApp flotante), contacto, Rinde Plus y ayuda; no repiten el menú del
+// header. Abajo, los enlaces legales y el copyright. Textos en
+// FOOTER (src/data/vigia.js), canales en src/data/social.js.
+import { PiArrowUpRight, PiEnvelopeSimple, PiInstagramLogo, PiWhatsappLogo } from 'react-icons/pi';
+import logo from '../assets/vigia-biostres-logo-light.png';
 import {
   CONTACT_EMAIL,
   INSTAGRAM_URL,
@@ -9,62 +14,90 @@ import {
   WHATSAPP_DISPLAY,
   OFFICE_ADDRESS,
 } from '../data/social';
-import { MARCA } from '../data/vigia';
+import { FOOTER, MARCA } from '../data/vigia';
 import './Footer.css';
 
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_ADDRESS)}`;
 const year = new Date().getFullYear();
+const LOGO_ALTO = 80;
+const logoAncho = Math.round((logo.width / logo.height) * LOGO_ALTO);
+
+const redes = [
+  { icon: PiInstagramLogo, href: INSTAGRAM_URL, label: `Instagram ${INSTAGRAM_HANDLE}` },
+  { icon: PiWhatsappLogo, href: WHATSAPP_URL, label: 'WhatsApp' },
+  { icon: PiEnvelopeSimple, href: `mailto:${CONTACT_EMAIL}`, label: 'Email' },
+];
 ---
 
 <footer class="rp-footer" id="contacto">
-  <div class="rp-footer__dots"></div>
   <div class="rp-footer__inner">
-    <h3 class="rp-footer__column-title">Contacto directo</h3>
+    <div class="rp-footer__main">
+      <div class="rp-footer__marca">
+        <!-- Logo monocromo en los dos temas (negro en claro, blanco en oscuro). -->
+        <a class="rp-footer__logo" href="/" aria-label={`${MARCA}, inicio`}>
+          <img src={logo.src} alt={MARCA} width={logoAncho} height={LOGO_ALTO} loading="lazy" decoding="async" />
+        </a>
 
-    <ul class="rp-footer__contact">
-      <li>
-        <a class="rp-footer__contact-item" href={`mailto:${CONTACT_EMAIL}`}>
-          <span class="rp-footer__contact-icon rp-footer__contact-icon--blue"><PiEnvelopeSimple /></span>
-          <span class="rp-footer__contact-text">
-            <span class="rp-footer__contact-label">Email</span>
-            <span class="rp-footer__contact-value">{CONTACT_EMAIL}</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="rp-footer__contact-item" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
-          <span class="rp-footer__contact-icon rp-footer__contact-icon--instagram"><PiInstagramLogo /></span>
-          <span class="rp-footer__contact-text">
-            <span class="rp-footer__contact-label">Instagram</span>
-            <span class="rp-footer__contact-value">{INSTAGRAM_HANDLE}</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="rp-footer__contact-item" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-          <span class="rp-footer__contact-icon rp-footer__contact-icon--whatsapp"><PiWhatsappLogo /></span>
-          <span class="rp-footer__contact-text">
-            <span class="rp-footer__contact-label">WhatsApp</span>
-            <span class="rp-footer__contact-value">{WHATSAPP_DISPLAY}</span>
-          </span>
-        </a>
-      </li>
-      <li>
-        <a class="rp-footer__contact-item" href={mapsUrl} target="_blank" rel="noopener noreferrer">
-          <span class="rp-footer__contact-icon rp-footer__contact-icon--amber"><PiMapPin /></span>
-          <span class="rp-footer__contact-text">
-            <span class="rp-footer__contact-label">Oficina</span>
-            <span class="rp-footer__contact-value">Concejal Lorusso 762 · Alta Gracia</span>
-          </span>
-        </a>
-      </li>
-    </ul>
+        <ul class="rp-footer__redes">
+          {
+            redes.map((r) => {
+              const Icon = r.icon;
+              return (
+                <li>
+                  <a href={r.href} aria-label={r.label} target="_blank" rel="noopener noreferrer">
+                    <Icon aria-hidden="true" />
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
 
-    <div class="rp-footer__divider"></div>
+      <div class="rp-footer__col">
+        <h3>{FOOTER.contacto.titulo}</h3>
+        <address class="rp-footer__datos">
+          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">{WHATSAPP_DISPLAY}</a>
+          <a href={mapsUrl} target="_blank" rel="noopener noreferrer">Concejal Lorusso 762, Alta Gracia, Córdoba</a>
+        </address>
+      </div>
+
+      <div class="rp-footer__col">
+        <h3>{FOOTER.rindeplus.titulo}</h3>
+        <p>{FOOTER.rindeplus.texto}</p>
+        <a class="rp-footer__externo" href={FOOTER.rindeplus.href} target="_blank" rel="noopener noreferrer">
+          {FOOTER.rindeplus.enlace}
+          <PiArrowUpRight aria-hidden="true" />
+        </a>
+      </div>
+
+      <nav class="rp-footer__col" aria-label={FOOTER.ayuda.titulo}>
+        <h3>{FOOTER.ayuda.titulo}</h3>
+        <ul>
+          {
+            FOOTER.ayuda.enlaces.map((e) => (
+              <li>
+                <a
+                  href={e.href}
+                  target={e.externo ? '_blank' : undefined}
+                  rel={e.externo ? 'noopener noreferrer' : undefined}
+                >
+                  {e.texto}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
 
     <div class="rp-footer__bottom">
+      <nav class="rp-footer__legal" aria-label="Legales">
+        {FOOTER.legales.map((l) => <a href={l.href}>{l.texto}</a>)}
+      </nav>
       <p class="rp-footer__copyright">
-        © {year} <strong>{MARCA}</strong> · una solución de Rinde Plus. Todos los derechos reservados.
+        © {year} {MARCA} · {FOOTER.pie}
       </p>
     </div>
   </div>

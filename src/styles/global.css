@@ -77,6 +77,10 @@
   --space-700: 64px;
   --space-800: 80px;
   --space-900: 96px;
+  /* Margen lateral de la página: el mismo en todas las secciones, el header
+     y el footer, a los dos lados. Con la ventana angosta deja lugar para el
+     hilo del recorrido (que va a la izquierda del contenido). */
+  --page-gutter: var(--space-300);
 
   /* Movimiento: curva con masa (arranca rápido y asienta lento). Nunca las
      curvas por defecto del navegador. */
@@ -366,11 +370,21 @@ img {
   --vg-sev-alerta-soft: #fff8c5;
   --vg-sev-info: #1f5bff;
   --vg-sev-info-soft: #e8eeff;
-  /* Fondo de los tres módulos: muy claros, para que el hilo (más intenso)
-     siempre se vea encima. */
-  --vg-bg-seco: #f2dfbd;
-  --vg-bg-agua: #cfe9e0;
+  /* Fondo de los tres módulos: muy claros y de saturación pareja, para que
+     el hilo (más intenso) siempre se vea encima y los fundidos no salten. */
+  --vg-bg-seco: #f5e8d2;
+  --vg-bg-solucion: #dcebf6;
+  --vg-bg-agua: #dcefe8;
+  /* Fondo del body: el recorrido termina en este color para fundirse con
+     la frase destacada sin escalón. */
+  --vg-bg-pagina: var(--bg-main);
+  /* Celeste de La solución: hilo, punto 3 y etiqueta. */
+  --vg-sky: #0b7cc1;
   --vg-thread-ok: #3f8f1f;
+  /* Acento de carbono (sección Impacto): turquesa, separado del verde del
+     rinde. */
+  --vg-carbono: #0e7c86;
+
   /* Íconos verdes sin fondo: más oscuro en claro para contrastar sobre blanco. */
   --vg-icon-green: #3f8f1f;
   /* Verde de WhatsApp (botón del menú y widget flotante). */
@@ -400,9 +414,21 @@ img {
   --vg-sev-info-soft: #131d33;
   /* Tonos apagados en oscuro: tierra y verde petróleo, sin saturar. */
   --vg-bg-seco: #221c14;
+  --vg-bg-solucion: #111b25;
   --vg-bg-agua: #111f1e;
+  --vg-bg-pagina: var(--gh-canvas);
+  --vg-sky: #5cc8ff;
   --vg-thread-ok: #8fd14f;
+  --vg-carbono: #4fd1c5;
   --vg-cta: #3d6bff;
   --vg-cta-hover: #5580ff;
   --vg-icon-green: #8fd14f;
+}
+
+@media (max-width: 1260px) {
+  :root { --page-gutter: var(--space-700); }
+}
+
+@media (max-width: 680px) {
+  :root { --page-gutter: var(--space-200); }
 }

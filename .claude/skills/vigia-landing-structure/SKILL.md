@@ -30,21 +30,22 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 ## Estructura fija
 
 ```
-1. Hero · 2. El problema · 3. Cómo funciona    ← recorrido del mismo lote (.vg-journey)
-4. Frase destacada · 5. Beneficios · 6. Para quién es
-7. Clientes · 8. Preguntas frecuentes · 9. Cierre · Footer
+1. Hero · 2. El problema · 3. Qué hace VigIA · 4. La solución    ← recorrido del mismo lote (.vg-journey)
+5. Frase destacada · 6. Impacto · 7. Sobre nosotros
+8. Clientes · 9. Preguntas frecuentes · 10. Cierre · Footer
 ```
 
 | Sección | Trabajo que hace | No hace |
 |---|---|---|
 | 1. Hero | Resultado + para quién + CTA + gráfico animado. | Listar funciones. |
-| 2. El problema | Por qué el estrés se detecta tarde. Tipos de estrés. | Hablar de VigIA. |
-| 3. Cómo funciona | Tres pasos, alertas de ejemplo, canales (plataforma y WhatsApp). | Detallar fórmulas. |
-| 4. Frase destacada | Una idea en dos líneas, grande. | Llevar botón ni título. |
-| 5. Beneficios | Tres resultados, cada uno con su prueba. | Repetir los pasos. |
-| 6. Para quién es | Productores y asesores: qué gana cada uno. | Sumar perfiles sin respaldo. |
-| 8. Preguntas | Objeciones reales: sensores, carga, cultivos, canales, secano, productos, precio. | Respuestas de más de 40 palabras. |
-| 9. Cierre | Urgencia + demo de 20 minutos + el mismo CTA. | Un CTA distinto. |
+| 2. El problema | Por qué el estrés se detecta tarde. | Hablar de VigIA. |
+| 3. Qué hace VigIA | Desde antes de la siembra, los tres tipos de estrés que vigila y la acción sugerida para cada uno. | Explicar canales o pasos (eso es Cómo funciona). |
+| 4. La solución | Cómo funciona: tres pasos, alertas de ejemplo, canales (plataforma y WhatsApp). | Detallar fórmulas. |
+| 5. Frase destacada | Una idea en dos líneas, grande. | Llevar botón ni título. |
+| 6. Impacto | Datos medidos en campo: contexto, grano y carbono con desglose por cultivo, y calculadora. | Repetir lo que hace el producto. |
+| 7. Sobre nosotros | Las personas detrás del producto, con foto y logo de su empresa. | Inventar cargos o trayectorias. |
+| 9. Preguntas | Objeciones reales: sensores, carga, cultivos, canales, secano. | Respuestas de más de 40 palabras. |
+| 10. Cierre | Urgencia + demo de 20 minutos + el mismo CTA. | Un CTA distinto. |
 
 Cambiar el orden, sumar o quitar una sección es una **decisión de estructura**: se acuerda con el usuario y se registra en `ESTRUCTURA_LANDING.md` (tabla "Decisiones") antes de tocar código.
 
@@ -55,9 +56,9 @@ Cambiar el orden, sumar o quitar una sección es una **decisión de estructura**
 - Imágenes satelitales, índices espectrales (NDVI, NDRE, NDWI), drones.
 - Estrés biótico: plagas, enfermedades, fungicidas, insecticidas. Tampoco estrés nutricional.
 - Mapas, "diagnóstico", "prescripción", "manejo variable".
-- Herbicidas.
+- Herbicidas. Única excepción: el carry-over de herbicidas al pie de Cómo funciona, como módulo de RindePlus y con enlace (decisión 18).
 - Productos o marcas de insumos. Las acciones son genéricas: bioinsumo o riego.
-- Números que no salgan del motor. Sí valen: 4 días, 14 días, 210 días, USD/mm.
+- Números que no salgan del motor. Sí valen: 4 días, 14 días, 210 días, USD/mm. Excepción: los resultados medidos en campo de la sección Impacto, siempre con fuente (decisión 19).
 
 **Siempre:**
 - **VigIA BioEstrés** en títulos, SEO y cierre; "VigIA" solo cuando ya se nombró.

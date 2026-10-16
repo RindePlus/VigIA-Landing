@@ -1,181 +1,176 @@
 /* ============================================================
-   Footer — contacto directo + copyright. Tokens --gh-* (tema) y escalas
-   --text-*, --space-*, --ease-* de global.css.
+   Footer: cuatro columnas a la misma altura (marca con redes, contacto,
+   Rinde Plus y ayuda); abajo, legales y copyright centrados. Fondo
+   del tema. Tokens --gh-* y --vg-*, escalas de global.css.
    ============================================================ */
 
 .rp-footer {
-  position: relative;
-  width: 100%;
   background: var(--gh-surface);
   color: var(--gh-fg-muted);
   font-family: var(--font-body);
   border-top: 1px solid var(--gh-border);
 }
 
-.rp-footer__dots { display: none; }
-
 .rp-footer__inner {
   max-width: 1160px;
   margin: 0 auto;
-  padding: var(--space-500) var(--space-300);
+  padding: var(--space-700) var(--page-gutter) var(--space-400);
 }
 
-@media (min-width: 1024px) {
-  .rp-footer__inner { padding-block: var(--space-600); }
-}
-
-/* --- Título centrado entre dos líneas a todo el ancho (mismo estilo que
-   "Qué estrés mitiga VigIA") --- */
-.rp-footer__column-title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-300);
-  margin: 0 0 var(--space-500);
-  color: var(--gh-fg);
-  font-family: var(--font-heading);
-  font-size: var(--text-base);
-  line-height: var(--leading-base);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.rp-footer__column-title::before,
-.rp-footer__column-title::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--gh-border-strong);
-}
-
-/* --- Contactos: 1 columna → 2×2 → 4 --- */
-.rp-footer__contact {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-100);
-  margin: 0 0 var(--space-500);
-  padding: 0;
-  list-style: none;
-}
-
-@media (min-width: 768px) {
-  .rp-footer__contact {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-400) var(--space-200);
-    margin-bottom: var(--space-600);
-  }
-}
-
-@media (min-width: 1024px) {
-  .rp-footer__contact {
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-300);
-  }
-}
-
-.rp-footer__contact > li { display: flex; justify-content: center; }
-
-/* Contactos flotando: sin recuadro ni fondo; ícono grande arriba, rótulo y
-   dato centrados debajo. */
-.rp-footer__contact-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-75);
-  width: 100%;
-  padding: var(--space-100);
-  border-radius: var(--gh-radius-card);
-  color: var(--gh-fg);
-  text-align: center;
-}
-
-.rp-footer__contact-item:active {
-  transform: scale(0.98);
-}
-
-.rp-footer__contact-item:focus-visible {
-  outline: 2px solid var(--gh-accent);
-  outline-offset: 2px;
-}
-
-.rp-footer__contact-icon {
-  display: flex;
-  margin-bottom: var(--space-50);
-  color: var(--gh-accent);
-  font-size: var(--text-4xl);
-  transition: transform var(--dur-slow) var(--ease-fluid);
-}
-
-.rp-footer__contact-item:hover .rp-footer__contact-icon {
-  transform: translateY(calc(var(--space-50) * -1)) scale(1.08);
-}
-
-.rp-footer__contact-icon--whatsapp { color: var(--vg-icon-green); }
-.rp-footer__contact-icon--amber { color: var(--gh-detail-yellow-strong); }
-.rp-footer__contact-icon--instagram { color: var(--gh-detail-pink); }
-
-.rp-footer__contact-text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-25);
-  min-width: 0;
-}
-
-.rp-footer__contact-label {
-  color: var(--gh-fg-subtle);
-  font-family: var(--font-heading);
-  font-size: var(--text-xs);
-  line-height: var(--leading-xs);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.rp-footer__contact-value {
-  color: var(--gh-fg);
-  font-size: var(--text-base);
-  line-height: var(--leading-base);
-  font-weight: 500;
-  overflow-wrap: anywhere;
+.rp-footer a {
+  color: inherit;
   transition: color var(--dur-base) var(--ease-fluid);
 }
 
-.rp-footer__contact-item:hover .rp-footer__contact-value {
-  color: var(--gh-accent);
+.rp-footer a:hover { color: var(--gh-fg); }
+
+.rp-footer a:focus-visible {
+  outline: 2px solid var(--vg-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
-/* --- Barra inferior --- */
-.rp-footer__divider {
-  height: 1px;
-  margin-bottom: var(--space-300);
-  background: var(--gh-border);
+/* --- Cuatro columnas: marca | contacto | Rinde Plus | ayuda --- */
+.rp-footer__main {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr 0.9fr;
+  gap: var(--space-500) var(--space-600);
+  padding-bottom: var(--space-600);
 }
 
-.rp-footer__bottom {
-  display: flex;
-  flex-direction: column;
+.rp-footer__marca {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: var(--space-300);
+}
+
+/* Logo monocromo: negro en claro, blanco en oscuro (sin los colores de
+   marca). */
+.rp-footer__logo img {
+  display: block;
+  width: auto;
+  height: 80px;
+  filter: brightness(0);
+}
+
+[data-rp-theme="dark"] .rp-footer__logo img {
+  filter: brightness(0) invert(1);
+}
+
+.rp-footer__datos {
+  display: grid;
   gap: var(--space-75);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-style: normal;
+}
+
+.rp-footer__redes {
+  display: flex;
+  gap: var(--space-100);
+  list-style: none;
+}
+
+/* Redes en círculos con borde, monocromos; al pasar, se rellenan. */
+.rp-footer__redes a {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--gh-border-strong);
+  border-radius: 50%;
+  color: var(--gh-fg);
+  font-size: var(--text-2xl);
+  transition:
+    background-color var(--dur-base) var(--ease-fluid),
+    color var(--dur-base) var(--ease-fluid),
+    border-color var(--dur-base) var(--ease-fluid);
+}
+
+.rp-footer__redes a:hover {
+  border-color: var(--gh-fg);
+  background: var(--gh-fg);
+  color: var(--gh-surface);
+}
+
+/* Columnas: título en mayúsculas y contenido corto debajo. */
+.rp-footer__col h3 {
+  margin-bottom: var(--space-200);
+  color: var(--gh-fg);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rp-footer__col p {
+  max-width: 340px;
+  margin-bottom: var(--space-200);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  text-wrap: pretty;
+}
+
+.rp-footer__col ul {
+  display: grid;
+  gap: var(--space-75);
+  list-style: none;
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
+.rp-footer__externo {
+  display: inline-flex;
+  gap: var(--space-50);
+  align-items: center;
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 600;
+}
+
+.rp-footer .rp-footer__externo { color: var(--gh-fg); }
+
+.rp-footer__externo svg {
+  transition: transform var(--dur-base) var(--ease-fluid);
+}
+
+.rp-footer__externo:hover svg { transform: translate(2px, -2px); }
+
+/* --- Pie: legales y copyright, centrados bajo una línea fina --- */
+.rp-footer__bottom {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-100);
+  padding-top: var(--space-300);
+  border-top: 1px solid var(--gh-border);
   text-align: center;
 }
 
-@media (min-width: 640px) {
-  .rp-footer__bottom {
-    flex-direction: row;
-    justify-content: center;
-  }
+.rp-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-100) var(--space-400);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
 }
 
 .rp-footer__copyright {
   margin: 0;
-  color: var(--gh-fg-muted);
+  color: var(--gh-fg-subtle);
   font-size: var(--text-xs);
   line-height: var(--leading-xs);
 }
 
-.rp-footer__copyright strong {
-  color: var(--gh-fg);
-  font-weight: 600;
+/* Tablet: dos por fila. Celular: una columna. */
+@media (max-width: 960px) {
+  .rp-footer__main { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 560px) {
+  .rp-footer__main { grid-template-columns: 1fr; gap: var(--space-400); }
+  .rp-footer__logo img { height: 72px; }
 }
