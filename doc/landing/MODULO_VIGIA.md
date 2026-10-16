@@ -11,6 +11,8 @@
 > **Alcance del nuevo producto.** El nuevo VigIA abarca **Mitigación de Estrés** y **Cultivo de Servicio**: mitigar el estrés abiótico (hídrico y térmico) con bioinsumos o manejo (por ejemplo, riego), a partir del clima/DPV, el balance hídrico y el suelo, con alertas predictivas.
 >
 > **VigIA Herbicidas (carry-over) queda fuera del alcance.** No se migra al nuevo sistema y sigue en RindePlus. Las secciones 1 a 9 describen sólo lo que entra en el alcance. Lo de Herbicidas se documenta aparte en el [Anexo A](#anexo-a-vigia-herbicidas-fuera-del-alcance), porque comparte datos y código con Biostrés y eso condiciona la separación.
+>
+> **Landing (2026-10-16):** el equipo decidió que el carry-over de herbicidas va a ser parte de VigIA. La landing lo presenta como módulo de VigIA, sin nombrar a RindePlus (decisión 46 de `ESTRUCTURA_LANDING.md`). Este documento sigue describiendo el sistema actual.
 
 ## Índice
 
