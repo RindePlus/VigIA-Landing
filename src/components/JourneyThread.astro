@@ -1,19 +1,20 @@
 ---
-// Hilo que conecta los cuatro módulos (Hero → Problema → Lo que hace →
-// La solución). Va dentro de `.vg-journey` (ver HomePage.astro):
-// - Los puntos del hilo son los títulos con `data-vg-node` (1 a 4); el
+// Hilo que conecta los cuatro módulos (Hero → Problema → Solución → Cómo funciona)
+// y fondo que cambia de tono con la historia del lote. Va dentro de
+// `.vg-journey` (ver index.astro):
+// - Los puntos del hilo son los elementos con `data-vg-node` (1 a 4); el
 //   hilo termina en el elemento con `data-vg-end`.
-// - La línea se dibuja con el scroll y el color cuenta la historia del lote:
-//   verde campo (VigIA vigila) → ámbar y rojo (el lote sin aviso) → verde
-//   agua (lo que hace VigIA) → verde campo (el lote se salva). Los puntos no llevan número (decisión 49).
+// - La línea se dibuja con el scroll: verde (VigIA vigila) → ámbar y rojo
+//   (el lote sin aviso) → celeste (la solución) → verde (el lote se salva).
 // - Al final no corta en seco: baja por el costado y dobla para entrar de
 //   costado en la frase destacada (.vg-tagline__text), a la altura de su
-//   renglón del medio, con un punto verde que se rellena al llegar.
+//   renglón del medio, con un punto verde que late al llegar.
 // - El avance se mide por el largo de la línea (no sólo por la altura), así
 //   los tramos de costado también se dibujan de a poco.
-// - El fondo es el plano de la página: sin degradé por etapas.
+// - El fondo cambia en el borde de cada sección: página → seco → solución
+//   → agua → página, con fundidos largos.
 // - Con movimiento reducido el hilo aparece completo y quieto. Sin JS no se
-//   dibuja.
+//   dibuja el hilo y queda el fondo de respaldo de sections.css.
 ---
 
 <svg class="vg-thread" aria-hidden="true" data-vg-thread>
@@ -23,8 +24,8 @@
       <stop data-stop="ok-b" style="stop-color: var(--vg-thread-ok)" />
       <stop data-stop="amber" style="stop-color: var(--vg-sev-alerta)" />
       <stop data-stop="red" style="stop-color: var(--vg-sev-critico)" />
-      <stop data-stop="agua-a" style="stop-color: var(--vg-agua)" />
-      <stop data-stop="agua-b" style="stop-color: var(--vg-agua)" />
+      <stop data-stop="sky-a" style="stop-color: var(--vg-sky)" />
+      <stop data-stop="sky-b" style="stop-color: var(--vg-sky)" />
       <stop data-stop="ok-c" style="stop-color: var(--vg-thread-ok)" />
       <stop data-stop="ok-d" style="stop-color: var(--vg-thread-ok)" />
     </linearGradient>
@@ -36,7 +37,7 @@
 
 <script>
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const NODE_COLOR = ['var(--vg-thread-ok)', 'var(--vg-sev-alerta)', 'var(--vg-agua)', 'var(--vg-thread-ok)'];
+  const NODE_COLOR = ['var(--vg-thread-ok)', 'var(--vg-sev-alerta)', 'var(--vg-sky)', 'var(--vg-thread-ok)'];
 
   const journey = document.querySelector<HTMLElement>('.vg-journey');
   const svg = journey?.querySelector<SVGSVGElement>('[data-vg-thread]');
@@ -156,12 +157,12 @@
       setStop('ok-b', n2 - 0.06);
       setStop('amber', n2);
       setStop('red', n2 + (n3 - n2) * 0.6);
-      setStop('agua-a', n3);
-      setStop('agua-b', n4 - (n4 - n3) * 0.25);
+      setStop('sky-a', n3);
+      setStop('sky-b', n4 - (n4 - n3) * 0.25);
       setStop('ok-c', n4);
       setStop('ok-d', 1);
 
-      // Puntos sin número.
+      // Puntos numerados.
       nodesGroup.replaceChildren();
       nodeEls = nodes.map((n, i) => {
         const g = document.createElementNS(SVG_NS, 'g');
@@ -170,26 +171,73 @@
         const c = document.createElementNS(SVG_NS, 'circle');
         c.setAttribute('cx', String(n.x));
         c.setAttribute('cy', String(n.y));
-        c.setAttribute('r', W > 680 ? '7' : '5');
-        g.append(c);
+        c.setAttribute('r', W > 680 ? '13' : '9');
+        const t = document.createElementNS(SVG_NS, 'text');
+        t.setAttribute('x', String(n.x));
+        t.setAttribute('y', String(n.y));
+        t.textContent = String(i + 1);
+        g.append(c, t);
         nodesGroup.append(g);
         return g;
       });
 
-      // Punto final sobre la frase: se rellena cuando el hilo llega.
+      // Punto final sobre la frase: late cuando el hilo llega.
       endEl = null;
       if (fin) {
         const g = document.createElementNS(SVG_NS, 'g');
         g.setAttribute('class', 'vg-thread__end');
+        const ring = document.createElementNS(SVG_NS, 'circle');
+        ring.setAttribute('class', 'vg-thread__end-ring');
+        ring.setAttribute('cx', String(fin.x));
+        ring.setAttribute('cy', String(fin.y));
+        ring.setAttribute('r', '14');
         const dot = document.createElementNS(SVG_NS, 'circle');
         dot.setAttribute('class', 'vg-thread__end-dot');
         dot.setAttribute('cx', String(fin.x));
         dot.setAttribute('cy', String(fin.y));
         dot.setAttribute('r', '6');
-        g.append(dot);
+        g.append(ring, dot);
         nodesGroup.append(g);
         endEl = g;
       }
+
+      // Fondo: página → seco (problema) → solución → agua (cómo funciona) →
+      // página. Cada
+      // cambio es un fundido largo centrado en el borde real de la sección,
+      // con curva suave (smoothstep en pasos de color-mix, mezclado en oklab):
+      // sin escalón visible ni bandas en los extremos del fundido.
+      const secciones = [...journey.querySelectorAll<HTMLElement>(':scope > section')];
+      const borde = (i: number, fallback: number) =>
+        secciones[i] ? secciones[i].getBoundingClientRect().top - jr.top : fallback;
+      const b2 = borde(1, H * 0.3);
+      const b3 = borde(2, H * 0.5);
+      const b4 = borde(3, H * 0.7);
+      const T = Math.min(240, (b3 - b2) / 4, (b4 - b3) / 4);
+      const PASOS = 8;
+      const fundido = (de: string, a: string, desde: number, hasta: number) =>
+        Array.from({ length: PASOS + 1 }, (_, i) => {
+          const t = i / PASOS;
+          const s = Math.round(t * t * (3 - 2 * t) * 100);
+          return `color-mix(in oklab, ${a} ${s}%, ${de}) ${(desde + (hasta - desde) * t).toFixed(1)}px`;
+        }).join(', ');
+      const canvas = 'var(--gh-canvas)';
+      const seco = 'var(--vg-bg-seco)';
+      const solucion = 'var(--vg-bg-solucion)';
+      const agua = 'var(--vg-bg-agua)';
+      const pagina = 'var(--vg-bg-pagina)';
+      // El verde de "agua" vuelve a la página al llegar a Cómo lo hace
+      // (.vg-detalle): el fundido arranca un poco antes del bloque y termina
+      // ya dentro de él. Sin ese bloque, al final del recorrido como antes.
+      const detalle = journey.querySelector<HTMLElement>('.vg-detalle');
+      const yDetalle = detalle ? detalle.getBoundingClientRect().top - jr.top : H;
+      const finAgua = Math.min(H, yDetalle + 2 * T);
+      const inicioPagina = Math.max(b4 + T, Math.min(yDetalle - T, H - 2 * T));
+      journey.style.background = `linear-gradient(to bottom, ${canvas} 0px,
+        ${fundido(canvas, seco, b2 - T, b2 + T)},
+        ${fundido(seco, solucion, b3 - T, b3 + T)},
+        ${fundido(solucion, agua, b4 - T, b4 + T)},
+        ${fundido(agua, pagina, inicioPagina, finAgua)},
+        ${pagina} ${finAgua}px)`;
 
       const length = line.getTotalLength();
       const largos: number[] = [];

@@ -74,8 +74,8 @@ export const QUE_HACE = {
   bajada:
     'Sigue cada ambiente desde antes de la siembra hasta el final del ciclo, y te dice cuándo cuidar el agua y cuándo aplicar el bioinsumo.',
   // Cuatro tarjetas con foto, primero en la sección. La de los picos de
-  // estrés va primera: es lo principal. Fotos reales de campo (decisión
-  // 49), con sus créditos al pie (FOOTER.creditosFotos).
+  // estrés va primera: es lo principal. Fotos de la serie de media-src/imagenes (qh-*.png), generadas
+  // con Nano Banana Pro y la imagen 0 (el lote) como referencia.
   puntos: [
     {
       id: 'picos',
@@ -83,7 +83,7 @@ export const QUE_HACE = {
       // Hídrico, térmico y combinado: qué pasa en cada uno.
       texto: 'Falta de agua, aire que seca a la planta o los dos juntos. Te avisa por ambiente, con margen.',
       imagen: imgEstres,
-      alt: 'Lote de soja en febrero, con manchones donde el cultivo creció menos',
+      alt: 'Hojas de soja que empiezan a plegarse bajo el sol fuerte del mediodía',
     },
     {
       // Sin el número de días previos a la siembra: lo que importa es que
@@ -92,7 +92,7 @@ export const QUE_HACE = {
       titulo: 'Desde antes de la siembra',
       texto: 'Sigue el agua del suelo desde antes de sembrar y te avisa 14 días antes de la etapa crítica.',
       imagen: imgSiembra,
-      alt: 'Soja recién nacida en siembra directa sobre rastrojo de sorgo',
+      alt: 'Sembradora entrando a un lote en barbecho con rastrojo al amanecer',
     },
     {
       // Balance por ambiente y la acción "regá" del hídrico y el combinado.
@@ -100,7 +100,7 @@ export const QUE_HACE = {
       titulo: 'Cuida el uso del agua',
       texto: 'Sabés cuánta agua útil tiene cada ambiente. Si se viene la falta de agua, regás justo cuando hace falta.',
       imagen: imgAgua,
-      alt: 'Equipo de riego por pivote sobre un lote de soja',
+      alt: 'Equipo de riego por pivote regando un lote de soja al atardecer',
     },
     {
       // Las acciones con bioinsumo de las cuatro alertas; dicho en positivo.
@@ -108,7 +108,7 @@ export const QUE_HACE = {
       titulo: 'Orientado a bioinsumos',
       texto: 'Cada aviso trae su bioinsumo: hídrico, antiestrés térmico o preventivo antes de la etapa crítica.',
       imagen: imgBioinsumos,
-      alt: 'Tractor con pulverizadora aplicando sobre un cultivo',
+      alt: 'Gotas finas de una aplicación sobre hojas de soja al amanecer',
     },
   ],
   // Otros módulos, debajo de las tarjetas, con enlace a su página (decisión
@@ -326,18 +326,6 @@ export const FOOTER = {
   ],
   legalesLabel: 'Legales',
   pie: 'Todos los derechos reservados.',
-  // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
-  // Commons): los piden sus licencias Creative Commons. Van al pie, junto
-  // al copyright, no en el medio de la página.
-  creditosFotos: {
-    prefijo: 'Fotos vía Wikimedia Commons:',
-    fotos: [
-      { autor: 'Alejo Cristian Santo', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Febrero_-_panoramio.jpg' },
-      { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },
-      { autor: 'Pollinator', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soybean_1292.JPG' },
-      { autor: 'Ermell', licencia: 'CC BY-SA 4.0', href: 'https://commons.wikimedia.org/wiki/File:Traktor_spritzanlage-20200319-RM-173117.jpg' },
-    ],
-  },
 };
 
 // Textos de la interfaz que no son de una sección: header, botón de
