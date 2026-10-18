@@ -4,9 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 
 // Lint de las islas React (.js/.jsx). Los .astro se validan con `pnpm check`.
 export default [
-  // Las skills de terceros (.claude/skills) traen scripts propios: no son
-  // código del sitio.
-  { ignores: ['docs', 'dist', '.astro', '.claude', '.impeccable'] },
+  { ignores: ['docs', 'dist', '.astro'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {

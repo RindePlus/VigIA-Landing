@@ -80,21 +80,21 @@ export const QUE_HACE = {
       // "Aire que seca a la planta": la demanda del aire, como en el glosario.
       texto: 'A water shortage, dry air pulling water from the plant, or both at once. Alerts per management zone, with lead time.',
       imagen: imgEstres,
-      alt: 'Soybean field in February, with patches where the crop grew less',
+      alt: 'Soybean leaves starting to fold under the strong midday sun',
     },
     {
       id: 'siembra',
       titulo: 'From pre-planting',
       texto: 'Tracks soil water from before planting and alerts you 14 days ahead of the critical stage.',
       imagen: imgSiembra,
-      alt: 'Soybean seedlings no-tilled into sorghum residue',
+      alt: 'Planter entering a fallow field with crop residue at dawn',
     },
     {
       id: 'agua',
       titulo: 'Smarter water use',
       texto: 'Know how much plant-available water each management zone has. When a shortage is coming, irrigate right when it is needed.',
       imagen: imgAgua,
-      alt: 'Center pivot irrigation system over a soybean field',
+      alt: 'Center pivot irrigating a soybean field at sunset',
     },
     {
       id: 'bioinsumo',
@@ -103,7 +103,7 @@ export const QUE_HACE = {
       // biostimulant (glosario).
       texto: 'Every alert comes with its biostimulant: drought-stress, heat-stress, or preventive ahead of the critical stage.',
       imagen: imgBioinsumos,
-      alt: 'Tractor with a sprayer applying over a crop',
+      alt: 'Fine spray droplets on soybean leaves at dawn',
     },
   ],
   // Otros módulos, debajo de las tarjetas (decisión 46).
@@ -296,18 +296,6 @@ export const FOOTER = {
   ],
   legalesLabel: 'Legal',
   pie: 'All rights reserved.',
-  // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
-  // Commons): los piden sus licencias Creative Commons. Van al pie, junto
-  // al copyright, no en el medio de la página.
-  creditosFotos: {
-    prefijo: 'Photos via Wikimedia Commons:',
-    fotos: [
-      { autor: 'Alejo Cristian Santo', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Febrero_-_panoramio.jpg' },
-      { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },
-      { autor: 'Pollinator', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soybean_1292.JPG' },
-      { autor: 'Ermell', licencia: 'CC BY-SA 4.0', href: 'https://commons.wikimedia.org/wiki/File:Traktor_spritzanlage-20200319-RM-173117.jpg' },
-    ],
-  },
 };
 
 export const UI = {

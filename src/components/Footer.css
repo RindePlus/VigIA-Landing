@@ -25,7 +25,7 @@
 .rp-footer a:hover { color: var(--gh-fg); }
 
 .rp-footer a:focus-visible {
-  outline: 2px solid var(--gh-accent);
+  outline: 2px solid var(--vg-blue);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -164,22 +164,6 @@
   font-size: var(--text-xs);
   line-height: var(--leading-xs);
 }
-
-/* Créditos de las fotos: debajo del copyright, igual de discretos. */
-.rp-footer__creditos {
-  margin: 0;
-  color: var(--gh-fg-subtle);
-  font-size: var(--text-xs);
-  line-height: var(--leading-xs);
-  text-align: center;
-}
-
-.rp-footer__creditos a {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.rp-footer__creditos a:hover { color: var(--gh-fg); }
 
 /* Tablet: dos por fila. Celular: una columna. */
 @media (max-width: 960px) {

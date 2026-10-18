@@ -17,15 +17,14 @@
   border-block: 1px solid var(--gh-border-muted);
 }
 
-/* Etiqueta de sección, sobria (decisión 49): texto chico en gris, sin
-   mayúsculas, sin espaciado extra y sin colores por sección. Ubica al
-   lector sin competir con el título. */
 .vg-eyebrow {
-  margin-bottom: var(--space-75);
-  color: var(--gh-fg-muted);
-  font-size: var(--text-base);
-  line-height: var(--leading-base);
-  font-weight: 500;
+  margin-bottom: var(--space-100);
+  color: var(--vg-blue);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .vg-section__title {
@@ -67,8 +66,8 @@ h3 {
   padding: var(--space-75) var(--space-100);
   border: 1px solid transparent;
   border-radius: var(--gh-radius-btn);
-  background: var(--gh-accent);
-  color: var(--gh-accent-fg);
+  background: var(--vg-blue);
+  color: #fff;
   font-size: var(--text-base);
   line-height: var(--leading-base);
   font-weight: 600;
@@ -95,8 +94,8 @@ h3 {
 }
 
 .vg-btn--light {
-  background: var(--vg-forest-fg);
-  color: var(--vg-forest-bg);
+  background: #fff;
+  color: #0e3b36;
 }
 
 /* ---------- Hero ---------- */
@@ -117,9 +116,12 @@ h3 {
   max-width: 680px;
   font-size: var(--text-4xl);
   line-height: var(--leading-4xl);
-  letter-spacing: -0.025em;
-  /* Tinta sólida: el énfasis lo da el tamaño, no un degradé. */
-  color: var(--gh-fg);
+  letter-spacing: -0.03em;
+  /* Degradé de izquierda a derecha sólo sobre el texto, nunca de fondo. */
+  background: linear-gradient(90deg, var(--hero-title-from), var(--hero-title-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 @media (min-width: 768px) {
@@ -199,14 +201,15 @@ h3 {
   padding-block: var(--space-75) var(--space-700);
 }
 
-/* Mismo estilo que las etiquetas de sección (.vg-eyebrow), centrado. */
 .vg-trusted__title {
   margin-bottom: var(--space-300);
   color: var(--gh-fg-muted);
-  font-size: var(--text-base);
-  line-height: var(--leading-base);
-  font-weight: 500;
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-align: center;
+  text-transform: uppercase;
 }
 
 /* ---------- Gráfico del hero ---------- */
@@ -235,34 +238,50 @@ h3 {
 /* Área del SVG: referencia para ubicar la notificación sobre el gráfico. */
 .vg-chart__plot { position: relative; }
 
-.vg-chart__forecast { fill: var(--vg-pronostico); }
+.vg-chart__forecast { fill: var(--vg-blue-soft); }
 .vg-chart__axis { stroke: var(--gh-border); stroke-width: 1; }
-.vg-chart__rain { fill: var(--gh-accent); opacity: 0.45; }
+.vg-chart__rain { fill: var(--vg-blue); opacity: 0.55; }
 .vg-chart__umbral { stroke: var(--vg-sev-alerta); stroke-width: 1.5; stroke-dasharray: 6 5; }
-.vg-chart__au { fill: none; stroke: var(--vg-campo); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.vg-chart__au { fill: none; stroke: var(--vg-lime); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .vg-chart__au--forecast { stroke-dasharray: 2 7; }
 .vg-chart__today { stroke: var(--gh-fg-subtle); stroke-width: 1; stroke-dasharray: 3 4; }
-.vg-chart__dot { fill: var(--vg-campo); stroke: var(--gh-surface); stroke-width: 2; }
+.vg-chart__dot { fill: var(--vg-lime); stroke: var(--gh-surface); stroke-width: 2; }
 .vg-chart__alert { fill: var(--vg-sev-alerta); }
 .vg-chart__alert-ring { fill: none; stroke: var(--vg-sev-alerta); stroke-width: 1.5; opacity: 0.5; }
 
 .vg-chart__label { fill: var(--gh-fg-muted); font-size: 12px; font-family: var(--font-body); }
 .vg-chart__label--strong { fill: var(--gh-fg); font-weight: 600; }
 .vg-chart__label--umbral { fill: var(--vg-sev-alerta); font-weight: 600; }
-.vg-chart__label--au { fill: var(--vg-campo); font-weight: 700; }
+.vg-chart__label--au { fill: var(--vg-lime); font-weight: 700; }
 
 /* Gráficos altos (hero y problema): etiquetas grandes, para leerse de un
    vistazo. Son unidades del viewBox (560 de ancho): en celular el SVG se
    achica, así que suben más. Las posiciones de los textos están pensadas
    para estos tamaños: si suben, revisar que no se salgan ni pisen la línea. */
 .vg-chart--alto .vg-chart__label { font-size: 24px; }
-/* Más aire bajo el encabezado: la notificación del hero cuelga arriba del
-   gráfico y no tiene que pisar "Lote 12". */
-.vg-chart--alto .vg-chart__head { margin-bottom: var(--space-300); font-size: var(--text-base); line-height: var(--leading-base); }
+.vg-chart--alto .vg-chart__head { font-size: var(--text-base); line-height: var(--leading-base); }
 
 @media (max-width: 680px) {
   .vg-chart--alto .vg-chart__label { font-size: 30px; }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .vg-chart__alert-ring {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: vg-pulse 2.4s var(--ease-fluid) infinite;
+  }
+}
+
+@keyframes vg-pulse {
+  0% { transform: scale(0.6); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ---------- Etiquetas de módulo y variantes ---------- */
+.vg-eyebrow--lime { color: var(--vg-lime); }
+.vg-eyebrow--amber { color: var(--vg-sev-alerta); }
+.vg-eyebrow--sky { color: var(--vg-sky); }
 
 .vg-section--compact {
   padding-block: var(--space-700);
@@ -533,6 +552,7 @@ h3 {
 .vg-reveal-on .vg-pasos[data-reveal] .vg-paso {
   transition:
     opacity var(--dur-reveal) var(--ease-fluid),
+    filter var(--dur-reveal) var(--ease-fluid),
     transform var(--dur-reveal) var(--ease-fluid);
   transition-delay: calc(var(--i) * var(--reveal-step));
 }
@@ -544,7 +564,8 @@ h3 {
 
 .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso {
   opacity: 0;
-  transform: translateX(calc(var(--space-100) * -1));
+  filter: blur(4px);
+  transform: translateX(calc(var(--space-300) * -1));
 }
 
 .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::after {
@@ -667,6 +688,7 @@ h3 {
 /* Estado bajo el nombre: "escribiendo…" se cruza con el subtítulo. */
 .vg-phone__status {
   display: grid;
+  opacity: 0.8;
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
 }
@@ -768,7 +790,7 @@ h3 {
 }
 
 .vg-phone__resuelta {
-  color: var(--vg-campo);
+  color: var(--gh-detail-green);
   opacity: 0;
   transform: translateY(var(--space-50));
 }
@@ -887,7 +909,7 @@ h3 {
   align-items: center;
   gap: var(--space-50);
   margin-top: auto;
-  color: var(--gh-accent);
+  color: var(--vg-blue);
   font-weight: 600;
 }
 
@@ -1019,15 +1041,15 @@ h3 {
 
 /* ---------- CTA final ---------- */
 .vg-cta {
-  background: var(--vg-forest-bg);
-  color: var(--vg-forest-fg);
+  background: #0e3b36;
+  color: #fff;
   text-align: center;
 }
 
 .vg-cta h2 {
   max-width: 680px;
   margin-inline: auto;
-  color: var(--vg-forest-fg);
+  color: #fff;
   font-size: var(--text-3xl);
   line-height: var(--leading-3xl);
   letter-spacing: -0.02em;
@@ -1056,6 +1078,7 @@ h3 {
 }
 
 [data-rp-theme="dark"] .vg-cta {
+  background: #131209;
   border-top: 1px solid var(--gh-border);
 }
 
@@ -1086,11 +1109,22 @@ h3 {
   }
 }
 
-/* Texto fijo, sin iluminarse al hacer scroll (decisión 49). Palabras
-   resaltadas: verde (a tiempo) y rojo (tarde). */
-.vg-tagline__word { color: var(--vg-forest); }
-.vg-tagline__word--ok { color: var(--vg-campo); }
-.vg-tagline__word--critico { color: var(--vg-sev-critico); }
+/* Sin la clase vg-reveal-on (sin JS o con movimiento reducido) el texto
+   queda en color pleno. */
+/* Palabras resaltadas: verde (a tiempo) y rojo (tarde). Se ven así también
+   sin JS o con movimiento reducido. */
+.vg-tagline__word { --tono: var(--vg-forest); color: var(--tono); }
+.vg-tagline__word--ok { --tono: var(--vg-icon-green); }
+.vg-tagline__word--critico { --tono: var(--vg-sev-critico); }
+
+.vg-reveal-on .vg-tagline__word {
+  color: color-mix(in srgb, var(--tono) 28%, transparent);
+  transition: color var(--dur-slow) var(--ease-fluid);
+}
+
+.vg-reveal-on .vg-tagline__word.is-on {
+  color: var(--tono);
+}
 
 /* ---------- 6. Impacto ----------
    Cuatro indicadores grandes y centrados, con una línea corta debajo, sin
@@ -1138,11 +1172,10 @@ h3 {
 
 .vg-indicador strong {
   color: var(--vg-forest);
-  font-family: var(--font-data);
   font-size: var(--text-5xl);
   line-height: var(--leading-5xl);
-  font-weight: 500;
-  letter-spacing: -0.04em;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   transition: color var(--dur-base) var(--ease-fluid);
@@ -1164,8 +1197,8 @@ h3 {
 }
 
 /* Indicadores que abren tabla: sin fondo (tampoco activos); al pasar o al
-   estar activos, el número toma el color de su dato (grano verde campo,
-   carbono tierra). Debajo, sólo una flechita discreta. */
+   estar activos, el número toma el color de su dato (grano verde, carbono
+   turquesa). Debajo, sólo una flechita discreta. */
 .vg-indicador--grano { --tono: var(--vg-icon-green); }
 .vg-indicador--carbono { --tono: var(--vg-carbono); }
 
@@ -1276,8 +1309,10 @@ h3 {
   overflow: hidden;
   padding: var(--space-400);
   border: 1px solid var(--gh-border);
+  border-top: 2px solid var(--tono);
   border-radius: var(--gh-radius-card);
   background: var(--gh-surface);
+  transition: border-top-color var(--dur-slow) var(--ease-fluid);
 }
 
 .vg-panel__item {
@@ -1377,7 +1412,7 @@ h3 {
 }
 
 .vg-tabla tbody th { color: var(--gh-fg); font-weight: 600; }
-.vg-tabla td { color: var(--gh-fg-muted); font-family: var(--font-data); }
+.vg-tabla td { color: var(--gh-fg-muted); }
 
 .vg-tabla__total th,
 .vg-tabla__total td {
@@ -1442,10 +1477,10 @@ h3 {
 }
 
 .vg-faq__item summary::-webkit-details-marker { display: none; }
-.vg-faq__item summary:hover { color: var(--gh-accent); }
+.vg-faq__item summary:hover { color: var(--vg-blue); }
 
 .vg-faq__item summary:focus-visible {
-  outline: 2px solid var(--gh-accent);
+  outline: 2px solid var(--vg-blue);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -1842,11 +1877,25 @@ h3 {
 }
 
 /* ============================================================
-   Recorrido de los tres módulos: hilo (JourneyThread) sobre el fondo plano
-   de la página (decisión 49: sin degradé por etapas).
+   Recorrido de los tres módulos: fondo que cambia + hilo (JourneyThread)
+   Excepción provisoria a los fondos planos de landing-page-design: se
+   mantiene mientras se prueban otros estilos de fondo (ver CLAUDE.md).
    ============================================================ */
 .vg-journey {
   position: relative;
+  /* Respaldo sin JS; con JS se recalcula con las posiciones reales. */
+  background: linear-gradient(
+    in oklab to bottom,
+    var(--gh-canvas) 0%,
+    var(--gh-canvas) 26%,
+    var(--vg-bg-seco) 34%,
+    var(--vg-bg-seco) 44%,
+    var(--vg-bg-solucion) 52%,
+    var(--vg-bg-solucion) 62%,
+    var(--vg-bg-agua) 70%,
+    var(--vg-bg-agua) 88%,
+    var(--vg-bg-pagina) 100%
+  );
 }
 
 .vg-journey > section {
@@ -1880,30 +1929,54 @@ h3 {
   stroke-linecap: round;
 }
 
-/* Puntos sin número: marcan la etapa, no la cuentan. */
 .vg-thread__node circle {
-  fill: var(--gh-canvas);
+  fill: var(--gh-surface);
   stroke: var(--c);
   stroke-width: 2;
   transition: fill var(--dur-base) var(--ease-fluid);
 }
 
+.vg-thread__node text {
+  fill: var(--c);
+  font: 700 12px var(--font-body);
+  text-anchor: middle;
+  dominant-baseline: central;
+  transition: fill var(--dur-base) var(--ease-fluid);
+}
+
 .vg-thread__node.is-reached circle { fill: var(--c); }
+.vg-thread__node.is-reached text { fill: var(--gh-surface); }
 
 /* Punto final del hilo, sobre la frase destacada. */
 .vg-thread__end-dot {
-  fill: var(--gh-canvas);
+  fill: var(--gh-surface);
   stroke: var(--vg-thread-ok);
   stroke-width: 2;
   transition: fill var(--dur-base) var(--ease-fluid);
 }
 
+.vg-thread__end-ring {
+  fill: none;
+  stroke: var(--vg-thread-ok);
+  stroke-width: 1.5;
+  opacity: 0;
+}
+
 .vg-thread__end.is-reached .vg-thread__end-dot { fill: var(--vg-thread-ok); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .vg-thread__end.is-reached .vg-thread__end-ring {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: vg-pulse 2.4s var(--ease-fluid) infinite;
+  }
+}
 
 /* En celular el margen general es angosto: el recorrido suma lugar a la
    izquierda para el hilo. (Entre 680 y 1260 px el margen general ya lo da.) */
 @media (max-width: 680px) {
   .vg-journey .vg-wrap { padding-left: var(--space-500); }
+  .vg-thread__node text { font-size: 9px; }
 }
 
 /* ---------- Páginas legales (LegalPage.astro) ----------

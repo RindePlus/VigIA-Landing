@@ -4,7 +4,7 @@
 // publicar, y completar razón social y CUIT del responsable.
 // Describen lo que el sitio hace hoy: sin formularios, sin cuentas, sin
 // analítica ni publicidad; guarda el tema (claro/oscuro) en el navegador,
-// carga IBM Plex desde Google Fonts y enlaza a WhatsApp, Instagram y Maps.
+// carga Geist desde Google Fonts y enlaza a WhatsApp, Instagram y Maps.
 import { CONTACT_EMAIL, OFFICE_ADDRESS } from './social';
 import { MARCA } from './vigia';
 
