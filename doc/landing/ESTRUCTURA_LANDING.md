@@ -91,11 +91,11 @@ Se mantiene de la versión 1.
 
 ## 3. Lo que hace VigIA (`#que-hace`)
 
-Sección nueva (decisión 15). Cuenta qué hace VigIA: acompaña desde antes de la siembra, cuida el agua, detecta los picos de estrés durante toda la campaña y está orientado a bioinsumos. Además, toma los tipos de estrés que antes cerraban El problema. Punto 3 del hilo y fondo en celeste (decisión 23). La etiqueta "La solución" pasó a la sección 4 (decisión 30). Desde la decisión 42 se llama **Lo que hace VigIA** y sus cuatro tarjetas cuentan también las cuatro alertas.
+Sección nueva (decisión 15). Cuenta qué hace VigIA: acompaña desde antes de la siembra, cuida el agua, detecta los picos de estrés durante toda la campaña y está orientado a bioinsumos. Además, toma los tipos de estrés que antes cerraban El problema. Punto 3 del hilo, en verde agua (decisión 49; antes celeste, decisión 23). La etiqueta "La solución" pasó a la sección 4 (decisión 30). Desde la decisión 42 se llama **Lo que hace VigIA** y sus cuatro tarjetas cuentan también las cuatro alertas.
 
 | Elemento | Contenido |
 |---|---|
-| Etiqueta | LO QUE HACE VIGIA (en celeste) |
+| Etiqueta | Lo que hace VigIA (etiqueta sobria, decisión 49) |
 | Título | **VigIA BioEstrés vigila el estrés toda la campaña** |
 | Bajada | Sigue cada ambiente desde antes de la siembra hasta el final del ciclo, y te dice cuándo cuidar el agua y cuándo aplicar el bioinsumo. |
 
@@ -185,7 +185,7 @@ Impacto medible con datos del informe técnico (decisiones 19, 25 y 32): escenar
 | **+8.680 t** | de grano recuperado frente a lotes que no siguieron a VigIA | Rinde recuperado por cultivo |
 | **~3.300 t** | de CO₂ extra capturadas en el suelo (sólo el extra del rinde recuperado; suma de los valores por cultivo, el informe da 2.800 a 4.100 t estables) | Carbono extra capturado por cultivo |
 
-**Tablas:** los dos últimos indicadores son botones, marcados sólo con una flechita discreta debajo. La primera vez que la sección entra en pantalla aparece un aviso corto debajo de los dos indicadores que se despliegan, **Tocá un indicador para ver el detalle**, que se va solo a los pocos segundos. Al tocar un indicador se despliega su tabla en un panel centrado debajo de los cuatro, **de a una** (abrir una cierra la otra; el mismo indicador, la cruz o Escape la cierran). El indicador activo no lleva fondo: sólo el número toma su color (grano verde, carbono turquesa). Una **flecha** en el borde del panel apunta a él. Al cambiar de tabla (con una ya abierta), el recuadro queda fijo (la flecha se apoya en su borde y su línea cambia de color con una transición) y adentro sólo se desplaza el contenido, como un carrusel: la tabla que sale se va hacia un lado y la nueva entra desde el otro, sin desvanecerse, junto con la flecha y con la misma curva y duración. El panel se despliega con una animación de alto y opacidad (todo sin animación con movimiento reducido).
+**Tablas:** los dos últimos indicadores son botones, marcados sólo con una flechita discreta debajo. La primera vez que la sección entra en pantalla aparece un aviso corto debajo de los dos indicadores que se despliegan, **Tocá un indicador para ver el detalle**, que se va solo a los pocos segundos. Al tocar un indicador se despliega su tabla en un panel centrado debajo de los cuatro, **de a una** (abrir una cierra la otra; el mismo indicador, la cruz o Escape la cierran). El indicador activo no lleva fondo: sólo el número toma su color (grano en verde campo, carbono en tierra). Una **flecha** en el borde del panel apunta a él. Al cambiar de tabla (con una ya abierta), el recuadro queda fijo (la flecha se apoya en su borde y su línea cambia de color con una transición) y adentro sólo se desplaza el contenido, como un carrusel: la tabla que sale se va hacia un lado y la nueva entra desde el otro, sin desvanecerse, junto con la flecha y con la misma curva y duración. El panel se despliega con una animación de alto y opacidad (todo sin animación con movimiento reducido).
 
 | Rinde recuperado | Hectáreas | kg/ha extra | Total |
 |---|---|---|---|
@@ -316,12 +316,22 @@ Al terminar el video de resolución vuelve el celular y, durante 3,2 s, el aviso
 - Es narrativo: no afirma que la plataforma registre la aplicación ni que el balance vuelva sobre el umbral (el video muestra una aplicación de bioinsumo, no un riego).
 - Con movimiento reducido no hay etapas: se ve el aviso original.
 
-## Recorrido: hilo y fondo
+## Recorrido: hilo
 
-Las secciones 1 a 4 comparten un contenedor (`.vg-journey`) con un fondo que cambia por etapas y un hilo que se dibuja con el scroll (`JourneyThread.astro`).
+Las secciones 1 a 4 comparten un contenedor (`.vg-journey`) sobre el **fondo plano** de la página, con un hilo que se dibuja con el scroll (`JourneyThread.astro`). Desde la decisión 49 no hay fondo por etapas.
 
-| Sección | Hilo | Fondo |
-|---|---|---|
+| Sección | Hilo |
+|---|---|
+| 1. Hero | Verde campo (`--vg-campo`): VigIA vigila el lote. Punto 1. |
+| 2. El problema | Ámbar y rojo (`--vg-sev-alerta`, `--vg-sev-critico`): el agua cruza el umbral sin aviso. Punto 2. |
+| 3. Lo que hace VigIA | Verde agua (`--vg-agua`): el agua del suelo y la respuesta. Punto 3. |
+| 4. La solución | Verde campo: el lote se salvó. Punto 4. |
+
+- Los puntos no llevan número ni laten: marcan la etapa y se rellenan cuando el hilo llega. Se anclan a los títulos de cada sección (`data-vg-node`), no a las etiquetas.
+- El hilo no termina en seco: pasa por el final de "Cómo lo hace" (`.vg-detalle`, `data-vg-end`), baja por el costado y dobla para entrar de costado en la frase destacada, a la altura de su renglón del medio, en un punto verde que se rellena cuando el hilo llega, con la frase más o menos a mitad de pantalla (la punta del hilo va al 55 % de la pantalla y el tramo horizontal final pide poco scroll). Así el recorrido del lote termina en la moraleja.
+- Con movimiento reducido, el hilo aparece completo y quieto.
+
+---|---|---|
 | 1. Hero | Verde: VigIA vigila el lote. Punto **1**. | El color normal de la página. |
 | 2. El problema | Ámbar y rojo: el agua cruza el umbral sin aviso. Punto **2**. | Arena, marcado (`--vg-bg-seco`). |
 | 3. Qué hace VigIA | Celeste: aparece la respuesta. Punto **3**. | Celeste (`--vg-bg-solucion`). |
