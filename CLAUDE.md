@@ -108,7 +108,7 @@ Fuera de Claude Code, el hook opcional `.githooks/commit-msg` valida lo mismo: `
 
 ## Diseño — sistema visual
 
-La guía de diseño es la skill **`landing-page-design`** (ver [ADR 0003](doc/adr/0003-landing-page-design-skill.md)): minimalista y moderno, con movimiento que acompaña sin recargar. Sus reglas se traducen a este repo así:
+La guía de diseño es la skill **`landing-page-design`** (ver [ADR 0003](doc/adr/0003-landing-page-design-skill.md)): minimalista y moderno, con movimiento que acompaña sin recargar. El sistema visual concreto (paleta, tipografía, componentes, qué sí y qué no) está en [`DESIGN.md`](DESIGN.md), y el contexto del producto para diseñar en [`PRODUCT.md`](PRODUCT.md); los lee la skill `impeccable`. Si cambiás un token, actualizá `DESIGN.md`. Las reglas se traducen a este repo así:
 
 - **Escalas como tokens CSS**, no clases de Tailwind: `--text-*` / `--leading-*` (tipografía), `--space-*` (espaciado), `--ease-fluid` y `--dur-*` (movimiento), todos en `src/styles/global.css`. Ningún tamaño, espaciado ni curva suelta en los componentes.
 - **Paleta de campo** (decisión 49 de `ESTRUCTURA_LANDING.md`, [ADR 0005](doc/adr/0005-rediseno-visual-agro-tecnico.md)): fondo piedra `--gh-canvas` (gris apenas cálido; el crema lo marca Impeccable como plantilla), tinta verde casi negra, verde bosque `--vg-forest` como único color de marca. El color tiene significado: verde campo `--vg-campo` = cultivo a salvo, ámbar `--vg-sev-alerta` = alerta o umbral, rojo `--vg-sev-critico` = pérdida, tierra `--vg-carbono` = carbono, verde agua `--vg-agua` = el tramo del hilo de "Lo que hace VigIA". Nada de azules, celestes ni lima. Los nombres `--gh-*` quedan por compatibilidad; los valores ya no son los de GitHub.
