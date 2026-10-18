@@ -65,6 +65,7 @@ Si un hook bloquea, leé el motivo y corregí. Nunca uses `--no-verify` ni lo es
 |---|---|---|
 | `main` | Producción. GitHub Pages publica `docs/` de `main`: lo que se mergea acá sale al aire. | Solo PRs de release desde `develop` (`/release`). |
 | `develop` | Integración. Acumula features ya revisadas para probarlas juntas antes de publicar. | Solo PRs desde feature branches (`/pr`). |
+| `develop-impeccable` | Paralela a `develop`, sin publicar: el rediseño visual hecho con la skill `impeccable` (paleta de campo, IBM Plex, fotos reales, `PRODUCT.md`, `DESIGN.md`). Se sacó de `develop` el 2026-10-18 para seguir trabajándolo aparte. | Ramas de trabajo creadas desde `origin/develop-impeccable`, con PR contra `develop-impeccable`. |
 | `<type>/<slug>` | Trabajo. Ramas cortas, una por tarea, creadas desde `develop`. | Commits del desarrollador. |
 
 - `main` y `develop` son **protegidas**: ni commits ni pushes directos. Los merges los hace una persona desde GitHub.
