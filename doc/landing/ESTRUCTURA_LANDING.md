@@ -310,7 +310,7 @@ Cada sección del recorrido tiene **un** medio, dentro de `MediaStory.astro`: pr
 
 ### Cierre espejo en Cómo funciona
 
-Al terminar el video de resolución vuelve el celular y, durante 3,2 s, el aviso "⚠️ Estrés hídrico en 14 días" se cruza con "✅ Resuelta a tiempo", con un borde verde en el mensaje. Después reinicia el ciclo. Es el espejo del "Sin aviso" del gráfico del problema.
+Al terminar el video de resolución vuelve el celular y, durante 3,2 s, el aviso "⚠️ Estrés hídrico en 14 días" se cruza con "✅ Resuelta a tiempo" (el mensaje sin borde de color, como en la app real). Después reinicia el ciclo. Es el espejo del "Sin aviso" del gráfico del problema.
 
 - Lo maneja `MediaStory` con la prop `cierre` (ms) y la etapa `data-stage="cierre"`; el texto está en `COMO_FUNCIONA.mensaje.resuelta`.
 - Es narrativo: no afirma que la plataforma registre la aplicación ni que el balance vuelva sobre el umbral (el video muestra una aplicación de bioinsumo, no un riego).

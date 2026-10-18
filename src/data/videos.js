@@ -13,12 +13,13 @@
 // Si van a cambiar seguido, conviene alojarlos fuera del repo y usar URLs.
 
 export const VIDEOS = {
-  // Módulo 2: el lote sin aviso (hojas enrollándose, suelo agrietado, mano
-  // sobre una planta marchita). Se muestra después del gráfico sin VigIA.
+  // Módulo 2: el lote sin aviso (el cultivo verde se marchita y el suelo se
+  // agrieta, en una sola toma). Se muestra después del gráfico sin VigIA.
+  // El clip ya viene en 10:7, la proporción de la tarjeta.
   problema: {
-    mp4: '/videos/problema.mp4',
-    poster: '/videos/problema.jpg',
-    descripcion: 'El lote se marchita bajo el sol del mediodía y la mano del productor toca una hoja seca (5 s).',
+    mp4: '/videos/problema_v2.mp4',
+    poster: '/videos/problema_v2.jpg',
+    descripcion: 'El lote verde se seca bajo el sol: las hojas se marchitan y el suelo se agrieta (6 s).',
     tono: 'critico',
     // Los eucaliptos y los silos están a la derecha.
     encuadre: '75% 50%',
