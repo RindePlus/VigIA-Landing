@@ -729,7 +729,6 @@ h3 {
   color: var(--vg-wa-fg);
   font-size: var(--text-base);
   line-height: var(--leading-base);
-  transition: box-shadow var(--dur-slow) var(--ease-fluid);
 }
 
 .vg-phone__bubble::before,
@@ -783,10 +782,6 @@ h3 {
   opacity: 1;
   transform: none;
   transition-delay: var(--dur-base);
-}
-
-.vg-story[data-stage="cierre"] .vg-phone__bubble {
-  box-shadow: 0 0 0 2px var(--vg-campo);
 }
 
 .vg-phone__time {
