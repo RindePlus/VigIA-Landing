@@ -40,10 +40,9 @@ export const SEO = {
 
 // 1. Hero
 export const HERO = {
-  etiqueta: 'Water and heat stress',
   // "Pérdida" se concreta como yield loss: "loss" solo queda vago en inglés.
   titulo: 'Catch crop stress before it turns into yield loss',
-  bajada: `${MARCA} tracks every management zone from before planting and alerts you on WhatsApp days before stress shows up in the field. For growers and agronomists who make data-driven decisions.`,
+  bajada: `${MARCA} tracks every management zone from before planting and alerts you on WhatsApp days before water and heat stress shows up in the field. For growers and agronomists who make data-driven decisions.`,
 };
 
 // 2. El problema
@@ -162,7 +161,8 @@ export const COMO_FUNCIONA = {
 
 // 5. Frase destacada. Misma lógica de colores: *verde* (a tiempo), _rojo_
 // (tarde).
-export const FRASE = ['Get the biostimulant on *before* stress hits,', 'not _after the damage is done._'];
+export const FRASE = ['Get the biostimulant on', '*before* stress hits,', 'not _after the damage is done._'];
+export const FRASE_SIGUE = 'Continue to Impact';
 
 // 6. Impacto. Mismos números que en español (impactoDatos.js), con formato
 // en inglés (20,000).

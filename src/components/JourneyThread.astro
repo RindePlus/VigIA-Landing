@@ -213,8 +213,16 @@
     const update = () => {
       if (!geo) return;
       const jr = journey.getBoundingClientRect();
-      // Punta del hilo un poco arriba de la mitad de la pantalla.
-      const target = reduceMotion ? Infinity : window.innerHeight * 0.55 - jr.top;
+      // Punta del hilo un poco arriba de la mitad de la pantalla. En el
+      // recorrido a pantalla completa, con la frase ya en pantalla el hilo
+      // llega entero: la frase se detiene centrada y la punta, al 55 %, no
+      // alcanzaba el punto final.
+      const frase = document.querySelector<HTMLElement>('.vg-tagline');
+      const fraseEnPantalla =
+        document.documentElement.classList.contains('vg-pager-on') &&
+        !!frase &&
+        Math.abs(frase.getBoundingClientRect().top) < window.innerHeight * 0.1;
+      const target = reduceMotion || fraseEnPantalla ? Infinity : window.innerHeight * 0.55 - jr.top;
       // Avance en px de scroll desde el primer punto → largo dibujado.
       const avance = target - geo.yStart;
       const { largos, avances } = geo;
@@ -228,7 +236,10 @@
       }
       line.style.strokeDashoffset = String(geo.length - dibujado);
       geo.nodes.forEach((n, i) => nodeEls[i]?.classList.toggle('is-reached', target >= n.y));
-      endEl?.classList.toggle('is-reached', dibujado >= geo.length - 12);
+      const llego = dibujado >= geo.length - 12;
+      endEl?.classList.toggle('is-reached', llego);
+      // La frase reacciona a la llegada (subrayado de "antes" y flecha).
+      if (llego) frase?.classList.add('is-llegada');
     };
 
     let ticking = false;

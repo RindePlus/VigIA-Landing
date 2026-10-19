@@ -1,0 +1,222 @@
+---
+// Paso de pantalla en pantalla en el recorrido (decisión 50). En pantallas
+// horizontales (escritorio y tablet acostada) cada panel del recorrido ocupa
+// una pantalla (`[data-pantalla]`, tamaños en sections.css) y cada gesto de
+// scroll lleva al siguiente (o al anterior) con una animación:
+// hero → problema → lo que hace → la solución (canales, y con otro gesto
+// "Cómo lo hace" en su lugar) → frase → Impacto. Desde Impacto hacia abajo
+// el scroll es normal.
+// - Hacia abajo, un gesto = un paso: la inercia del trackpad no saltea
+//   paneles ni sigue de largo al llegar. La primera transición es más lenta
+//   (presenta el estilo); la de la frase, mucho más lenta (se ve llegar el
+//   hilo); el resto, ágiles.
+// - Hacia arriba también va por paneles, pero rápido y casi sin espera
+//   entre gestos: volver tiene que ser fácil.
+// - Un panel con `data-pasos="N"` tiene N estados antes de pasar al
+//   siguiente; el estado va en `data-paso` (0, 1…) y lo usa el CSS.
+// - Rueda, trackpad, teclado (flechas, Re Pág/Av Pág, espacio) y deslizar
+//   en pantallas táctiles.
+// - Sin JS, con movimiento reducido, en celular o en pantallas verticales
+//   no hace nada: la página se scrollea como siempre.
+// - Mientras está activo, <html> lleva la clase `vg-pager-on` (el hilo la
+//   usa para llegar entero a la frase).
+---
+
+<script>
+  const MEDIA = '(min-width: 900px) and (min-height: 560px) and (orientation: landscape)';
+  // Duraciones en ms.
+  const BAJAR_PRIMERA = 800; // la primera vez se mira el paso
+  const BAJAR = 520; // después, el usuario ya conoce el estilo
+  const BAJAR_A_FRASE = 1800; // se ve avanzar el hilo hasta la frase
+  const SUBIR = 420;
+  // Traba al pasar a "Cómo lo hace": hasta que terminan de desplegarse los
+  // pasos (sections.css: --dur-fast + 2 × 420 ms + --dur-reveal).
+  const TRABA_PASOS = 1600;
+  // Sin eventos de rueda durante este tiempo = el gesto terminó. Hacia
+  // arriba casi no se espera.
+  const PAUSA_BAJAR = 90;
+  const PAUSA_SUBIR = 40;
+  const UMBRAL_TOQUE = 40; // px de deslizamiento para cambiar de panel
+
+  // Curva ease-in-out fuerte (cubic-bezier(0.77, 0, 0.175, 1), la de la
+  // skill animate para movimiento en pantalla): arranca y llega suave.
+  const curva = (() => {
+    const [x1, y1, x2, y2] = [0.77, 0, 0.175, 1];
+    const bx = (t: number) => 3 * x1 * t * (1 - t) ** 2 + 3 * x2 * t ** 2 * (1 - t) + t ** 3;
+    const by = (t: number) => 3 * y1 * t * (1 - t) ** 2 + 3 * y2 * t ** 2 * (1 - t) + t ** 3;
+    return (x: number) => {
+      let lo = 0;
+      let hi = 1;
+      for (let i = 0; i < 24; i++) {
+        const mid = (lo + hi) / 2;
+        if (bx(mid) < x) lo = mid;
+        else hi = mid;
+      }
+      return by((lo + hi) / 2);
+    };
+  })();
+
+  const mq = window.matchMedia(MEDIA);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const paneles = [...document.querySelectorAll<HTMLElement>('[data-pantalla]')];
+  const root = document.documentElement;
+
+  if (paneles.length > 1) {
+    let ocupado = false; // animando o trabado
+    let primera = true;
+    let ultimaRueda = 0;
+    // Tras un paso, el resto del mismo gesto (la inercia) se descarta,
+    // también al llegar a Impacto, donde el scroll ya es normal.
+    let gestoConsumido = false;
+    let toqueY: number | null = null;
+
+    const activo = () => mq.matches && !reduce.matches;
+    const marcar = () => root.classList.toggle('vg-pager-on', activo());
+    marcar();
+    mq.addEventListener('change', marcar);
+    reduce.addEventListener('change', marcar);
+
+    const top = (el: HTMLElement) => Math.round(el.getBoundingClientRect().top + window.scrollY);
+    const fin = paneles[paneles.length - 1]; // Impacto
+    const frase = document.querySelector<HTMLElement>('.vg-tagline');
+
+    // Hacia abajo, antes de Impacto. Hacia arriba, hasta el borde de
+    // Impacto (desde ahí vuelve a la frase). Más abajo, scroll normal.
+    const maneja = (dir: number) => {
+      const y = window.scrollY;
+      const yFin = top(fin);
+      if (dir > 0) return y < yFin - 2;
+      if (dir < 0) return y <= yFin + 2 && y > 0;
+      return false;
+    };
+
+    // Panel alineado arriba de la pantalla (el que se está viendo), si hay.
+    const actual = () => paneles.find((p) => Math.abs(top(p) - window.scrollY) <= 2);
+
+    const liberar = () => {
+      ocupado = false;
+      ultimaRueda = performance.now();
+    };
+
+    const trabar = (ms: number) => {
+      ocupado = true;
+      gestoConsumido = true;
+      window.setTimeout(liberar, ms);
+    };
+
+    const scrollear = (to: number, dur: number) => {
+      const from = window.scrollY;
+      ocupado = true;
+      gestoConsumido = true;
+      const t0 = performance.now();
+      const paso = (now: number) => {
+        const t = Math.min(1, (now - t0) / dur);
+        // 'instant': el html tiene scroll-behavior: smooth, que suavizaría
+        // cada cuadro por su cuenta.
+        window.scrollTo({ top: from + (to - from) * curva(t), behavior: 'instant' });
+        if (t < 1) requestAnimationFrame(paso);
+        else liberar();
+      };
+      requestAnimationFrame(paso);
+    };
+
+    const mover = (dir: number) => {
+      const p = actual();
+      // Dentro de un panel con estados: primero se recorren sus estados.
+      if (p?.dataset.pasos) {
+        const n = Number(p.dataset.pasos);
+        const i = Number(p.dataset.paso ?? 0);
+        if (dir > 0 && i < n - 1) {
+          p.dataset.paso = String(i + 1);
+          trabar(TRABA_PASOS);
+          return;
+        }
+        if (dir < 0 && i > 0) {
+          p.dataset.paso = String(i - 1);
+          trabar(SUBIR);
+          return;
+        }
+      }
+      const y = window.scrollY;
+      const tops = paneles.map(top);
+      if (dir > 0) {
+        const i = tops.findIndex((t) => t > y + 4);
+        if (i < 0) return;
+        const sig = paneles[i];
+        // Al llegar bajando a un panel con estados, arranca por el primero.
+        if (sig.dataset.pasos) sig.dataset.paso = '0';
+        const dur = sig === frase ? BAJAR_A_FRASE : primera ? BAJAR_PRIMERA : BAJAR;
+        primera = false;
+        scrollear(tops[i], dur);
+      } else {
+        const i = tops.map((t, k) => (t < y - 4 ? k : -1)).filter((k) => k >= 0).pop();
+        if (i === undefined) return;
+        // Subiendo, un panel con estados se muestra en el último: es lo que
+        // se vio al pasar por él.
+        const ant = paneles[i];
+        if (ant.dataset.pasos) ant.dataset.paso = String(Number(ant.dataset.pasos) - 1);
+        scrollear(tops[i], SUBIR);
+      }
+    };
+
+    window.addEventListener(
+      'wheel',
+      (e) => {
+        if (!activo() || e.ctrlKey) return; // ctrl + rueda = zoom
+        const dir = Math.sign(e.deltaY);
+        if (!dir) return;
+        const ahora = performance.now();
+        const pausa = dir > 0 ? PAUSA_BAJAR : PAUSA_SUBIR;
+        const mismoGesto = ahora - ultimaRueda < pausa;
+        ultimaRueda = ahora;
+        if (!mismoGesto) gestoConsumido = false;
+        // La inercia de un gesto que ya hizo su paso no sigue de largo,
+        // aunque ya estemos en Impacto.
+        if (ocupado || gestoConsumido) {
+          if (ocupado || maneja(dir) || window.scrollY <= top(fin) + 2) e.preventDefault();
+          return;
+        }
+        if (!maneja(dir)) return;
+        e.preventDefault();
+        mover(dir);
+      },
+      { passive: false },
+    );
+
+    window.addEventListener('keydown', (e) => {
+      if (!activo() || e.altKey || e.ctrlKey || e.metaKey) return;
+      const el = document.activeElement;
+      if (el && el.matches('input, textarea, select, [contenteditable="true"]')) return;
+      const abajo = ['ArrowDown', 'PageDown'].includes(e.key) || (e.key === ' ' && !e.shiftKey);
+      const arriba = ['ArrowUp', 'PageUp'].includes(e.key) || (e.key === ' ' && e.shiftKey);
+      const dir = abajo ? 1 : arriba ? -1 : 0;
+      if (!dir || !maneja(dir)) return;
+      e.preventDefault();
+      if (!ocupado) mover(dir);
+    });
+
+    window.addEventListener(
+      'touchstart',
+      (e) => {
+        toqueY = e.touches.length === 1 ? e.touches[0].clientY : null;
+      },
+      { passive: true },
+    );
+    window.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!activo() || toqueY === null) return;
+        if (maneja(Math.sign(toqueY - e.touches[0].clientY))) e.preventDefault();
+      },
+      { passive: false },
+    );
+    window.addEventListener('touchend', (e) => {
+      if (!activo() || toqueY === null) return;
+      const dy = toqueY - e.changedTouches[0].clientY;
+      toqueY = null;
+      const dir = Math.sign(dy);
+      if (Math.abs(dy) < UMBRAL_TOQUE || !maneja(dir) || ocupado) return;
+      mover(dir);
+    });
+  }
+</script>

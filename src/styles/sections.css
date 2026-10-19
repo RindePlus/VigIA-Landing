@@ -12,6 +12,13 @@
   padding-block: var(--space-900);
 }
 
+/* El header queda siempre visible (decisión 50): al saltar a una sección
+   desde el menú, su borde superior queda justo debajo de él. */
+section[id],
+footer[id] {
+  scroll-margin-top: var(--space-800);
+}
+
 .vg-section--tint {
   background: var(--gh-surface);
   border-block: 1px solid var(--gh-border-muted);
@@ -455,77 +462,69 @@ h3 {
 }
 
 /* ---------- Cómo lo hace ----------
-   Tres pasos en una tira, unidos por una línea. */
-/* Bien separado del bloque de los canales y el WhatsApp: es otra parte. */
+   Va en la columna de texto de La solución, debajo de los canales (en
+   pantalla completa, en su lugar: ver "Recorrido a pantalla completa").
+   Tres pasos en vertical, unidos por una línea que baja de punto a punto. */
 .vg-detalle {
-  margin-top: var(--space-900);
+  margin-top: var(--space-600);
 }
 
-/* Subtítulo del bloque (Cómo lo hace): centrado sobre su bloque, que también
-   va centrado, y un paso más grande que los títulos de adentro (Se cargan
-   tus lotes…) para que mande. */
+/* Subtítulo chico: un paso por encima de los títulos de los pasos. */
 .vg-detalle__label {
-  margin-bottom: var(--space-500);
+  margin-bottom: var(--space-300);
   color: var(--gh-fg);
-  font-size: var(--text-3xl);
-  line-height: var(--leading-3xl);
-  font-weight: 700;
-  text-align: center;
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  font-weight: 600;
   text-wrap: pretty;
 }
 
-/* Pasos como línea de tiempo, sin números: cada paso centrado con un punto
-   verde encima del título, y una línea fina de punto a punto. Más angosta
-   que el ancho de la sección, con aire a los costados. */
+/* Pasos como línea de tiempo vertical, sin números: un punto verde a la
+   izquierda de cada título y una línea fina hacia el punto de abajo. */
 .vg-pasos {
   --punto: var(--space-100);
   --hueco: var(--space-300);
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: var(--hueco);
-  max-width: 880px;
-  margin-inline: auto;
   list-style: none;
 }
 
 .vg-paso {
   position: relative;
-  padding-top: calc(var(--punto) + var(--space-200));
-  text-align: center;
+  padding-left: calc(var(--punto) + var(--space-200));
 }
 
 .vg-paso::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: calc(50% - var(--punto) / 2);
+  top: calc((var(--leading-xl) - var(--punto)) / 2);
+  left: 0;
   width: var(--punto);
   height: var(--punto);
   border-radius: 50%;
   background: var(--vg-icon-green);
 }
 
+/* De un punto al de abajo, con un respiro a cada lado. */
 .vg-paso:not(:last-child)::after {
   content: '';
   position: absolute;
-  top: calc(var(--punto) / 2);
-  /* De un centro al siguiente hay 100% + hueco; la línea deja un respiro
-     a cada lado de los puntos. */
-  left: calc(50% + var(--punto) / 2 + var(--space-100));
-  width: calc(100% + var(--hueco) - var(--punto) - var(--space-100) * 2);
-  height: 1px;
+  top: calc(var(--leading-xl) / 2 + var(--punto) / 2 + var(--space-75));
+  bottom: calc(var(--space-75) - var(--hueco) - var(--leading-xl) / 2 + var(--punto) / 2);
+  left: calc(var(--punto) / 2);
+  width: 1px;
   background: var(--gh-border-strong);
-  transform-origin: left center;
+  transform-origin: center top;
 }
 
-/* Despliegue al entrar en pantalla. La lista usa el observer de data-reveal
-   (BaseLayout) sólo como disparador: ella no se desvanece; la animan sus
-   hijos. Cada paso entra desde la izquierda cuando la línea llega a él
-   (`--i` = posición) y la línea hacia el siguiente se dibuja a continuación.
-   Sin JS o con movimiento reducido no hay .vg-reveal-on y todo se ve fijo. */
+/* Despliegue de arriba hacia abajo. La lista usa el observer de
+   data-reveal (BaseLayout) sólo como disparador: ella no se desvanece; la
+   animan sus hijos. Cada paso baja a su lugar cuando la línea llega a él
+   (`--i` = posición) y la línea hacia el siguiente se dibuja a
+   continuación. Sin JS o con movimiento reducido no hay .vg-reveal-on y
+   todo se ve fijo. */
 .vg-reveal-on .vg-pasos[data-reveal] {
   opacity: 1;
-  filter: none;
   transform: none;
   transition: none;
 }
@@ -544,19 +543,19 @@ h3 {
 
 .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso {
   opacity: 0;
-  transform: translateX(calc(var(--space-100) * -1));
+  transform: translateY(calc(var(--space-100) * -1));
 }
 
 .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::after {
-  transform: scaleX(0);
+  transform: scaleY(0);
 }
 
 .vg-paso .vg-paso__titulo {
   margin-bottom: var(--space-25);
   color: var(--gh-fg);
-  font-size: var(--text-2xl);
-  line-height: var(--leading-2xl);
-  font-weight: 700;
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  font-weight: 600;
   text-wrap: pretty;
 }
 
@@ -571,33 +570,6 @@ h3 {
   .vg-avisos {
     grid-template-columns: 1fr;
     gap: var(--space-500);
-  }
-}
-
-@media (max-width: 680px) {
-  .vg-pasos { grid-template-columns: 1fr; }
-
-  /* En celular la línea de tiempo baja: punto a la izquierda y la línea
-     hacia el paso de abajo, que se dibuja de arriba hacia abajo. */
-  .vg-paso {
-    padding-top: 0;
-    padding-left: calc(var(--punto) + var(--space-200));
-    text-align: left;
-  }
-  .vg-paso::before {
-    top: calc((var(--leading-2xl) - var(--punto)) / 2);
-    left: 0;
-  }
-  .vg-paso:not(:last-child)::after {
-    top: calc(var(--leading-2xl) / 2 + var(--punto) / 2 + var(--space-100));
-    bottom: calc(var(--space-100) - var(--hueco) - var(--leading-2xl) / 2 + var(--punto) / 2);
-    left: calc(var(--punto) / 2);
-    width: 1px;
-    height: auto;
-    transform-origin: center top;
-  }
-  .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::after {
-    transform: scaleY(0);
   }
 }
 
@@ -1090,7 +1062,150 @@ h3 {
    resaltadas: verde (a tiempo) y rojo (tarde). */
 .vg-tagline__word { color: var(--vg-forest); }
 .vg-tagline__word--ok { color: var(--vg-campo); }
+
+/* Cuando el hilo llega a la frase (JourneyThread pone .is-llegada), un
+   trazo verde recorre "antes" de izquierda a derecha, como el impulso del
+   hilo que sigue bajo la palabra, y se va por la derecha. Lento, para que
+   se vea. Sin JS o con movimiento reducido no hay trazo. */
+.vg-tagline__word--ok {
+  position: relative;
+  display: inline-block;
+}
+
+.vg-tagline__word--ok::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.02em;
+  height: 0.09em;
+  border-radius: var(--space-25);
+  background: var(--vg-campo);
+  transform-origin: left center;
+}
+
+.vg-tagline__word--ok::after { clip-path: inset(0 100% 0 0); }
+
+@keyframes vg-impulso {
+  0% { clip-path: inset(0 100% 0 0); }
+  50% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 100%); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .vg-tagline.is-llegada .vg-tagline__word--ok::after {
+    animation: vg-impulso 1.8s cubic-bezier(0.77, 0, 0.175, 1) both;
+  }
+}
+
+/* Flecha al pie de la frase: sólo en pantalla completa (ver más abajo),
+   donde el hilo terminando podría hacer pensar que la página termina. */
+.vg-tagline__sigue {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--panel-pad-bottom, var(--space-300)) + var(--space-200));
+  align-items: center;
+  justify-content: center;
+  width: var(--space-600);
+  height: var(--space-600);
+  border-radius: 50%;
+  color: var(--gh-fg-muted);
+  font-size: var(--text-2xl);
+  transform: translateX(-50%);
+  transition:
+    color var(--dur-base) var(--ease-fluid),
+    opacity var(--dur-slow) var(--ease-fluid) var(--dur-slow);
+}
+
+.vg-tagline__sigue:hover { color: var(--gh-accent); }
+
+/* Aparece después del trazo, no antes: es el paso siguiente. */
+.vg-reveal-on .vg-tagline:not(.is-llegada) .vg-tagline__sigue { opacity: 0; }
+
+/* Respira despacio: crece y se achica apenas, para invitar a seguir sin
+   reclamar atención. Única animación continua de la página, por pedido
+   explícito (DESIGN.md). Sin ella con movimiento reducido. */
+@keyframes vg-respira {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.14); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .vg-tagline.is-llegada .vg-tagline__sigue {
+    animation: vg-respira 2.8s ease-in-out var(--dur-slow) infinite;
+  }
+}
 .vg-tagline__word--critico { color: var(--vg-sev-critico); }
+
+/* ---------- Fondos por capítulo (decisión 50) ----------
+   El recorrido (hero → frase) va sobre el fondo de la página. Impacto es una
+   banda verde bosque: las cifras pesan y separan la historia de la prueba.
+   Equipo y clientes, sobre un gris verdoso apenas más oscuro. Preguntas
+   frecuentes, del color del footer: el cierre verde queda entre los dos. */
+.vg-impacto {
+  /* Dentro de la banda, los tokens del tema pasan a sus versiones sobre
+     verde: así tablas, botones y textos se resuelven solos, sin overrides
+     por componente. El panel de las tablas usa el mismo verde, con borde. */
+  --gh-canvas: var(--vg-forest-bg);
+  --gh-surface: var(--vg-forest-bg);
+  --gh-surface-2: var(--vg-forest-bg);
+  --gh-border: var(--vg-on-forest-line);
+  --gh-border-muted: var(--vg-on-forest-line-muted);
+  --gh-border-strong: var(--vg-on-forest-line-strong);
+  --gh-fg: var(--vg-on-forest-fg);
+  --gh-fg-muted: var(--vg-on-forest-muted);
+  --gh-fg-subtle: var(--vg-on-forest-subtle);
+  --gh-accent: var(--vg-on-forest-accent);
+  --vg-forest: var(--vg-on-forest-fg);
+  --vg-campo: var(--vg-on-forest-campo);
+  --vg-icon-green: var(--vg-on-forest-campo);
+  --vg-carbono: var(--vg-on-forest-carbono);
+  background: var(--vg-forest-bg);
+  color: var(--gh-fg);
+}
+
+.vg-nosotros,
+.vg-trusted {
+  background: var(--vg-bg-prueba);
+}
+
+#preguntas {
+  background: var(--gh-surface);
+}
+
+/* Líneas de nivel detrás del hero (TopoLines.astro): muy tenues, para dar
+   textura sin competir con el texto ni con el gráfico. */
+.vg-hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.vg-topo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--gh-border-strong);
+  stroke-width: 1;
+  opacity: 0.45;
+  pointer-events: none;
+  /* Se desvanecen hacia abajo (el hero no termina en un corte) y casi
+     desaparecen detrás del texto, a la izquierda: no se mezclan con las
+     letras. Dos máscaras que se intersecan. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 55%, transparent),
+    linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 42%, #000 62%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 55%, transparent),
+    linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 42%, #000 62%);
+  mask-composite: intersect;
+}
+
+[data-rp-theme="dark"] .vg-topo { opacity: 0.3; }
 
 /* ---------- 6. Impacto ----------
    Cuatro indicadores grandes y centrados, con una línea corta debajo, sin
@@ -1904,6 +2019,194 @@ h3 {
    izquierda para el hilo. (Entre 680 y 1260 px el margen general ya lo da.) */
 @media (max-width: 680px) {
   .vg-journey .vg-wrap { padding-left: var(--space-500); }
+}
+
+/* ============================================================
+   Recorrido a pantalla completa (decisión 50, SectionPager.astro)
+   En pantallas horizontales (escritorio, tablet acostada) cada panel ocupa
+   exactamente una pantalla, con su contenido centrado en el espacio que
+   deja el header (siempre visible): hero, problema, lo que hace, la
+   solución (con "Cómo lo hace" adentro), la frase e Impacto. Los tamaños
+   salen de los tokens --fit-* (global.css), que siguen al alto de la
+   ventana. En celular y en vertical, la página queda como siempre.
+   ============================================================ */
+@media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
+  [data-pantalla] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+    padding-block: var(--panel-pad-top) var(--panel-pad-bottom);
+  }
+
+  [data-pantalla] > .vg-wrap { width: 100%; }
+
+  /* La sección de la solución no lleva aire propio: lo lleva su panel. */
+  #como-funciona { padding-block: 0; }
+
+  .vg-avisos[data-pantalla] {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-content: center;
+  }
+
+  /* En las pantallas de dos columnas, el título arranca a la altura del
+     borde de arriba del gráfico o del video, y la etiqueta queda por
+     encima de esa línea. En el hero no hay etiqueta. */
+  .vg-hero__grid,
+  .vg-problema,
+  .vg-avisos[data-pantalla] {
+    align-items: start;
+  }
+
+  .vg-problema .vg-media,
+  .vg-avisos > .vg-media {
+    margin-top: calc(var(--leading-base) + var(--space-75));
+  }
+
+  /* Hero: el contenido queda un poco arriba del centro y más grande, para
+     que no sobre aire entre el header y el título. */
+  .vg-hero[data-pantalla] {
+    padding-bottom: calc(var(--panel-pad-bottom) + 6vh);
+  }
+
+  .vg-hero__title {
+    font-size: var(--fit-hero);
+    line-height: 1.04;
+  }
+
+  /* Tipografía según el alto de la ventana. */
+  [data-pantalla] .vg-section__title {
+    font-size: var(--fit-headline);
+    line-height: 1.15;
+  }
+
+  [data-pantalla] .vg-section__lead,
+  .vg-hero__subtitle {
+    font-size: var(--fit-lead);
+    line-height: 1.55;
+  }
+
+  [data-pantalla] .vg-section__lead { margin-bottom: var(--fit-gap); }
+  .vg-hero__subtitle { margin-block: var(--space-200) var(--fit-gap); }
+
+  /* Medios: el ancho sale del alto disponible, así el gráfico y el celular
+     nunca empujan el panel más allá de la pantalla. */
+  .vg-hero__grid > .vg-media,
+  .vg-problema .vg-media {
+    width: 100%;
+    max-width: calc((100svh - var(--panel-pad-top) - var(--panel-pad-bottom) - var(--space-400)) * 1.3);
+    justify-self: end;
+  }
+
+  .vg-avisos > .vg-media {
+    width: 100%;
+    max-width: calc((100svh - var(--panel-pad-top) - var(--panel-pad-bottom) - var(--space-400)) * 4 / 3);
+    justify-self: end;
+    top: 0;
+  }
+
+  /* Lo que hace VigIA: fotos más bajas y cuatro tarjetas en fila también en
+     tablet acostada (en dos filas no entran en una pantalla). */
+  .vg-punto__img {
+    aspect-ratio: auto;
+    height: clamp(5.5rem, 17vh, 12rem);
+  }
+
+  .vg-puntos {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 980px;
+    row-gap: var(--fit-gap);
+  }
+
+  /* Las dos preguntas (cultivos de servicio, herbicidas) van al pie de la
+     pantalla, separadas de las tarjetas. */
+  #que-hace > .vg-wrap {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .vg-modulos { margin-top: auto; padding-top: var(--fit-gap); }
+  .vg-razon,
+  .vg-canal { padding-block: calc(var(--fit-gap) / 2); }
+
+  /* La solución en dos pasos (data-paso, lo cambia SectionPager): primero
+     los canales; con el siguiente gesto, en su mismo lugar, "Cómo lo
+     hace". El título, la bajada y el celular no se mueven. */
+  .vg-avisos__cambio { display: grid; }
+
+  .vg-avisos__cambio > .vg-avisos__canales,
+  .vg-avisos__cambio > .vg-detalle {
+    grid-area: 1 / 1;
+    transition:
+      opacity var(--dur-base) var(--ease-fluid),
+      transform var(--dur-base) var(--ease-fluid),
+      visibility 0s linear var(--dur-base);
+  }
+
+  .vg-avisos__cambio > .vg-detalle {
+    margin-top: var(--space-50);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .vg-avisos[data-paso="1"] .vg-avisos__cambio > .vg-avisos__canales {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(calc(var(--space-100) * -1));
+  }
+
+  .vg-avisos[data-paso="1"] .vg-avisos__cambio > .vg-detalle {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  /* Los pasos se despliegan de arriba hacia abajo al entrar "Cómo lo hace"
+     (no al aparecer la sección), más ágiles que en la página normal: el
+     paginador traba el paso siguiente hasta que terminan. */
+  .vg-avisos { --reveal-step: 420ms; }
+  .vg-reveal-on .vg-avisos:not([data-paso="1"]) .vg-pasos .vg-paso {
+    opacity: 0;
+    transform: translateY(calc(var(--space-100) * -1));
+  }
+
+  .vg-reveal-on .vg-avisos:not([data-paso="1"]) .vg-pasos .vg-paso::after {
+    transform: scaleY(0);
+  }
+
+  .vg-reveal-on .vg-avisos[data-paso="1"] .vg-pasos .vg-paso {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--dur-reveal) var(--ease-fluid),
+      transform var(--dur-reveal) var(--ease-fluid);
+    transition-delay: calc(var(--dur-fast) + var(--i) * var(--reveal-step));
+  }
+
+  .vg-reveal-on .vg-avisos[data-paso="1"] .vg-pasos .vg-paso::after {
+    transform: none;
+    transition: transform var(--reveal-step) var(--ease-fluid);
+    transition-delay: calc(var(--dur-fast) * 2 + var(--i) * var(--reveal-step));
+  }
+
+  /* Frase: más grande, y la flecha para seguir abajo (ver TaglineReveal). */
+  .vg-tagline[data-pantalla] { position: relative; }
+
+  .vg-tagline__text {
+    font-size: var(--fit-display);
+    line-height: 1.1;
+  }
+
+  .vg-tagline__sigue { display: inline-flex; }
+
+  /* Impacto: el contenido centrado en su pantalla; las tablas que se
+     despliegan la alargan y el scroll ahí ya es normal. */
+  .vg-impacto[data-pantalla] {
+    padding-block: var(--panel-pad-top) var(--panel-pad-bottom);
+  }
 }
 
 /* ---------- Páginas legales (LegalPage.astro) ----------

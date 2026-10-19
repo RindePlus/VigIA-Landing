@@ -24,10 +24,6 @@
   will-change: transform;
 }
 
-.header--hidden {
-  transform: translateY(-100%);
-  box-shadow: none;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .header { transition: none; }
@@ -778,6 +774,13 @@ img.logo-image:hover {
 
 @media (max-width: 767px) {
   .header-nav__whatsapp { display: flex; }
+}
+
+/* Sobre las bandas verde bosque (Impacto, cierre) el translúcido dejaba
+   pasar demasiado verde y el logo y el menú no se leían: ahí el fondo es
+   casi opaco. */
+.rp-home .header--scrolled.header--sobre-oscuro {
+  background-color: color-mix(in srgb, var(--gh-surface) 94%, transparent);
 }
 
 /* Desenfoque del header y del menú. En las reglas va sólo backdrop-filter:

@@ -22,6 +22,14 @@ colors:
   pronostico: "#ebe5d7"
   whatsapp: "#25d366"
   whatsapp-ink: "#0b2e13"
+  bg-prueba: "#dfe7e1"
+  on-forest-fg: "#ece8df"
+  on-forest-muted: "#b4d4c1"
+  on-forest-subtle: "#9fc2ad"
+  on-forest-accent: "#8cc2a9"
+  wa-bubble: "#ffffff"
+  wa-meta: "#667781"
+  mask: "#000000"
   dark-canvas: "#181818"
   dark-surface: "#1f1f1f"
   dark-ink: "#ece8df"
@@ -59,6 +67,8 @@ rounded:
   btn: "8px"
   card: "12px"
   chart: "16px"
+  wa-bubble: "10px"
+  pill: "999px"
 spacing:
   xs: "8px"
   sm: "12px"
@@ -134,6 +144,10 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 - **Tinta tenue** (#525b55): encabezados de tabla, copyright y créditos (6,3:1).
 - **Bordes** (#d8d5cd, #e4e1da, #b1ada3): tarjetas, divisores y el trazo punteado del hilo.
 
+- **Sobre la banda verde** (Impacto y cierre): texto #ece8df y secundarios teñidos de verde (#b4d4c1, #9fc2ad), no grises neutros.
+- **Celular de WhatsApp** (`WhatsAppMock.astro`): copia los colores de la app real (globo #ffffff, metadatos #667781, barras, fondo). Es una réplica del producto, no parte de la paleta: no se reutilizan en otros componentes.
+- **Máscaras** (#000000): sólo como canal de opacidad en `mask-image` (líneas de nivel, carrusel de logos), nunca como color visible.
+
 ### Named Rules
 **The Meaning Rule.** Cada color dice algo: verde a salvo, ámbar alerta, rojo pérdida, tierra carbono. Un color sin significado no entra. Nada de azules, celestes, lima ni violetas.
 
@@ -165,6 +179,30 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 - **Secciones:** 96 px de aire vertical; las compactas, 64 px.
 - **Espaciado:** sólo los pasos de `--space-*` (2 a 96 px).
 - **Recorrido:** el hero, El problema, Lo que hace VigIA y La solución forman un recorrido unido por el hilo a la izquierda. Las primeras van en dos columnas, texto a la izquierda y medio a la derecha, y en celular pasan a una columna.
+- **Recorrido a pantalla completa (decisión 50):** en pantallas horizontales de al menos 900 × 560 px (escritorio y tablet acostada), cada panel ocupa una pantalla, con el contenido centrado debajo del header (que queda siempre visible):
+  1. hero, sin etiqueta;
+  2. El problema;
+  3. Lo que hace VigIA, con las dos preguntas al pie;
+  4. La solución, en dos estados: primero la bajada y los canales; con el siguiente gesto, en su lugar, "Cómo lo hace" (tres pasos en vertical que se despliegan de arriba hacia abajo), sin mover el título ni el celular;
+  5. la frase, en tres renglones;
+  6. Impacto.
+
+  En los paneles de dos columnas, el título arranca a la altura del borde de arriba del gráfico o del video, y la etiqueta queda por encima. Los tamaños siguen al alto de la ventana (tokens `--fit-*`).
+
+  Cada gesto de scroll es un paso (`SectionPager.astro`):
+  - **Hacia abajo:** 800 ms la primera vez, 520 ms después y 1,8 s hacia la frase, para ver llegar el hilo. Al pasar a "Cómo lo hace", traba hasta que terminan los pasos.
+  - **Hacia arriba:** también por paneles, pero en 420 ms y casi sin espera entre gestos.
+  - **La inercia del trackpad** no saltea paneles ni sigue de largo al llegar a Impacto.
+  - **Desde Impacto,** scroll normal.
+  - **En celular, en vertical o con movimiento reducido,** la página se scrollea como siempre.
+- **Llegada a la frase:** cuando el hilo llega al punto, justo antes de "antes", un trazo verde campo recorre la palabra de izquierda a derecha, con el impulso del hilo, y se va por la derecha (1,8 s). Después aparece una flecha abajo que respira despacio: crece y se achica apenas. Es la única animación continua de la página, por pedido explícito.
+- **Fondos por capítulo (decisión 50):**
+  - el recorrido, sobre el fondo de la página, con líneas de nivel tenues detrás del hero (`TopoLines.astro`), casi invisibles detrás del texto;
+  - Impacto, en una banda verde bosque;
+  - equipo y clientes, sobre un verde salvia claro (`--vg-bg-prueba`);
+  - preguntas frecuentes, del color del footer, con el cierre verde entre los dos.
+
+  Todos planos, sin degradés.
 
 ## Elevation & Depth
 
@@ -176,7 +214,7 @@ Casi plano. La profundidad la dan las superficies (piedra contra superficie) y b
 
 ## Shapes
 
-Radios moderados: 8 px en botones, 12 px en tarjetas y paneles, 16 px en el recuadro de los gráficos. Las fotos van con las esquinas rectas. No se usan píldoras salvo en controles chicos, ni bordes de color gruesos sobre tarjetas redondeadas.
+Radios moderados: 8 px en botones, 12 px en tarjetas y paneles, 16 px en el recuadro de los gráficos. Píldora (999 px) sólo en controles chicos del header; 10 px en el globo del celular de WhatsApp, como en la app. Las fotos van con las esquinas rectas. No se usan píldoras salvo en controles chicos, ni bordes de color gruesos sobre tarjetas redondeadas.
 
 ## Components
 
@@ -190,7 +228,8 @@ Superficie #fbfaf8, borde de 1 px y 12 px de radio, sin sombra fuerte. Las tarje
 
 ### Navigation
 - **Header:** del ancho del contenido y transparente arriba de todo.
-- **Al bajar:** fondo translúcido con desenfoque y una línea fina abajo. Se oculta al scrollear hacia abajo.
+- **Al bajar:** fondo translúcido con desenfoque y una línea fina abajo. Siempre visible: no se oculta al scrollear. Sobre las bandas verde bosque (Impacto, cierre: `data-fondo-oscuro`) el fondo pasa a casi opaco, para que se lean logo y menú.
+- **Anclas del menú:** las secciones tienen `scroll-margin-top` del alto del header, así quedan justo debajo de él.
 
 ### Gráfico del balance (Signature Component)
 - **Qué muestra:** agua útil (verde campo), umbral (ámbar punteado), zona de pronóstico (#ebe5d7) y "Hoy".
@@ -213,6 +252,6 @@ Superficie #fbfaf8, borde de 1 px y 12 px de radio, sin sombra fuerte. Las tarje
 ### Don't:
 - **Don't** usar degradés en el texto ni fondos por etapas.
 - **Don't** poner etiquetas en mayúsculas con tracking ni colores distintos por sección.
-- **Don't** usar desenfoque al aparecer, pulsos o animaciones infinitas.
-- **Don't** fijar secciones en pantalla ni alargar la página con animaciones de scroll. Ya se probó y se descartó: las animaciones ligadas al scroll pasaban en el borde de la pantalla, no donde se lee.
+- **Don't** usar desenfoque al aparecer, pulsos o animaciones infinitas (única excepción acordada: la flecha de la frase, que respira despacio).
+- **Don't** atar animaciones al avance del scroll (que se dibujen mientras el elemento entra por el borde): se probó y se descartó, porque pasaban en el borde de la pantalla, no donde se lee. El paso entre paneles del recorrido sí está aceptado (decisión 50): es un gesto, una animación completa, con el panel entero a la vista.
 - **Don't** usar imágenes generadas que repitan la misma escena, ni inventar fotos de clientes.

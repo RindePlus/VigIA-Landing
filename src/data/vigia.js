@@ -36,11 +36,11 @@ export const SEO = {
 
 // 1. Hero
 export const HERO = {
-  etiqueta: 'Estrés hídrico y térmico',
   titulo: 'Detectá el estrés antes de que se convierta en pérdida',
   // Lleva los tres diferenciales que antes iban como palabras clave: desde
   // antes de la siembra, por ambiente y por WhatsApp (decisión 47).
-  bajada: `${MARCA} sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos.`,
+  // "Hídrico y térmico" vino de la etiqueta del hero, que se quitó (decisión 50).
+  bajada: `${MARCA} sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés hídrico y térmico se vea a campo. Para productores y asesores que deciden con datos.`,
 };
 
 // 2. El problema
@@ -177,7 +177,9 @@ export const COMO_FUNCIONA = {
 // 5. Frase destacada: una línea por renglón.
 // Palabras resaltadas con los colores de la historia: *verde* (a tiempo) y
 // _rojo_ (tarde).
-export const FRASE = ['Que el bioinsumo llegue *antes* que el estrés,', 'no _después del daño._'];
+export const FRASE = ['Que el bioinsumo llegue', '*antes* que el estrés,', 'no _después del daño._'];
+// Flecha al pie de la frase (pantalla completa): la página sigue.
+export const FRASE_SIGUE = 'Seguir a Impacto';
 
 // 6. Impacto: resultados medidos en campo. Los números están en
 // src/data/impactoDatos.js (compartidos con la versión en inglés).

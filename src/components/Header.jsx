@@ -49,10 +49,12 @@ const Header = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const [isHidden, setIsHidden] = useState(false);
   // Arriba de todo el header se funde con la página; al bajar toma fondo y
   // una línea fina para separarse del contenido que pasa por debajo.
   const [isScrolled, setIsScrolled] = useState(false);
+  // Sobre las bandas verde bosque (Impacto, cierre: [data-fondo-oscuro]) el
+  // fondo translúcido del header se aclara, para que se lean logo y menú.
+  const [sobreOscuro, setSobreOscuro] = useState(false);
   // Sección en la que está parado el usuario (href del ítem del menú): se
   // marca con una línea verde debajo del enlace.
   const [activeHref, setActiveHref] = useState(null);
@@ -77,16 +79,10 @@ const Header = ({
     };
   }, [isLangOpen]);
 
-  // Oculta el header al bajar y lo muestra al subir. Para ocultarse exige un
-  // recorrido hacia abajo sostenido (no un toque de rueda); para volver basta
-  // un gesto corto hacia arriba.
+  // El header queda siempre visible (decisión 50: con el recorrido de
+  // pantalla en pantalla, esconderlo al bajar complicaba volver arriba).
+  // Arriba de todo es transparente; al bajar toma el fondo con desenfoque.
   useEffect(() => {
-    const HIDE_DISTANCE = 120;
-    const SHOW_DISTANCE = 8;
-    const TOP_ZONE = 160;
-    let lastY = window.scrollY;
-    let anchorY = lastY; // donde empezó el tramo actual en una misma dirección
-    let direction = 0;
     let ticking = false;
 
     // Secciones del menú que existen en esta página (en las otras páginas no
@@ -118,22 +114,14 @@ const Header = ({
     const update = () => {
       const y = window.scrollY;
       setIsScrolled(y > 8);
+      const alto = headerRef.current?.offsetHeight ?? 80;
+      setSobreOscuro(
+        [...document.querySelectorAll('[data-fondo-oscuro]')].some((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top < alto && r.bottom > 0;
+        }),
+      );
       setActiveHref(paginaActual ? paginaActual.href : seccionActiva());
-      const nextDirection = Math.sign(y - lastY);
-      if (nextDirection !== 0 && nextDirection !== direction) {
-        direction = nextDirection;
-        anchorY = lastY;
-      }
-      const travelled = Math.abs(y - anchorY);
-
-      if (y < TOP_ZONE) {
-        setIsHidden(false);
-      } else if (direction > 0 && travelled >= HIDE_DISTANCE) {
-        setIsHidden(true);
-      } else if (direction < 0 && travelled >= SHOW_DISTANCE) {
-        setIsHidden(false);
-      }
-      lastY = y;
       ticking = false;
     };
 
@@ -167,7 +155,7 @@ const Header = ({
   return (
     <header
       ref={headerRef}
-      className={`header ${isMenuOpen ? 'header--menu-open' : ''} ${!showMenu ? 'header--no-menu' : ''} ${isHidden && !isMenuOpen ? 'header--hidden' : ''} ${isScrolled ? 'header--scrolled' : ''}`}
+      className={`header ${isMenuOpen ? 'header--menu-open' : ''} ${!showMenu ? 'header--no-menu' : ''} ${isScrolled ? 'header--scrolled' : ''} ${sobreOscuro ? 'header--sobre-oscuro' : ''}`}
     >
       <div className="header-content">
         <a href={inicioHref} className="header-logo" aria-label={inicioLabel}>
