@@ -37,6 +37,73 @@ const guardarPosicion = (destino) => {
   }
 };
 
+// Desplegable del menú (ítem con `hijos`). En escritorio se abre al dejar
+// el cursor encima un momento (no al pasar de largo) y se cierra con un
+// pequeño margen al salir, para poder bajar hasta la lista. Con teclado se
+// abre al enfocar el título. En el menú de celular los hijos van siempre a
+// la vista, debajo del título (Header.css).
+const ABRIR_MS = 220;
+const CERRAR_MS = 200;
+
+const MenuGrupo = ({ item, activeHref, onNavigate }) => {
+  const [abierto, setAbierto] = useState(false);
+  const timer = useRef(null);
+  const grupoRef = useRef(null);
+  const activo = item.href === activeHref || item.hijos.some((h) => h.href === activeHref);
+
+  const programar = (valor, ms) => {
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setAbierto(valor), ms);
+  };
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  const cerrar = () => {
+    window.clearTimeout(timer.current);
+    setAbierto(false);
+    onNavigate();
+  };
+
+  return (
+    <div
+      ref={grupoRef}
+      className={`menu-grupo ${abierto ? 'menu-grupo--abierto' : ''}`}
+      onPointerEnter={(e) => e.pointerType === 'mouse' && programar(true, ABRIR_MS)}
+      onPointerLeave={(e) => e.pointerType === 'mouse' && programar(false, CERRAR_MS)}
+      onFocus={() => programar(true, 0)}
+      onBlur={(e) => {
+        if (!grupoRef.current?.contains(e.relatedTarget)) programar(false, 0);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') programar(false, 0);
+      }}
+    >
+      <a
+        href={item.href}
+        className={`menu-item menu-grupo__titulo ${activo ? 'menu-item--active' : ''}`}
+        aria-current={item.href === activeHref ? 'location' : undefined}
+        onClick={cerrar}
+      >
+        {item.label}
+        <PiCaretDown className="menu-grupo__caret" aria-hidden="true" />
+      </a>
+      <ul className="menu-grupo__lista">
+        {item.hijos.map((hijo) => (
+          <li key={hijo.href}>
+            <a
+              href={hijo.href}
+              className={`menu-subitem ${hijo.href === activeHref ? 'menu-subitem--active' : ''}`}
+              aria-current={hijo.href === activeHref ? 'location' : undefined}
+              onClick={cerrar}
+            >
+              {hijo.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 const Header = ({
   menuItems,
   showMenu = true,
@@ -49,10 +116,12 @@ const Header = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
-  const [isHidden, setIsHidden] = useState(false);
   // Arriba de todo el header se funde con la página; al bajar toma fondo y
   // una línea fina para separarse del contenido que pasa por debajo.
   const [isScrolled, setIsScrolled] = useState(false);
+  // Sobre las bandas oscuras (Impacto, footer: [data-fondo-oscuro]) el
+  // fondo translúcido del header se aclara, para que se lean logo y menú.
+  const [sobreOscuro, setSobreOscuro] = useState(false);
   // Sección en la que está parado el usuario (href del ítem del menú): se
   // marca con una línea verde debajo del enlace.
   const [activeHref, setActiveHref] = useState(null);
@@ -77,21 +146,17 @@ const Header = ({
     };
   }, [isLangOpen]);
 
-  // Oculta el header al bajar y lo muestra al subir. Para ocultarse exige un
-  // recorrido hacia abajo sostenido (no un toque de rueda); para volver basta
-  // un gesto corto hacia arriba.
+  // El header queda siempre visible (decisión 50: con el recorrido de
+  // pantalla en pantalla, esconderlo al bajar complicaba volver arriba).
+  // Arriba de todo es transparente; al bajar toma el fondo con desenfoque.
   useEffect(() => {
-    const HIDE_DISTANCE = 120;
-    const SHOW_DISTANCE = 8;
-    const TOP_ZONE = 160;
-    let lastY = window.scrollY;
-    let anchorY = lastY; // donde empezó el tramo actual en una misma dirección
-    let direction = 0;
     let ticking = false;
 
     // Secciones del menú que existen en esta página (en las otras páginas no
-    // hay ninguna y no se marca nada).
+    // hay ninguna y no se marca nada). Los hijos de un desplegable cuentan
+    // como secciones propias; el título se marca si lo está uno de ellos.
     const secciones = menuItems
+      .flatMap((item) => [item, ...(item.hijos ?? [])])
       .map((item) => ({ href: item.href, el: document.getElementById(item.href.split('#')[1] ?? '') }))
       .filter((s) => s.el);
 
@@ -118,22 +183,17 @@ const Header = ({
     const update = () => {
       const y = window.scrollY;
       setIsScrolled(y > 8);
+      const alto = headerRef.current?.offsetHeight ?? 80;
+      // Alto real del header: los saltos del menú dejan cada sección justo
+      // debajo de él (scroll-margin-top en sections.css).
+      document.documentElement.style.setProperty('--alto-header', `${alto}px`);
+      setSobreOscuro(
+        [...document.querySelectorAll('[data-fondo-oscuro]')].some((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top < alto && r.bottom > 0;
+        }),
+      );
       setActiveHref(paginaActual ? paginaActual.href : seccionActiva());
-      const nextDirection = Math.sign(y - lastY);
-      if (nextDirection !== 0 && nextDirection !== direction) {
-        direction = nextDirection;
-        anchorY = lastY;
-      }
-      const travelled = Math.abs(y - anchorY);
-
-      if (y < TOP_ZONE) {
-        setIsHidden(false);
-      } else if (direction > 0 && travelled >= HIDE_DISTANCE) {
-        setIsHidden(true);
-      } else if (direction < 0 && travelled >= SHOW_DISTANCE) {
-        setIsHidden(false);
-      }
-      lastY = y;
       ticking = false;
     };
 
@@ -167,7 +227,7 @@ const Header = ({
   return (
     <header
       ref={headerRef}
-      className={`header ${isMenuOpen ? 'header--menu-open' : ''} ${!showMenu ? 'header--no-menu' : ''} ${isHidden && !isMenuOpen ? 'header--hidden' : ''} ${isScrolled ? 'header--scrolled' : ''}`}
+      className={`header ${isMenuOpen ? 'header--menu-open' : ''} ${!showMenu ? 'header--no-menu' : ''} ${isScrolled ? 'header--scrolled' : ''} ${sobreOscuro ? 'header--sobre-oscuro' : ''}`}
     >
       <div className="header-content">
         <a href={inicioHref} className="header-logo" aria-label={inicioLabel}>
@@ -180,17 +240,26 @@ const Header = ({
 
         {showMenu && (
           <nav className={`header-nav ${isMenuOpen ? 'header-nav--open' : ''}`} id="header-menu">
-            {menuItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={`menu-item ${item.href === activeHref ? 'menu-item--active' : ''}`}
-                aria-current={item.href === activeHref ? 'location' : undefined}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
+            {menuItems.map((item) =>
+              item.hijos ? (
+                <MenuGrupo
+                  key={item.href}
+                  item={item}
+                  activeHref={activeHref}
+                  onNavigate={() => setIsMenuOpen(false)}
+                />
+              ) : (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={`menu-item ${item.href === activeHref ? 'menu-item--active' : ''}`}
+                  aria-current={item.href === activeHref ? 'location' : undefined}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ),
+            )}
 
             <div className="header-nav__theme">
               <span className="header-nav__theme-label">

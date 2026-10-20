@@ -1,0 +1,103 @@
+---
+// Fondo de El problema (decorativo): suelo seco y agrietado visto desde
+// arriba. Placas de barro seco separadas por grietas (celdas de Voronoi
+// achicadas hacia su centro, con bordes apenas quebrados). Cuenta la
+// sequía, como el fondo tierra de la sección.
+// Se genera al compilar, siempre igual: pseudoazar con semilla fija.
+// Vectores sin relleno; color y desvanecido en sections.css
+// (.vg-fondo-linea--grietas).
+
+const W = 1200;
+const H = 800;
+
+const fmt = (n: number) => n.toFixed(1);
+type P = [number, number];
+
+// Pseudoazar con semilla (mulberry32): mismo dibujo en cada build.
+const azar = (() => {
+  let a = 20261019;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+})();
+
+// Centros de las placas: una grilla con corrimientos, más grandes abajo
+// (más cerca) y más chicas arriba.
+const centros: P[] = [];
+for (let y = -40, fila = 0; y < H + 60; fila++) {
+  const paso = 58 + (y / H) * 52;
+  for (let x = -40 + (fila % 2) * paso * 0.5; x < W + 60; x += paso) {
+    centros.push([x + (azar() - 0.5) * paso * 0.7, y + (azar() - 0.5) * paso * 0.6]);
+  }
+  y += paso * 0.86;
+}
+
+// Recorta un polígono al semiplano más cercano a `a` que a `b`.
+const recortar = (poly: P[], a: P, b: P): P[] => {
+  const m: P = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  const n: P = [b[0] - a[0], b[1] - a[1]];
+  const lado = (p: P) => (p[0] - m[0]) * n[0] + (p[1] - m[1]) * n[1];
+  const out: P[] = [];
+  for (let i = 0; i < poly.length; i++) {
+    const p = poly[i];
+    const q = poly[(i + 1) % poly.length];
+    const lp = lado(p);
+    const lq = lado(q);
+    if (lp <= 0) out.push(p);
+    if (lp * lq < 0) {
+      const t = lp / (lp - lq);
+      out.push([p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t]);
+    }
+  }
+  return out;
+};
+
+const placas = centros.map((c) => {
+  let poly: P[] = [
+    [c[0] - 200, c[1] - 200],
+    [c[0] + 200, c[1] - 200],
+    [c[0] + 200, c[1] + 200],
+    [c[0] - 200, c[1] + 200],
+  ];
+  for (const o of centros) {
+    if (o === c || Math.abs(o[0] - c[0]) > 260 || Math.abs(o[1] - c[1]) > 260) continue;
+    poly = recortar(poly, c, o);
+  }
+  // Achica hacia el centro (el ancho de la grieta) y quiebra cada borde en
+  // tres tramos.
+  const gx = poly.reduce((s, p) => s + p[0], 0) / poly.length;
+  const gy = poly.reduce((s, p) => s + p[1], 0) / poly.length;
+  const adentro = poly.map(([x, y]): P => {
+    const d = Math.hypot(gx - x, gy - y) || 1;
+    const k = Math.min(0.4, (2.5 + (y / H) * 3) / d);
+    return [x + (gx - x) * k, y + (gy - y) * k];
+  });
+  const pts: P[] = [];
+  adentro.forEach((p, i) => {
+    const q = adentro[(i + 1) % adentro.length];
+    pts.push(p);
+    const largo = Math.hypot(q[0] - p[0], q[1] - p[1]);
+    if (largo < 18) return;
+    const nx = -(q[1] - p[1]) / largo;
+    const ny = (q[0] - p[0]) / largo;
+    for (const t of [0.35, 0.68]) {
+      const desvio = (azar() - 0.5) * Math.min(5, largo * 0.08);
+      pts.push([p[0] + (q[0] - p[0]) * t + nx * desvio, p[1] + (q[1] - p[1]) * t + ny * desvio]);
+    }
+  });
+  return `M${pts.map(([x, y]) => `${fmt(x)} ${fmt(y)}`).join(' L')} Z`;
+});
+---
+
+<svg
+  class="vg-fondo-linea vg-fondo-linea--grietas"
+  viewBox={`0 0 ${W} ${H}`}
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+  focusable="false"
+>
+  {placas.map((d) => <path d={d} />)}
+</svg>

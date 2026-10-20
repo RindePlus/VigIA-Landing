@@ -12,6 +12,15 @@
   padding-block: var(--space-900);
 }
 
+/* El header queda siempre visible (decisión 50): al saltar a una sección
+   desde el menú, su borde superior queda justo debajo de él. --alto-header
+   lo mide Header.jsx: con un valor fijo, si el header es un píxel más bajo,
+   asoma una línea de la sección anterior. */
+section[id],
+footer[id] {
+  scroll-margin-top: var(--alto-header, var(--space-800));
+}
+
 .vg-section--tint {
   background: var(--gh-surface);
   border-block: 1px solid var(--gh-border-muted);
@@ -94,11 +103,6 @@ h3 {
   filter: none;
 }
 
-.vg-btn--light {
-  background: var(--vg-forest-fg);
-  color: var(--vg-forest-bg);
-}
-
 /* ---------- Hero ---------- */
 .vg-hero {
   /* Alto del header + aire propio de la sección. */
@@ -171,14 +175,16 @@ h3 {
   transform: translateX(var(--space-50));
 }
 
-/* En celular el CTA (el del hero y el del cierre) no ocupa todo el ancho:
-   texto un punto más chico y, en el hero, sin flecha (como el del cierre),
-   para que entre en un solo renglón dentro de la columna del contenido. */
+/* En celular el CTA (el del hero y el de preguntas) no ocupa todo el
+   ancho: texto un punto más chico y sin flecha, para que entre en un solo
+   renglón dentro de la columna del contenido. */
 @media (max-width: 480px) {
-  .vg-hero__ctas .vg-btn { padding: var(--space-75) var(--space-200); }
-  .vg-hero__ctas .vg-btn svg { display: none; }
   .vg-hero__ctas .vg-btn,
-  .vg-cta .vg-btn {
+  .vg-faq__cta .vg-btn { padding: var(--space-75) var(--space-200); }
+  .vg-hero__ctas .vg-btn svg,
+  .vg-faq__cta .vg-btn svg { display: none; }
+  .vg-hero__ctas .vg-btn,
+  .vg-faq__cta .vg-btn {
     font-size: var(--text-sm);
     line-height: var(--leading-sm);
   }
@@ -194,19 +200,10 @@ h3 {
   margin-inline: auto;
 }
 
-/* ---------- Clientes (carrusel) ---------- */
+/* ---------- Clientes (carrusel) ----------
+   Al pie de Sobre nosotros, sin título, pegado a las tarjetas del equipo. */
 .vg-trusted {
-  padding-block: var(--space-75) var(--space-700);
-}
-
-/* Mismo estilo que las etiquetas de sección (.vg-eyebrow), centrado. */
-.vg-trusted__title {
-  margin-bottom: var(--space-300);
-  color: var(--gh-fg-muted);
-  font-size: var(--text-base);
-  line-height: var(--leading-base);
-  font-weight: 500;
-  text-align: center;
+  margin-top: var(--space-400);
 }
 
 /* ---------- Gráfico del hero ---------- */
@@ -454,78 +451,74 @@ h3 {
   line-height: var(--leading-base);
 }
 
+/* Indicador de las dos partes de la solución: sólo en pantalla completa
+   (ver "Recorrido a pantalla completa"). */
+.vg-partes { display: none; }
+
 /* ---------- Cómo lo hace ----------
-   Tres pasos en una tira, unidos por una línea. */
-/* Bien separado del bloque de los canales y el WhatsApp: es otra parte. */
+   Va en la columna de texto de La solución, debajo de los canales (en
+   pantalla completa, en su lugar: ver "Recorrido a pantalla completa").
+   Tres pasos en vertical, unidos por una línea que baja de punto a punto. */
 .vg-detalle {
-  margin-top: var(--space-900);
+  margin-top: var(--space-600);
 }
 
-/* Subtítulo del bloque (Cómo lo hace): centrado sobre su bloque, que también
-   va centrado, y un paso más grande que los títulos de adentro (Se cargan
-   tus lotes…) para que mande. */
+/* Subtítulo chico: un paso por encima de los títulos de los pasos. */
 .vg-detalle__label {
-  margin-bottom: var(--space-500);
+  margin-bottom: var(--space-300);
   color: var(--gh-fg);
-  font-size: var(--text-3xl);
-  line-height: var(--leading-3xl);
-  font-weight: 700;
-  text-align: center;
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  font-weight: 600;
   text-wrap: pretty;
 }
 
-/* Pasos como línea de tiempo, sin números: cada paso centrado con un punto
-   verde encima del título, y una línea fina de punto a punto. Más angosta
-   que el ancho de la sección, con aire a los costados. */
+/* Pasos como línea de tiempo vertical, sin números: un punto verde a la
+   izquierda de cada título y una línea fina hacia el punto de abajo. */
 .vg-pasos {
   --punto: var(--space-100);
   --hueco: var(--space-300);
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: var(--hueco);
-  max-width: 880px;
-  margin-inline: auto;
   list-style: none;
 }
 
 .vg-paso {
   position: relative;
-  padding-top: calc(var(--punto) + var(--space-200));
-  text-align: center;
+  padding-left: calc(var(--punto) + var(--space-200));
 }
 
 .vg-paso::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: calc(50% - var(--punto) / 2);
+  top: calc((var(--leading-xl) - var(--punto)) / 2);
+  left: 0;
   width: var(--punto);
   height: var(--punto);
   border-radius: 50%;
   background: var(--vg-icon-green);
 }
 
+/* De un punto al de abajo, con un respiro a cada lado. */
 .vg-paso:not(:last-child)::after {
   content: '';
   position: absolute;
-  top: calc(var(--punto) / 2);
-  /* De un centro al siguiente hay 100% + hueco; la línea deja un respiro
-     a cada lado de los puntos. */
-  left: calc(50% + var(--punto) / 2 + var(--space-100));
-  width: calc(100% + var(--hueco) - var(--punto) - var(--space-100) * 2);
-  height: 1px;
+  top: calc(var(--leading-xl) / 2 + var(--punto) / 2 + var(--space-75));
+  bottom: calc(var(--space-75) - var(--hueco) - var(--leading-xl) / 2 + var(--punto) / 2);
+  left: calc(var(--punto) / 2);
+  width: 1px;
   background: var(--gh-border-strong);
-  transform-origin: left center;
+  transform-origin: center top;
 }
 
-/* Despliegue al entrar en pantalla. La lista usa el observer de data-reveal
-   (BaseLayout) sólo como disparador: ella no se desvanece; la animan sus
-   hijos. Cada paso entra desde la izquierda cuando la línea llega a él
-   (`--i` = posición) y la línea hacia el siguiente se dibuja a continuación.
-   Sin JS o con movimiento reducido no hay .vg-reveal-on y todo se ve fijo. */
+/* Despliegue de arriba hacia abajo. La lista usa el observer de
+   data-reveal (BaseLayout) sólo como disparador: ella no se desvanece; la
+   animan sus hijos. Cada paso baja a su lugar cuando la línea llega a él
+   (`--i` = posición) y la línea hacia el siguiente se dibuja a
+   continuación. Sin JS o con movimiento reducido no hay .vg-reveal-on y
+   todo se ve fijo. */
 .vg-reveal-on .vg-pasos[data-reveal] {
   opacity: 1;
-  filter: none;
   transform: none;
   transition: none;
 }
@@ -544,19 +537,19 @@ h3 {
 
 .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso {
   opacity: 0;
-  transform: translateX(calc(var(--space-100) * -1));
+  transform: translateY(calc(var(--space-100) * -1));
 }
 
 .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::after {
-  transform: scaleX(0);
+  transform: scaleY(0);
 }
 
 .vg-paso .vg-paso__titulo {
   margin-bottom: var(--space-25);
   color: var(--gh-fg);
-  font-size: var(--text-2xl);
-  line-height: var(--leading-2xl);
-  font-weight: 700;
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  font-weight: 600;
   text-wrap: pretty;
 }
 
@@ -571,33 +564,6 @@ h3 {
   .vg-avisos {
     grid-template-columns: 1fr;
     gap: var(--space-500);
-  }
-}
-
-@media (max-width: 680px) {
-  .vg-pasos { grid-template-columns: 1fr; }
-
-  /* En celular la línea de tiempo baja: punto a la izquierda y la línea
-     hacia el paso de abajo, que se dibuja de arriba hacia abajo. */
-  .vg-paso {
-    padding-top: 0;
-    padding-left: calc(var(--punto) + var(--space-200));
-    text-align: left;
-  }
-  .vg-paso::before {
-    top: calc((var(--leading-2xl) - var(--punto)) / 2);
-    left: 0;
-  }
-  .vg-paso:not(:last-child)::after {
-    top: calc(var(--leading-2xl) / 2 + var(--punto) / 2 + var(--space-100));
-    bottom: calc(var(--space-100) - var(--hueco) - var(--leading-2xl) / 2 + var(--punto) / 2);
-    left: calc(var(--punto) / 2);
-    width: 1px;
-    height: auto;
-    transform-origin: center top;
-  }
-  .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::after {
-    transform: scaleY(0);
   }
 }
 
@@ -1017,48 +983,6 @@ h3 {
   }
 }
 
-/* ---------- CTA final ---------- */
-.vg-cta {
-  background: var(--vg-forest-bg);
-  color: var(--vg-forest-fg);
-  text-align: center;
-}
-
-.vg-cta h2 {
-  max-width: 680px;
-  margin-inline: auto;
-  color: var(--vg-forest-fg);
-  font-size: var(--text-3xl);
-  line-height: var(--leading-3xl);
-  letter-spacing: -0.02em;
-}
-
-@media (min-width: 768px) {
-  .vg-cta h2 {
-    font-size: var(--text-4xl);
-    line-height: var(--leading-4xl);
-  }
-}
-
-.vg-cta p {
-  margin-block: var(--space-100) var(--space-400);
-  color: rgba(255, 255, 255, 0.78);
-  font-size: var(--text-lg);
-  line-height: var(--leading-lg);
-}
-
-/* Nota debajo del botón (en inglés: el equipo responde en español). */
-.vg-cta .vg-cta__nota {
-  margin-block: var(--space-200) 0;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: var(--text-sm);
-  line-height: var(--leading-sm);
-}
-
-[data-rp-theme="dark"] .vg-cta {
-  border-top: 1px solid var(--gh-border);
-}
-
 /* ---------- 4. Frase destacada (TaglineReveal) ---------- */
 .vg-tagline {
   padding-block: var(--space-900);
@@ -1090,7 +1014,313 @@ h3 {
    resaltadas: verde (a tiempo) y rojo (tarde). */
 .vg-tagline__word { color: var(--vg-forest); }
 .vg-tagline__word--ok { color: var(--vg-campo); }
+
+/* Cuando el hilo llega a la frase (JourneyThread pone .is-llegada), un
+   trazo verde recorre "antes" de izquierda a derecha, como el impulso del
+   hilo que sigue bajo la palabra, y se va por la derecha. Lento, para que
+   se vea. Sin JS o con movimiento reducido no hay trazo. */
+.vg-tagline__word--ok {
+  position: relative;
+  display: inline-block;
+}
+
+.vg-tagline__word--ok::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.02em;
+  height: 0.09em;
+  border-radius: var(--space-25);
+  background: var(--vg-campo);
+  transform-origin: left center;
+}
+
+.vg-tagline__word--ok::after { clip-path: inset(0 100% 0 0); }
+
+@keyframes vg-impulso {
+  0% { clip-path: inset(0 100% 0 0); }
+  50% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 100%); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .vg-tagline.is-llegada .vg-tagline__word--ok::after {
+    animation: vg-impulso 1.8s cubic-bezier(0.77, 0, 0.175, 1) both;
+  }
+}
+
+/* Flecha al pie de la frase: sólo en pantalla completa (ver más abajo),
+   donde el hilo terminando podría hacer pensar que la página termina. */
+.vg-tagline__sigue {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--panel-pad-bottom, var(--space-300)) + var(--space-200));
+  align-items: center;
+  justify-content: center;
+  width: var(--space-600);
+  height: var(--space-600);
+  border-radius: 50%;
+  color: var(--gh-fg-muted);
+  font-size: var(--text-2xl);
+  transform: translateX(-50%);
+  transition:
+    color var(--dur-base) var(--ease-fluid),
+    opacity var(--dur-slow) var(--ease-fluid) var(--dur-slow);
+}
+
+.vg-tagline__sigue:hover { color: var(--gh-accent); }
+
+/* Aparece después del trazo, no antes: es el paso siguiente. */
+.vg-reveal-on .vg-tagline:not(.is-llegada) .vg-tagline__sigue { opacity: 0; }
+
+/* Respira despacio: crece y se achica apenas, para invitar a seguir sin
+   reclamar atención. Única animación continua de la página, por pedido
+   explícito (DESIGN.md). Sin ella con movimiento reducido. */
+@keyframes vg-respira {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.14); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .vg-tagline.is-llegada .vg-tagline__sigue {
+    animation: vg-respira 2.8s ease-in-out var(--dur-slow) infinite;
+  }
+}
 .vg-tagline__word--critico { color: var(--vg-sev-critico); }
+
+/* ---------- Fondos por capítulo (decisión 50) ----------
+   El recorrido (hero → frase) va sobre el fondo de la página. Impacto es una
+   banda verde bosque: las cifras pesan y separan la historia de la prueba.
+   Equipo y clientes vuelven al fondo de la página (decisión 53: el salvia
+   frío chocaba con las tarjetas blancas). Preguntas frecuentes, del color
+   del footer: el cierre verde queda entre los dos. */
+/* La solución, con fondo propio: dentro, el canvas del tema pasa a ese
+   color, así lo que lo usa para recortarse queda igual. El problema va
+   sobre el fondo de la página, con la letra de siempre. */
+
+#como-funciona {
+  --gh-canvas: var(--vg-bg-solucion);
+  background: var(--gh-canvas);
+}
+
+.vg-impacto {
+  /* Dentro de la banda, los tokens del tema pasan a sus versiones sobre
+     verde: así tablas, botones y textos se resuelven solos, sin overrides
+     por componente. El panel de las tablas usa el mismo verde, con borde. */
+  --gh-canvas: var(--vg-forest-bg);
+  --gh-surface: var(--vg-forest-bg);
+  --gh-surface-2: var(--vg-forest-bg);
+  --gh-border: var(--vg-on-forest-line);
+  --gh-border-muted: var(--vg-on-forest-line-muted);
+  --gh-border-strong: var(--vg-on-forest-line-strong);
+  --gh-fg: var(--vg-on-forest-fg);
+  --gh-fg-muted: var(--vg-on-forest-muted);
+  --gh-fg-subtle: var(--vg-on-forest-subtle);
+  --gh-accent: var(--vg-on-forest-accent);
+  --vg-forest: var(--vg-on-forest-fg);
+  --vg-campo: var(--vg-on-forest-campo);
+  --vg-icon-green: var(--vg-on-forest-campo);
+  --vg-carbono: var(--vg-on-forest-carbono);
+  background: var(--vg-forest-bg);
+  color: var(--gh-fg);
+}
+
+#preguntas {
+  background: var(--gh-surface);
+}
+
+/* Líneas de nivel detrás del hero (TopoLines.astro): muy tenues, para dar
+   textura sin competir con el texto ni con el gráfico. */
+.vg-hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.vg-topo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--gh-border-strong);
+  stroke-width: 1;
+  opacity: 0.45;
+  pointer-events: none;
+  /* Se desvanecen hacia abajo (el hero no termina en un corte) y casi
+     desaparecen detrás del texto, a la izquierda: no se mezclan con las
+     letras. Dos máscaras que se intersecan. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 55%, transparent),
+    linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 42%, #000 62%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 55%, transparent),
+    linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 42%, #000 62%);
+  mask-composite: intersect;
+}
+
+[data-rp-theme="dark"] .vg-topo { opacity: 0.3; }
+
+/* Lote sembrado detrás del hero (FieldRows.astro), en prueba. Los surcos
+   están en la mitad de abajo: se desvanece arriba (el cielo queda limpio,
+   el header no se mezcla) y al pie (el hero no termina en un corte). Detrás
+   del texto, a la izquierda, baja a menos de la mitad: se sigue viendo,
+   pero no compite con las letras. */
+.vg-campo-fondo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--gh-border-strong);
+  stroke-width: 1;
+  opacity: 0.5;
+  pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 40%, #000 56%, #000 80%, transparent),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 40%, #000 56%, #000 80%, transparent),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  mask-composite: intersect;
+}
+
+.vg-campo-fondo path { vector-effect: non-scaling-stroke; }
+.vg-campo-fondo__lejos { opacity: 0.6; }
+
+[data-rp-theme="dark"] .vg-campo-fondo { opacity: 0.35; }
+
+/* Fondos a línea de El problema, Lo que hace VigIA y La solución
+   (SueloSeco, LoteAmbientes y Pivotes.astro): misma técnica que el lote
+   del hero. Cada uno toma el color de su tramo del hilo, muy mezclado con
+   el fondo de la sección; en las zonas libres y al 40 % detrás del texto. */
+.vg-fondo-linea {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--linea);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.vg-fondo-linea path { vector-effect: non-scaling-stroke; }
+
+/* Suelo agrietado: abajo a la derecha. Se corta en diagonal, desde el pie
+   (a la altura del final del texto) hasta el medio del gráfico, antes de
+   llegar al texto. */
+.vg-fondo-linea--grietas {
+  --linea: color-mix(in srgb, var(--vg-carbono) 24%, var(--gh-canvas));
+  -webkit-mask-image: linear-gradient(140deg, transparent 53%, #000 63%);
+  mask-image: linear-gradient(140deg, transparent 53%, #000 63%);
+}
+
+/* Lotes con ambientes: arriba a la derecha, se desvanece hacia las
+   tarjetas. */
+.vg-fondo-linea--ambientes {
+  --linea: color-mix(in srgb, var(--vg-agua) 34%, var(--gh-canvas));
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 22%, transparent 42%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 22%, transparent 42%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  mask-composite: intersect;
+}
+
+/* Lote a la derecha de las tarjetas, de arriba a abajo. */
+.vg-fondo-linea--ambientes-lado {
+  --linea: color-mix(in srgb, var(--vg-agua) 34%, var(--gh-canvas));
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 92%);
+}
+
+/* Pivotes: abajo y a la derecha, se desvanecen hacia arriba. */
+.vg-fondo-linea--pivotes {
+  --linea: color-mix(in srgb, var(--vg-campo) 30%, var(--gh-canvas));
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 10%, #000 45%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 10%, #000 45%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  mask-composite: intersect;
+}
+
+/* Con scroll normal (celular, vertical: donde no hay paso de pantalla en
+   pantalla), los fondos unen las secciones en vez de quedar dentro de cada
+   una. Lotes desde la mitad de El problema hasta el comienzo de Lo que
+   hace VigIA (en lugar del suelo agrietado y los lotes de cada sección), y
+   dos pivotes sobre el borde entre Lo que hace VigIA y La solución
+   (en lugar de los del pie, que queda libre hacia la frase). En pantalla
+   completa, estos dos no se ven. */
+.vg-fondo-linea--lotes,
+.vg-fondo-linea--pivotes-borde { display: none; }
+
+@media not all and (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
+  .vg-fondo-linea--grietas,
+  .vg-fondo-linea--ambientes,
+  .vg-fondo-linea--ambientes-lado,
+  .vg-fondo-linea--pivotes { display: none; }
+
+  /* Sigue por debajo de Lo que hace VigIA (la sección siguiente, sin fondo
+     propio, la deja ver); se desvanece arriba y al pie. */
+  .vg-fondo-linea--lotes {
+    display: block;
+    top: 50%;
+    height: calc(50% + 480px);
+    --linea: color-mix(in srgb, var(--vg-agua) 34%, var(--gh-canvas));
+    -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.45) 18%, rgba(0, 0, 0, 0.45) 70%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.45) 18%, rgba(0, 0, 0, 0.45) 70%, transparent);
+  }
+
+  /* Sobre el borde entre Lo que hace VigIA y La solución (en y = 230 del
+     dibujo, como en Pivotes.astro). Dos copias alineadas a ese borde, cada
+     una dentro de su sección, así quedan detrás del texto de las dos: la
+     de arriba la tapa el fondo verde de La solución, y la de abajo se
+     recorta en el borde. Tenues (pasan detrás de texto) y desvanecidas
+     arriba y al pie. */
+  .vg-fondo-linea--pivotes-borde {
+    display: block;
+    height: 560px;
+    --linea: color-mix(in srgb, var(--vg-campo) 30%, var(--gh-canvas));
+    -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.45) 12%, rgba(0, 0, 0, 0.45) 55%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.45) 12%, rgba(0, 0, 0, 0.45) 55%, transparent);
+  }
+
+  .vg-fondo-linea--pivotes-borde.is-fin {
+    top: auto;
+    bottom: -330px;
+  }
+
+  .vg-fondo-linea--pivotes-borde.is-inicio {
+    top: -230px;
+    clip-path: inset(230px 0 0 0);
+  }
+
+  /* La frase, con más aire: casi una pantalla, centrada. */
+  .vg-tagline {
+    display: grid;
+    align-content: center;
+    min-height: 80svh;
+  }
+}
+
+/* En oscuro, monocromos: el color de cada tramo se veía como neón sobre
+   los fondos oscuros. Van en un gris claro apenas visible, como el resto
+   de las líneas del tema. */
+[data-rp-theme="dark"] .vg-fondo-linea {
+  --linea: color-mix(in srgb, var(--gh-fg) 13%, var(--gh-canvas));
+}
 
 /* ---------- 6. Impacto ----------
    Cuatro indicadores grandes y centrados, con una línea corta debajo, sin
@@ -1406,7 +1636,15 @@ h3 {
 @media (max-width: 480px) {
   .vg-indicadores { gap: var(--space-200); }
   .vg-indicador strong { font-size: var(--text-3xl); line-height: var(--leading-3xl); }
-  .vg-panel__items { padding: var(--space-300) var(--space-200); }
+  /* En celular, el panel va de borde a borde de la pantalla, sólo con la
+     línea de arriba y la de abajo: la tabla gana el ancho del margen y no
+     queda un recuadro cortado por el costado. */
+  .vg-panel__items {
+    margin-inline: calc(-1 * var(--page-gutter));
+    padding: var(--space-300) var(--page-gutter);
+    border-inline: 0;
+    border-radius: 0;
+  }
 }
 
 /* ---------- 9. Preguntas frecuentes ----------
@@ -1414,9 +1652,9 @@ h3 {
    flecha de cada una, cerca de su texto (sin estirarse al ancho total). */
 .vg-faq {
   display: grid;
-  grid-template-columns: minmax(0, 320px) minmax(0, 560px);
+  grid-template-columns: minmax(0, 360px) minmax(0, 560px);
   justify-content: center;
-  gap: var(--space-700);
+  gap: var(--space-300) var(--space-700);
   align-items: start;
 }
 
@@ -1464,6 +1702,44 @@ h3 {
   color: var(--gh-fg-muted);
 }
 
+/* Cierre: una línea chica que sigue al título y el CTA (el mismo del
+   hero). En la columna del título, poco debajo de él, así
+   las preguntas tienen lugar. En una columna, debajo de las preguntas. */
+.vg-faq__head { grid-area: 1 / 1; }
+.vg-faq__list { grid-area: 1 / 2 / span 2; }
+
+.vg-faq__cta {
+  grid-area: 2 / 1;
+  align-self: start;
+}
+
+/* En dos columnas, el título y el cierre van centrados en la suya:
+   alineados a la izquierda dejaban un hueco hasta la lista y el bloque se
+   veía corrido a la izquierda. */
+@media (min-width: 961px) {
+  .vg-faq__head,
+  .vg-faq__cta { text-align: center; }
+
+  /* La fila del título, a su medida: el alto que sobra de la lista va a la
+     del cierre, que así queda cerca del título. */
+  .vg-faq { grid-template-rows: auto 1fr; }
+}
+
+.vg-faq__cierre {
+  margin-bottom: var(--space-200);
+  color: var(--gh-fg-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
+/* Nota debajo del botón (en inglés: el equipo responde en español). */
+.vg-faq__nota {
+  margin-top: var(--space-100);
+  color: var(--gh-fg-subtle);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
   /* En una columna el CTA va debajo del gráfico: la bajada dice qué hace,
@@ -1484,6 +1760,10 @@ h3 {
     grid-template-columns: minmax(0, 560px);
     gap: var(--space-300);
   }
+
+  .vg-faq__head,
+  .vg-faq__list,
+  .vg-faq__cta { grid-area: auto; }
 }
 
 @media (max-width: 680px) {
@@ -1858,7 +2138,9 @@ h3 {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 0;
+  /* Por encima de las secciones: las que tienen fondo propio lo taparían.
+     Va en el margen izquierdo, sin pisar contenido. */
+  z-index: 2;
   overflow: visible;
   pointer-events: none;
 }
@@ -1882,7 +2164,8 @@ h3 {
 
 /* Puntos sin número: marcan la etapa, no la cuentan. */
 .vg-thread__node circle {
-  fill: var(--gh-canvas);
+  /* Sin llenar, del color del fondo de su sección (--fondo, JourneyThread). */
+  fill: var(--fondo, var(--gh-canvas));
   stroke: var(--c);
   stroke-width: 2;
   transition: fill var(--dur-base) var(--ease-fluid);
@@ -1904,6 +2187,291 @@ h3 {
    izquierda para el hilo. (Entre 680 y 1260 px el margen general ya lo da.) */
 @media (max-width: 680px) {
   .vg-journey .vg-wrap { padding-left: var(--space-500); }
+}
+
+/* ============================================================
+   Recorrido a pantalla completa (decisión 50, SectionPager.astro)
+   En pantallas horizontales (escritorio, tablet acostada) cada panel ocupa
+   exactamente una pantalla, con su contenido centrado en el espacio que
+   deja el header (siempre visible): hero, problema, lo que hace, la
+   solución (con "Cómo lo hace" adentro), la frase e Impacto. Los tamaños
+   salen de los tokens --fit-* (global.css), que siguen al alto de la
+   ventana. En celular y en vertical, la página queda como siempre.
+   ============================================================ */
+@media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
+  [data-pantalla] {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+    padding-block: var(--panel-pad-top) var(--panel-pad-bottom);
+  }
+
+  [data-pantalla] > .vg-wrap { width: 100%; }
+
+  /* Un panel ya deja lugar al header en su padding (la solución no tiene
+     padding propio: lo lleva su panel): el salto desde el menú lo alinea
+     arriba de todo, como el paginador, y el contenido queda
+     centrado en la pantalla. */
+  section[id][data-pantalla],
+  #como-funciona { scroll-margin-top: 0; }
+
+  /* La sección de la solución no lleva aire propio: lo lleva su panel. */
+  #como-funciona { padding-block: 0; }
+
+  .vg-avisos[data-pantalla] {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-content: center;
+  }
+
+  /* En las pantallas de dos columnas, el título arranca a la altura del
+     borde de arriba del gráfico o del video, y la etiqueta queda por
+     encima de esa línea. En el hero no hay etiqueta. */
+  .vg-hero__grid,
+  .vg-problema,
+  .vg-avisos[data-pantalla] {
+    align-items: start;
+  }
+
+  .vg-problema .vg-media,
+  .vg-avisos > .vg-media {
+    margin-top: calc(var(--leading-base) + var(--space-75));
+  }
+
+  /* Hero: el contenido queda un poco arriba del centro y más grande, para
+     que no sobre aire entre el header y el título. */
+  .vg-hero[data-pantalla] {
+    padding-bottom: calc(var(--panel-pad-bottom) + 6vh);
+  }
+
+  .vg-hero__title {
+    font-size: var(--fit-hero);
+    line-height: 1.04;
+  }
+
+  /* Tipografía según el alto de la ventana. */
+  [data-pantalla] .vg-section__title {
+    font-size: var(--fit-headline);
+    line-height: 1.15;
+  }
+
+  [data-pantalla] .vg-section__lead,
+  .vg-hero__subtitle {
+    font-size: var(--fit-lead);
+    line-height: 1.55;
+  }
+
+  [data-pantalla] .vg-section__lead { margin-bottom: var(--fit-gap); }
+  .vg-hero__subtitle { margin-block: var(--space-200) var(--fit-gap); }
+
+  /* Medios: el ancho sale del alto disponible, así el gráfico y el celular
+     nunca empujan el panel más allá de la pantalla. */
+  .vg-hero__grid > .vg-media,
+  .vg-problema .vg-media {
+    width: 100%;
+    max-width: calc((100svh - var(--panel-pad-top) - var(--panel-pad-bottom) - var(--space-400)) * 1.3);
+    justify-self: end;
+  }
+
+  .vg-avisos > .vg-media {
+    width: 100%;
+    max-width: calc((100svh - var(--panel-pad-top) - var(--panel-pad-bottom) - var(--space-400)) * 4 / 3);
+    justify-self: end;
+    top: 0;
+  }
+
+  /* Lo que hace VigIA: fotos más bajas y cuatro tarjetas en fila también en
+     tablet acostada (en dos filas no entran en una pantalla). */
+  .vg-punto__img {
+    aspect-ratio: auto;
+    height: clamp(5.5rem, 17vh, 12rem);
+  }
+
+  .vg-puntos {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 980px;
+    row-gap: var(--fit-gap);
+  }
+
+  /* El espacio libre se reparte en tercios con márgenes automáticos: uno
+     entre el header y la etiqueta, otro entre las tarjetas y las dos
+     preguntas (cultivos de servicio, herbicidas) y otro al pie. Así el
+     contenido no queda pegado al header y las preguntas no quedan ni al pie
+     ni juntas con las tarjetas. */
+  #que-hace > .vg-wrap {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #que-hace > .vg-wrap > .vg-section__title { margin-top: auto; }
+  .vg-modulos { margin-block: auto; padding-top: var(--fit-gap); }
+  .vg-razon,
+  .vg-canal { padding-block: calc(var(--fit-gap) / 2); }
+
+  /* La solución en dos pasos (data-paso, lo cambia SectionPager): primero
+     los canales; con el siguiente gesto, en su mismo lugar, "Cómo lo
+     hace". El título y el celular no se mueven. El cambio va en la
+     dirección del scroll (lo que sale sube, lo que entra llega desde
+     abajo), para que se note aunque no se esté mirando el texto. */
+  .vg-avisos__cambio { display: grid; }
+
+  .vg-avisos__cambio > .vg-avisos__canales,
+  .vg-avisos__cambio > .vg-detalle {
+    grid-area: 1 / 1;
+    transition:
+      opacity var(--dur-base) var(--ease-fluid),
+      transform var(--dur-base) var(--ease-fluid),
+      visibility 0s linear var(--dur-base);
+  }
+
+  .vg-avisos__cambio > .vg-detalle {
+    margin-top: var(--space-50);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(var(--space-400));
+  }
+
+  .vg-avisos[data-paso="1"] .vg-avisos__cambio > .vg-avisos__canales {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(calc(var(--space-400) * -1));
+  }
+
+  .vg-avisos[data-paso="1"] .vg-avisos__cambio > .vg-detalle {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  .vg-avisos:not([data-paso="1"]) .vg-avisos__cambio > .vg-avisos__canales {
+    transition-delay: 0s;
+  }
+
+  /* Las dos rayas al pie, centradas con la columna de texto: la de la
+     parte que se ve, más larga y en verde bosque. Sólo con el paginador activo (sin él, las dos partes van una
+     debajo de la otra). El botón es más alto que la raya, para tocarlo. */
+  .vg-pager-on .vg-partes {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-75);
+    margin-top: var(--fit-gap);
+  }
+
+  .vg-partes__raya {
+    padding-block: var(--space-100);
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
+  .vg-partes__raya::before {
+    content: '';
+    display: block;
+    width: var(--space-300);
+    height: var(--space-25);
+    border-radius: var(--space-25);
+    background: var(--gh-border-strong);
+    transition:
+      width var(--dur-base) var(--ease-fluid),
+      background-color var(--dur-base) var(--ease-fluid);
+  }
+
+  .vg-partes__raya:hover::before { background: var(--gh-fg-muted); }
+
+  .vg-partes__raya[aria-current="step"]::before {
+    width: var(--space-600);
+    background: var(--vg-forest);
+  }
+
+  /* Los pasos se despliegan de arriba hacia abajo al entrar "Cómo lo hace"
+     (no al aparecer la sección), más ágiles que en la página normal: el
+     paginador traba el paso siguiente hasta que terminan. */
+  .vg-avisos { --reveal-step: 320ms; }
+  .vg-reveal-on .vg-avisos:not([data-paso="1"]) .vg-pasos .vg-paso {
+    opacity: 0;
+    transform: translateY(calc(var(--space-100) * -1));
+  }
+
+  .vg-reveal-on .vg-avisos:not([data-paso="1"]) .vg-pasos .vg-paso::after {
+    transform: scaleY(0);
+  }
+
+  .vg-reveal-on .vg-avisos[data-paso="1"] .vg-pasos .vg-paso {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--dur-reveal) var(--ease-fluid),
+      transform var(--dur-reveal) var(--ease-fluid);
+    transition-delay: calc(var(--dur-fast) + var(--i) * var(--reveal-step));
+  }
+
+  .vg-reveal-on .vg-avisos[data-paso="1"] .vg-pasos .vg-paso::after {
+    transform: none;
+    transition: transform var(--reveal-step) var(--ease-fluid);
+    transition-delay: calc(var(--dur-fast) * 2 + var(--i) * var(--reveal-step));
+  }
+
+  /* Frase: más grande, y la flecha para seguir abajo (ver TaglineReveal). */
+  .vg-tagline[data-pantalla] { position: relative; }
+
+  .vg-tagline__text {
+    font-size: var(--fit-display);
+    line-height: 1.1;
+  }
+
+  .vg-tagline__sigue { display: inline-flex; }
+
+  /* Impacto: el contenido centrado en su pantalla. Con una tabla abierta
+     (.is-tabla) el título y la bajada se pliegan y los indicadores suben,
+     así la tabla entra sin scroll; al cerrarla, todo vuelve a centrarse
+     con el título. */
+  .vg-impacto[data-pantalla] {
+    padding-block: var(--panel-pad-top) var(--panel-pad-bottom);
+  }
+
+  /* El paginador decide dónde queda la página: sin el anclaje del
+     navegador, que al plegarse el título de Impacto corría el scroll para
+     sostener los indicadores y asomaba la sección de arriba (o la de
+     abajo, al cerrar la tabla). */
+  .vg-pager-on { overflow-anchor: none; }
+
+  .vg-pager-on .vg-impacto__cabeza {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition:
+      grid-template-rows var(--dur-slow) var(--ease-fluid),
+      opacity var(--dur-base) var(--ease-fluid);
+  }
+
+  .vg-pager-on .vg-impacto__cabeza > div {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .vg-pager-on .vg-impacto .vg-indicadores {
+    transition: margin-top var(--dur-slow) var(--ease-fluid);
+  }
+
+  .vg-pager-on .vg-impacto.is-tabla .vg-impacto__cabeza {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  .vg-pager-on .vg-impacto.is-tabla .vg-indicadores { margin-top: 0; }
+
+  /* Preguntas comparte la última pantalla con el footer: ocupa lo que el
+     footer deja (lo mide SectionPager), así no hace falta scroll normal.
+     Si se abren preguntas y no entra, la página sigue con scroll normal. */
+  .vg-pager-on #preguntas[data-pantalla] {
+    min-height: calc(100svh - var(--alto-footer, 0px));
+    padding-bottom: var(--space-300);
+  }
+
+  .vg-pager-on #preguntas .vg-faq__item summary { padding-block: var(--space-100); }
 }
 
 /* ---------- Páginas legales (LegalPage.astro) ----------

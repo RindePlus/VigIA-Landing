@@ -327,6 +327,22 @@ html {
   --vg-pronostico: #e8e5dd;
   /* Tierra: carbono que queda en el suelo (sección Impacto). */
   --vg-carbono: #7a4b26;
+  /* Fondo sólido de La solución (decisión 54): verde muy claro (el tramo
+     verde campo), cálido para no chocar con las tarjetas blancas. El
+     problema va sobre el fondo de la página. */
+  --vg-bg-solucion: #e6f0e0;
+  /* Textos y líneas sobre la banda verde bosque (Impacto), en los
+     dos temas. Todos pasan AA sobre --vg-forest-bg. */
+  --vg-on-forest-fg: #ece8df;
+  /* Secundarios teñidos del verde de fondo, no grises neutros. */
+  --vg-on-forest-muted: #b4d4c1;
+  --vg-on-forest-subtle: #9fc2ad;
+  --vg-on-forest-accent: #8cc2a9;
+  --vg-on-forest-campo: #93c46b;
+  --vg-on-forest-carbono: #d6a06c;
+  --vg-on-forest-line: rgba(236, 232, 223, 0.18);
+  --vg-on-forest-line-muted: rgba(236, 232, 223, 0.1);
+  --vg-on-forest-line-strong: rgba(236, 232, 223, 0.34);
   --vg-thread-ok: var(--vg-campo);
   /* Verde agua: el tramo del hilo de "Lo que hace VigIA" (el agua del
      suelo), distinto del verde campo con el que termina el recorrido. */
@@ -375,6 +391,7 @@ html {
   --vg-pronostico: #23221f;
   --vg-carbono: #d6a06c;
   --vg-agua: #6fbfbf;
+  --vg-bg-solucion: #1b201c;
   --vg-icon-green: var(--vg-campo);
   --vg-wa-bar: #202c33;
   --vg-wa-bar-fg: #e9edef;
@@ -393,6 +410,24 @@ html {
 
 @media (max-width: 1260px) {
   :root { --page-gutter: var(--space-700); }
+}
+
+/* Recorrido a pantalla completa (decisión 50, SectionPager.astro): en
+   pantallas horizontales cada panel ocupa una pantalla y los tamaños
+   siguen al alto de la ventana, para que todo entre sin scroll interno.
+   Crecen en pantallas altas y se achican en las bajas, con topes. */
+@media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
+  :root {
+    /* Alto del header (siempre visible, 80 px) y aire abajo: el contenido
+       se centra en lo que queda de pantalla. */
+    --panel-pad-top: var(--space-800);
+    --panel-pad-bottom: calc(var(--space-300) + 1vh);
+    --fit-hero: clamp(2.5rem, 3.4vh + 1.6rem, 4.25rem);
+    --fit-display: clamp(2.25rem, 2.6vh + 1.6rem, 3.75rem);
+    --fit-headline: clamp(1.75rem, 1.9vh + 1.15rem, 2.75rem);
+    --fit-lead: clamp(1rem, 0.6vh + 0.75rem, 1.25rem);
+    --fit-gap: clamp(var(--space-200), 3.4vh, var(--space-600));
+  }
 }
 
 @media (max-width: 680px) {

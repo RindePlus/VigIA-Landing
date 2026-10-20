@@ -25,15 +25,15 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 - **Público:** productores (extensivos e intensivos, en secano o bajo riego) y asesores agronómicos.
 - **Problema:** el estrés hídrico y térmico se ve a campo cuando el rinde ya está comprometido.
 - **Promesa:** VigIA BioEstrés te avisa con días de margen, por ambiente, para aplicar el bioinsumo o regar a tiempo.
-- **Acción única:** **Contactanos para empezar a usar VigIA**. Abre WhatsApp para agendar una demo de 20 minutos con los lotes del cliente. Mismo texto en el hero y en el cierre.
+- **Acción única:** **Contactanos para empezar a usar VigIA**. Abre WhatsApp para agendar una demo de 20 minutos con los lotes del cliente. Mismo texto en el hero y en Preguntas (el cierre).
 - **Tipo de página:** relato largo con hero (tipo B de `landing-page-design`): hay que educar sobre el estrés invisible antes de pedir la acción.
 
 ## Estructura fija
 
 ```
 1. Hero · 2. El problema · 3. Lo que hace VigIA · 4. La solución    ← recorrido del mismo lote (.vg-journey)
-5. Frase destacada · 6. Impacto · 7. Sobre nosotros
-8. Clientes · 9. Preguntas frecuentes · 10. Cierre · Footer
+5. Frase destacada · 6. Impacto · 7. Sobre nosotros + 8. Clientes (una pantalla)
+9. Preguntas frecuentes + cierre (CTA al pie) · Footer
 ```
 
 | Sección | Trabajo que hace | No hace |
@@ -46,7 +46,8 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 | 6. Impacto | Datos medidos en campo: contexto, grano y carbono con desglose por cultivo, y calculadora. | Repetir lo que hace el producto. |
 | 7. Sobre nosotros | Las personas detrás del producto, con foto y logo de su empresa. | Inventar cargos o trayectorias. |
 | 9. Preguntas | Objeciones reales: sensores, carga, cultivos, canales, secano. | Respuestas de más de 40 palabras. |
-| 10. Cierre | Urgencia + demo de 20 minutos + el mismo CTA. | Un CTA distinto. |
+| 8. Clientes | Carrusel de logos al pie de Sobre nosotros, sin título a la vista. | Sumar socios (van en Sobre nosotros). |
+| Cierre (en 9, bajo el título) | Una línea chica que sigue al título ("¿Te quedó alguna duda? Escribinos.") + el mismo CTA. | Un CTA distinto; volver a ser una sección propia. |
 
 Cambiar el orden, sumar o quitar una sección es una **decisión de estructura**: se acuerda con el usuario y se registra en `ESTRUCTURA_LANDING.md` (tabla "Decisiones") antes de tocar código.
 
@@ -105,7 +106,7 @@ Si un texto no entra, se recorta la idea, no la letra.
 
 - [ ] Cada afirmación tiene respaldo en MODULO_VIGIA §10.
 - [ ] Sin IA, satélite, biótico, mapas, Herbicidas ni marcas de insumos.
-- [ ] Un solo CTA principal, con el mismo texto en el hero y en el cierre.
+- [ ] Un solo CTA principal, con el mismo texto en el hero y en el cierre (en Preguntas).
 - [ ] Presupuesto de texto respetado.
 - [ ] "VigIA BioEstrés" en títulos, SEO y cierre.
 - [ ] Copy en `src/data/`, no en el markup.

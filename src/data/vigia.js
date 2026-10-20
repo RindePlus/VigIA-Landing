@@ -36,16 +36,15 @@ export const SEO = {
 
 // 1. Hero
 export const HERO = {
-  etiqueta: 'Estrés hídrico y térmico',
   titulo: 'Detectá el estrés antes de que se convierta en pérdida',
   // Lleva los tres diferenciales que antes iban como palabras clave: desde
   // antes de la siembra, por ambiente y por WhatsApp (decisión 47).
-  bajada: `${MARCA} sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos.`,
+  // "Hídrico y térmico" vino de la etiqueta del hero, que se quitó (decisión 50).
+  bajada: `${MARCA} sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés hídrico y térmico se vea a campo. Para productores y asesores que deciden con datos.`,
 };
 
 // 2. El problema
 export const PROBLEMA = {
-  etiqueta: 'El problema',
   titulo: 'El cultivo muestra el estrés cuando ya perdiste rinde',
   bajada: 'Para cuando lo ves a campo, reaccionás tarde y el daño ya está hecho.',
   razones: [
@@ -67,7 +66,6 @@ export const PROBLEMA = {
 // (alertEngine.ts, MODULO_VIGIA §10.2): qué pasa en la 1, el aviso a 14 días
 // en la 2, el riego en la 3 y los bioinsumos en la 4 (decisión 42).
 export const QUE_HACE = {
-  etiqueta: 'Lo que hace VigIA',
   titulo: `${MARCA} vigila el estrés toda la campaña`,
   // Abarca las cuatro tarjetas: acompaña todo el ciclo (ventana siembra
   // −60 / +150, MODULO_VIGIA §10.2) y la acción es agua o bioinsumo.
@@ -132,7 +130,6 @@ export const QUE_HACE = {
 
 // 4. La solución (cómo funciona: canales y pasos)
 export const COMO_FUNCIONA = {
-  etiqueta: 'La solución',
   // Sin nombrar los canales: ya los presentan las dos tarjetas de abajo.
   titulo: 'Te avisa a tiempo para actuar',
   bajada:
@@ -153,6 +150,9 @@ export const COMO_FUNCIONA = {
   // Subtítulo del bloque de los pasos. Las alertas pasaron a las tarjetas
   // de la sección 3 (decisión 42).
   tituloPasos: 'Cómo lo hace',
+  // Indicador de dos rayas al pie, en pantalla completa: dice en cuál de
+  // las dos partes estás (los avisos o cómo lo hace) y lleva a cada una.
+  partes: { etiqueta: 'Partes de la solución', nombres: ['Los avisos', 'Cómo lo hace'] },
   // Cómo lo hace: tres pasos cortos. Paso 1 con redacción neutral ("se
   // cargan") hasta confirmar quién hace el alta de lotes (pregunta abierta 1
   // de ESTRUCTURA_LANDING.md).
@@ -177,7 +177,9 @@ export const COMO_FUNCIONA = {
 // 5. Frase destacada: una línea por renglón.
 // Palabras resaltadas con los colores de la historia: *verde* (a tiempo) y
 // _rojo_ (tarde).
-export const FRASE = ['Que el bioinsumo llegue *antes* que el estrés,', 'no _después del daño._'];
+export const FRASE = ['Que el bioinsumo llegue', '*antes* que el estrés,', 'no _después del daño._'];
+// Flecha al pie de la frase (pantalla completa): la página sigue.
+export const FRASE_SIGUE = 'Seguir a Impacto';
 
 // 6. Impacto: resultados medidos en campo. Los números están en
 // src/data/impactoDatos.js (compartidos con la versión en inglés).
@@ -185,11 +187,10 @@ const fmt = formateador('es-AR');
 const FILAS = filasImpacto(fmt, { maiz: 'Maíz', soja: 'Soja', trigo: 'Trigo' }, 'Total');
 
 export const IMPACTO = {
-  etiqueta: 'Impacto',
-  titulo: 'Más grano y más carbono en el suelo',
-  // "Lotes de productores": deja claro que son campos de clientes reales,
-  // no ensayos propios (decisión 43).
-  bajada: 'Resultados de cinco campañas continuas en lotes de productores, con maíz, soja y trigo.',
+  // El nombre de la sección es el título; la frase que era título queda
+  // como bajada.
+  titulo: 'Impacto',
+  bajada: 'Más grano y más carbono en el suelo',
 
   // Cuatro indicadores grandes con una línea corta debajo. Los dos últimos
   // abren su tabla por cultivo (un panel centrado debajo, de a uno).
@@ -236,18 +237,20 @@ export const IMPACTO = {
 // con foto y logo, están en src/data/equipo.js.
 // PENDIENTE: revisar la bajada con el equipo.
 export const NOSOTROS = {
-  etiqueta: 'Sobre nosotros',
   titulo: `Las personas detrás de ${MARCA}`,
   bajada: 'Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos.',
 };
 
-// 8. Clientes (el carrusel está en src/data/clientes.js).
+// 8. Clientes (el carrusel está en src/data/clientes.js), debajo de Sobre
+// nosotros y sin título a la vista: el título queda como nombre accesible.
 export const CLIENTES = { titulo: 'Confían en nosotros' };
 
 // 9. Preguntas frecuentes (también van como JSON-LD FAQPage).
 export const PREGUNTAS = {
-  etiqueta: 'Preguntas frecuentes',
   titulo: 'Lo que suelen preguntarnos',
+  // Línea chica sobre el CTA, debajo del título (ahí va el cierre): sigue
+  // al título de la sección.
+  cierre: '¿Te quedó alguna duda? Escribinos.',
   items: [
     {
       pregunta: '¿Necesito sensores o estaciones en el campo?',
@@ -277,11 +280,6 @@ export const PREGUNTAS = {
   ],
 };
 
-// 10. Cierre
-export const CIERRE = {
-  titulo: 'La próxima pérdida ya se está gestando en algún lote. Encontrala primero.',
-  texto: `Agendá una demo de 20 minutos y te mostramos ${MARCA} funcionando sobre tus lotes, con datos de tu campaña actual.`,
-};
 
 // Página /educacion (src/views/EducacionPage.astro), enlazada al final del menú.
 // PENDIENTE: contenido definitivo. Por ahora, una página provisoria.
@@ -346,7 +344,19 @@ export const UI = {
   saltar: 'Saltar al contenido',
   inicio: 'inicio',
   menu: [
-    { label: 'Cómo funciona', href: '/#como-funciona' },
+    // Desplegable con las secciones del recorrido (se abre al dejar el
+    // cursor encima); el título lleva al problema. "Inicio" vuelve arriba de
+    // todo (el hero no tiene título propio): más a mano que el logo.
+    {
+      label: 'Cómo funciona',
+      href: '/#problema',
+      hijos: [
+        { label: 'Inicio', href: '/#inicio' },
+        { label: 'El problema', href: '/#problema' },
+        { label: 'Lo que hace VigIA', href: '/#que-hace' },
+        { label: 'La solución', href: '/#como-funciona' },
+      ],
+    },
     { label: 'Impacto', href: '/#impacto' },
     { label: 'Nosotros', href: '/#nosotros' },
     { label: 'Contacto', href: '/#contacto' },

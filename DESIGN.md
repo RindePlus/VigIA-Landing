@@ -19,9 +19,17 @@ colors:
   alerta: "#8a5300"
   perdida: "#b3261e"
   carbono: "#7a4b26"
+  bg-solucion: "#e6f0e0"
   pronostico: "#ebe5d7"
   whatsapp: "#25d366"
   whatsapp-ink: "#0b2e13"
+  on-forest-fg: "#ece8df"
+  on-forest-muted: "#b4d4c1"
+  on-forest-subtle: "#9fc2ad"
+  on-forest-accent: "#8cc2a9"
+  wa-bubble: "#ffffff"
+  wa-meta: "#667781"
+  mask: "#000000"
   dark-canvas: "#181818"
   dark-surface: "#1f1f1f"
   dark-ink: "#ece8df"
@@ -59,6 +67,8 @@ rounded:
   btn: "8px"
   card: "12px"
   chart: "16px"
+  wa-bubble: "10px"
+  pill: "999px"
 spacing:
   xs: "8px"
   sm: "12px"
@@ -114,7 +124,7 @@ Es sobrio y de densidad media. El movimiento acompaña y explica, sin decorar. S
 Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que representan.
 
 ### Primary
-- **Verde bosque** (#0e3b36): la marca. Títulos de sección, fondo del cierre y la frase destacada. En oscuro, como texto pasa a blanco cálido y como fondo a #11211d.
+- **Verde bosque** (#0e3b36): la marca. Títulos de sección, fondo de Impacto y la frase destacada. En oscuro, como texto pasa a blanco cálido y como fondo a #11211d.
 
 ### Secondary
 - **Verde campo** (#3b6e25): el cultivo a salvo. Línea de agua útil, hilo del recorrido, íconos, grano recuperado y palabra "antes" de la frase.
@@ -134,6 +144,10 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 - **Tinta tenue** (#525b55): encabezados de tabla, copyright y créditos (6,3:1).
 - **Bordes** (#d8d5cd, #e4e1da, #b1ada3): tarjetas, divisores y el trazo punteado del hilo.
 
+- **Sobre la banda verde** (Impacto): texto #ece8df y secundarios teñidos de verde (#b4d4c1, #9fc2ad), no grises neutros.
+- **Celular de WhatsApp** (`WhatsAppMock.astro`): copia los colores de la app real (globo #ffffff, metadatos #667781, barras, fondo). Es una réplica del producto, no parte de la paleta: no se reutilizan en otros componentes.
+- **Máscaras** (#000000): sólo como canal de opacidad en `mask-image` (lote del hero, carrusel de logos), nunca como color visible.
+
 ### Named Rules
 **The Meaning Rule.** Cada color dice algo: verde a salvo, ámbar alerta, rojo pérdida, tierra carbono. Un color sin significado no entra. Nada de azules, celestes, lima ni violetas.
 
@@ -151,7 +165,7 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 - **Headline** (600, 2.25rem / 1.875rem, tracking -0.02em): títulos de sección, en verde bosque.
 - **Lead** (400, 1.125rem): bajadas, en tinta suave, hasta 640 px de ancho.
 - **Body** (400, 1rem / 1.5rem): texto corrido.
-- **Label** (500, 1rem): etiquetas de sección y "Confían en nosotros". En gris, sin mayúsculas y sin tracking.
+- **Label** (500, 1rem): etiquetas de sección. En gris, sin mayúsculas y sin tracking.
 - **Data** (Chivo Mono 500, 3rem, tracking -0.04em): cifras de Impacto. Las tablas usan Chivo Mono en tamaño de texto.
 
 ### Named Rules
@@ -165,6 +179,36 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 - **Secciones:** 96 px de aire vertical; las compactas, 64 px.
 - **Espaciado:** sólo los pasos de `--space-*` (2 a 96 px).
 - **Recorrido:** el hero, El problema, Lo que hace VigIA y La solución forman un recorrido unido por el hilo a la izquierda. Las primeras van en dos columnas, texto a la izquierda y medio a la derecha, y en celular pasan a una columna.
+- **Recorrido a pantalla completa (decisión 50):** en pantallas horizontales de al menos 900 × 560 px (escritorio y tablet acostada), cada panel ocupa una pantalla, con el contenido centrado debajo del header (que queda siempre visible):
+  1. hero, sin etiqueta;
+  2. El problema;
+  3. Lo que hace VigIA, con las dos preguntas al pie;
+  4. La solución, en dos estados: primero la bajada y los canales; con el siguiente gesto, en su lugar, "Cómo lo hace" (tres pasos en vertical que se despliegan de arriba hacia abajo), sin mover el título ni el celular;
+  5. la frase, en tres renglones;
+  6. Impacto.
+
+  En los paneles de dos columnas, el título arranca a la altura del borde de arriba del gráfico o del video, y la etiqueta queda por encima. Los tamaños siguen al alto de la ventana (tokens `--fit-*`).
+
+  Cada gesto de scroll es un paso (`SectionPager.astro`, [ADR 0006](doc/adr/0006-recorrido-de-pantalla-en-pantalla.md)):
+  - **Un gesto, un paso, en las dos direcciones:** la inercia del trackpad nunca saltea paneles, por rápido que sea el envión: pasar varios pide gestos distintos o un movimiento largo sin soltar (una pantalla de movimiento del dedo en trackpad, 60 % del alto en táctil). Subir es igual que bajar.
+  - **Tiempos:** 800 ms la primera vez, 520 ms después (también hacia arriba) y 1,5 s hacia la frase, para ver llegar el hilo.
+  - **Gesto en cola:** un gesto nuevo durante la animación (pasada su primera parte) hace el paso siguiente apenas termina.
+  - **La solución:** al pasar a "Cómo lo hace", traba 1 s; los pasos terminan de desplegarse aunque se siga. El cambio va en la dirección del scroll (lo que sale sube, lo que entra llega desde abajo). Dos rayas al pie, centradas con la columna de texto, marcan el estado (la actual, más larga y en verde bosque) y llevan a cada uno.
+  - **Nunca a medio camino:** si la página queda entre dos paneles, se acomoda en el más cercano.
+  - **Toda la home va de a pantalla,** hasta Preguntas (con el CTA de cierre), que comparte la última pantalla con el footer. Si no entran juntos (preguntas abiertas, pantalla baja), desde ahí el scroll es normal; al volver subiendo, la página se frena en Preguntas y a Sobre nosotros se pasa con otro gesto.
+  - **Impacto con una tabla abierta:** el título y la bajada se pliegan y los indicadores suben, para que la tabla entre en la pantalla; al cerrarla, todo vuelve a centrarse con el título. Si igual no entra (pantallas muy bajas), primero se baja hasta su final y recién después se pasa al siguiente.
+  - **En celular, en vertical o con movimiento reducido,** la página se scrollea como siempre.
+- **Llegada a la frase:** cuando el hilo llega al punto, justo antes de "antes", un trazo verde campo recorre la palabra de izquierda a derecha, con el impulso del hilo, y se va por la derecha (1,8 s). Después aparece una flecha abajo que respira despacio: crece y se achica apenas. Es la única animación continua de la página, por pedido explícito.
+- **Fondos por capítulo (decisión 50):**
+  - El problema, sobre el fondo de la página, con la letra de siempre (se probó una banda de tierra con letra blanca y se descartó). La solución, sobre un verde muy claro (`--vg-bg-solucion`, #e6f0e0), sólido: acompaña el tramo verde del hilo y alterna con el fondo piedra. Cálido, para no chocar con las tarjetas blancas. En oscuro, #1b201c. Dentro, `--gh-canvas` toma ese color, y el punto del hilo sin alcanzar también;
+  - dibujos a línea de fondo en El problema (suelo agrietado, `SueloSeco.astro`), Lo que hace VigIA (lotes divididos en ambientes, `LoteAmbientes.astro`) y La solución (pivotes de riego vistos desde arriba, `Pivotes.astro`). Cada uno con el color de su tramo del hilo (tierra, verde agua, verde campo) muy mezclado con el fondo; en oscuro, monocromos, en un gris claro apenas visible (`.vg-fondo-linea`). Van en las zonas sin texto: las grietas, abajo a la derecha, cortadas en diagonal antes del texto; los lotes, arriba a la derecha y en una columna a la derecha de las tarjetas; los pivotes, abajo y a la derecha, asomando por el pie y al costado del video. La frase e Impacto van sin dibujo: la frase es el momento de foco y el verde liso de Impacto se ve más serio. Con scroll normal (celular, vertical) los dibujos unen las secciones en vez de quedar dentro de cada una: lotes como los de Lo que hace VigIA (`LotesConexion.astro`) desde la mitad de El problema hasta el comienzo de Lo que hace VigIA, sin el suelo agrietado; dos pivotes grandes, cortados por los costados, sobre el borde entre Lo que hace VigIA y La solución, y el pie de La solución libre hacia la frase, que ahí ocupa casi una pantalla;
+  - el resto del recorrido, sobre el fondo de la página, con un lote sembrado dibujado a línea detrás del hero (`FieldRows.astro`): surcos en perspectiva hacia un punto de fuga al centro, cortina de árboles, lomas, y a la derecha un molino y un alambrado. Tenue, desvanecido arriba y al pie, y al 40 % detrás del texto;
+  - Impacto, en una banda verde bosque;
+  - equipo y clientes, en una sola pantalla (el carrusel, sin título, debajo de las tarjetas), sobre el fondo piedra de la página, con las tarjetas blancas (decisión 53: el salvia que tenían chocaba con ellas);
+  - preguntas frecuentes, con el CTA de cierre, sobre el fondo de la página;
+  - el footer, verde bosque como Impacto, compacto.
+
+  Todos planos, sin degradés.
 
 ## Elevation & Depth
 
@@ -176,13 +220,13 @@ Casi plano. La profundidad la dan las superficies (piedra contra superficie) y b
 
 ## Shapes
 
-Radios moderados: 8 px en botones, 12 px en tarjetas y paneles, 16 px en el recuadro de los gráficos. Las fotos van con las esquinas rectas. No se usan píldoras salvo en controles chicos, ni bordes de color gruesos sobre tarjetas redondeadas.
+Radios moderados: 8 px en botones, 12 px en tarjetas y paneles, 16 px en el recuadro de los gráficos. Píldora (999 px) sólo en controles chicos del header; 10 px en el globo del celular de WhatsApp, como en la app. Las fotos van con las esquinas rectas. No se usan píldoras salvo en controles chicos, ni bordes de color gruesos sobre tarjetas redondeadas.
 
 ## Components
 
 ### Buttons
 - **Hero:** tinta sobre papel (negro en claro, blanco cálido en oscuro), 8 px de radio. La flecha se corre 4 px al pasar el mouse.
-- **Cierre:** superficie clara sobre el verde bosque.
+- **Cierre:** el mismo botón del hero, en la columna del título de Preguntas (los dos centrados en esa columna), poco debajo del título, con una línea chica arriba que sigue al título ("¿Te quedó alguna duda? Escribinos."). En una columna, debajo de las preguntas.
 - **WhatsApp:** verde de WhatsApp con texto oscuro (#0b2e13): el blanco no llega a 3:1. El logo del botón flotante sigue blanco, como excepción de marca.
 
 ### Cards / Containers
@@ -190,7 +234,9 @@ Superficie #fbfaf8, borde de 1 px y 12 px de radio, sin sombra fuerte. Las tarje
 
 ### Navigation
 - **Header:** del ancho del contenido y transparente arriba de todo.
-- **Al bajar:** fondo translúcido con desenfoque y una línea fina abajo. Se oculta al scrollear hacia abajo.
+- **Al bajar:** fondo translúcido con desenfoque y una línea fina abajo. Siempre visible: no se oculta al scrollear. Sobre las bandas verde bosque (Impacto, cierre: `data-fondo-oscuro`) el fondo pasa a casi opaco, para que se lean logo y menú.
+- **Menú:** "Cómo funciona" es un desplegable con Inicio, El problema, Lo que hace VigIA y La solución; Impacto, Nosotros, Contacto y Educación van sueltos. El desplegable se abre al dejar el cursor encima un momento (220 ms, no al pasar de largo), entra con fundido y una bajada corta, y sale más rápido. En celular, los tres van siempre a la vista, debajo del título.
+- **Anclas del menú:** las secciones tienen `scroll-margin-top` del alto real del header (`--alto-header`, lo mide `Header.jsx`), así quedan justo debajo de él. Los paneles del recorrido a pantalla completa, en cambio, se alinean arriba de todo: su padding ya deja lugar al header.
 
 ### Gráfico del balance (Signature Component)
 - **Qué muestra:** agua útil (verde campo), umbral (ámbar punteado), zona de pronóstico (#ebe5d7) y "Hoy".
@@ -213,6 +259,6 @@ Superficie #fbfaf8, borde de 1 px y 12 px de radio, sin sombra fuerte. Las tarje
 ### Don't:
 - **Don't** usar degradés en el texto ni fondos por etapas.
 - **Don't** poner etiquetas en mayúsculas con tracking ni colores distintos por sección.
-- **Don't** usar desenfoque al aparecer, pulsos o animaciones infinitas.
-- **Don't** fijar secciones en pantalla ni alargar la página con animaciones de scroll. Ya se probó y se descartó: las animaciones ligadas al scroll pasaban en el borde de la pantalla, no donde se lee.
+- **Don't** usar desenfoque al aparecer, pulsos o animaciones infinitas (única excepción acordada: la flecha de la frase, que respira despacio).
+- **Don't** atar animaciones al avance del scroll (que se dibujen mientras el elemento entra por el borde): se probó y se descartó, porque pasaban en el borde de la pantalla, no donde se lee. El paso entre paneles del recorrido sí está aceptado (decisión 50): es un gesto, una animación completa, con el panel entero a la vista.
 - **Don't** usar imágenes generadas que repitan la misma escena, ni inventar fotos de clientes.
