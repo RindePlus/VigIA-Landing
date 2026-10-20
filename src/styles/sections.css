@@ -1096,31 +1096,9 @@ h3 {
    Equipo y clientes vuelven al fondo de la página (decisión 53: el salvia
    frío chocaba con las tarjetas blancas). Preguntas frecuentes, del color
    del footer: el cierre verde queda entre los dos. */
-/* El problema y La solución, con fondo propio: dentro, el canvas del tema
-   pasa a ese color, así lo que lo usa para recortarse queda igual. El
-   problema toma además los colores del modo oscuro (.vg-banda-oscura, en
-   global.css): superficies y bordes salen de la misma tierra, aclarada.
-   La letra va en blanco, y los secundarios en blancos cálidos que pasan AA
-   sobre la tierra (5,2:1 y 4,9:1). El gráfico y su alerta vuelven a los
-   colores de la página (.vg-tema-pagina), como en las otras secciones. */
-#problema {
-  --gh-fg: #ffffff;
-  --vg-forest: var(--gh-fg); /* títulos */
-  --gh-fg-muted: #efe6da;
-  --gh-fg-subtle: #ebdfcf;
-  --gh-canvas: var(--vg-bg-problema);
-  --gh-surface: color-mix(in srgb, var(--gh-fg) 6%, var(--vg-bg-problema));
-  --gh-surface-2: color-mix(in srgb, var(--gh-fg) 10%, var(--vg-bg-problema));
-  --gh-border: color-mix(in srgb, var(--gh-fg) 16%, var(--vg-bg-problema));
-  --gh-border-muted: color-mix(in srgb, var(--gh-fg) 10%, var(--vg-bg-problema));
-  --vg-pronostico: color-mix(in srgb, var(--gh-fg) 8%, var(--vg-bg-problema));
-  background: var(--gh-canvas);
-  color: var(--gh-fg);
-}
-
-/* Lo que vuelve a los colores de la página dentro de una banda toma
-   también su color de texto (si no, heredaría el blanco de la banda). */
-.vg-tema-pagina { color: var(--gh-fg); }
+/* La solución, con fondo propio: dentro, el canvas del tema pasa a ese
+   color, así lo que lo usa para recortarse queda igual. El problema va
+   sobre el fondo de la página, con la letra de siempre. */
 
 #como-funciona {
   --gh-canvas: var(--vg-bg-solucion);

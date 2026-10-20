@@ -115,7 +115,7 @@ const faqJsonLd = {
   </section>
 
   <!-- 2. El problema -->
-  <section class="vg-section vg-banda-oscura" id="problema" data-pantalla data-fondo-oscuro>
+  <section class="vg-section" id="problema" data-pantalla>
     <SueloSeco />
     <div class="vg-wrap">
       <!-- Título, bajada y razones en la columna izquierda: el gráfico queda
@@ -142,7 +142,7 @@ const faqJsonLd = {
           </ul>
         </div>
 
-        <div class="vg-media vg-tema-pagina" data-reveal style={delay(1)}>
+        <div class="vg-media" data-reveal style={delay(1)}>
           <!-- 11 s: la animación dura ~4,6 s y el final queda quieto el resto,
                para que se pueda leer antes de pasar al video. -->
           <MediaStory duracion={11000} video={videoProblema} pendiente={DESCRIPCION_PENDIENTE.problema}>
