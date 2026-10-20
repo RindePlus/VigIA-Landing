@@ -17,12 +17,12 @@ En pantallas horizontales de al menos 900 × 560 px (escritorio y tablet acostad
 
 El movimiento general:
 
-1. **Un gesto, un paso, en las dos direcciones.** Cada gesto de rueda, trackpad, teclado o deslizamiento lleva al panel siguiente o al anterior. El resto del gesto (la inercia del trackpad) se descarta: nunca se pasan dos paneles con un solo envión. Subir funciona igual que bajar.
+1. **Un gesto, un paso, en las dos direcciones.** Cada gesto de rueda, trackpad, teclado o deslizamiento lleva al panel siguiente o al anterior. El resto del gesto (la inercia del trackpad) se descarta: nunca se pasan dos paneles con un solo envión, por rápido que sea. Lo que cuenta es la distancia, no la velocidad: un movimiento largo sin soltar (trackpad o táctil) sí puede pasar más de uno. Subir funciona igual que bajar.
 2. **Un paso es una animación completa.** El panel llega entero y alineado, con una curva que arranca y llega suave. La página nunca queda a medio camino entre dos paneles: si algo la deja ahí, se acomoda en el más cercano.
 3. **Un gesto nuevo se reconoce aunque siga la inercia del anterior.** La inercia sólo pierde fuerza; un repunte claro es otro gesto. Si llega mientras se anima un paso, queda en cola y el paso siguiente arranca apenas termina.
 4. **Los tiempos acompañan el relato.** Los pasos son ágiles (alrededor de medio segundo). La primera transición es algo más lenta, para presentar el estilo, y la llegada a la frase, más lenta todavía, para ver llegar el hilo.
 5. **Un panel puede tener estados.** La solución muestra primero los canales y, con el siguiente gesto, "Cómo lo hace" en el mismo lugar (`data-pasos`, `data-paso`). Dos rayas al pie indican en cuál de los dos estados se está.
-6. **El relato tiene un borde claro.** Desde Impacto hacia abajo el scroll es normal. Al volver desde ahí, la página se frena en Impacto y hace falta otro gesto para entrar al relato.
+6. **La página tiene un borde claro.** El paso de pantalla en pantalla sigue después del relato (Impacto, Sobre nosotros) hasta Preguntas, el último panel, que comparte la pantalla con el footer; si no entran juntos, desde ahí el scroll es normal. Con una tabla abierta, Impacto pliega su título para entrar en la pantalla; si igual no entra, se ve entero antes de pasar al siguiente. Al volver desde abajo, la página se frena en Preguntas y hace falta otro gesto para volver a Sobre nosotros.
 7. **No actúa cuando no corresponde.** Sin JS, en celular, en pantallas verticales o con `prefers-reduced-motion`, la página se scrollea como siempre y todo el contenido se ve. Tampoco interfiere con los saltos del menú ni con la barra de scroll.
 
 Los tiempos exactos y los umbrales viven como constantes comentadas al principio del script. Se pueden ajustar sin cambiar esta decisión.
@@ -42,4 +42,4 @@ Los tiempos exactos y los umbrales viven como constantes comentadas al principio
 - **Se pierde el scroll libre en esa parte de la página.** Por eso está limitado a pantallas horizontales y respeta el movimiento reducido. Celular queda con scroll normal hasta que se decida otra cosa.
 - **Hay más JS que mantener,** y es sensible a cómo cada dispositivo manda los eventos de rueda. Cualquier cambio se prueba con trackpad (gestos cortos, largos y seguidos) y con rueda de mouse, subiendo y bajando.
 - **Los paneles tienen que entrar en una pantalla.** Los tamaños siguen al alto de la ventana (tokens `--fit-*`). Un panel nuevo del relato lleva `data-pantalla` y se diseña para ese alto.
-- **El detalle de diseño** (tiempos, rayas, freno en Impacto) está en `DESIGN.md` y en las decisiones 50 y 51 de `ESTRUCTURA_LANDING.md`.
+- **El detalle de diseño** (tiempos, rayas, freno en Preguntas) está en `DESIGN.md` y en las decisiones 50 y 51 de `ESTRUCTURA_LANDING.md`.

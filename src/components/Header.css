@@ -904,7 +904,7 @@ img.logo-image:hover {
   .header-nav__whatsapp { display: flex; }
 }
 
-/* Sobre las bandas verde bosque (Impacto, cierre) el translúcido dejaba
+/* Sobre la banda verde bosque (Impacto) el translúcido dejaba
    pasar demasiado verde y el logo y el menú no se leían: ahí el fondo es
    casi opaco. */
 .rp-home .header--scrolled.header--sobre-oscuro {

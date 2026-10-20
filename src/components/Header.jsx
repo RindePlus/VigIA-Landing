@@ -119,7 +119,7 @@ const Header = ({
   // Arriba de todo el header se funde con la página; al bajar toma fondo y
   // una línea fina para separarse del contenido que pasa por debajo.
   const [isScrolled, setIsScrolled] = useState(false);
-  // Sobre las bandas verde bosque (Impacto, cierre: [data-fondo-oscuro]) el
+  // Sobre las bandas oscuras (Impacto, footer: [data-fondo-oscuro]) el
   // fondo translúcido del header se aclara, para que se lean logo y menú.
   const [sobreOscuro, setSobreOscuro] = useState(false);
   // Sección en la que está parado el usuario (href del ítem del menú): se

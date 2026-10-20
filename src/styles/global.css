@@ -327,13 +327,11 @@ html {
   --vg-pronostico: #e8e5dd;
   /* Tierra: carbono que queda en el suelo (sección Impacto). */
   --vg-carbono: #7a4b26;
-  /* Fondos sólidos de El problema y La solución (decisión 54): el
-     recorrido alterna con el fondo piedra. Tierra seca para el problema
-     (el tramo ámbar y rojo del hilo) y verde muy claro para la solución (el
-     tramo verde campo); cálidos, para no chocar con las tarjetas blancas. */
-  --vg-bg-problema: #ebe4d6;
+  /* Fondo sólido de La solución (decisión 54): verde muy claro (el tramo
+     verde campo), cálido para no chocar con las tarjetas blancas. El
+     problema va sobre el fondo de la página. */
   --vg-bg-solucion: #e6f0e0;
-  /* Textos y líneas sobre la banda verde bosque (Impacto y cierre), en los
+  /* Textos y líneas sobre la banda verde bosque (Impacto), en los
      dos temas. Todos pasan AA sobre --vg-forest-bg. */
   --vg-on-forest-fg: #ece8df;
   /* Secundarios teñidos del verde de fondo, no grises neutros. */
@@ -393,7 +391,6 @@ html {
   --vg-pronostico: #23221f;
   --vg-carbono: #d6a06c;
   --vg-agua: #6fbfbf;
-  --vg-bg-problema: #211e19;
   --vg-bg-solucion: #1b201c;
   --vg-icon-green: var(--vg-campo);
   --vg-wa-bar: #202c33;
