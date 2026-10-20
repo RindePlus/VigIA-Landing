@@ -19,8 +19,9 @@
 // - Subiendo con scroll normal, el scroll es libre hasta el borde de
 //   Impacto: recién cuando lo cruza, la página se frena ahí un momento y el
 //   resto de ese gesto no sigue de largo a la frase. Para volver a la frase
-//   hace falta otro gesto. No se anticipa: anticiparlo tironeaba la página
-//   hacia Impacto antes de llegar.
+//   hace falta otro gesto, que empiece ya parado en Impacto (con la rueda
+//   del mouse, otra muesca después de la traba). No se anticipa:
+//   anticiparlo tironeaba la página hacia Impacto antes de llegar.
 // - Red de seguridad: si la página queda quieta entre dos paneles (fuera
 //   de la parte de scroll normal), se acomoda en el más cercano. Sólo
 //   actúan tras un gesto del usuario (rueda, toque, teclas): no con saltos
@@ -70,7 +71,7 @@
   // y queda trabado un momento.
   const VOLVER_A_IMPACTO = 180;
   const PASADA_CHICA = 40; // px
-  const TRABA_IMPACTO = 450;
+  const TRABA_IMPACTO = 600;
   // Sin scroll durante este tiempo = la página quedó quieta.
   const QUIETO = 150;
   // El freno y el acomodo sólo siguen a un gesto de hace menos de esto.
@@ -116,6 +117,11 @@
     // también al llegar a Impacto, donde el scroll ya es normal.
     let gestoConsumido = false;
     let toqueY: number | null = null;
+    // Dónde estaba la página al empezar el gesto de rueda o de toque: desde
+    // Impacto sólo se sube a la frase con un gesto que empezó ahí, no con
+    // el que venía subiendo desde abajo.
+    let yInicioGesto = 0;
+    let yInicioToque = 0;
 
     const activo = () => mq.matches && !reduce.matches;
     const marcar = () => root.classList.toggle('vg-pager-on', activo());
@@ -272,6 +278,7 @@
         if (nuevo) {
           gestoConsumido = false;
           inicioGesto = ahora;
+          yInicioGesto = window.scrollY;
           dirGesto = dir;
           pico = 0;
           recientes = [];
@@ -293,6 +300,13 @@
         }
         if (!maneja(dir)) return;
         e.preventDefault();
+        const yFin = top(fin);
+        // Llegó a Impacto subiendo con este mismo gesto (el evento de rueda
+        // ganó al de scroll): se frena, no sube.
+        if (dir < 0 && yInicioGesto > yFin + 2) {
+          frenarEnImpacto(window.scrollY, yFin);
+          return;
+        }
         mover(dir);
       },
       { passive: false },
@@ -316,6 +330,7 @@
       'touchstart',
       (e) => {
         toqueY = e.touches.length === 1 ? e.touches[0].clientY : null;
+        yInicioToque = window.scrollY;
       },
       { passive: true },
     );
@@ -333,6 +348,8 @@
       toqueY = null;
       const dir = Math.sign(dy);
       if (Math.abs(dy) < UMBRAL_TOQUE || !maneja(dir)) return;
+      // Venía subiendo desde abajo de Impacto: se queda en Impacto.
+      if (dir < 0 && yInicioToque > top(fin) + 2) return;
       if (ocupado) encolar(dir);
       else mover(dir);
     });
