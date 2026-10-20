@@ -16,6 +16,7 @@ import ProblemChart from '../components/ProblemChart.astro';
 import MediaStory from '../components/MediaStory.astro';
 import FieldRows from '../components/FieldRows.astro';
 import SueloSeco from '../components/SueloSeco.astro';
+import LotesConexion from '../components/LotesConexion.astro';
 import LoteAmbientes from '../components/LoteAmbientes.astro';
 import Pivotes from '../components/Pivotes.astro';
 import SectionPager from '../components/SectionPager.astro';
@@ -117,6 +118,7 @@ const faqJsonLd = {
   <!-- 2. El problema -->
   <section class="vg-section" id="problema" data-pantalla>
     <SueloSeco />
+    <LotesConexion />
     <div class="vg-wrap">
       <!-- Título, bajada y razones en la columna izquierda: el gráfico queda
            centrado a la derecha, entre el título y las razones. -->
@@ -157,6 +159,7 @@ const faqJsonLd = {
        las cuatro alertas y su acción. Punto 3 del hilo, en celeste. -->
   <section class="vg-section vg-solucion" id="que-hace" data-pantalla>
     <LoteAmbientes />
+    <Pivotes borde="fin" />
     <div class="vg-wrap">
       <h2 class="vg-section__title" data-vg-node="3">{QUE_HACE.titulo}</h2>
       <p class="vg-section__lead">{QUE_HACE.bajada}</p>

@@ -1256,6 +1256,65 @@ h3 {
   mask-composite: intersect;
 }
 
+/* Con scroll normal (celular, vertical: donde no hay paso de pantalla en
+   pantalla), los fondos unen las secciones en vez de quedar dentro de cada
+   una. Lotes desde la mitad de El problema hasta el comienzo de Lo que
+   hace VigIA (en lugar del suelo agrietado y los lotes de cada sección), y
+   dos pivotes sobre el borde entre Lo que hace VigIA y La solución
+   (en lugar de los del pie, que queda libre hacia la frase). En pantalla
+   completa, estos dos no se ven. */
+.vg-fondo-linea--lotes,
+.vg-fondo-linea--pivotes-borde { display: none; }
+
+@media not all and (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
+  .vg-fondo-linea--grietas,
+  .vg-fondo-linea--ambientes,
+  .vg-fondo-linea--ambientes-lado,
+  .vg-fondo-linea--pivotes { display: none; }
+
+  /* Sigue por debajo de Lo que hace VigIA (la sección siguiente, sin fondo
+     propio, la deja ver); se desvanece arriba y al pie. */
+  .vg-fondo-linea--lotes {
+    display: block;
+    top: 50%;
+    height: calc(50% + 480px);
+    --linea: color-mix(in srgb, var(--vg-agua) 34%, var(--gh-canvas));
+    -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.45) 18%, rgba(0, 0, 0, 0.45) 70%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.45) 18%, rgba(0, 0, 0, 0.45) 70%, transparent);
+  }
+
+  /* Sobre el borde entre Lo que hace VigIA y La solución (en y = 230 del
+     dibujo, como en Pivotes.astro). Dos copias alineadas a ese borde, cada
+     una dentro de su sección, así quedan detrás del texto de las dos: la
+     de arriba la tapa el fondo verde de La solución, y la de abajo se
+     recorta en el borde. Tenues (pasan detrás de texto) y desvanecidas
+     arriba y al pie. */
+  .vg-fondo-linea--pivotes-borde {
+    display: block;
+    height: 560px;
+    --linea: color-mix(in srgb, var(--vg-campo) 30%, var(--gh-canvas));
+    -webkit-mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.45) 12%, rgba(0, 0, 0, 0.45) 55%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.45) 12%, rgba(0, 0, 0, 0.45) 55%, transparent);
+  }
+
+  .vg-fondo-linea--pivotes-borde.is-fin {
+    top: auto;
+    bottom: -330px;
+  }
+
+  .vg-fondo-linea--pivotes-borde.is-inicio {
+    top: -230px;
+    clip-path: inset(230px 0 0 0);
+  }
+
+  /* La frase, con más aire: casi una pantalla, centrada. */
+  .vg-tagline {
+    display: grid;
+    align-content: center;
+    min-height: 80svh;
+  }
+}
+
 /* En oscuro, monocromos: el color de cada tramo se veía como neón sobre
    los fondos oscuros. Van en un gris claro apenas visible, como el resto
    de las líneas del tema. */
@@ -1577,7 +1636,15 @@ h3 {
 @media (max-width: 480px) {
   .vg-indicadores { gap: var(--space-200); }
   .vg-indicador strong { font-size: var(--text-3xl); line-height: var(--leading-3xl); }
-  .vg-panel__items { padding: var(--space-300) var(--space-200); }
+  /* En celular, el panel va de borde a borde de la pantalla, sólo con la
+     línea de arriba y la de abajo: la tabla gana el ancho del margen y no
+     queda un recuadro cortado por el costado. */
+  .vg-panel__items {
+    margin-inline: calc(-1 * var(--page-gutter));
+    padding: var(--space-300) var(--page-gutter);
+    border-inline: 0;
+    border-radius: 0;
+  }
 }
 
 /* ---------- 9. Preguntas frecuentes ----------
