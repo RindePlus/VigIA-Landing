@@ -112,7 +112,7 @@ const Header = ({
   inicioHref = '/',
   inicioLabel = MARCA,
   whatsappUrl,
-  rutas = { es: '/', en: '/en/' },
+  rutas = { es: '/', en: '/en/', pt: '/pt/' },
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
