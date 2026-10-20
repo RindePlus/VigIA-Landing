@@ -1,8 +1,9 @@
 ---
 // Home de VigIA BioEstrés (versión 2 de doc/landing/ESTRUCTURA_LANDING.md):
 // Hero → El problema → Lo que hace VigIA → La solución (recorrido del mismo
-// lote) → Frase destacada → Resultados → Sobre nosotros → Clientes → Preguntas
-// → Cierre.
+// lote) → Frase destacada → Resultados → Sobre nosotros (con los clientes) →
+// Preguntas (con el CTA de cierre). Cada una es una pantalla del paginador
+// (SectionPager); desde Preguntas, scroll normal hasta el footer.
 // Una sola home para los dos idiomas (ADR 0004): src/pages/index.astro la
 // usa en español y src/pages/en/index.astro en inglés. El contenido sale de
 // src/data/vigia.js o vigia.en.js según el idioma. Los medios de las tres
@@ -50,7 +51,6 @@ const {
   NOSOTROS,
   CLIENTES,
   PREGUNTAS,
-  CIERRE,
   UI,
 } = contenido(lang);
 // Videos con el rótulo de capítulo en el idioma de la página.
@@ -115,14 +115,13 @@ const faqJsonLd = {
   </section>
 
   <!-- 2. El problema -->
-  <section class="vg-section" id="problema" data-pantalla>
+  <section class="vg-section vg-banda-oscura" id="problema" data-pantalla data-fondo-oscuro>
     <SueloSeco />
     <div class="vg-wrap">
       <!-- Título, bajada y razones en la columna izquierda: el gráfico queda
            centrado a la derecha, entre el título y las razones. -->
       <div class="vg-problema">
         <div class="vg-problema__texto">
-          <p class="vg-eyebrow">{PROBLEMA.etiqueta}</p>
           <h2 class="vg-section__title" data-vg-node="2">{PROBLEMA.titulo}</h2>
           <p class="vg-section__lead">{PROBLEMA.bajada}</p>
           <ul class="vg-razones">
@@ -143,7 +142,7 @@ const faqJsonLd = {
           </ul>
         </div>
 
-        <div class="vg-media" data-reveal style={delay(1)}>
+        <div class="vg-media vg-tema-pagina" data-reveal style={delay(1)}>
           <!-- 11 s: la animación dura ~4,6 s y el final queda quieto el resto,
                para que se pueda leer antes de pasar al video. -->
           <MediaStory duracion={11000} video={videoProblema} pendiente={DESCRIPCION_PENDIENTE.problema}>
@@ -159,7 +158,6 @@ const faqJsonLd = {
   <section class="vg-section vg-solucion" id="que-hace" data-pantalla>
     <LoteAmbientes />
     <div class="vg-wrap">
-      <p class="vg-eyebrow">{QUE_HACE.etiqueta}</p>
       <h2 class="vg-section__title" data-vg-node="3">{QUE_HACE.titulo}</h2>
       <p class="vg-section__lead">{QUE_HACE.bajada}</p>
 
@@ -215,7 +213,6 @@ const faqJsonLd = {
            la derecha, terminando a la altura de la tarjeta de la plataforma. -->
       <div class="vg-avisos" data-pantalla data-pasos="2">
         <div class="vg-avisos__texto">
-          <p class="vg-eyebrow">{COMO_FUNCIONA.etiqueta}</p>
           <h2 class="vg-section__title" data-vg-node="4">{COMO_FUNCIONA.titulo}</h2>
           <!-- Bajada + canales y "Cómo lo hace" comparten lugar: en pantalla
                completa un gesto de scroll cambia uno por el otro
@@ -292,9 +289,14 @@ const faqJsonLd = {
        del que salió (script al final de la sección). -->
   <section class="vg-section vg-section--compact vg-impacto" id="impacto" data-pantalla data-fondo-oscuro>
     <div class="vg-wrap">
-      <p class="vg-eyebrow">{IMPACTO.etiqueta}</p>
-      <h2 class="vg-section__title">{IMPACTO.titulo}</h2>
-      <p class="vg-section__lead">{IMPACTO.bajada}</p>
+      <!-- A pantalla completa, con una tabla abierta el título y la bajada se
+           pliegan: los indicadores suben y la tabla entra en la pantalla. -->
+      <div class="vg-impacto__cabeza">
+        <div>
+          <h2 class="vg-section__title">{IMPACTO.titulo}</h2>
+          <p class="vg-section__lead">{IMPACTO.bajada}</p>
+        </div>
+      </div>
 
       <div class="vg-indicadores-box">
         <ul class="vg-indicadores">
@@ -408,6 +410,7 @@ const faqJsonLd = {
           b.classList.toggle('is-active', activo);
         });
         cancelarPista();
+        seccion.classList.toggle('is-tabla', id !== null);
 
         if (id === null) {
           // Al cerrar, el panel se pliega con la tabla adentro.
@@ -473,10 +476,10 @@ const faqJsonLd = {
   </script>
 
   <!-- 7. Sobre nosotros: foto, nombre y logo de la empresa de cada persona.
-       Sin foto cargada, van las iniciales en el mismo círculo. -->
-  <section class="vg-section vg-section--compact vg-nosotros" id="nosotros">
+       Sin foto cargada, van las iniciales en el mismo círculo. Debajo, sin
+       título, el carrusel de clientes: entran los dos en una pantalla. -->
+  <section class="vg-section vg-section--compact vg-nosotros" id="nosotros" data-pantalla>
     <div class="vg-wrap">
-      <p class="vg-eyebrow">{NOSOTROS.etiqueta}</p>
       <h2 class="vg-section__title">{NOSOTROS.titulo}</h2>
       <p class="vg-section__lead">{NOSOTROS.bajada}</p>
       <ul class="vg-equipo">
@@ -517,19 +520,17 @@ const faqJsonLd = {
         }
       </ul>
     </div>
+    <!-- 8. Clientes: fuera del .vg-wrap, el carrusel ocupa todo el ancho. -->
+    <div class="vg-trusted" id="clientes" role="region" aria-label={CLIENTES.titulo}>
+      <TrustedCompanies client:visible />
+    </div>
   </section>
 
-  <!-- 8. Clientes -->
-  <section class="vg-trusted" id="clientes">
-    <h2 class="vg-trusted__title">{CLIENTES.titulo}</h2>
-    <TrustedCompanies client:visible />
-  </section>
-
-  <!-- 9. Preguntas frecuentes -->
-  <section class="vg-section vg-section--compact" id="preguntas">
+  <!-- 9. Preguntas frecuentes, y debajo el CTA de cierre. Es el último panel
+       del paginador: desde acá el scroll es normal y se ve el footer. -->
+  <section class="vg-section vg-section--compact vg-preguntas" id="preguntas" data-pantalla>
     <div class="vg-wrap vg-faq">
       <div class="vg-faq__head">
-        <p class="vg-eyebrow">{PREGUNTAS.etiqueta}</p>
         <h2 class="vg-section__title">{PREGUNTAS.titulo}</h2>
       </div>
       <div class="vg-faq__list" data-reveal style={delay(1)}>
@@ -544,6 +545,14 @@ const faqJsonLd = {
             </details>
           ))
         }
+      </div>
+      <div class="vg-faq__cta">
+        <p class="vg-faq__cierre">{PREGUNTAS.cierre}</p>
+        <a class="vg-btn vg-btn--cta" href={ctaUrl} target="_blank" rel="noopener noreferrer">
+          {CTA.texto}
+          <PiArrowRight aria-hidden="true" />
+        </a>
+        {CTA.nota && <p class="vg-faq__nota">{CTA.nota}</p>}
       </div>
     </div>
   </section>
@@ -598,14 +607,4 @@ const faqJsonLd = {
       });
     }
   </script>
-
-  <!-- 10. Cierre -->
-  <section class="vg-section vg-cta" data-fondo-oscuro>
-    <div class="vg-wrap vg-cta__inner">
-      <h2>{CIERRE.titulo}</h2>
-      <p>{CIERRE.texto}</p>
-      <a class="vg-btn vg-btn--light" href={ctaUrl} target="_blank" rel="noopener noreferrer">{CTA.texto}</a>
-      {CTA.nota && <p class="vg-cta__nota">{CTA.nota}</p>}
-    </div>
-  </section>
 </BaseLayout>

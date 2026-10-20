@@ -1,20 +1,30 @@
 /* ============================================================
    Footer: cuatro columnas a la misma altura (marca con redes, contacto,
-   Rinde Plus y ayuda); abajo, legales y copyright centrados. Fondo
-   del tema. Tokens --gh-* y --vg-*, escalas de global.css.
+   Rinde Plus y ayuda); abajo, legales y copyright centrados. Verde
+   bosque, como Impacto. Compacto: en pantalla completa entra en la misma
+   pantalla que las preguntas (SectionPager). Tokens --gh-* y --vg-*,
+   escalas de global.css.
    ============================================================ */
 
 .rp-footer {
-  background: var(--gh-surface);
+  /* Como en Impacto: los tokens del tema pasan a sus versiones sobre
+     verde, así enlaces, redes y líneas se resuelven solos. */
+  --gh-surface: var(--vg-forest-bg);
+  --gh-border: var(--vg-on-forest-line);
+  --gh-border-strong: var(--vg-on-forest-line-strong);
+  --gh-fg: var(--vg-on-forest-fg);
+  --gh-fg-muted: var(--vg-on-forest-muted);
+  --gh-fg-subtle: var(--vg-on-forest-subtle);
+  --gh-accent: var(--vg-on-forest-accent);
+  background: var(--vg-forest-bg);
   color: var(--gh-fg-muted);
   font-family: var(--font-body);
-  border-top: 1px solid var(--gh-border);
 }
 
 .rp-footer__inner {
   max-width: 1160px;
   margin: 0 auto;
-  padding: var(--space-700) var(--page-gutter) var(--space-400);
+  padding: var(--space-300) var(--page-gutter) var(--space-200);
 }
 
 .rp-footer a {
@@ -33,34 +43,32 @@
 /* --- Cuatro columnas: marca | contacto | Rinde Plus | ayuda --- */
 .rp-footer__main {
   display: grid;
-  grid-template-columns: 1fr 1fr 1.3fr 0.9fr;
-  gap: var(--space-500) var(--space-600);
-  padding-bottom: var(--space-600);
+  /* Marca, contacto y ayuda al ancho de su contenido (la dirección en un
+     renglón); Rinde Plus toma el resto, y su texto entra en dos. Así el
+     footer es más bajo. */
+  grid-template-columns: auto auto 1fr auto;
+  gap: var(--space-300) var(--space-500);
+  padding-bottom: var(--space-200);
 }
 
 .rp-footer__marca {
   display: grid;
   justify-items: start;
   align-content: start;
-  gap: var(--space-300);
+  gap: var(--space-200);
 }
 
-/* Logo monocromo: negro en claro, blanco en oscuro (sin los colores de
-   marca). */
+/* Logo monocromo en blanco sobre el verde (sin los colores de marca). */
 .rp-footer__logo img {
   display: block;
   width: auto;
-  height: 80px;
-  filter: brightness(0);
-}
-
-[data-rp-theme="dark"] .rp-footer__logo img {
+  height: 48px;
   filter: brightness(0) invert(1);
 }
 
 .rp-footer__datos {
   display: grid;
-  gap: var(--space-75);
+  gap: var(--space-50);
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
   font-style: normal;
@@ -77,12 +85,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border: 1px solid var(--gh-border-strong);
   border-radius: 50%;
   color: var(--gh-fg);
-  font-size: var(--text-2xl);
+  font-size: var(--text-xl);
   transition:
     background-color var(--dur-base) var(--ease-fluid),
     color var(--dur-base) var(--ease-fluid),
@@ -97,7 +105,7 @@
 
 /* Columnas: título en mayúsculas y contenido corto debajo. */
 .rp-footer__col h3 {
-  margin-bottom: var(--space-200);
+  margin-bottom: var(--space-100);
   color: var(--gh-fg);
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
@@ -107,8 +115,8 @@
 }
 
 .rp-footer__col p {
-  max-width: 340px;
-  margin-bottom: var(--space-200);
+  max-width: 440px;
+  margin-bottom: var(--space-100);
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
   text-wrap: pretty;
@@ -116,7 +124,7 @@
 
 .rp-footer__col ul {
   display: grid;
-  gap: var(--space-75);
+  gap: var(--space-50);
   list-style: none;
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
@@ -143,8 +151,8 @@
 .rp-footer__bottom {
   display: grid;
   justify-items: center;
-  gap: var(--space-100);
-  padding-top: var(--space-300);
+  gap: var(--space-25);
+  padding-top: var(--space-100);
   border-top: 1px solid var(--gh-border);
   text-align: center;
 }
@@ -187,6 +195,6 @@
 }
 
 @media (max-width: 560px) {
-  .rp-footer__main { grid-template-columns: 1fr; gap: var(--space-400); }
-  .rp-footer__logo img { height: 72px; }
+  .rp-footer__main { grid-template-columns: 1fr; gap: var(--space-300); }
+  .rp-footer__logo img { height: 48px; }
 }

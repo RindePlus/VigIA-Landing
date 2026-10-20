@@ -1,4 +1,5 @@
-:root {
+:root,
+.vg-tema-pagina {
   /* Alias heredados de la Landing de RindePlus que todavía usan el header,
      el footer y los títulos. Apuntan a la paleta de campo de abajo. */
   --secondary: var(--gh-fg);
@@ -94,8 +95,15 @@
 }
 
 /* Modo oscuro — BaseLayout.astro fija data-rp-theme en <html> antes del
-   primer paint (sin flash) y useTheme lo actualiza al usar el toggle. */
-[data-rp-theme="dark"] {
+   primer paint (sin flash) y useTheme lo actualiza al usar el toggle.
+   .vg-banda-oscura: una sección que va siempre con los colores del modo
+   oscuro, en los dos temas (El problema, sobre tierra).
+   .vg-tema-pagina: dentro de una banda, vuelve a los colores del tema de
+   la página (el gráfico y la alerta de El problema, como en las otras
+   secciones). */
+[data-rp-theme="dark"],
+[data-rp-theme="dark"] .vg-tema-pagina,
+.vg-banda-oscura {
   /* Fondos oscuros: la paleta neutra de landing-page-design. Texto en
      blanco cálido, para que no se vea frío contra el papel del tema claro. */
   --gh-canvas: #181818;
@@ -311,7 +319,8 @@ html {
 /* ============================================================
    Marca VigIA (colores del logo) + severidades de alertas
    ============================================================ */
-:root {
+:root,
+.vg-tema-pagina {
   /* Verde bosque: el color de marca (logo, CTA del cierre, títulos). */
   --vg-forest: #0e3b36;
   --vg-forest-bg: #0e3b36;
@@ -328,12 +337,16 @@ html {
   /* Tierra: carbono que queda en el suelo (sección Impacto). */
   --vg-carbono: #7a4b26;
   /* Fondos sólidos de El problema y La solución (decisión 54): el
-     recorrido alterna con el fondo piedra. Tierra seca para el problema
-     (el tramo ámbar y rojo del hilo) y verde muy claro para la solución (el
-     tramo verde campo); cálidos, para no chocar con las tarjetas blancas. */
-  --vg-bg-problema: #ebe4d6;
+     recorrido alterna con el fondo piedra. El problema es una banda de
+     tierra, en los dos temas, con los colores del modo oscuro
+     (.vg-banda-oscura) y la letra en blanco: del tono del tramo ámbar del
+     hilo, lo más clara posible sin que el blanco pierda contraste (6,4:1),
+     y lo bastante oscura para que la línea se siga viendo encima. La solución, verde
+     muy claro (el tramo verde campo), cálido para no chocar con las
+     tarjetas blancas. */
+  --vg-bg-problema: #7a5838;
   --vg-bg-solucion: #e6f0e0;
-  /* Textos y líneas sobre la banda verde bosque (Impacto y cierre), en los
+  /* Textos y líneas sobre la banda verde bosque (Impacto), en los
      dos temas. Todos pasan AA sobre --vg-forest-bg. */
   --vg-on-forest-fg: #ece8df;
   /* Secundarios teñidos del verde de fondo, no grises neutros. */
@@ -379,7 +392,9 @@ html {
   --vg-video-scrim: rgba(0, 0, 0, 0.55);
 }
 
-[data-rp-theme="dark"] {
+[data-rp-theme="dark"],
+[data-rp-theme="dark"] .vg-tema-pagina,
+.vg-banda-oscura {
   /* En oscuro el verde bosque como texto pasa a blanco cálido; como fondo
      (CTA del cierre) queda un verde muy oscuro. */
   --vg-forest: #ece8df;
@@ -393,7 +408,6 @@ html {
   --vg-pronostico: #23221f;
   --vg-carbono: #d6a06c;
   --vg-agua: #6fbfbf;
-  --vg-bg-problema: #211e19;
   --vg-bg-solucion: #1b201c;
   --vg-icon-green: var(--vg-campo);
   --vg-wa-bar: #202c33;

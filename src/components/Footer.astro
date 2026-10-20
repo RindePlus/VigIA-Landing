@@ -1,5 +1,6 @@
 ---
-// Footer estático (sin JS en el cliente). Cuatro columnas a la misma altura:
+// Footer estático (sin JS en el cliente), verde bosque como Impacto
+// (data-fondo-oscuro: el header se ajusta encima). Cuatro columnas a la misma altura:
 // la marca (logo monocromo y redes, a la izquierda para que no las tape el
 // WhatsApp flotante), contacto, Rinde Plus y ayuda; no repiten el menú del
 // header. Abajo, los enlaces legales y el copyright. Textos en FOOTER
@@ -23,7 +24,7 @@ const { FOOTER, MARCA, UI, WHATSAPP_URL } = contenido(lang);
 const direccion = lang === 'en' ? OFFICE_ADDRESS : 'Concejal Lorusso 762, Alta Gracia, Córdoba';
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_ADDRESS)}`;
 const year = new Date().getFullYear();
-const LOGO_ALTO = 80;
+const LOGO_ALTO = 48;
 const logoAncho = Math.round((logo.width / logo.height) * LOGO_ALTO);
 
 const redes = [
@@ -33,7 +34,7 @@ const redes = [
 ];
 ---
 
-<footer class="rp-footer" id="contacto">
+<footer class="rp-footer" id="contacto" data-fondo-oscuro>
   <div class="rp-footer__inner">
     <div class="rp-footer__main">
       <div class="rp-footer__marca">

@@ -103,11 +103,6 @@ h3 {
   filter: none;
 }
 
-.vg-btn--light {
-  background: var(--vg-forest-fg);
-  color: var(--vg-forest-bg);
-}
-
 /* ---------- Hero ---------- */
 .vg-hero {
   /* Alto del header + aire propio de la sección. */
@@ -180,14 +175,16 @@ h3 {
   transform: translateX(var(--space-50));
 }
 
-/* En celular el CTA (el del hero y el del cierre) no ocupa todo el ancho:
-   texto un punto más chico y, en el hero, sin flecha (como el del cierre),
-   para que entre en un solo renglón dentro de la columna del contenido. */
+/* En celular el CTA (el del hero y el de preguntas) no ocupa todo el
+   ancho: texto un punto más chico y sin flecha, para que entre en un solo
+   renglón dentro de la columna del contenido. */
 @media (max-width: 480px) {
-  .vg-hero__ctas .vg-btn { padding: var(--space-75) var(--space-200); }
-  .vg-hero__ctas .vg-btn svg { display: none; }
   .vg-hero__ctas .vg-btn,
-  .vg-cta .vg-btn {
+  .vg-faq__cta .vg-btn { padding: var(--space-75) var(--space-200); }
+  .vg-hero__ctas .vg-btn svg,
+  .vg-faq__cta .vg-btn svg { display: none; }
+  .vg-hero__ctas .vg-btn,
+  .vg-faq__cta .vg-btn {
     font-size: var(--text-sm);
     line-height: var(--leading-sm);
   }
@@ -203,19 +200,10 @@ h3 {
   margin-inline: auto;
 }
 
-/* ---------- Clientes (carrusel) ---------- */
+/* ---------- Clientes (carrusel) ----------
+   Al pie de Sobre nosotros, sin título, pegado a las tarjetas del equipo. */
 .vg-trusted {
-  padding-block: var(--space-75) var(--space-700);
-}
-
-/* Mismo estilo que las etiquetas de sección (.vg-eyebrow), centrado. */
-.vg-trusted__title {
-  margin-bottom: var(--space-300);
-  color: var(--gh-fg-muted);
-  font-size: var(--text-base);
-  line-height: var(--leading-base);
-  font-weight: 500;
-  text-align: center;
+  margin-top: var(--space-400);
 }
 
 /* ---------- Gráfico del hero ---------- */
@@ -995,48 +983,6 @@ h3 {
   }
 }
 
-/* ---------- CTA final ---------- */
-.vg-cta {
-  background: var(--vg-forest-bg);
-  color: var(--vg-forest-fg);
-  text-align: center;
-}
-
-.vg-cta h2 {
-  max-width: 680px;
-  margin-inline: auto;
-  color: var(--vg-forest-fg);
-  font-size: var(--text-3xl);
-  line-height: var(--leading-3xl);
-  letter-spacing: -0.02em;
-}
-
-@media (min-width: 768px) {
-  .vg-cta h2 {
-    font-size: var(--text-4xl);
-    line-height: var(--leading-4xl);
-  }
-}
-
-.vg-cta p {
-  margin-block: var(--space-100) var(--space-400);
-  color: rgba(255, 255, 255, 0.78);
-  font-size: var(--text-lg);
-  line-height: var(--leading-lg);
-}
-
-/* Nota debajo del botón (en inglés: el equipo responde en español). */
-.vg-cta .vg-cta__nota {
-  margin-block: var(--space-200) 0;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: var(--text-sm);
-  line-height: var(--leading-sm);
-}
-
-[data-rp-theme="dark"] .vg-cta {
-  border-top: 1px solid var(--gh-border);
-}
-
 /* ---------- 4. Frase destacada (TaglineReveal) ---------- */
 .vg-tagline {
   padding-block: var(--space-900);
@@ -1151,11 +1097,30 @@ h3 {
    frío chocaba con las tarjetas blancas). Preguntas frecuentes, del color
    del footer: el cierre verde queda entre los dos. */
 /* El problema y La solución, con fondo propio: dentro, el canvas del tema
-   pasa a ese color, así lo que lo usa para recortarse queda igual. */
+   pasa a ese color, así lo que lo usa para recortarse queda igual. El
+   problema toma además los colores del modo oscuro (.vg-banda-oscura, en
+   global.css): superficies y bordes salen de la misma tierra, aclarada.
+   La letra va en blanco, y los secundarios en blancos cálidos que pasan AA
+   sobre la tierra (5,2:1 y 4,9:1). El gráfico y su alerta vuelven a los
+   colores de la página (.vg-tema-pagina), como en las otras secciones. */
 #problema {
+  --gh-fg: #ffffff;
+  --vg-forest: var(--gh-fg); /* títulos */
+  --gh-fg-muted: #efe6da;
+  --gh-fg-subtle: #ebdfcf;
   --gh-canvas: var(--vg-bg-problema);
+  --gh-surface: color-mix(in srgb, var(--gh-fg) 6%, var(--vg-bg-problema));
+  --gh-surface-2: color-mix(in srgb, var(--gh-fg) 10%, var(--vg-bg-problema));
+  --gh-border: color-mix(in srgb, var(--gh-fg) 16%, var(--vg-bg-problema));
+  --gh-border-muted: color-mix(in srgb, var(--gh-fg) 10%, var(--vg-bg-problema));
+  --vg-pronostico: color-mix(in srgb, var(--gh-fg) 8%, var(--vg-bg-problema));
   background: var(--gh-canvas);
+  color: var(--gh-fg);
 }
+
+/* Lo que vuelve a los colores de la página dentro de una banda toma
+   también su color de texto (si no, heredaría el blanco de la banda). */
+.vg-tema-pagina { color: var(--gh-fg); }
 
 #como-funciona {
   --gh-canvas: var(--vg-bg-solucion);
@@ -1642,9 +1607,9 @@ h3 {
    flecha de cada una, cerca de su texto (sin estirarse al ancho total). */
 .vg-faq {
   display: grid;
-  grid-template-columns: minmax(0, 320px) minmax(0, 560px);
+  grid-template-columns: minmax(0, 360px) minmax(0, 560px);
   justify-content: center;
-  gap: var(--space-700);
+  gap: var(--space-300) var(--space-700);
   align-items: start;
 }
 
@@ -1692,6 +1657,44 @@ h3 {
   color: var(--gh-fg-muted);
 }
 
+/* Cierre: una línea chica que sigue al título y el CTA (el mismo del
+   hero). En la columna del título, poco debajo de él, así
+   las preguntas tienen lugar. En una columna, debajo de las preguntas. */
+.vg-faq__head { grid-area: 1 / 1; }
+.vg-faq__list { grid-area: 1 / 2 / span 2; }
+
+.vg-faq__cta {
+  grid-area: 2 / 1;
+  align-self: start;
+}
+
+/* En dos columnas, el título y el cierre van centrados en la suya:
+   alineados a la izquierda dejaban un hueco hasta la lista y el bloque se
+   veía corrido a la izquierda. */
+@media (min-width: 961px) {
+  .vg-faq__head,
+  .vg-faq__cta { text-align: center; }
+
+  /* La fila del título, a su medida: el alto que sobra de la lista va a la
+     del cierre, que así queda cerca del título. */
+  .vg-faq { grid-template-rows: auto 1fr; }
+}
+
+.vg-faq__cierre {
+  margin-bottom: var(--space-200);
+  color: var(--gh-fg-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
+/* Nota debajo del botón (en inglés: el equipo responde en español). */
+.vg-faq__nota {
+  margin-top: var(--space-100);
+  color: var(--gh-fg-subtle);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
   /* En una columna el CTA va debajo del gráfico: la bajada dice qué hace,
@@ -1712,6 +1715,10 @@ h3 {
     grid-template-columns: minmax(0, 560px);
     gap: var(--space-300);
   }
+
+  .vg-faq__head,
+  .vg-faq__list,
+  .vg-faq__cta { grid-area: auto; }
 }
 
 @media (max-width: 680px) {
@@ -2254,7 +2261,7 @@ h3 {
     justify-content: center;
   }
 
-  #que-hace > .vg-wrap > .vg-eyebrow { margin-top: auto; }
+  #que-hace > .vg-wrap > .vg-section__title { margin-top: auto; }
   .vg-modulos { margin-block: auto; padding-top: var(--fit-gap); }
   .vg-razon,
   .vg-canal { padding-block: calc(var(--fit-gap) / 2); }
@@ -2373,11 +2380,53 @@ h3 {
 
   .vg-tagline__sigue { display: inline-flex; }
 
-  /* Impacto: el contenido centrado en su pantalla; las tablas que se
-     despliegan la alargan y el scroll ahí ya es normal. */
+  /* Impacto: el contenido centrado en su pantalla. Con una tabla abierta
+     (.is-tabla) el título y la bajada se pliegan y los indicadores suben,
+     así la tabla entra sin scroll; al cerrarla, todo vuelve a centrarse
+     con el título. */
   .vg-impacto[data-pantalla] {
     padding-block: var(--panel-pad-top) var(--panel-pad-bottom);
   }
+
+  /* El paginador decide dónde queda la página: sin el anclaje del
+     navegador, que al plegarse el título de Impacto corría el scroll para
+     sostener los indicadores y asomaba la sección de arriba (o la de
+     abajo, al cerrar la tabla). */
+  .vg-pager-on { overflow-anchor: none; }
+
+  .vg-pager-on .vg-impacto__cabeza {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition:
+      grid-template-rows var(--dur-slow) var(--ease-fluid),
+      opacity var(--dur-base) var(--ease-fluid);
+  }
+
+  .vg-pager-on .vg-impacto__cabeza > div {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .vg-pager-on .vg-impacto .vg-indicadores {
+    transition: margin-top var(--dur-slow) var(--ease-fluid);
+  }
+
+  .vg-pager-on .vg-impacto.is-tabla .vg-impacto__cabeza {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+
+  .vg-pager-on .vg-impacto.is-tabla .vg-indicadores { margin-top: 0; }
+
+  /* Preguntas comparte la última pantalla con el footer: ocupa lo que el
+     footer deja (lo mide SectionPager), así no hace falta scroll normal.
+     Si se abren preguntas y no entra, la página sigue con scroll normal. */
+  .vg-pager-on #preguntas[data-pantalla] {
+    min-height: calc(100svh - var(--alto-footer, 0px));
+    padding-bottom: var(--space-300);
+  }
+
+  .vg-pager-on #preguntas .vg-faq__item summary { padding-block: var(--space-100); }
 }
 
 /* ---------- Páginas legales (LegalPage.astro) ----------

@@ -47,7 +47,6 @@ export const HERO = {
 
 // 2. El problema
 export const PROBLEMA = {
-  etiqueta: 'The problem',
   titulo: 'By the time the crop shows stress, the yield is already lost',
   bajada: "When you see it in the field, you're reacting too late and the damage is done.",
   razones: [
@@ -67,7 +66,6 @@ export const PROBLEMA = {
 
 // 3. Lo que hace VigIA
 export const QUE_HACE = {
-  etiqueta: 'What VigIA does',
   // "Campaña" → season (growing season); "campaign" no se usa en el agro.
   titulo: `${MARCA} watches for stress all season long`,
   bajada:
@@ -125,7 +123,6 @@ export const QUE_HACE = {
 
 // 4. La solución
 export const COMO_FUNCIONA = {
-  etiqueta: 'The solution',
   titulo: 'Alerts in time to act',
   bajada:
     'VigIA tracks every management zone, every day. When stress is coming, it alerts you with enough lead time to apply a biostimulant or irrigate.',
@@ -171,9 +168,8 @@ const fmt = formateador('en-US');
 const FILAS = filasImpacto(fmt, { maiz: 'Corn', soja: 'Soybean', trigo: 'Wheat' }, 'Total');
 
 export const IMPACTO = {
-  etiqueta: 'Impact',
-  titulo: 'More grain, more carbon in the soil',
-  bajada: "Results from five consecutive seasons on growers' fields, in corn, soybean and wheat.",
+  titulo: 'Impact',
+  bajada: 'More grain, more carbon in the soil',
   indicadores: [
     { id: 'hectareas', valor: `+${fmt(HA_TOTAL)}`, unidad: 'ha', texto: 'monitored' },
     { id: 'efectividad', valor: '96', unidad: '%', texto: 'biostimulant response effectiveness' },
@@ -212,7 +208,6 @@ export const IMPACTO = {
 
 // 7. Sobre nosotros
 export const NOSOTROS = {
-  etiqueta: 'About us',
   titulo: `The people behind ${MARCA}`,
   bajada: 'A team that brings together ag technology, agronomic advice and biostimulants.',
 };
@@ -222,8 +217,10 @@ export const CLIENTES = { titulo: 'Trusted by' };
 
 // 9. Preguntas frecuentes
 export const PREGUNTAS = {
-  etiqueta: 'FAQ',
   titulo: 'Common questions',
+  // Línea chica sobre el CTA, debajo del título (ahí va el cierre): sigue
+  // al título de la sección.
+  cierre: 'Still have questions? Message us.',
   items: [
     {
       pregunta: 'Do I need sensors or weather stations in the field?',
@@ -255,11 +252,6 @@ export const PREGUNTAS = {
   ],
 };
 
-// 10. Cierre
-export const CIERRE = {
-  titulo: 'The next yield loss is already building in one of your fields. Find it first.',
-  texto: `Book a 20-minute demo and we'll show you ${MARCA} running on your own fields, with data from your current season.`,
-};
 
 export const EDUCACION = {
   etiqueta: 'Learn',
