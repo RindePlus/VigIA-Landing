@@ -141,8 +141,14 @@ const hreflang = alt.tieneEn
       const root = document.documentElement;
       if (root.classList.contains('vg-reveal-on')) {
         // En celular se dispara apenas el elemento asoma: al bajar rápido no
-        // quedan huecos esperando a que el contenido aparezca.
+        // quedan huecos esperando a que el contenido aparezca. En el
+        // recorrido a pantalla completa (SectionPager) cada panel se ve
+        // entero: sin margen abajo, si no lo que va al pie del panel nunca
+        // "entra" y no aparece.
         const celular = window.matchMedia('(max-width: 680px)').matches;
+        const pantallaCompleta = window.matchMedia(
+          '(min-width: 900px) and (min-height: 560px) and (orientation: landscape)',
+        ).matches;
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -161,7 +167,11 @@ const hreflang = alt.tieneEn
               el.addEventListener('transitionend', done);
             });
           },
-          celular ? { rootMargin: '0px', threshold: 0 } : { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+          celular
+            ? { rootMargin: '0px', threshold: 0 }
+            : pantallaCompleta
+              ? { rootMargin: '0px', threshold: 0.1 }
+              : { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
         );
         document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
       }

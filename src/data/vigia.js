@@ -36,11 +36,11 @@ export const SEO = {
 
 // 1. Hero
 export const HERO = {
-  etiqueta: 'Estrés hídrico y térmico',
   titulo: 'Detectá el estrés antes de que se convierta en pérdida',
   // Lleva los tres diferenciales que antes iban como palabras clave: desde
   // antes de la siembra, por ambiente y por WhatsApp (decisión 47).
-  bajada: `${MARCA} sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos.`,
+  // "Hídrico y térmico" vino de la etiqueta del hero, que se quitó (decisión 50).
+  bajada: `${MARCA} sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés hídrico y térmico se vea a campo. Para productores y asesores que deciden con datos.`,
 };
 
 // 2. El problema
@@ -153,6 +153,9 @@ export const COMO_FUNCIONA = {
   // Subtítulo del bloque de los pasos. Las alertas pasaron a las tarjetas
   // de la sección 3 (decisión 42).
   tituloPasos: 'Cómo lo hace',
+  // Indicador de dos rayas al pie, en pantalla completa: dice en cuál de
+  // las dos partes estás (los avisos o cómo lo hace) y lleva a cada una.
+  partes: { etiqueta: 'Partes de la solución', nombres: ['Los avisos', 'Cómo lo hace'] },
   // Cómo lo hace: tres pasos cortos. Paso 1 con redacción neutral ("se
   // cargan") hasta confirmar quién hace el alta de lotes (pregunta abierta 1
   // de ESTRUCTURA_LANDING.md).
@@ -177,7 +180,9 @@ export const COMO_FUNCIONA = {
 // 5. Frase destacada: una línea por renglón.
 // Palabras resaltadas con los colores de la historia: *verde* (a tiempo) y
 // _rojo_ (tarde).
-export const FRASE = ['Que el bioinsumo llegue *antes* que el estrés,', 'no _después del daño._'];
+export const FRASE = ['Que el bioinsumo llegue', '*antes* que el estrés,', 'no _después del daño._'];
+// Flecha al pie de la frase (pantalla completa): la página sigue.
+export const FRASE_SIGUE = 'Seguir a Impacto';
 
 // 6. Impacto: resultados medidos en campo. Los números están en
 // src/data/impactoDatos.js (compartidos con la versión en inglés).
@@ -346,7 +351,19 @@ export const UI = {
   saltar: 'Saltar al contenido',
   inicio: 'inicio',
   menu: [
-    { label: 'Cómo funciona', href: '/#como-funciona' },
+    // Desplegable con las secciones del recorrido (se abre al dejar el
+    // cursor encima); el título lleva al problema. "Inicio" vuelve arriba de
+    // todo (el hero no tiene título propio): más a mano que el logo.
+    {
+      label: 'Cómo funciona',
+      href: '/#problema',
+      hijos: [
+        { label: 'Inicio', href: '/#inicio' },
+        { label: 'El problema', href: '/#problema' },
+        { label: 'Lo que hace VigIA', href: '/#que-hace' },
+        { label: 'La solución', href: '/#como-funciona' },
+      ],
+    },
     { label: 'Impacto', href: '/#impacto' },
     { label: 'Nosotros', href: '/#nosotros' },
     { label: 'Contacto', href: '/#contacto' },

@@ -1,0 +1,429 @@
+---
+// Paso de pantalla en pantalla en el recorrido (decisión 50). En pantallas
+// horizontales (escritorio y tablet acostada) cada panel del recorrido ocupa
+// una pantalla (`[data-pantalla]`, tamaños en sections.css) y cada gesto de
+// scroll lleva al siguiente (o al anterior) con una animación:
+// hero → problema → lo que hace → la solución (canales, y con otro gesto
+// "Cómo lo hace" en su lugar) → frase → Impacto. Desde Impacto hacia abajo
+// el scroll es normal.
+// - Hacia abajo, un gesto = un paso: la inercia del trackpad no saltea
+//   paneles ni sigue de largo al llegar. La primera transición es más lenta
+//   (presenta el estilo); la de la frase, mucho más lenta (se ve llegar el
+//   hilo); el resto, ágiles.
+// - Hacia arriba, igual: un gesto = un paso, con la misma animación (sin
+//   trabas, la inercia salteaba paneles, sobre todo en la solución).
+// - Un gesto nuevo se reconoce aunque la inercia del anterior no haya
+//   terminado: la inercia sólo pierde fuerza, así que un repunte claro es
+//   otro gesto. Si llega mientras se anima un paso (pasada la primera
+//   parte), queda en cola y el paso siguiente arranca apenas termina.
+// - Subiendo con scroll normal, el scroll es libre hasta el borde de
+//   Impacto: recién cuando lo cruza, la página se frena ahí un momento y el
+//   resto de ese gesto no sigue de largo a la frase. Para volver a la frase
+//   hace falta otro gesto, que empiece ya parado en Impacto (con la rueda
+//   del mouse, otra muesca después de la traba). No se anticipa:
+//   anticiparlo tironeaba la página hacia Impacto antes de llegar.
+// - Red de seguridad: si la página queda quieta entre dos paneles (fuera
+//   de la parte de scroll normal), se acomoda en el más cercano. Sólo
+//   actúan tras un gesto del usuario (rueda, toque, teclas): no con saltos
+//   del menú, la barra de scroll ni la búsqueda del navegador.
+// - Un panel con `data-pasos="N"` tiene N estados antes de pasar al
+//   siguiente; el estado va en `data-paso` (0, 1…) y lo usa el CSS. Sus
+//   botones `[data-ir-paso]` (las rayas al pie) marcan el estado con
+//   aria-current y llevan a cada uno.
+// - Rueda, trackpad, teclado (flechas, Re Pág/Av Pág, espacio) y deslizar
+//   en pantallas táctiles.
+// - Sin JS, con movimiento reducido, en celular o en pantallas verticales
+//   no hace nada: la página se scrollea como siempre.
+// - Mientras está activo, <html> lleva la clase `vg-pager-on` (el hilo la
+//   usa para llegar entero a la frase).
+---
+
+<script>
+  const MEDIA = '(min-width: 900px) and (min-height: 560px) and (orientation: landscape)';
+  // Duraciones en ms.
+  const BAJAR_PRIMERA = 800; // la primera vez se mira el paso
+  const BAJAR = 520; // después, el usuario ya conoce el estilo
+  const BAJAR_A_FRASE = 1500; // se ve avanzar el hilo hasta la frase
+  const SUBIR = BAJAR;
+  // Traba al volver de "Cómo lo hace" a los canales (el cambio en
+  // sections.css dura --dur-base).
+  const TRABA_VOLVER_PASO = 600;
+  // Traba al pasar a "Cómo lo hace": lo justo para ver aparecer los
+  // primeros pasos (el despliegue completo, en sections.css, dura ~1,4 s y
+  // termina aunque se siga de largo).
+  const TRABA_PASOS = 1000;
+  // Sin eventos de rueda durante este tiempo = el gesto terminó.
+  const PAUSA = 90;
+  // Repunte: un evento de rueda REPUNTE veces más fuerte que el promedio de
+  // los últimos, cuando la inercia ya venía perdiendo fuerza, es un gesto
+  // nuevo. Recién después de REPUNTE_TIEMPO desde que empezó el anterior
+  // (al arrancar, un deslizamiento también acelera).
+  const REPUNTE = 2.5;
+  const REPUNTE_MIN = 8; // px; por debajo es ruido de la inercia
+  const REPUNTE_TIEMPO = 300;
+  // Un gesto durante la animación de un paso queda en cola sólo pasada
+  // esta fracción de la animación (antes se descarta: suele ser el mismo
+  // impulso).
+  const COLA_DESDE = 0.3;
+  const UMBRAL_TOQUE = 40; // px de deslizamiento para cambiar de panel
+  // Freno al cruzar subiendo el borde de Impacto: vuelve a él (al toque si
+  // se pasó poco, con una animación corta si un envión lo llevó más lejos)
+  // y queda trabado un momento.
+  const VOLVER_A_IMPACTO = 180;
+  const PASADA_CHICA = 40; // px
+  const TRABA_IMPACTO = 600;
+  // Sin scroll durante este tiempo = la página quedó quieta.
+  const QUIETO = 150;
+  // El freno y el acomodo sólo siguen a un gesto de hace menos de esto.
+  const TRAS_GESTO = 1000;
+
+  // Curva ease-in-out fuerte (cubic-bezier(0.77, 0, 0.175, 1), la de la
+  // skill animate para movimiento en pantalla): arranca y llega suave.
+  const curva = (() => {
+    const [x1, y1, x2, y2] = [0.77, 0, 0.175, 1];
+    const bx = (t: number) => 3 * x1 * t * (1 - t) ** 2 + 3 * x2 * t ** 2 * (1 - t) + t ** 3;
+    const by = (t: number) => 3 * y1 * t * (1 - t) ** 2 + 3 * y2 * t ** 2 * (1 - t) + t ** 3;
+    return (x: number) => {
+      let lo = 0;
+      let hi = 1;
+      for (let i = 0; i < 24; i++) {
+        const mid = (lo + hi) / 2;
+        if (bx(mid) < x) lo = mid;
+        else hi = mid;
+      }
+      return by((lo + hi) / 2);
+    };
+  })();
+
+  const mq = window.matchMedia(MEDIA);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const paneles = [...document.querySelectorAll<HTMLElement>('[data-pantalla]')];
+  const root = document.documentElement;
+
+  if (paneles.length > 1) {
+    let ocupado = false; // animando o trabado
+    let inicioOcupado = 0;
+    let durOcupado = 0;
+    let conCola = true; // si se aceptan gestos en cola durante lo ocupado
+    let pendiente = 0; // dirección del gesto en cola (0 = ninguno)
+    let primera = true;
+    // Gesto de rueda en curso.
+    let ultimaRueda = 0;
+    let inicioGesto = 0;
+    let dirGesto = 0;
+    let pico = 0;
+    let recientes: number[] = [];
+    // Tras un paso, el resto del mismo gesto (la inercia) se descarta,
+    // también al llegar a Impacto, donde el scroll ya es normal.
+    let gestoConsumido = false;
+    let toqueY: number | null = null;
+    // Dónde estaba la página al empezar el gesto de rueda o de toque: desde
+    // Impacto sólo se sube a la frase con un gesto que empezó ahí, no con
+    // el que venía subiendo desde abajo.
+    let yInicioGesto = 0;
+    let yInicioToque = 0;
+
+    const activo = () => mq.matches && !reduce.matches;
+    const marcar = () => root.classList.toggle('vg-pager-on', activo());
+    marcar();
+    mq.addEventListener('change', marcar);
+    reduce.addEventListener('change', marcar);
+
+    const top = (el: HTMLElement) => Math.round(el.getBoundingClientRect().top + window.scrollY);
+    const fin = paneles[paneles.length - 1]; // Impacto
+    const frase = document.querySelector<HTMLElement>('.vg-tagline');
+
+    // Estado de un panel con pasos, y sus rayas al día.
+    const ponerPaso = (p: HTMLElement, n: number) => {
+      p.dataset.paso = String(n);
+      p.querySelectorAll<HTMLElement>('[data-ir-paso]').forEach((b) => {
+        if (Number(b.dataset.irPaso) === n) b.setAttribute('aria-current', 'step');
+        else b.removeAttribute('aria-current');
+      });
+    };
+    paneles.forEach((p) => {
+      if (p.dataset.pasos) ponerPaso(p, Number(p.dataset.paso ?? 0));
+    });
+
+    // Hacia abajo, antes de Impacto. Hacia arriba, hasta el borde de
+    // Impacto (desde ahí vuelve a la frase). Más abajo, scroll normal.
+    const maneja = (dir: number) => {
+      const y = window.scrollY;
+      const yFin = top(fin);
+      if (dir > 0) return y < yFin - 2;
+      if (dir < 0) return y <= yFin + 2 && y > 0;
+      return false;
+    };
+
+    // Panel alineado arriba de la pantalla (el que se está viendo), si hay.
+    const actual = () => paneles.find((p) => Math.abs(top(p) - window.scrollY) <= 2);
+
+    const ocupar = (ms: number, cola = true) => {
+      ocupado = true;
+      gestoConsumido = true;
+      inicioOcupado = performance.now();
+      durOcupado = ms;
+      conCola = cola;
+    };
+
+    // Un gesto que llega mientras se anima: se guarda si ya pasó la
+    // primera parte de la animación; si no, se descarta.
+    const encolar = (dir: number) => {
+      gestoConsumido = true;
+      if (conCola && performance.now() - inicioOcupado >= durOcupado * COLA_DESDE) pendiente = dir;
+    };
+
+    const liberar = () => {
+      ocupado = false;
+      ultimaRueda = performance.now();
+      const dir = pendiente;
+      pendiente = 0;
+      if (dir && activo() && maneja(dir)) mover(dir);
+    };
+
+    const trabar = (ms: number) => {
+      ocupar(ms);
+      window.setTimeout(liberar, ms);
+    };
+
+    const scrollear = (to: number, dur: number, espera = 0, cola = true) => {
+      const from = window.scrollY;
+      ocupar(dur + espera, cola);
+      const t0 = performance.now();
+      const paso = (now: number) => {
+        const t = Math.min(1, (now - t0) / dur);
+        // 'instant': el html tiene scroll-behavior: smooth, que suavizaría
+        // cada cuadro por su cuenta.
+        window.scrollTo({ top: from + (to - from) * curva(t), behavior: 'instant' });
+        if (t < 1) requestAnimationFrame(paso);
+        else if (espera) window.setTimeout(liberar, espera);
+        else liberar();
+      };
+      requestAnimationFrame(paso);
+    };
+
+    // Subiendo con scroll normal, la página cruzó el borde de Impacto:
+    // vuelve a él y queda trabada. Sin cola: la traba es justamente para
+    // que el resto del gesto no siga de largo.
+    const frenarEnImpacto = (y: number, yFin: number) => {
+      if (Math.abs(y - yFin) > PASADA_CHICA) {
+        scrollear(yFin, VOLVER_A_IMPACTO, TRABA_IMPACTO, false);
+        return;
+      }
+      window.scrollTo({ top: yFin, behavior: 'instant' });
+      ocupar(TRABA_IMPACTO, false);
+      window.setTimeout(liberar, TRABA_IMPACTO);
+    };
+
+    function mover(dir: number) {
+      const p = actual();
+      // Dentro de un panel con estados: primero se recorren sus estados.
+      if (p?.dataset.pasos) {
+        const n = Number(p.dataset.pasos);
+        const i = Number(p.dataset.paso ?? 0);
+        if (dir > 0 && i < n - 1) {
+          ponerPaso(p, i + 1);
+          trabar(TRABA_PASOS);
+          return;
+        }
+        if (dir < 0 && i > 0) {
+          ponerPaso(p, i - 1);
+          trabar(TRABA_VOLVER_PASO);
+          return;
+        }
+      }
+      const y = window.scrollY;
+      const tops = paneles.map(top);
+      if (dir > 0) {
+        const i = tops.findIndex((t) => t > y + 4);
+        if (i < 0) return;
+        const sig = paneles[i];
+        // Al llegar bajando a un panel con estados, arranca por el primero.
+        if (sig.dataset.pasos) ponerPaso(sig, 0);
+        const dur = sig === frase ? BAJAR_A_FRASE : primera ? BAJAR_PRIMERA : BAJAR;
+        primera = false;
+        scrollear(tops[i], dur);
+      } else {
+        const i = tops.map((t, k) => (t < y - 4 ? k : -1)).filter((k) => k >= 0).pop();
+        if (i === undefined) return;
+        // Subiendo, un panel con estados se muestra en el último: es lo que
+        // se vio al pasar por él.
+        const ant = paneles[i];
+        if (ant.dataset.pasos) ponerPaso(ant, Number(ant.dataset.pasos) - 1);
+        scrollear(tops[i], SUBIR);
+      }
+    }
+
+    // ¿Este evento de rueda empieza un gesto nuevo? Sí, si hubo una pausa,
+    // si cambió la dirección o si hay un repunte sobre una inercia que ya
+    // venía perdiendo fuerza.
+    const esGestoNuevo = (dir: number, fuerza: number, ahora: number) => {
+      if (ahora - ultimaRueda >= PAUSA || dir !== dirGesto) return true;
+      if (recientes.length < 3 || ahora - inicioGesto < REPUNTE_TIEMPO) return false;
+      const media = recientes.reduce((a, b) => a + b, 0) / recientes.length;
+      return media < pico * 0.6 && fuerza >= REPUNTE_MIN && fuerza > media * REPUNTE;
+    };
+
+    window.addEventListener(
+      'wheel',
+      (e) => {
+        if (!activo() || e.ctrlKey) return; // ctrl + rueda = zoom
+        const dir = Math.sign(e.deltaY);
+        if (!dir) return;
+        const ahora = performance.now();
+        const escala = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1;
+        const fuerza = Math.abs(e.deltaY) * escala;
+        const nuevo = esGestoNuevo(dir, fuerza, ahora);
+        ultimaRueda = ahora;
+        if (nuevo) {
+          gestoConsumido = false;
+          inicioGesto = ahora;
+          yInicioGesto = window.scrollY;
+          dirGesto = dir;
+          pico = 0;
+          recientes = [];
+        }
+        pico = Math.max(pico, fuerza);
+        recientes.push(fuerza);
+        if (recientes.length > 4) recientes.shift();
+
+        if (ocupado) {
+          e.preventDefault();
+          if (nuevo) encolar(dir);
+          return;
+        }
+        // La inercia de un gesto que ya hizo su paso no sigue de largo,
+        // aunque ya estemos en Impacto.
+        if (gestoConsumido) {
+          if (maneja(dir) || window.scrollY <= top(fin) + 2) e.preventDefault();
+          return;
+        }
+        if (!maneja(dir)) return;
+        e.preventDefault();
+        const yFin = top(fin);
+        // Llegó a Impacto subiendo con este mismo gesto (el evento de rueda
+        // ganó al de scroll): se frena, no sube.
+        if (dir < 0 && yInicioGesto > yFin + 2) {
+          frenarEnImpacto(window.scrollY, yFin);
+          return;
+        }
+        mover(dir);
+      },
+      { passive: false },
+    );
+
+    window.addEventListener('keydown', (e) => {
+      if (!activo() || e.altKey || e.ctrlKey || e.metaKey) return;
+      const el = document.activeElement;
+      if (el && el.matches('input, textarea, select, [contenteditable="true"]')) return;
+      const abajo = ['ArrowDown', 'PageDown'].includes(e.key) || (e.key === ' ' && !e.shiftKey);
+      const arriba = ['ArrowUp', 'PageUp'].includes(e.key) || (e.key === ' ' && e.shiftKey);
+      const dir = abajo ? 1 : arriba ? -1 : 0;
+      if (!dir) return;
+      if (!maneja(dir)) return;
+      e.preventDefault();
+      if (!ocupado) mover(dir);
+      else if (!e.repeat) encolar(dir);
+    });
+
+    window.addEventListener(
+      'touchstart',
+      (e) => {
+        toqueY = e.touches.length === 1 ? e.touches[0].clientY : null;
+        yInicioToque = window.scrollY;
+      },
+      { passive: true },
+    );
+    window.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!activo() || toqueY === null) return;
+        if (maneja(Math.sign(toqueY - e.touches[0].clientY))) e.preventDefault();
+      },
+      { passive: false },
+    );
+    window.addEventListener('touchend', (e) => {
+      if (!activo() || toqueY === null) return;
+      const dy = toqueY - e.changedTouches[0].clientY;
+      toqueY = null;
+      const dir = Math.sign(dy);
+      if (Math.abs(dy) < UMBRAL_TOQUE || !maneja(dir)) return;
+      // Venía subiendo desde abajo de Impacto: se queda en Impacto.
+      if (dir < 0 && yInicioToque > top(fin) + 2) return;
+      if (ocupado) encolar(dir);
+      else mover(dir);
+    });
+
+    // Saltos del menú (enlaces con #), Inicio/Fin y la barra de scroll: el
+    // scroll nativo cruza paneles a propósito, sin frenos ni acomodos.
+    let libre = false;
+    let finLibre = 0;
+    const soltar = (ms: number) => {
+      libre = true;
+      window.clearTimeout(finLibre);
+      finLibre = window.setTimeout(() => (libre = false), ms);
+    };
+    document.addEventListener('click', (e) => {
+      if ((e.target as Element | null)?.closest('a[href*="#"]')) soltar(1500);
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Home' || e.key === 'End') soltar(1500);
+    });
+    window.addEventListener('pointerdown', (e) => {
+      // Clic fuera del ancho del documento = sobre la barra de scroll.
+      if (e.clientX >= root.clientWidth) soltar(60_000);
+    });
+    window.addEventListener('pointerup', () => {
+      if (libre) soltar(300);
+    });
+
+    // Último gesto del usuario que scrollea (rueda, toque, teclas).
+    let ultimoGesto = 0;
+    const gesto = () => (ultimoGesto = performance.now());
+    window.addEventListener('wheel', gesto, { passive: true });
+    window.addEventListener('touchmove', gesto, { passive: true });
+    window.addEventListener('keydown', gesto);
+    const reciente = () => performance.now() - ultimoGesto < TRAS_GESTO;
+
+    let yPrevio = window.scrollY;
+    let quieto = 0;
+    window.addEventListener(
+      'scroll',
+      () => {
+        const y = window.scrollY;
+        const yAntes = yPrevio;
+        yPrevio = y;
+        window.clearTimeout(quieto);
+        if (!activo() || ocupado || libre || !reciente()) return;
+        const yFin = top(fin);
+        // Subiendo, cruzó (o tocó) el borde de Impacto: se frena ahí.
+        if (yAntes > yFin + 2 && y <= yFin + 2) {
+          frenarEnImpacto(y, yFin);
+          return;
+        }
+        if (y >= yFin - 2) return;
+        quieto = window.setTimeout(() => {
+          if (!activo() || ocupado || libre || actual()) return;
+          const yy = window.scrollY;
+          const cerca = paneles
+            .map(top)
+            .reduce((a, b) => (Math.abs(b - yy) < Math.abs(a - yy) ? b : a));
+          scrollear(cerca, SUBIR);
+        }, QUIETO);
+      },
+      { passive: true },
+    );
+
+    // Rayas al pie de un panel con pasos: llevan a ese estado.
+    document.addEventListener('click', (e) => {
+      const b = (e.target as Element | null)?.closest<HTMLElement>('[data-ir-paso]');
+      const p = b?.closest<HTMLElement>('[data-pasos]');
+      if (!b || !p || !activo() || ocupado) return;
+      const n = Number(b.dataset.irPaso);
+      const i = Number(p.dataset.paso ?? 0);
+      if (n === i) return;
+      ponerPaso(p, n);
+      trabar(n > i ? TRABA_PASOS : TRABA_VOLVER_PASO);
+    });
+  }
+</script>

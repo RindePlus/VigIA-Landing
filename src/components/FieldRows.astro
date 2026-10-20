@@ -1,0 +1,179 @@
+---
+// Fondo del hero (decorativo): un lote sembrado en perspectiva, dibujado a
+// línea como un grabado. Surcos que convergen hacia el horizonte, una
+// cortina de árboles y lomas lejanas. Reemplaza a las líneas de nivel
+// (TopoLines.astro) en prueba.
+// Se genera al compilar, siempre igual (sin azar): suma de senos.
+// Vectores sin relleno; el color, la opacidad y el desvanecido los da el CSS
+// (.vg-campo-fondo en sections.css).
+
+const W = 1200;
+const H = 800;
+const HORIZONTE = 490;
+// Punto de fuga: al centro, entre el texto y el gráfico, donde se ve. La
+// derecha (que asoma al costado y debajo del gráfico) lleva más árboles,
+// un molino y un alambrado.
+const FUGA_X = 600;
+
+const fmt = (n: number) => n.toFixed(1);
+const linea = (pts: [number, number][]) =>
+  pts.map(([x, y], i) => `${i ? 'L' : 'M'}${fmt(x)} ${fmt(y)}`).join(' ');
+
+// Surcos de a pares (el lomo y el fondo del surco, como en un grabado): de
+// un punto del borde de abajo hacia el punto de fuga. Empiezan apenas
+// debajo del horizonte (el lote termina antes de los árboles), se curvan
+// un poco, como un lote sobre una loma suave, y tiemblan apenas, como
+// dibujados a mano.
+const SURCOS = 34;
+const surco = (xb: number, i: number) => {
+  const t0 = 0.03;
+  const pts: [number, number][] = [];
+  for (let k = 0; k <= 30; k++) {
+    const t = t0 + (1 - t0) * (k / 30) ** 1.5;
+    const x = FUGA_X + (xb - FUGA_X) * t;
+    const comba = 70 * t * (1 - t) * Math.sin(i * 0.17 + 0.6);
+    const pulso = 1.6 * t * Math.sin(k * 1.9 + i * 2.3);
+    const y = HORIZONTE + (H + 40 - HORIZONTE) * t;
+    pts.push([x + comba + pulso, y]);
+  }
+  return linea(pts);
+};
+// Por dónde sale el alambrado del borde de abajo: los surcos terminan
+// antes; del otro lado queda campo sin sembrar.
+const ALAMBRADO_XB = 2100;
+const surcos = Array.from({ length: SURCOS }, (_, i) => {
+  const xb = -1600 + (i / (SURCOS - 1)) * 4800;
+  return xb + 38 < ALAMBRADO_XB - 60 ? [surco(xb, i), surco(xb + 38, i)] : [];
+}).flat();
+
+// Cortina de árboles sobre el horizonte: grupos con el contorno de las
+// copas, como una nube de lomitos encadenados (más altos en el medio del
+// grupo), con tramos de horizonte libre entre uno y otro. A la izquierda,
+// bajos y salteados (detrás del texto); a la derecha, una cortina larga y
+// alta.
+const GRUPOS = [
+  { desde: -10, hasta: 170, alto: 0.7 },
+  { desde: 290, hasta: 450, alto: 0.8 },
+  { desde: 700, hasta: 900, alto: 1.1 },
+  { desde: 930, hasta: 1075, alto: 1.5 },
+  { desde: 1150, hasta: 1215, alto: 1.3 },
+];
+const base = HORIZONTE - 1;
+const arboles = GRUPOS.map(({ desde, hasta, alto: escala }, g) => {
+  const alto = (x: number) => escala * (10 + 22 * Math.sin(((x - desde) / (hasta - desde)) * Math.PI));
+  let x = desde;
+  let k = 0;
+  let d = `M${fmt(x)} ${fmt(base)} L${fmt(x)} ${fmt(base - alto(x) * 0.7)}`;
+  while (x < hasta) {
+    const r = 6 + 4 * Math.abs(Math.sin(k * 1.7 + g)) + 3 * Math.abs(Math.sin(k * 0.6));
+    const x2 = Math.min(hasta, x + r * 1.8);
+    const y2 = base - alto(x2) * 0.7;
+    const cima = base - alto((x + x2) / 2) - r * 0.9;
+    d += ` C${fmt(x)} ${fmt(cima)} ${fmt(x2)} ${fmt(cima)} ${fmt(x2)} ${fmt(y2)}`;
+    x = x2;
+    k++;
+  }
+  return `${d} L${fmt(x)} ${fmt(base)}`;
+});
+
+// Molino de viento, a la derecha, en un claro de la cortina: torre de cuatro patas que se angostan,
+// travesaños, la rueda de aspas y la cola.
+const molino = (() => {
+  const x = 1110;
+  const pie = HORIZONTE + 14;
+  const alto = 120;
+  const cima = pie - alto;
+  const d: string[] = [];
+  // Patas: dos de cada lado, de la base ancha a la cima angosta.
+  for (const [abajo, arriba] of [
+    [-20, -4],
+    [-9, -2],
+    [9, 2],
+    [20, 4],
+  ]) {
+    d.push(`M${fmt(x + abajo)} ${fmt(pie)} L${fmt(x + arriba)} ${fmt(cima)}`);
+  }
+  // Travesaños en cruz entre las patas de afuera.
+  const ancho = (y: number) => 4 + (20 - 4) * ((y - cima) / alto);
+  for (let k = 0; k < 4; k++) {
+    const y1 = pie - (k * alto) / 4;
+    const y2 = pie - ((k + 1) * alto) / 4;
+    d.push(`M${fmt(x - ancho(y1))} ${fmt(y1)} L${fmt(x + ancho(y2))} ${fmt(y2)}`);
+    d.push(`M${fmt(x + ancho(y1))} ${fmt(y1)} L${fmt(x - ancho(y2))} ${fmt(y2)}`);
+  }
+  // Rueda: aro y aspas.
+  const r = 24;
+  const cy = cima - 6;
+  d.push(`M${fmt(x - r)} ${fmt(cy)} A${r} ${r} 0 1 0 ${fmt(x + r)} ${fmt(cy)} A${r} ${r} 0 1 0 ${fmt(x - r)} ${fmt(cy)}`);
+  d.push(`M${fmt(x - r * 0.35)} ${fmt(cy)} A${r * 0.35} ${r * 0.35} 0 1 0 ${fmt(x + r * 0.35)} ${fmt(cy)} A${r * 0.35} ${r * 0.35} 0 1 0 ${fmt(x - r * 0.35)} ${fmt(cy)}`);
+  for (let k = 0; k < 12; k++) {
+    const a = (k / 12) * Math.PI * 2;
+    d.push(
+      `M${fmt(x + Math.cos(a) * r * 0.35)} ${fmt(cy + Math.sin(a) * r * 0.35)} L${fmt(x + Math.cos(a) * r)} ${fmt(cy + Math.sin(a) * r)}`,
+    );
+  }
+  // Cola: una barra hacia la derecha con la veleta.
+  d.push(`M${fmt(x + 4)} ${fmt(cy)} L${fmt(x + 46)} ${fmt(cy + 2)}`);
+  d.push(`M${fmt(x + 40)} ${fmt(cy - 9)} L${fmt(x + 52)} ${fmt(cy - 7)} L${fmt(x + 52)} ${fmt(cy + 10)} L${fmt(x + 40)} ${fmt(cy + 8)} Z`);
+  return d.join(' ');
+})();
+
+// Alambrado sobre el costado derecho del lote: postes que achican hacia el
+// punto de fuga y dos hilos.
+const alambrado = (() => {
+  const xb = ALAMBRADO_XB;
+  const punto = (t: number): [number, number] => [
+    FUGA_X + (xb - FUGA_X) * t,
+    HORIZONTE + (H + 40 - HORIZONTE) * t,
+  ];
+  const d: string[] = [];
+  const postes = 22;
+  const hilo1: [number, number][] = [];
+  const hilo2: [number, number][] = [];
+  for (let k = 0; k <= postes; k++) {
+    const t = 0.18 + 0.82 * (k / postes) ** 2;
+    const [x, y] = punto(t);
+    const h = 64 * t;
+    d.push(`M${fmt(x)} ${fmt(y)} L${fmt(x)} ${fmt(y - h)}`);
+    hilo1.push([x, y - h * 0.92]);
+    hilo2.push([x, y - h * 0.55]);
+  }
+  return `${d.join(' ')} ${linea(hilo1)} ${linea(hilo2)}`;
+})();
+
+// Horizonte: la línea donde termina el lote, de punta a punta.
+const horizonte = linea(
+  Array.from({ length: 61 }, (_, i): [number, number] => {
+    const x = -20 + (i / 60) * (W + 40);
+    return [x, HORIZONTE + 1.5 * Math.sin(x / 140)];
+  }),
+);
+
+// Lomas lejanas, detrás de los árboles.
+const lomas = [
+  { y: HORIZONTE - 48, amp: 22, f: 230, fase: 0.3, desde: 420, hasta: W + 20 },
+  { y: HORIZONTE - 30, amp: 14, f: 170, fase: 2.0, desde: -20, hasta: 720 },
+].map(({ y, amp, f, fase, desde, hasta }) =>
+  linea(
+    Array.from({ length: 50 }, (_, i): [number, number] => {
+      const x = desde + (i / 49) * (hasta - desde);
+      return [x, y - amp * Math.sin(x / f + fase) - amp * 0.4 * Math.sin(x / (f * 0.45))];
+    }),
+  ),
+);
+---
+
+<svg
+  class="vg-campo-fondo"
+  viewBox={`0 0 ${W} ${H}`}
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+  focusable="false"
+>
+  {lomas.map((d) => <path d={d} class="vg-campo-fondo__lejos" />)}
+  {arboles.map((d) => <path d={d} />)}
+  <path d={molino} />
+  <path d={alambrado} />
+  <path d={horizonte} />
+  {surcos.map((d) => <path d={d} />)}
+</svg>

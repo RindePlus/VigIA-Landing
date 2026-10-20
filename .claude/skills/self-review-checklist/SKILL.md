@@ -58,7 +58,7 @@ Detector de patrones de IA y contraste (skill `impeccable`), sobre el build:
 sh .claude/skills/impeccable/scripts/impeccable detect --json docs/index.html
 ```
 
-Hoy quedan 2 hallazgos conocidos y falsos (`cramped-padding` en la lista de preguntas y en `.vg-section`). Cualquier otro se arregla o se justifica. Las reglas visuales están en `DESIGN.md`.
+Los únicos hallazgos aceptados son `cramped-padding` en secciones con fondo propio y en la lista de preguntas: son falsos (el margen lateral lo da `.vg-wrap`). Cualquier otro se arregla o se justifica en `DESIGN.md`. Las reglas visuales están en `DESIGN.md`.
 
 Después, indicá al usuario qué mirar en `pnpm dev` (http://localhost:4321):
 - Mobile (≤ 390px) y desktop.

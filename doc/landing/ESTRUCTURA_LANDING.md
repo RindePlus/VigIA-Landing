@@ -47,7 +47,7 @@ Header ─ Cómo funciona · Impacto · Nosotros · Contacto · Educación (/edu
 ├─ 3. Qué hace VigIA       #que-hace        · punto 3 · cuatro tarjetas con foto + tres tipos de estrés
 ├─ 4. La solución          #como-funciona   · punto 4 · celular WhatsApp → video resolución
 │  └────────────────────────────────────────────────────┘
-├─ 5. Frase destacada                         (palabras que se encienden al hacer scroll)
+├─ 5. Frase destacada                         (tres renglones; "antes" se subraya al llegar el hilo)
 ├─ 6. Impacto              #impacto         (cuatro indicadores, tablas de grano y carbono)
 ├─ 7. Sobre nosotros       #nosotros        (personas con foto y logo de su empresa)
 ├─ 8. Clientes             #clientes        (carrusel)
@@ -64,9 +64,9 @@ Header ─ Cómo funciona · Impacto · Nosotros · Contacto · Educación (/edu
 
 | Elemento | Contenido |
 |---|---|
-| Etiqueta | ESTRÉS HÍDRICO Y TÉRMICO |
+| Etiqueta | Sin etiqueta (decisión 50): "estrés hídrico y térmico" pasa a la bajada |
 | Título (h1) | **Detectá el estrés antes de que se convierta en pérdida** |
-| Bajada | VigIA BioEstrés sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos. |
+| Bajada | VigIA BioEstrés sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés hídrico y térmico se vea a campo. Para productores y asesores que deciden con datos. (36 palabras: una sobre el máximo, aceptado para no perder el tipo de estrés). |
 | Botón | Sólo **Contactanos para empezar a usar VigIA** (WhatsApp, con flecha), monocromo: negro en tema claro y blanco en oscuro (decisión 33). Va en la columna de texto, **debajo de la bajada** y alineado a la izquierda con el texto (decisión 47). Sin botón secundario (decisión 31). En celular y tablet (una columna) va debajo del gráfico: primero se ve lo que hace y después se pide la acción. |
 | Visual | El gráfico termina a la altura del botón. `BalanceChart.astro`, simplificado: sólo la línea de agua útil, el umbral, "Hoy" y la zona de pronóstico (sin chips de datos, lluvia ni "Ejemplo ilustrativo"). La línea se dibuja y, justo antes de tocar el umbral, aparece la notificación, colgada de una línea punteada ámbar que sube desde el punto de **Hoy** (la alerta se envía hoy, cuando el pronóstico ya muestra el cruce; el punto ámbar del cruce es lo que se anticipa), con el logo de WhatsApp grande (el aviso llega por WhatsApp) y el texto **Alerta enviada · Estrés hídrico en 14 días**, y late el punto del cruce. El gráfico muestra 18 días de historia y los 14 del pronóstico (el horizonte del motor): la línea toca el umbral justo al final del pronóstico. En escritorio la notificación va sobre el gráfico (arriba a la derecha); en celular, debajo. Sin video. |
 
@@ -142,7 +142,7 @@ Es el capítulo "con VigIA" del recorrido. **Lo principal son los dos canales de
 
 **Cómo lo hace** (decisión 39): debajo del bloque principal, bien separado de él (96 px) y sobre el color normal de la página (el verde agua se funde al llegar a este bloque). Con su subtítulo **centrado**, un paso más grande que los títulos de adentro. Mide hasta 880 px y va centrado. El bloque "Qué te avisa VigIA" se quitó: sus cuatro alertas pasaron a las tarjetas de la sección 3 (decisión 42).
 
-- **Cómo lo hace:** línea de tiempo **sin números**: cada paso centrado, con un punto verde encima del título y una línea fina de punto a punto. Al entrar en pantalla la línea se dibuja de izquierda a derecha y cada paso aparece cuando la línea llega a él. En celular la línea es vertical (punto a la izquierda). Con movimiento reducido se ve fija.
+- **Cómo lo hace:** va en la columna de texto, debajo de los canales, con un subtítulo chico. Línea de tiempo **vertical y sin números**: un punto verde a la izquierda de cada paso y una línea fina hacia el de abajo, que se dibuja de arriba hacia abajo; cada paso aparece cuando la línea llega a él. En pantalla completa reemplaza a los canales con el siguiente gesto de scroll (decisión 50). Con movimiento reducido se ve fija.
 
   | Paso | Título | Texto |
   |---|---|---|
@@ -158,11 +158,12 @@ Los otros módulos (cultivos de servicio y carry-over de herbicidas) ya no van a
 
 Sección propia, fuera del recorrido, con tipografía grande (sección B11 de `landing-page-design`).
 
-> **Que el bioinsumo llegue antes que el estrés,**
+> **Que el bioinsumo llegue**
+> **antes que el estrés,**
 > **no después del daño.**
 
 - **Palabras resaltadas con los colores de la historia:** "antes" en verde (a tiempo) y "después del daño" en rojo (tarde). En `src/data/vigia.js` se marcan con `*verde*` y `_rojo_`.
-- Cada palabra pasa de un tono apagado (≈30 % de opacidad) al color pleno a medida que cruza una línea de activación, en orden de lectura, con `--ease-fluid`.
+- Tres renglones (decisión 50). El hilo entra por el renglón del medio, justo antes de "antes"; al llegar, "antes" se subraya en verde. En pantalla completa, una flecha abajo lleva a Impacto.
 - Con `prefers-reduced-motion` o sin JS, el texto se ve completo y sin animar.
 - Es texto HTML (un `<p>`, no un heading), legible por lectores de pantalla.
 
@@ -428,6 +429,12 @@ De la versión 1 a la versión 2. Cada paso deja la página funcionando.
 | 47 | Hero sin palabras clave | Se quitan las tres palabras clave del hero (desde antes de la siembra, por ambiente, alertas por WhatsApp). Sus ideas pasan a la bajada, que ahora dice desde antes de la siembra, por ambiente y por WhatsApp. El CTA sube a la columna de texto, debajo de la bajada. Reemplaza la parte de palabras clave de la decisión 17 y la ubicación del botón de la 31. |
 | 48 | Canales como las razones | Los canales de La solución toman el formato de las razones de El problema, para que los dos capítulos del recorrido se lean iguales: a la izquierda y a todo el ancho de la columna (ya no centrados ni de 420 px), ícono arriba y los mismos tamaños de texto. Los íconos siguen monocromos. |
 | 49 | Rediseño visual: agro técnico y sobrio | A partir de la crítica de Impeccable (la página se leía como hecha con IA). Sólo estética, sin cambiar textos ni información. Paleta de campo con significado (fondo piedra, verde bosque de marca, verde campo / ámbar / rojo / tierra según lo que representan) en lugar de los grises de GitHub y la paleta de Tailwind. IBM Plex Sans + Chivo Mono para datos (cero liso), en lugar de Geist. Título del hero en tinta sólida (sin degradé). Etiquetas de sección sobrias (chicas, en gris, sin mayúsculas). Fondo plano en el recorrido (fin del degradé provisorio). Hilo con puntos sin número y sin pulsos, con un tramo verde agua en Lo que hace VigIA. Frase destacada fija (no se ilumina palabra por palabra). Apariciones más cortas, sin desenfoque y sólo en grupos de contenido. Fotos de "Lo que hace VigIA" reales (Wikimedia Commons, con créditos en el pie de página) en lugar de las generadas. Botones de WhatsApp con texto oscuro (contraste). Ver ADR 0005. |
+| 50 | Recorrido a pantalla completa y fondos por capítulo | En pantallas horizontales (escritorio y tablet acostada), el hero, El problema, Lo que hace VigIA, La solución, la frase e Impacto ocupan una pantalla cada uno, con tamaños que siguen al alto de la ventana. Cada gesto de scroll pasa al panel siguiente o al anterior: hacia abajo con una traba corta (la primera transición, más lenta; la de la frase, mucho más lenta para ver llegar el hilo), hacia arriba rápido y casi sin espera; desde Impacto, scroll normal, sin que la inercia siga de largo al llegar. En los paneles de dos columnas el título arranca a la altura del gráfico o video. El hero no lleva etiqueta: "estrés hídrico y térmico" pasa a la bajada. En Lo que hace VigIA, las dos preguntas van al pie. La solución tiene dos estados: bajada y canales, y con el siguiente gesto, "Cómo lo hace" en su lugar (pasos en vertical, con traba hasta que terminan de desplegarse). La frase va en tres renglones; al llegar el hilo, un trazo recorre "antes" y se va, y aparece una flecha que respira despacio. El header queda siempre visible y se aclara sobre las bandas verdes. Fondos: líneas de nivel tenues en el hero (más claras detrás del texto), Impacto en banda verde bosque, equipo y clientes en verde salvia, preguntas del color del footer. Celular queda pendiente. Sólo en `develop-impeccable`. |
+| 51 | Scroll de pantalla en pantalla, parejo | Reemplaza lo del scroll de la decisión 50 ([ADR 0006](../adr/0006-recorrido-de-pantalla-en-pantalla.md)). Un gesto, un paso, también hacia arriba, con la misma animación que hacia abajo (520 ms): sin trabas, la inercia salteaba paneles, sobre todo en la solución. Un gesto nuevo se reconoce aunque siga la inercia del anterior y, si llega durante una animación, queda en cola. La frase pasa de 1,8 s a 1,5 s. "Cómo lo hace" traba 1 s (antes, hasta que terminaban los pasos); el cambio va en la dirección del scroll y dos rayas al pie marcan el estado. La página nunca queda entre dos paneles: se acomoda en el más cercano. Al volver desde abajo, se frena en Impacto. |
+| 52 | Menú con desplegable | "Cómo funciona" pasa a ser un desplegable con Inicio (vuelve arriba de todo: el hero no tiene título y es más a mano que el logo), El problema, Lo que hace VigIA y La solución; el título lleva al problema. Impacto, Nosotros, Contacto y Educación siguen sueltos. Los saltos del menú dejan cada sección justo debajo del header (y los paneles a pantalla completa, alineados arriba). |
+| 53 | Equipo y clientes sobre piedra | Equipo y clientes dejan el verde salvia de la decisión 50 y vuelven al fondo piedra de la página: el salvia, frío, chocaba con el blanco cálido de las tarjetas del equipo. Impacto sigue en verde bosque y preguntas frecuentes, del color del footer. |
+| 54 | Fondo propio para El problema y La solución | El recorrido deja de ir todo sobre el mismo fondo: El problema va sobre tierra seca y La solución sobre un verde muy claro, sólidos, y el hero, Lo que hace VigIA y la frase siguen sobre piedra. Los colores acompañan el tramo del hilo de cada sección (ámbar y rojo, verde campo) y son cálidos, para no chocar con las tarjetas blancas como el salvia frío de la decisión 53. Todos los textos pasan AA. El hilo pasa por encima de las secciones, para que los fondos no lo tapen. |
+| 55 | Dibujos de fondo por sección | Con la misma técnica que el lote del hero (línea fina, tenue, generado al compilar), cada sección del recorrido lleva un dibujo de su tema: suelo agrietado en El problema, lotes divididos en ambientes en Lo que hace VigIA y pivotes de riego vistos desde arriba en La solución. Toman el color de su tramo del hilo, van en las zonas sin contenido y quedan al 40 % detrás del texto. La frase, Impacto, el equipo y las preguntas van sin dibujo. |
 
 ## Preguntas abiertas
 

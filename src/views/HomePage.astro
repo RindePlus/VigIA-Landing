@@ -13,6 +13,11 @@ import BalanceChart from '../components/BalanceChart.astro';
 import WhatsAppMock from '../components/WhatsAppMock.astro';
 import ProblemChart from '../components/ProblemChart.astro';
 import MediaStory from '../components/MediaStory.astro';
+import FieldRows from '../components/FieldRows.astro';
+import SueloSeco from '../components/SueloSeco.astro';
+import LoteAmbientes from '../components/LoteAmbientes.astro';
+import Pivotes from '../components/Pivotes.astro';
+import SectionPager from '../components/SectionPager.astro';
 import JourneyThread from '../components/JourneyThread.astro';
 import TaglineReveal from '../components/TaglineReveal.astro';
 import TrustedCompanies from '../components/TrustedCompanies.jsx';
@@ -40,6 +45,7 @@ const {
   QUE_HACE,
   COMO_FUNCIONA,
   FRASE,
+  FRASE_SIGUE,
   IMPACTO,
   NOSOTROS,
   CLIENTES,
@@ -84,10 +90,10 @@ const faqJsonLd = {
   <JourneyThread />
 
   <!-- 1. Hero -->
-  <section class="vg-hero" id="inicio">
+  <section class="vg-hero" id="inicio" data-pantalla>
+    <FieldRows />
     <div class="vg-wrap vg-hero__grid">
       <div class="vg-hero__copy">
-        <p class="vg-eyebrow">{HERO.etiqueta}</p>
         <h1 class="vg-hero__title" data-vg-node="1">{HERO.titulo}</h1>
         <p class="vg-hero__subtitle">{HERO.bajada}</p>
         <!-- CTA en la columna de texto, debajo de la bajada (decisión 47). -->
@@ -109,7 +115,8 @@ const faqJsonLd = {
   </section>
 
   <!-- 2. El problema -->
-  <section class="vg-section" id="problema">
+  <section class="vg-section" id="problema" data-pantalla>
+    <SueloSeco />
     <div class="vg-wrap">
       <!-- Título, bajada y razones en la columna izquierda: el gráfico queda
            centrado a la derecha, entre el título y las razones. -->
@@ -149,7 +156,8 @@ const faqJsonLd = {
 
   <!-- 3. Lo que hace VigIA: cuatro tarjetas con foto, que también cuentan
        las cuatro alertas y su acción. Punto 3 del hilo, en celeste. -->
-  <section class="vg-section vg-solucion" id="que-hace">
+  <section class="vg-section vg-solucion" id="que-hace" data-pantalla>
+    <LoteAmbientes />
     <div class="vg-wrap">
       <p class="vg-eyebrow">{QUE_HACE.etiqueta}</p>
       <h2 class="vg-section__title" data-vg-node="3">{QUE_HACE.titulo}</h2>
@@ -201,30 +209,66 @@ const faqJsonLd = {
   <!-- 4. La solución (ancla #como-funciona, la del menú): los dos canales de
        la alerta son lo principal -->
   <section class="vg-section" id="como-funciona">
+    <Pivotes />
     <div class="vg-wrap">
       <!-- Título, bajada y canales a la izquierda; el WhatsApp con el video a
            la derecha, terminando a la altura de la tarjeta de la plataforma. -->
-      <div class="vg-avisos">
+      <div class="vg-avisos" data-pantalla data-pasos="2">
         <div class="vg-avisos__texto">
           <p class="vg-eyebrow">{COMO_FUNCIONA.etiqueta}</p>
           <h2 class="vg-section__title" data-vg-node="4">{COMO_FUNCIONA.titulo}</h2>
-          <p class="vg-section__lead">{COMO_FUNCIONA.bajada}</p>
-          <ul class="vg-canales">
+          <!-- Bajada + canales y "Cómo lo hace" comparten lugar: en pantalla
+               completa un gesto de scroll cambia uno por el otro
+               (SectionPager, data-pasos); en celular y en vertical van uno
+               debajo del otro. -->
+          <div class="vg-avisos__cambio">
+            <div class="vg-avisos__canales">
+              <p class="vg-section__lead">{COMO_FUNCIONA.bajada}</p>
+              <ul class="vg-canales">
+                {
+                  COMO_FUNCIONA.canales.map((c, i) => {
+                    const Icon = ICONOS_CANALES[c.id as keyof typeof ICONOS_CANALES];
+                    return (
+                      <li class={`vg-canal vg-canal--${c.id}`} data-reveal style={delay(i)}>
+                        <span class="vg-canal__icon" aria-hidden="true"><Icon /></span>
+                        <div>
+                          <h3>{c.titulo}</h3>
+                          <p>{c.texto}</p>
+                        </div>
+                      </li>
+                    );
+                  })
+                }
+              </ul>
+            </div>
+            <!-- Cómo lo hace: tres pasos en vertical, unidos por una línea. Es el
+                 ancla final del hilo (data-vg-end): no lleva data-reveal. -->
+            <div class="vg-detalle" data-vg-end>
+              <h3 class="vg-detalle__label">{COMO_FUNCIONA.tituloPasos}</h3>
+              <!-- Línea de tiempo: un punto por paso; la línea se dibuja de arriba
+                   hacia abajo y cada paso aparece cuando la línea llega a él
+                   (estilos en sections.css, .vg-pasos). -->
+              <ol class="vg-pasos" data-reveal>
+                {
+                  COMO_FUNCIONA.pasos.map((p, i) => (
+                    <li class="vg-paso" style={`--i: ${i}`}>
+                      <p class="vg-paso__titulo">{p.titulo}</p>
+                      <p class="vg-paso__texto">{p.texto}</p>
+                    </li>
+                  ))
+                }
+              </ol>
+            </div>
+          </div>
+          <!-- Dos rayas: la parte que se ve (data-paso del panel) va marcada.
+               Sólo en pantalla completa; SectionPager atiende los clics. -->
+          <div class="vg-partes" role="group" aria-label={COMO_FUNCIONA.partes.etiqueta}>
             {
-              COMO_FUNCIONA.canales.map((c, i) => {
-                const Icon = ICONOS_CANALES[c.id as keyof typeof ICONOS_CANALES];
-                return (
-                  <li class={`vg-canal vg-canal--${c.id}`} data-reveal style={delay(i)}>
-                    <span class="vg-canal__icon" aria-hidden="true"><Icon /></span>
-                    <div>
-                      <h3>{c.titulo}</h3>
-                      <p>{c.texto}</p>
-                    </div>
-                  </li>
-                );
-              })
+              COMO_FUNCIONA.partes.nombres.map((nombre, i) => (
+                <button type="button" class="vg-partes__raya" data-ir-paso={i} aria-label={nombre} />
+              ))
             }
-          </ul>
+          </div>
         </div>
 
         <div class="vg-media" data-reveal style={delay(1)}>
@@ -233,38 +277,20 @@ const faqJsonLd = {
           </MediaStory>
         </div>
       </div>
-
-      <!-- Cómo lo hace: los tres pasos en una tira unida por una línea. Es el
-           ancla final del hilo (data-vg-end): no lleva data-reveal. -->
-      <div class="vg-detalle" data-vg-end>
-        <h3 class="vg-detalle__label">{COMO_FUNCIONA.tituloPasos}</h3>
-        <!-- Línea de tiempo: un punto por paso; al entrar en pantalla la línea
-             se dibuja de izquierda a derecha y cada paso aparece cuando la
-             línea llega a él (estilos en sections.css, .vg-pasos). -->
-        <ol class="vg-pasos" data-reveal>
-          {
-            COMO_FUNCIONA.pasos.map((p, i) => (
-              <li class="vg-paso" style={`--i: ${i}`}>
-                <p class="vg-paso__titulo">{p.titulo}</p>
-                <p class="vg-paso__texto">{p.texto}</p>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
     </div>
   </section>
 
   </div>
 
   <!-- 5. Frase destacada -->
-  <TaglineReveal lineas={FRASE} />
+  <TaglineReveal lineas={FRASE} sigue={FRASE_SIGUE} />
+  <SectionPager />
 
   <!-- 6. Impacto: cuatro indicadores grandes con una línea corta debajo.
        Los dos últimos son botones que abren su tabla en un panel centrado
        debajo, de a uno; una flecha en el borde del panel apunta al indicador
        del que salió (script al final de la sección). -->
-  <section class="vg-section vg-section--compact vg-impacto" id="impacto">
+  <section class="vg-section vg-section--compact vg-impacto" id="impacto" data-pantalla data-fondo-oscuro>
     <div class="vg-wrap">
       <p class="vg-eyebrow">{IMPACTO.etiqueta}</p>
       <h2 class="vg-section__title">{IMPACTO.titulo}</h2>
@@ -574,7 +600,7 @@ const faqJsonLd = {
   </script>
 
   <!-- 10. Cierre -->
-  <section class="vg-section vg-cta">
+  <section class="vg-section vg-cta" data-fondo-oscuro>
     <div class="vg-wrap vg-cta__inner">
       <h2>{CIERRE.titulo}</h2>
       <p>{CIERRE.texto}</p>

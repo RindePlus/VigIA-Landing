@@ -24,10 +24,6 @@
   will-change: transform;
 }
 
-.header--hidden {
-  transform: translateY(-100%);
-  box-shadow: none;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .header { transition: none; }
@@ -152,7 +148,7 @@ img.logo-image:hover {
 }
 
 .header-nav--open {
-  max-height: 600px;
+  max-height: 760px;
   opacity: 1;
   padding: 20px 12px 16px;
 }
@@ -714,6 +710,134 @@ img.logo-image:hover {
   .rp-home .menu-item::after { transition: none; }
 }
 
+/* ---- Desplegable del menú (MenuGrupo en Header.jsx) ----
+   En escritorio, una lista flotante debajo del título, como el selector de
+   idioma: entra con fundido y una bajada corta, y sale más rápido. En el
+   menú de celular, los hijos van siempre a la vista, sangrados debajo del
+   título. */
+.menu-grupo { position: relative; }
+
+.menu-grupo__caret {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  transition: transform var(--dur-base) var(--ease-fluid);
+}
+
+.menu-grupo--abierto .menu-grupo__caret { transform: rotate(180deg); }
+
+.menu-grupo__lista { list-style: none; }
+
+.menu-subitem {
+  display: block;
+  color: var(--gh-fg-muted);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.menu-subitem--active { color: var(--vg-icon-green); }
+
+.menu-subitem:focus-visible {
+  outline: 2px solid var(--gh-accent);
+  outline-offset: -2px;
+}
+
+@media (max-width: 767px) {
+  .menu-grupo__caret { display: none; }
+
+  .menu-grupo__lista {
+    opacity: 0;
+    transition: opacity var(--dur-base) var(--ease-fluid);
+  }
+
+  .header-nav--open .menu-grupo__lista {
+    opacity: 1;
+    transition-delay: 0.08s;
+  }
+
+  .menu-subitem {
+    padding: var(--space-75) var(--space-300) var(--space-75) var(--space-600);
+    border-radius: var(--gh-radius-btn, 10px);
+  }
+
+  .menu-subitem:hover { background: var(--gh-surface-2); }
+}
+
+@media (min-width: 768px) {
+  .rp-home .menu-grupo__titulo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-50);
+  }
+
+  .rp-home .menu-grupo__lista {
+    position: absolute;
+    top: calc(100% + var(--space-75));
+    left: 0;
+    z-index: 10;
+    min-width: 200px;
+    padding: var(--space-50);
+    border: 1px solid var(--gh-border);
+    border-radius: var(--radius-md);
+    background: var(--gh-surface);
+    box-shadow: var(--gh-shadow-overlay);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px) scale(0.98);
+    transform-origin: top left;
+    transition:
+      opacity var(--dur-fast) var(--ease-fluid),
+      transform var(--dur-fast) var(--ease-fluid),
+      visibility 0s linear var(--dur-fast);
+  }
+
+  /* Puente sobre el hueco entre el título y la lista: al bajar el cursor
+     no se sale del desplegable. */
+  .rp-home .menu-grupo__lista::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 100%;
+    left: 0;
+    height: var(--space-75);
+  }
+
+  .rp-home .menu-grupo--abierto .menu-grupo__lista {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity var(--dur-base) var(--ease-fluid),
+      transform var(--dur-base) var(--ease-fluid);
+  }
+
+  .rp-home .menu-subitem {
+    padding: var(--space-75) var(--space-100);
+    border-radius: 8px;
+    color: var(--gh-fg);
+    font-size: var(--text-sm);
+    line-height: var(--leading-sm);
+    transition: background var(--dur-fast) var(--ease-fluid);
+  }
+
+  .rp-home .menu-subitem:hover { background: var(--gh-surface-2); }
+
+  .rp-home .menu-subitem--active {
+    color: var(--vg-icon-green);
+    font-weight: 600;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-grupo__caret,
+  .menu-grupo__lista,
+  .rp-home .menu-grupo__lista,
+  .rp-home .menu-grupo--abierto .menu-grupo__lista { transition: none; }
+}
+
 /* ---- Celular (home): ☰ | logo centrado | idioma + usuario ----
    El drawer es absoluto, así que no ocupa celda: la grilla queda con tres
    columnas iguales a los costados para que el logo quede centrado de verdad. */
@@ -778,6 +902,13 @@ img.logo-image:hover {
 
 @media (max-width: 767px) {
   .header-nav__whatsapp { display: flex; }
+}
+
+/* Sobre las bandas verde bosque (Impacto, cierre) el translúcido dejaba
+   pasar demasiado verde y el logo y el menú no se leían: ahí el fondo es
+   casi opaco. */
+.rp-home .header--scrolled.header--sobre-oscuro {
+  background-color: color-mix(in srgb, var(--gh-surface) 94%, transparent);
 }
 
 /* Desenfoque del header y del menú. En las reglas va sólo backdrop-filter:

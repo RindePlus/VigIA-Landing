@@ -40,10 +40,9 @@ export const SEO = {
 
 // 1. Hero
 export const HERO = {
-  etiqueta: 'Water and heat stress',
   // "Pérdida" se concreta como yield loss: "loss" solo queda vago en inglés.
   titulo: 'Catch crop stress before it turns into yield loss',
-  bajada: `${MARCA} tracks every management zone from before planting and alerts you on WhatsApp days before stress shows up in the field. For growers and agronomists who make data-driven decisions.`,
+  bajada: `${MARCA} tracks every management zone from before planting and alerts you on WhatsApp days before water and heat stress shows up in the field. For growers and agronomists who make data-driven decisions.`,
 };
 
 // 2. El problema
@@ -144,6 +143,7 @@ export const COMO_FUNCIONA = {
     },
   ],
   tituloPasos: 'How it works',
+  partes: { etiqueta: 'Parts of the solution', nombres: ['The alerts', 'How it works'] },
   pasos: [
     // "Se cargan tus lotes": voz pasiva neutral, igual que en español
     // (pregunta abierta 1: quién hace el alta).
@@ -162,7 +162,8 @@ export const COMO_FUNCIONA = {
 
 // 5. Frase destacada. Misma lógica de colores: *verde* (a tiempo), _rojo_
 // (tarde).
-export const FRASE = ['Get the biostimulant on *before* stress hits,', 'not _after the damage is done._'];
+export const FRASE = ['Get the biostimulant on', '*before* stress hits,', 'not _after the damage is done._'];
+export const FRASE_SIGUE = 'Continue to Impact';
 
 // 6. Impacto. Mismos números que en español (impactoDatos.js), con formato
 // en inglés (20,000).
@@ -314,7 +315,16 @@ export const UI = {
   saltar: 'Skip to content',
   inicio: 'home',
   menu: [
-    { label: 'How it works', href: '/en/#como-funciona' },
+    {
+      label: 'How it works',
+      href: '/en/#problema',
+      hijos: [
+        { label: 'Home', href: '/en/#inicio' },
+        { label: 'The problem', href: '/en/#problema' },
+        { label: 'What VigIA does', href: '/en/#que-hace' },
+        { label: 'The solution', href: '/en/#como-funciona' },
+      ],
+    },
     { label: 'Impact', href: '/en/#impacto' },
     { label: 'About us', href: '/en/#nosotros' },
     { label: 'Contact', href: '/en/#contacto' },
