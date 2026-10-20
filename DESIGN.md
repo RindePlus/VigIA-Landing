@@ -22,7 +22,6 @@ colors:
   pronostico: "#ebe5d7"
   whatsapp: "#25d366"
   whatsapp-ink: "#0b2e13"
-  bg-prueba: "#dfe7e1"
   on-forest-fg: "#ece8df"
   on-forest-muted: "#b4d4c1"
   on-forest-subtle: "#9fc2ad"
@@ -189,17 +188,19 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 
   En los paneles de dos columnas, el título arranca a la altura del borde de arriba del gráfico o del video, y la etiqueta queda por encima. Los tamaños siguen al alto de la ventana (tokens `--fit-*`).
 
-  Cada gesto de scroll es un paso (`SectionPager.astro`):
-  - **Hacia abajo:** 800 ms la primera vez, 520 ms después y 1,8 s hacia la frase, para ver llegar el hilo. Al pasar a "Cómo lo hace", traba hasta que terminan los pasos.
-  - **Hacia arriba:** también por paneles, pero en 420 ms y casi sin espera entre gestos.
-  - **La inercia del trackpad** no saltea paneles ni sigue de largo al llegar a Impacto.
-  - **Desde Impacto,** scroll normal.
+  Cada gesto de scroll es un paso (`SectionPager.astro`, [ADR 0006](doc/adr/0006-recorrido-de-pantalla-en-pantalla.md)):
+  - **Un gesto, un paso, en las dos direcciones:** la inercia del trackpad nunca saltea paneles. Subir es igual que bajar.
+  - **Tiempos:** 800 ms la primera vez, 520 ms después (también hacia arriba) y 1,5 s hacia la frase, para ver llegar el hilo.
+  - **Gesto en cola:** un gesto nuevo durante la animación (pasada su primera parte) hace el paso siguiente apenas termina.
+  - **La solución:** al pasar a "Cómo lo hace", traba 1 s; los pasos terminan de desplegarse aunque se siga. El cambio va en la dirección del scroll (lo que sale sube, lo que entra llega desde abajo). Dos rayas al pie, centradas con la columna de texto, marcan el estado (la actual, más larga y en verde bosque) y llevan a cada uno.
+  - **Nunca a medio camino:** si la página queda entre dos paneles, se acomoda en el más cercano.
+  - **Desde Impacto,** scroll normal. Al volver subiendo, la página se frena en Impacto; a la frase se pasa con otro gesto.
   - **En celular, en vertical o con movimiento reducido,** la página se scrollea como siempre.
 - **Llegada a la frase:** cuando el hilo llega al punto, justo antes de "antes", un trazo verde campo recorre la palabra de izquierda a derecha, con el impulso del hilo, y se va por la derecha (1,8 s). Después aparece una flecha abajo que respira despacio: crece y se achica apenas. Es la única animación continua de la página, por pedido explícito.
 - **Fondos por capítulo (decisión 50):**
   - el recorrido, sobre el fondo de la página, con líneas de nivel tenues detrás del hero (`TopoLines.astro`), casi invisibles detrás del texto;
   - Impacto, en una banda verde bosque;
-  - equipo y clientes, sobre un verde salvia claro (`--vg-bg-prueba`);
+  - equipo y clientes, sobre el fondo piedra de la página, con las tarjetas blancas (decisión 53: el salvia que tenían chocaba con ellas);
   - preguntas frecuentes, del color del footer, con el cierre verde entre los dos.
 
   Todos planos, sin degradés.
@@ -229,7 +230,8 @@ Superficie #fbfaf8, borde de 1 px y 12 px de radio, sin sombra fuerte. Las tarje
 ### Navigation
 - **Header:** del ancho del contenido y transparente arriba de todo.
 - **Al bajar:** fondo translúcido con desenfoque y una línea fina abajo. Siempre visible: no se oculta al scrollear. Sobre las bandas verde bosque (Impacto, cierre: `data-fondo-oscuro`) el fondo pasa a casi opaco, para que se lean logo y menú.
-- **Anclas del menú:** las secciones tienen `scroll-margin-top` del alto del header, así quedan justo debajo de él.
+- **Menú:** "Cómo funciona" es un desplegable con Inicio, El problema, Lo que hace VigIA y La solución; Impacto, Nosotros, Contacto y Educación van sueltos. El desplegable se abre al dejar el cursor encima un momento (220 ms, no al pasar de largo), entra con fundido y una bajada corta, y sale más rápido. En celular, los tres van siempre a la vista, debajo del título.
+- **Anclas del menú:** las secciones tienen `scroll-margin-top` del alto real del header (`--alto-header`, lo mide `Header.jsx`), así quedan justo debajo de él. Los paneles del recorrido a pantalla completa, en cambio, se alinean arriba de todo: su padding ya deja lugar al header.
 
 ### Gráfico del balance (Signature Component)
 - **Qué muestra:** agua útil (verde campo), umbral (ámbar punteado), zona de pronóstico (#ebe5d7) y "Hoy".
