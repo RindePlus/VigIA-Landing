@@ -15,8 +15,8 @@ export function openWhatsApp() {
 }
 
 // Textos y URL llegan por props desde BaseLayout, en el idioma de la página
-// (UI.widget y WHATSAPP_URL de src/data/vigia.js o vigia.en.js). `nota`
-// aclara en inglés que el equipo responde en español.
+// (UI.widget y WHATSAPP_URL de src/data/vigia.js, vigia.en.js o vigia.pt.js).
+// `nota` aclara en inglés y en portugués que el equipo responde en español.
 const WhatsAppWidget = ({ textos, whatsappUrl }) => {
   const [open, setOpen] = useState(false);
   const popupRef = useRef(null);

@@ -90,6 +90,7 @@ Si una frase literal se entiende pero suena rara ("the crop shows the stress whe
 
 | Español | Inglés | Por qué |
 |---|---|---|
+| VigIA BioEstrés · Alertas de estrés hídrico y térmico (título de la página) | **VigIA BioEstrés · Water and heat stress alerts** | Es lo que se busca: *water stress*, *heat stress*. |
 | Detectá el estrés antes de que se convierta en pérdida | **Catch crop stress before it turns into yield loss** | *Loss* solo queda vago; *yield loss* es lo que le importa al productor. *Catch* es más natural que *detect* en titulares. |
 | El cultivo muestra el estrés cuando ya perdiste rinde | **By the time the crop shows stress, the yield is already lost** | La estructura *by the time… already* es la forma natural de decir "cuando ya es tarde". |
 | Para cuando lo ves a campo, reaccionás tarde y el daño ya está hecho | **When you see it in the field, you're reacting too late and the damage is done** | |

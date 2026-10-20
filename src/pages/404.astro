@@ -1,30 +1,32 @@
 ---
 // Astro genera docs/404.html, que GitHub Pages sirve para rutas inexistentes.
-// Es uno solo para los dos idiomas: si la ruta pedida empieza con /en/, el
-// script de abajo cambia los textos y el enlace al inglés.
+// Es uno solo para todos los idiomas: si la ruta pedida empieza con /en/ o
+// /pt/, el script de abajo cambia los textos y el enlace a ese idioma.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { MARCA, NO_ENCONTRADA } from '../data/vigia';
 import { NO_ENCONTRADA as NOT_FOUND } from '../data/vigia.en';
+import { NO_ENCONTRADA as NAO_ENCONTRADA } from '../data/vigia.pt';
 import '../styles/sections.css';
 ---
 
-<BaseLayout title={`${NO_ENCONTRADA.titulo} · ${MARCA}`} showMenu={false}>
+<BaseLayout title={`${NO_ENCONTRADA.titulo} · ${MARCA}`} showMenu={false} noindex>
   <section class="vg-hero vg-hero--simple"><div class="vg-wrap">
     <h1 class="vg-hero__title">404</h1>
-    <p class="vg-hero__subtitle" data-404-texto data-en={NOT_FOUND.texto}>{NO_ENCONTRADA.texto}</p>
-    <a class="vg-btn" href="/" data-404-volver data-en={NOT_FOUND.volver}>{NO_ENCONTRADA.volver}</a>
+    <p class="vg-hero__subtitle" data-404-texto data-en={NOT_FOUND.texto} data-pt={NAO_ENCONTRADA.texto}>{NO_ENCONTRADA.texto}</p>
+    <a class="vg-btn" href="/" data-404-volver data-en={NOT_FOUND.volver} data-pt={NAO_ENCONTRADA.volver}>{NO_ENCONTRADA.volver}</a>
   </div></section>
 </BaseLayout>
 
 <script>
-  if (/^\/en(\/|$)/.test(window.location.pathname)) {
-    document.documentElement.lang = 'en';
+  const lang = window.location.pathname.match(/^\/(en|pt)(\/|$)/)?.[1];
+  if (lang) {
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
     const texto = document.querySelector<HTMLElement>('[data-404-texto]');
     const volver = document.querySelector<HTMLAnchorElement>('[data-404-volver]');
-    if (texto?.dataset.en) texto.textContent = texto.dataset.en;
-    if (volver?.dataset.en) {
-      volver.textContent = volver.dataset.en;
-      volver.href = '/en/';
+    if (texto?.dataset[lang]) texto.textContent = texto.dataset[lang] ?? '';
+    if (volver?.dataset[lang]) {
+      volver.textContent = volver.dataset[lang] ?? '';
+      volver.href = `/${lang}/`;
     }
   }
 </script>

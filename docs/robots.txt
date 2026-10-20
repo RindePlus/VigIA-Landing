@@ -1,0 +1,7 @@
+# Todo el sitio se puede rastrear. Las páginas que no se indexan (precios,
+# educación y el 404) lo dicen con <meta name="robots" content="noindex">,
+# que los buscadores sólo leen si pueden rastrearlas.
+User-agent: *
+Allow: /
+
+Sitemap: https://vigiabioestres.com/sitemap.xml

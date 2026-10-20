@@ -45,3 +45,8 @@ Thumbs.db
 # Material de trabajo de imágenes y videos (Nano Banana, Higgsfield, edición).
 # Pesado y con muchas versiones: no se commitea. Lo final va a public/videos/.
 media-src/
+
+# Críticas guardadas por la skill impeccable (material de trabajo)
+.impeccable/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

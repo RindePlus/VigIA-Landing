@@ -1,7 +1,7 @@
-// Números de la sección Impacto, compartidos por los dos idiomas
-// (src/data/vigia.js y vigia.en.js): los datos son los mismos, sólo cambian
-// los textos y el formato de los números (20.000 en español, 20,000 en
-// inglés).
+// Números de la sección Impacto, compartidos por los tres idiomas
+// (src/data/vigia.js, vigia.en.js y vigia.pt.js): los datos son los
+// mismos, sólo cambian los textos y el formato de los números (20.000 en
+// español y portugués, 20,000 en inglés).
 // Datos del informe técnico: escenario base de 20.000 ha, cinco campañas
 // continuas (decisiones 19, 25, 32 y 34 de ESTRUCTURA_LANDING.md). Son
 // resultados de campo, no del motor. Los totales se calculan a partir de los
@@ -50,6 +50,6 @@ export const filasImpacto = (fmt, nombres, total) => ({
       fmt(c.co2.suelo),
       fmt(c.co2.estable),
     ]),
-    [total, `~${fmt(Math.round(CO2_FIJADO / 1000) * 1000)}`, `~${fmt(CO2_SUELO)}`, fmt(CO2_DESTACADO)],
+    [total, `~${fmt(Math.round(CO2_FIJADO / 1000) * 1000)}`, `~${fmt(CO2_SUELO)}`, `~${fmt(CO2_DESTACADO)}`],
   ],
 });

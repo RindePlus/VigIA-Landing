@@ -37,9 +37,9 @@
   width: 300px;
   height: 240px;
   border-radius: 24px;
-  background: #fff;
-  box-shadow: 0 20px 48px -12px rgba(15, 23, 42, 0.22);
-  border: 1px solid var(--rp-gray-200);
+  background: var(--gh-surface);
+  box-shadow: var(--gh-shadow-overlay);
+  border: 1px solid var(--gh-border);
 }
 
 /* FAB button */
@@ -72,7 +72,8 @@
 
 .wa-widget__fab-icon {
   position: absolute;
-  color: #fff;
+  /* Logo oficial de WhatsApp: blanco sobre su verde (excepción de marca). */
+  color: var(--vg-whatsapp-logo);
   transition: opacity var(--dur-base) var(--ease-fluid), transform var(--dur-slow) var(--ease-fluid);
 }
 
@@ -87,7 +88,7 @@
   opacity: 0;
   transform: scale(0.5) rotate(-90deg);
   font-size: 20px;
-  color: var(--rp-gray-500);
+  color: var(--gh-fg-muted);
 }
 
 .wa-widget--open .wa-widget__fab-icon--wa {
@@ -124,7 +125,7 @@
 .wa-widget__greeting {
   font-family: var(--font-body);
   font-size: var(--text-lg);
-  color: var(--rp-gray-700);
+  color: var(--gh-fg);
   opacity: 0;
   transform: translateY(4px);
   transition: opacity var(--dur-fast) var(--ease-fluid), transform var(--dur-fast) var(--ease-fluid);
@@ -142,7 +143,7 @@
    saludo. */
 .wa-widget__nota {
   margin: 0;
-  color: var(--rp-gray-500);
+  color: var(--gh-fg-muted);
   font-family: var(--font-body);
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
@@ -164,7 +165,7 @@
   padding: 12px 20px;
   border-radius: 14px;
   background: var(--vg-whatsapp);
-  color: #fff;
+  color: var(--vg-whatsapp-fg);
   font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 700;

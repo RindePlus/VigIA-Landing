@@ -14,11 +14,12 @@ export default defineConfig({
   outDir: './docs',
   trailingSlash: 'ignore',
   integrations: [react()],
-  // Sitio en dos idiomas (ADR 0004): español en la raíz (/, /pricing…) e
-  // inglés bajo /en/ (/en/, /en/pricing…). Cada página existe por idioma en
-  // src/pages; Astro.currentLocale dice en cuál se está renderizando.
+  // Sitio en tres idiomas (ADR 0004 y ADR 0008): español en la raíz (/,
+  // /pricing…), inglés bajo /en/ y portugués de Brasil bajo /pt/. Cada
+  // página existe por idioma en src/pages; Astro.currentLocale dice en cuál
+  // se está renderizando.
   i18n: {
-    locales: ['es', 'en'],
+    locales: ['es', 'en', 'pt'],
     defaultLocale: 'es',
     routing: { prefixDefaultLocale: false },
   },

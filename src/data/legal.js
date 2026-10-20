@@ -4,7 +4,8 @@
 // publicar, y completar razón social y CUIT del responsable.
 // Describen lo que el sitio hace hoy: sin formularios, sin cuentas, sin
 // analítica ni publicidad; guarda el tema (claro/oscuro) en el navegador,
-// carga Geist desde Google Fonts y enlaza a WhatsApp, Instagram y Maps.
+// sirve sus tipografías desde el mismo sitio (sin Google Fonts) y enlaza a
+// WhatsApp, Instagram y Maps.
 import { CONTACT_EMAIL, OFFICE_ADDRESS } from './social';
 import { MARCA } from './vigia';
 
@@ -12,6 +13,8 @@ const ACTUALIZADO = 'Octubre de 2026';
 
 export const PRIVACIDAD = {
   titulo: 'Política de privacidad',
+  descripcion:
+    'Qué datos recolecta el sitio de VigIA BioEstrés, qué servicios de terceros intervienen y cómo ejercer tus derechos sobre tus datos.',
   actualizado: ACTUALIZADO,
   secciones: [
     {
@@ -36,7 +39,7 @@ export const PRIVACIDAD = {
     {
       titulo: 'Servicios de terceros',
       parrafos: [
-        'Las tipografías se cargan desde Google Fonts, que recibe la dirección IP de tu dispositivo al cargarlas. Los enlaces a WhatsApp, Instagram y Google Maps te llevan a esos servicios, que tienen sus propias políticas de privacidad.',
+        'El sitio no carga recursos de otros servicios: las tipografías, imágenes y videos se sirven desde el mismo sitio. Los enlaces a WhatsApp, Instagram y Google Maps te llevan a esos servicios, que tienen sus propias políticas de privacidad.',
       ],
     },
     {
@@ -55,6 +58,8 @@ export const PRIVACIDAD = {
 
 export const TERMINOS = {
   titulo: 'Términos y condiciones',
+  descripcion:
+    'Condiciones de uso del sitio de VigIA BioEstrés: alcance de la información y los resultados, uso de la plataforma y propiedad intelectual.',
   actualizado: ACTUALIZADO,
   secciones: [
     {

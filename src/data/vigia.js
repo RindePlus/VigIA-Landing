@@ -1,7 +1,8 @@
 // Contenido en español, un objeto por sección (ver doc/landing/ESTRUCTURA_LANDING.md,
-// versión 2). La versión en inglés es src/data/vigia.en.js, con las mismas
-// claves: si agregás o cambiás un texto acá, hacelo también allá (reglas en
-// doc/landing/TRADUCCION_EN.md). Cada afirmación tiene respaldo en doc/landing/MODULO_VIGIA.md §10:
+// versión 2). Las versiones en inglés y portugués son src/data/vigia.en.js y
+// src/data/vigia.pt.js, con las mismas claves: si agregás o cambiás un texto
+// acá, hacelo también allá (reglas en doc/landing/TRADUCCION_EN.md y
+// TRADUCCION_PT.md). Cada afirmación tiene respaldo en doc/landing/MODULO_VIGIA.md §10:
 // balance hídrico FAO-56 por ambiente, DPV contra umbrales por cultivo,
 // pronóstico a 14 días y las alertas de alertEngine.ts.
 // Reglas (skill vigia-landing-structure): sin IA, satélite, estrés biótico ni
@@ -28,24 +29,25 @@ export const CTA = {
 // WhatsApp general (header, footer y botón flotante).
 export const WHATSAPP_URL = buildWhatsAppUrl('Hola, quiero más información sobre VigIA');
 
+// Título de la home: la marca y la propuesta, que es lo que se busca
+// (con sólo la marca, el título no tenía ninguna palabra de búsqueda).
 export const SEO = {
-  titulo: MARCA,
+  titulo: `${MARCA} · Alertas de estrés hídrico y térmico`,
   descripcion:
     'Alertas de estrés hídrico y térmico por ambiente, con días de margen para aplicar el bioinsumo o regar. En la plataforma y por WhatsApp.',
 };
 
 // 1. Hero
 export const HERO = {
-  etiqueta: 'Estrés hídrico y térmico',
   titulo: 'Detectá el estrés antes de que se convierta en pérdida',
   // Lleva los tres diferenciales que antes iban como palabras clave: desde
   // antes de la siembra, por ambiente y por WhatsApp (decisión 47).
-  bajada: `${MARCA} sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos.`,
+  // "Hídrico y térmico" vino de la etiqueta del hero, que se quitó (decisión 50).
+  bajada: `${MARCA} sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés hídrico y térmico se vea a campo. Para productores y asesores que deciden con datos.`,
 };
 
 // 2. El problema
 export const PROBLEMA = {
-  etiqueta: 'El problema',
   titulo: 'El cultivo muestra el estrés cuando ya perdiste rinde',
   bajada: 'Para cuando lo ves a campo, reaccionás tarde y el daño ya está hecho.',
   razones: [
@@ -67,15 +69,14 @@ export const PROBLEMA = {
 // (alertEngine.ts, MODULO_VIGIA §10.2): qué pasa en la 1, el aviso a 14 días
 // en la 2, el riego en la 3 y los bioinsumos en la 4 (decisión 42).
 export const QUE_HACE = {
-  etiqueta: 'Lo que hace VigIA',
   titulo: `${MARCA} vigila el estrés toda la campaña`,
   // Abarca las cuatro tarjetas: acompaña todo el ciclo (ventana siembra
   // −60 / +150, MODULO_VIGIA §10.2) y la acción es agua o bioinsumo.
   bajada:
     'Sigue cada ambiente desde antes de la siembra hasta el final del ciclo, y te dice cuándo cuidar el agua y cuándo aplicar el bioinsumo.',
   // Cuatro tarjetas con foto, primero en la sección. La de los picos de
-  // estrés va primera: es lo principal. Fotos de la serie de media-src/imagenes (qh-*.png), generadas
-  // con Nano Banana Pro y la imagen 0 (el lote) como referencia.
+  // estrés va primera: es lo principal. Fotos reales de campo (decisión
+  // 49), con sus créditos al pie (FOOTER.creditosFotos).
   puntos: [
     {
       id: 'picos',
@@ -83,7 +84,7 @@ export const QUE_HACE = {
       // Hídrico, térmico y combinado: qué pasa en cada uno.
       texto: 'Falta de agua, aire que seca a la planta o los dos juntos. Te avisa por ambiente, con margen.',
       imagen: imgEstres,
-      alt: 'Hojas de soja que empiezan a plegarse bajo el sol fuerte del mediodía',
+      alt: 'Lote de soja en febrero, con manchones donde el cultivo creció menos',
     },
     {
       // Sin el número de días previos a la siembra: lo que importa es que
@@ -92,7 +93,7 @@ export const QUE_HACE = {
       titulo: 'Desde antes de la siembra',
       texto: 'Sigue el agua del suelo desde antes de sembrar y te avisa 14 días antes de la etapa crítica.',
       imagen: imgSiembra,
-      alt: 'Sembradora entrando a un lote en barbecho con rastrojo al amanecer',
+      alt: 'Soja recién nacida en siembra directa sobre rastrojo de sorgo',
     },
     {
       // Balance por ambiente y la acción "regá" del hídrico y el combinado.
@@ -100,7 +101,7 @@ export const QUE_HACE = {
       titulo: 'Cuida el uso del agua',
       texto: 'Sabés cuánta agua útil tiene cada ambiente. Si se viene la falta de agua, regás justo cuando hace falta.',
       imagen: imgAgua,
-      alt: 'Equipo de riego por pivote regando un lote de soja al atardecer',
+      alt: 'Equipo de riego por pivote sobre un lote de soja',
     },
     {
       // Las acciones con bioinsumo de las cuatro alertas; dicho en positivo.
@@ -108,7 +109,7 @@ export const QUE_HACE = {
       titulo: 'Orientado a bioinsumos',
       texto: 'Cada aviso trae su bioinsumo: hídrico, antiestrés térmico o preventivo antes de la etapa crítica.',
       imagen: imgBioinsumos,
-      alt: 'Gotas finas de una aplicación sobre hojas de soja al amanecer',
+      alt: 'Tractor con pulverizadora aplicando sobre un cultivo',
     },
   ],
   // Otros módulos, debajo de las tarjetas, con enlace a su página (decisión
@@ -132,7 +133,6 @@ export const QUE_HACE = {
 
 // 4. La solución (cómo funciona: canales y pasos)
 export const COMO_FUNCIONA = {
-  etiqueta: 'La solución',
   // Sin nombrar los canales: ya los presentan las dos tarjetas de abajo.
   titulo: 'Te avisa a tiempo para actuar',
   bajada:
@@ -177,7 +177,7 @@ export const COMO_FUNCIONA = {
 // 5. Frase destacada: una línea por renglón.
 // Palabras resaltadas con los colores de la historia: *verde* (a tiempo) y
 // _rojo_ (tarde).
-export const FRASE = ['Que el bioinsumo llegue *antes* que el estrés,', 'no _después del daño._'];
+export const FRASE = ['Que el bioinsumo llegue', '*antes* que el estrés,', 'no _después del daño._'];
 
 // 6. Impacto: resultados medidos en campo. Los números están en
 // src/data/impactoDatos.js (compartidos con la versión en inglés).
@@ -185,11 +185,10 @@ const fmt = formateador('es-AR');
 const FILAS = filasImpacto(fmt, { maiz: 'Maíz', soja: 'Soja', trigo: 'Trigo' }, 'Total');
 
 export const IMPACTO = {
-  etiqueta: 'Impacto',
-  titulo: 'Más grano y más carbono en el suelo',
-  // "Lotes de productores": deja claro que son campos de clientes reales,
-  // no ensayos propios (decisión 43).
-  bajada: 'Resultados de cinco campañas continuas en lotes de productores, con maíz, soja y trigo.',
+  // El nombre de la sección es el título; la frase que era título queda
+  // como bajada.
+  titulo: 'Impacto',
+  bajada: 'Más grano y más carbono en el suelo',
 
   // Cuatro indicadores grandes con una línea corta debajo. Los dos últimos
   // abren su tabla por cultivo (un panel centrado debajo, de a uno).
@@ -236,18 +235,23 @@ export const IMPACTO = {
 // con foto y logo, están en src/data/equipo.js.
 // PENDIENTE: revisar la bajada con el equipo.
 export const NOSOTROS = {
-  etiqueta: 'Sobre nosotros',
   titulo: `Las personas detrás de ${MARCA}`,
   bajada: 'Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos.',
+  // Línea chica sobre el logo de cada tarjeta: dice qué es el logo (sin
+  // inventar cargos; cuando estén confirmados, pueden ir en su lugar).
+  representa: 'En representación de',
 };
 
-// 8. Clientes (el carrusel está en src/data/clientes.js).
+// 8. Clientes (el carrusel está en src/data/clientes.js), debajo de Sobre
+// nosotros y sin título a la vista: el título queda como nombre accesible.
 export const CLIENTES = { titulo: 'Confían en nosotros' };
 
 // 9. Preguntas frecuentes (también van como JSON-LD FAQPage).
 export const PREGUNTAS = {
-  etiqueta: 'Preguntas frecuentes',
   titulo: 'Lo que suelen preguntarnos',
+  // Línea chica sobre el CTA, debajo del título (ahí va el cierre): sigue
+  // al título de la sección.
+  cierre: '¿Te quedó alguna duda? Escribinos.',
   items: [
     {
       pregunta: '¿Necesito sensores o estaciones en el campo?',
@@ -277,11 +281,6 @@ export const PREGUNTAS = {
   ],
 };
 
-// 10. Cierre
-export const CIERRE = {
-  titulo: 'La próxima pérdida ya se está gestando en algún lote. Encontrala primero.',
-  texto: `Agendá una demo de 20 minutos y te mostramos ${MARCA} funcionando sobre tus lotes, con datos de tu campaña actual.`,
-};
 
 // Página /educacion (src/views/EducacionPage.astro), enlazada al final del menú.
 // PENDIENTE: contenido definitivo. Por ahora, una página provisoria.
@@ -321,11 +320,22 @@ export const FOOTER = {
   },
   // Páginas en src/pages (textos en src/data/legal.js, borrador a revisar).
   legales: [
-    { texto: 'Política de privacidad', href: '/privacidad' },
-    { texto: 'Términos y condiciones', href: '/terminos' },
+    { texto: 'Política de privacidad', href: '/privacidad/' },
+    { texto: 'Términos y condiciones', href: '/terminos/' },
   ],
-  legalesLabel: 'Legales',
   pie: 'Todos los derechos reservados.',
+  // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
+  // Commons): los piden sus licencias Creative Commons. Van al pie, junto
+  // al copyright, no en el medio de la página.
+  creditosFotos: {
+    prefijo: 'Fotos vía Wikimedia Commons:',
+    fotos: [
+      { autor: 'Alejo Cristian Santo', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Febrero_-_panoramio.jpg' },
+      { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },
+      { autor: 'Pollinator', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soybean_1292.JPG' },
+      { autor: 'Ermell', licencia: 'CC BY-SA 4.0', href: 'https://commons.wikimedia.org/wiki/File:Traktor_spritzanlage-20200319-RM-173117.jpg' },
+    ],
+  },
 };
 
 // Textos de la interfaz que no son de una sección: header, botón de
@@ -334,12 +344,24 @@ export const UI = {
   saltar: 'Saltar al contenido',
   inicio: 'inicio',
   menu: [
-    { label: 'Cómo funciona', href: '/#como-funciona' },
+    // Desplegable con las secciones del recorrido (se abre al dejar el
+    // cursor encima); el título lleva al problema. "Inicio" vuelve arriba de
+    // todo (el hero no tiene título propio): más a mano que el logo.
+    {
+      label: 'Cómo funciona',
+      href: '/#problema',
+      hijos: [
+        { label: 'Inicio', href: '/#inicio' },
+        { label: 'El problema', href: '/#problema' },
+        { label: 'Lo que hace VigIA', href: '/#que-hace' },
+        { label: 'La solución', href: '/#como-funciona' },
+      ],
+    },
     { label: 'Impacto', href: '/#impacto' },
     { label: 'Nosotros', href: '/#nosotros' },
     { label: 'Contacto', href: '/#contacto' },
     // Página propia (no una sección de la home): va al final.
-    { label: 'Educación', href: '/educacion' },
+    { label: 'Educación', href: '/educacion/' },
   ],
   header: {
     idioma: 'Idioma',
