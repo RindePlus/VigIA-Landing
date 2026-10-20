@@ -99,7 +99,7 @@ Sección nueva (decisión 15). Cuenta qué hace VigIA: acompaña desde antes de 
 | Título | **VigIA BioEstrés vigila el estrés toda la campaña** |
 | Bajada | Sigue cada ambiente desde antes de la siembra hasta el final del ciclo, y te dice cuándo cuidar el agua y cuándo aplicar el bioinsumo. |
 
-**Cuatro tarjetas con foto**, primero en la sección (decisión 38): foto arriba (4:3, apaisada; 16:9 en dos columnas) con **esquinas rectas**, título y texto corto, sin caja. Cuatro columnas en escritorio, dos en tablet, una en celular. Foto, título y texto comparten renglones (subgrid): si un título baja a dos líneas, los textos siguen arrancando a la misma altura.
+**Cuatro tarjetas con foto**, primero en la sección (decisión 38): la foto ocupa toda la tarjeta y el título y el texto corto van abajo, sobre una franja translúcida con desenfoque (decisión 57). La línea entre foto y texto queda a la misma altura en todas; los títulos, centrados en el renglón del más largo, y los textos arrancan a la par. Cuatro columnas en escritorio, dos en tablet, una en celular. Foto, título y texto comparten renglones (subgrid): si un título baja a dos líneas, los textos siguen arrancando a la misma altura.
 
 | Tarjeta | Texto | Foto (provisoria) |
 |---|---|---|
@@ -142,7 +142,7 @@ Es el capítulo "con VigIA" del recorrido. **Lo principal son los dos canales de
 
 **Cómo lo hace** (decisión 39): debajo del bloque principal, bien separado de él (96 px) y sobre el color normal de la página (el verde agua se funde al llegar a este bloque). Con su subtítulo **centrado**, un paso más grande que los títulos de adentro. Mide hasta 880 px y va centrado. El bloque "Qué te avisa VigIA" se quitó: sus cuatro alertas pasaron a las tarjetas de la sección 3 (decisión 42).
 
-- **Cómo lo hace:** va en la columna de texto, debajo de los canales, con un subtítulo chico. Línea de tiempo **vertical y sin números**: un punto verde a la izquierda de cada paso y una línea fina hacia el de abajo, que se dibuja de arriba hacia abajo; cada paso aparece cuando la línea llega a él. En pantalla completa reemplaza a los canales con el siguiente gesto de scroll (decisión 50). Con movimiento reducido se ve fija.
+- **Cómo lo hace:** debajo de las dos columnas, a todo el ancho, con un subtítulo chico (decisión 57). Línea de tiempo **horizontal y sin números**: un punto verde arriba de cada paso y una línea fina hacia el siguiente, que se dibuja de izquierda a derecha; cada paso aparece cuando la línea llega a él. En celular, vertical. Con movimiento reducido se ve fija.
 
   | Paso | Título | Texto |
   |---|---|---|
@@ -163,7 +163,7 @@ Sección propia, fuera del recorrido, con tipografía grande (sección B11 de `l
 > **no después del daño.**
 
 - **Palabras resaltadas con los colores de la historia:** "antes" en verde (a tiempo) y "después del daño" en rojo (tarde). En `src/data/vigia.js` se marcan con `*verde*` y `_rojo_`.
-- Tres renglones (decisión 50). El hilo entra por el renglón del medio, justo antes de "antes"; al llegar, "antes" se subraya en verde. En pantalla completa, una flecha abajo lleva a Impacto.
+- Tres renglones (decisión 50). El hilo entra por el renglón del medio, justo antes de "antes"; al llegar, "antes" se subraya en verde.
 - Con `prefers-reduced-motion` o sin JS, el texto se ve completo y sin animar.
 - Es texto HTML (un `<p>`, no un heading), legible por lectores de pantalla.
 
@@ -436,6 +436,7 @@ De la versión 1 a la versión 2. Cada paso deja la página funcionando.
 | 54 | Fondo propio para El problema y La solución | El recorrido deja de ir todo sobre el mismo fondo: El problema va sobre tierra seca y La solución sobre un verde muy claro, sólidos, y el hero, Lo que hace VigIA y la frase siguen sobre piedra. Los colores acompañan el tramo del hilo de cada sección (ámbar y rojo, verde campo) y son cálidos, para no chocar con las tarjetas blancas como el salvia frío de la decisión 53. Todos los textos pasan AA. El hilo pasa por encima de las secciones, para que los fondos no lo tapen. |
 | 55 | Dibujos de fondo por sección | Con la misma técnica que el lote del hero (línea fina, tenue, generado al compilar), cada sección del recorrido lleva un dibujo de su tema: suelo agrietado en El problema, lotes divididos en ambientes en Lo que hace VigIA y pivotes de riego vistos desde arriba en La solución. Toman el color de su tramo del hilo, van en las zonas sin contenido y quedan al 40 % detrás del texto. La frase, Impacto, el equipo y las preguntas van sin dibujo. |
 | 56 | Toda la home de a pantalla | El paso de pantalla en pantalla sigue después de Impacto. Sobre nosotros y Clientes van en una sola pantalla: el carrusel, sin el título "Confían en nosotros" (queda como nombre accesible), pegado a las tarjetas del equipo. El Cierre deja de ser una sección: se quitan su título ("La próxima pérdida…") y su texto, y el CTA va a Preguntas, en la columna del título, poco debajo de él, con una línea chica arriba que sigue al título ("¿Te quedó alguna duda? Escribinos."). Preguntas es el último panel y comparte la pantalla con el footer, que se achica y pasa a verde bosque, como Impacto. En Impacto, al abrir una tabla el título y la bajada se pliegan para que entre en la pantalla. Reemplaza la sección 10 de la estructura y, en lo del borde del recorrido, la decisión 51. |
+| 57 | Scroll normal en toda la home | Reemplaza el paso de pantalla en pantalla de las decisiones 50, 51 y 56 ([ADR 0007](../adr/0007-scroll-normal-en-toda-la-home.md)). Sin `SectionPager`: "Cómo lo hace" va debajo de las dos columnas de La solución, con los pasos en fila; la frase pierde la flecha. Cada sección sigue ocupando más o menos una pantalla en horizontal (`.vg-pantalla`), sin trabar el scroll. Escritorio toma los fondos que unen secciones del celular. El header vuelve a ocultarse al bajar. La solución pasa al fondo de la página; las tarjetas de Lo que hace VigIA, a foto completa con el texto sobre una franja con desenfoque; las alertas de los gráficos, con el borde gris de la tarjeta; el avatar del WhatsApp, el favicon; el footer lleva los legales en Ayuda y el pie en un renglón. |
 
 ## Preguntas abiertas
 

@@ -140,7 +140,6 @@ export const COMO_FUNCIONA = {
     },
   ],
   tituloPasos: 'How it works',
-  partes: { etiqueta: 'Parts of the solution', nombres: ['The alerts', 'How it works'] },
   pasos: [
     // "Se cargan tus lotes": voz pasiva neutral, igual que en español
     // (pregunta abierta 1: quién hace el alta).
@@ -160,7 +159,6 @@ export const COMO_FUNCIONA = {
 // 5. Frase destacada. Misma lógica de colores: *verde* (a tiempo), _rojo_
 // (tarde).
 export const FRASE = ['Get the biostimulant on', '*before* stress hits,', 'not _after the damage is done._'];
-export const FRASE_SIGUE = 'Continue to Impact';
 
 // 6. Impacto. Mismos números que en español (impactoDatos.js), con formato
 // en inglés (20,000).
@@ -287,7 +285,6 @@ export const FOOTER = {
     { texto: 'Privacy policy (Spanish)', href: '/privacidad' },
     { texto: 'Terms and conditions (Spanish)', href: '/terminos' },
   ],
-  legalesLabel: 'Legal',
   pie: 'All rights reserved.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
   // Commons): los piden sus licencias Creative Commons. Van al pie, junto

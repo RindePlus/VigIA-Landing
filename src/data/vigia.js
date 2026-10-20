@@ -150,9 +150,6 @@ export const COMO_FUNCIONA = {
   // Subtítulo del bloque de los pasos. Las alertas pasaron a las tarjetas
   // de la sección 3 (decisión 42).
   tituloPasos: 'Cómo lo hace',
-  // Indicador de dos rayas al pie, en pantalla completa: dice en cuál de
-  // las dos partes estás (los avisos o cómo lo hace) y lleva a cada una.
-  partes: { etiqueta: 'Partes de la solución', nombres: ['Los avisos', 'Cómo lo hace'] },
   // Cómo lo hace: tres pasos cortos. Paso 1 con redacción neutral ("se
   // cargan") hasta confirmar quién hace el alta de lotes (pregunta abierta 1
   // de ESTRUCTURA_LANDING.md).
@@ -178,8 +175,6 @@ export const COMO_FUNCIONA = {
 // Palabras resaltadas con los colores de la historia: *verde* (a tiempo) y
 // _rojo_ (tarde).
 export const FRASE = ['Que el bioinsumo llegue', '*antes* que el estrés,', 'no _después del daño._'];
-// Flecha al pie de la frase (pantalla completa): la página sigue.
-export const FRASE_SIGUE = 'Seguir a Impacto';
 
 // 6. Impacto: resultados medidos en campo. Los números están en
 // src/data/impactoDatos.js (compartidos con la versión en inglés).
@@ -322,7 +317,6 @@ export const FOOTER = {
     { texto: 'Política de privacidad', href: '/privacidad' },
     { texto: 'Términos y condiciones', href: '/terminos' },
   ],
-  legalesLabel: 'Legales',
   pie: 'Todos los derechos reservados.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
   // Commons): los piden sus licencias Creative Commons. Van al pie, junto
