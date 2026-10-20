@@ -13,7 +13,8 @@ const { MARCA, PRECIOS } = contenido(idiomaDe(Astro.currentLocale));
 const consultaUrl = buildWhatsAppUrl(PRECIOS.mensajeWhatsApp);
 ---
 
-<BaseLayout title={`${PRECIOS.titulo} · ${MARCA}`}>
+<!-- noindex mientras no haya precios: la página sólo invita a consultar. -->
+<BaseLayout title={`${PRECIOS.titulo} · ${MARCA}`} description={PRECIOS.bajada} noindex>
   <section class="vg-hero vg-hero--simple"><div class="vg-wrap">
     <h1 class="vg-hero__title">{PRECIOS.titulo}</h1>
     <p class="vg-hero__subtitle">{PRECIOS.bajada}</p>

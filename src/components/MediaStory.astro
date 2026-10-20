@@ -56,7 +56,7 @@ const mostrarPendiente = !video && pendiente && import.meta.env.DEV;
         muted
         playsinline
         preload="none"
-        poster={video.poster}
+        data-poster={video.poster}
         aria-hidden="true"
         style={video.encuadre ? `object-position: ${video.encuadre}` : undefined}
       >
@@ -142,8 +142,13 @@ const mostrarPendiente = !video && pendiente && import.meta.env.DEV;
           const wasVisible = visible;
           visible = entry.isIntersecting;
           // El video arranca con preload="none" para no cargarlo si nunca se
-          // ve; al entrar en pantalla se baja mientras corre la animación.
-          if (visible && video && video.preload !== 'auto') video.preload = 'auto';
+          // ve; al entrar en pantalla se baja mientras corre la animación. El
+          // poster, igual: con el atributo puesto de entrada, el navegador lo
+          // bajaba al cargar la página y competía con las fuentes del hero.
+          if (visible && video && video.preload !== 'auto') {
+            if (video.dataset.poster) video.poster = video.dataset.poster;
+            video.preload = 'auto';
+          }
           if (visible && !wasVisible) playAnim();
           if (!visible && wasVisible) stop();
         },

@@ -33,7 +33,7 @@ export const CTA = {
 export const WHATSAPP_URL = buildWhatsAppUrl("Hi, I'd like more information about VigIA");
 
 export const SEO = {
-  titulo: MARCA,
+  titulo: `${MARCA} · Water and heat stress alerts`,
   descripcion:
     'Water and heat stress alerts for every management zone, with days of lead time to apply a biostimulant or irrigate. On the platform and on WhatsApp.',
 };
@@ -282,8 +282,8 @@ export const FOOTER = {
   },
   // Las legales sólo existen en español: el enlace lo aclara.
   legales: [
-    { texto: 'Privacy policy (Spanish)', href: '/privacidad' },
-    { texto: 'Terms and conditions (Spanish)', href: '/terminos' },
+    { texto: 'Privacy policy (Spanish)', href: '/privacidad/' },
+    { texto: 'Terms and conditions (Spanish)', href: '/terminos/' },
   ],
   pie: 'All rights reserved.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
@@ -317,7 +317,7 @@ export const UI = {
     { label: 'Impact', href: '/en/#impacto' },
     { label: 'About us', href: '/en/#nosotros' },
     { label: 'Contact', href: '/en/#contacto' },
-    { label: 'Learn', href: '/en/educacion' },
+    { label: 'Learn', href: '/en/educacion/' },
   ],
   header: {
     idioma: 'Language',

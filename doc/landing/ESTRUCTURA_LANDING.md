@@ -196,7 +196,7 @@ Nota: *Diferencia de rinde entre lotes que aplicaron el bioinsumo según las ale
 | Maíz | 20.378 | 12.026 | 2.050 |
 | Soja | 6.836 | 4.538 | 700 |
 | Trigo | 4.818 | 3.186 | 550 |
-| **Total** | **~32.000** | **~19.750** | **3.300** |
+| **Total** | **~32.000** | **~19.750** | **~3.300** |
 
 Nota: *Es el carbono extra del rinde recuperado. Equivale a neutralizar las emisiones de unos 750 autos por año. El carbono que queda es el del rastrojo y las raíces; las raíces aportan el más estable.*
 
@@ -247,18 +247,20 @@ Con la estructura de un footer de marca (decisión 37), en verde bosque como Imp
 - **Pie, en un renglón fino:** © año VigIA BioEstrés · Todos los derechos reservados, y los créditos de las fotos.
 - Sin newsletter: el sitio es estático y no tiene dónde guardar los emails.
 
-**Páginas legales** (`LegalPage.astro`, textos en `src/data/legal.js`): describen lo que el sitio hace hoy (sin formularios, cuentas, analítica ni publicidad; guarda el tema en el navegador; carga Google Fonts; enlaza a WhatsApp, Instagram y Maps) e incluyen la leyenda de la AAIP de la Ley 25.326. **Son un borrador:** revisarlas con asesoría legal y completar razón social y CUIT antes de publicar.
+**Páginas legales** (`LegalPage.astro`, textos en `src/data/legal.js`): describen lo que el sitio hace hoy (sin formularios, cuentas, analítica ni publicidad; guarda el tema en el navegador; sirve sus tipografías desde el mismo sitio, sin Google Fonts; enlaza a WhatsApp, Instagram y Maps) e incluyen la leyenda de la AAIP de la Ley 25.326. **Son un borrador:** revisarlas con asesoría legal y completar razón social y CUIT antes de publicar.
 
 ## SEO
 
 | Campo | Valor |
 |---|---|
-| `<title>` | VigIA BioEstrés (`SEO.titulo`, igual en los tres idiomas) |
+| `<title>` | **VigIA BioEstrés · Alertas de estrés hídrico y térmico** (`SEO.titulo`; en inglés *Water and heat stress alerts*, en portugués *Alertas de estresse hídrico e térmico*). Con sólo la marca no tenía ninguna palabra de búsqueda. |
 | Meta description | Alertas de estrés hídrico y térmico por ambiente, con días de margen para aplicar el bioinsumo o regar. En la plataforma y por WhatsApp. |
 | `og:image` | 1200×630 desde `media-src/imagenes/3.3.jpg` (el lote sano), con el logo. |
-| Datos estructurados | `FAQPage` con las preguntas de la sección 8. |
+| Datos estructurados | `Organization` (nombre, logo, contacto, dirección), `WebSite` (con los tres idiomas) y `FAQPage` con las preguntas de la sección 8. Sin redes (`sameAs`) hasta que VigIA tenga las suyas. |
 | Idiomas | `hreflang` es, en, pt y x-default, y `og:locale` con los otros dos como alternativos, en las páginas traducidas. |
-| Indexar | Sí: es la página principal del dominio. |
+| Indexar | La home (en los tres idiomas) y las legales. Precios, Educación y el 404 van con `noindex` (sin `canonical` ni `hreflang`) hasta que tengan contenido. |
+| Sitemap y robots | `src/pages/sitemap.xml.ts` genera `sitemap.xml` con las páginas que se indexan y las alternativas de idioma de la home; `public/robots.txt` permite todo y apunta al sitemap. |
+| URLs | Con barra final (`/pricing/`): es la que sirve GitHub Pages sin redirección. `hreflang`, `canonical`, el sitemap y los enlaces internos la usan (`conBarra` en `src/i18n/idiomas.js`). |
 
 ---
 
@@ -269,7 +271,7 @@ Cada sección del recorrido tiene **un** medio, dentro de `MediaStory.astro`: pr
 | Sección | Animación en código | Video (`public/videos/`) |
 |---|---|---|
 | 1. Hero | `BalanceChart.astro`, 11 s (animación de ~3,5 s y el final quieto para leerlo) | Ninguno: el gráfico es la propuesta del producto. |
-| 2. El problema | `ProblemChart.astro`, 11 s (animación de ~4,6 s y el final quieto para leerlo) | `problema.mp4` (5,1 s, 2,9 MB): clip 2B, el lote se marchita y la mano toca una hoja. |
+| 2. El problema | `ProblemChart.astro`, 11 s (animación de ~4,6 s y el final quieto para leerlo) | `problema_v2.mp4` (6 s, 2,9 MB): el lote verde se seca bajo el sol, las hojas se marchitan y el suelo se agrieta. |
 | 4. La solución | `WhatsAppMock.astro`, 4,5 s, más 3,2 s de cierre "Resuelta" después del video | `resolucion.mp4` (5,5 s, 1,5 MB): clip 3B → 3C, la pulverizadora al amanecer y el lote sano. |
 
 **Estado:** los dos videos están en `public/videos/` con poster y cargados en `src/data/videos.js`. Los clips crudos y los masters están en `media-src/` (fuera del repo).
@@ -284,7 +286,7 @@ Cada sección del recorrido tiene **un** medio, dentro de `MediaStory.astro`: pr
 ### Requisitos técnicos
 
 - Los videos se reproducen a **0,75x** (`playbackRate`): el campo se mira con calma. Las animaciones en código mantienen su velocidad. Con eso, `problema` dura unos 6,8 s y `resolucion` unos 7,3 s.
-- `<video muted playsinline preload="none">` con `poster`. El video empieza a bajar cuando la sección entra en pantalla, mientras corre la animación.
+- `<video muted playsinline preload="none">` con el poster en WebP. El poster y el video empiezan a bajar cuando la sección entra en pantalla, mientras corre la animación: con el poster puesto de entrada, se descargaba al abrir la página y competía con las fuentes del hero.
 - **Sólo MP4 (H.264)**, 960×720, 24 fps, sin audio. Con follaje fino, a igual calidad el WebM pesaba más. `webm` queda como campo opcional.
 - Peso: hasta 4 MB por clip, priorizando que se vea bien (SSIM ≥ 0,98 contra el master).
 - Con `prefers-reduced-motion` o sin JS: la animación queda en su estado final y el video no se muestra.

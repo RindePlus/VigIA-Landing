@@ -45,11 +45,20 @@ export const rutaBase = (pathname) => {
   return sinIdioma.length > 1 ? sinIdioma.replace(/\/+$/, '') : '/';
 };
 
-/** Rutas de la página actual en cada idioma y si existe traducida. Si no
- *  existe (legales), los otros idiomas llevan a su home. */
+/** Agrega la barra final a una ruta de página ('/pricing' → '/pricing/').
+ *  Es la URL que sirve GitHub Pages: sin la barra, responde con una
+ *  redirección (301), y hreflang, el sitemap y los enlaces internos tienen
+ *  que apuntar a la URL final. */
+export const conBarra = (r) => (r.endsWith('/') ? r : `${r}/`);
+
+/** Rutas de la página actual en cada idioma (con barra final) y si existe
+ *  traducida. Si no existe (legales), los otros idiomas llevan a su home.
+ *  El 404 no es una página a la que se pueda volver: los tres idiomas
+ *  llevan a su home. */
 export const alternativas = (pathname) => {
   const base = rutaBase(pathname);
   const traducida = PAGINAS_TRADUCIDAS.includes(base);
-  const enIdioma = (lang) => ruta(lang, traducida ? base : '/');
-  return { es: base, en: enIdioma('en'), pt: enIdioma('pt'), traducida };
+  const enIdioma = (lang) => conBarra(ruta(lang, traducida ? base : '/'));
+  const es = base === '/404' ? '/' : conBarra(base);
+  return { es, en: enIdioma('en'), pt: enIdioma('pt'), traducida };
 };

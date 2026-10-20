@@ -155,6 +155,7 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 ## Typography
 
 - **Display y cuerpo:** IBM Plex Sans (`--font-heading`, `--font-body`).
+- **Carga:** las dos fuentes están alojadas en el sitio (`public/fonts/`, `@font-face` en `global.css`), variables y sólo con latin y latin-ext; IBM Plex Sans latin se precarga. Sin Google Fonts: bloqueaba el primer render en celular.
 - **Datos:** Chivo Mono (`--font-data`, clase `.vg-data`).
 
 **Character:** una sans técnica y legible, de informe, con una monoespaciada de cero liso sólo para medidas. No se usa Geist, Inter ni Space Grotesk: el detector de Impeccable las marca como sobreusadas.

@@ -7,6 +7,7 @@
 // (src/data/vigia.js o vigia.en.js, según el idioma de la página), canales en
 // src/data/social.js.
 import { PiArrowUpRight, PiEnvelopeSimple, PiInstagramLogo, PiWhatsappLogo } from 'react-icons/pi';
+import { Image } from 'astro:assets';
 import logo from '../assets/vigia-biostres-logo-light.png';
 import {
   CONTACT_EMAIL,
@@ -40,7 +41,7 @@ const redes = [
       <div class="rp-footer__marca">
         <!-- Logo monocromo en los dos temas (negro en claro, blanco en oscuro). -->
         <a class="rp-footer__logo" href={ruta(lang, '/')} aria-label={`${MARCA}, ${UI.inicio}`}>
-          <img src={logo.src} alt={MARCA} width={logoAncho} height={LOGO_ALTO} loading="lazy" decoding="async" />
+          <Image src={logo} alt={MARCA} width={logoAncho} height={LOGO_ALTO} densities={[1, 2]} format="webp" loading="lazy" decoding="async" />
         </a>
 
         <ul class="rp-footer__redes">
@@ -60,7 +61,7 @@ const redes = [
       </div>
 
       <div class="rp-footer__col">
-        <h3>{FOOTER.contacto.titulo}</h3>
+        <h2>{FOOTER.contacto.titulo}</h2>
         <address class="rp-footer__datos">
           <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">{WHATSAPP_DISPLAY}</a>
@@ -69,7 +70,7 @@ const redes = [
       </div>
 
       <div class="rp-footer__col">
-        <h3>{FOOTER.rindeplus.titulo}</h3>
+        <h2>{FOOTER.rindeplus.titulo}</h2>
         <p>{FOOTER.rindeplus.texto}</p>
         <a class="rp-footer__externo" href={FOOTER.rindeplus.href} target="_blank" rel="noopener noreferrer">
           {FOOTER.rindeplus.enlace}
@@ -78,7 +79,7 @@ const redes = [
       </div>
 
       <nav class="rp-footer__col" aria-label={FOOTER.ayuda.titulo}>
-        <h3>{FOOTER.ayuda.titulo}</h3>
+        <h2>{FOOTER.ayuda.titulo}</h2>
         <ul>
           {
             FOOTER.ayuda.enlaces.map((e) => (

@@ -91,6 +91,7 @@ El español y el portugués se parecen mucho, y eso es la trampa: muchos calcos 
 
 | Español | Portugués | Por qué |
 |---|---|---|
+| VigIA BioEstrés · Alertas de estrés hídrico y térmico (título de la página) | **VigIA BioEstrés · Alertas de estresse hídrico e térmico** | Es lo que se busca en Brasil. |
 | Detectá el estrés antes de que se convierta en pérdida | **Detecte o estresse antes que ele vire perda de produtividade** | *Perda* sola queda vaga, como en inglés. *Virar* es el verbo natural para "convertirse". |
 | El cultivo muestra el estrés cuando ya perdiste rinde | **Quando a lavoura mostra o estresse, a produtividade já foi perdida** | La estructura *quando… já* dice "cuando ya es tarde". |
 | El pronóstico regional no conoce tu lote | **A previsão regional não conhece o seu talhão** | La personificación funciona igual. |

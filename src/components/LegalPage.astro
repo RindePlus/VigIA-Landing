@@ -8,6 +8,7 @@ import '../styles/sections.css';
 interface Props {
   texto: {
     titulo: string;
+    descripcion: string;
     actualizado: string;
     secciones: { titulo: string; parrafos: string[] }[];
   };
@@ -16,7 +17,7 @@ interface Props {
 const { texto } = Astro.props;
 ---
 
-<BaseLayout title={`${texto.titulo} · ${MARCA}`} description={`${texto.titulo} de ${MARCA}.`}>
+<BaseLayout title={`${texto.titulo} · ${MARCA}`} description={texto.descripcion}>
   <section class="vg-section vg-legal">
     <div class="vg-wrap">
       <h1 class="vg-legal__titulo">{texto.titulo}</h1>
