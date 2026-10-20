@@ -1,9 +1,10 @@
 /* ============================================================
    Footer: cuatro columnas a la misma altura (marca con redes, contacto,
-   Rinde Plus y ayuda); abajo, legales y copyright centrados. Verde
-   bosque, como Impacto. Compacto: en pantalla completa entra en la misma
-   pantalla que las preguntas (SectionPager). Tokens --gh-* y --vg-*,
-   escalas de global.css.
+   Rinde Plus y ayuda, con los legales); abajo, un renglón fino con el
+   copyright y los créditos de las fotos. Verde
+   bosque, como Impacto. Compacto: en pantallas horizontales entra en la
+   misma pantalla que las preguntas (Footer.astro mide su alto). Tokens
+   --gh-* y --vg-*, escalas de global.css.
    ============================================================ */
 
 .rp-footer {
@@ -147,23 +148,16 @@
 
 .rp-footer__externo:hover svg { transform: translate(2px, -2px); }
 
-/* --- Pie: legales y copyright, centrados bajo una línea fina --- */
+/* --- Pie: copyright y créditos en un renglón fino bajo una línea (los
+   legales van en la columna de ayuda) --- */
 .rp-footer__bottom {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-25);
-  padding-top: var(--space-100);
-  border-top: 1px solid var(--gh-border);
-  text-align: center;
-}
-
-.rp-footer__legal {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-100) var(--space-400);
-  font-size: var(--text-sm);
-  line-height: var(--leading-sm);
+  gap: var(--space-25) var(--space-300);
+  padding-top: var(--space-75);
+  border-top: 1px solid var(--gh-border);
+  text-align: center;
 }
 
 .rp-footer__copyright {

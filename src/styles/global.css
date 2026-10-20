@@ -327,10 +327,6 @@ html {
   --vg-pronostico: #e8e5dd;
   /* Tierra: carbono que queda en el suelo (sección Impacto). */
   --vg-carbono: #7a4b26;
-  /* Fondo sólido de La solución (decisión 54): verde muy claro (el tramo
-     verde campo), cálido para no chocar con las tarjetas blancas. El
-     problema va sobre el fondo de la página. */
-  --vg-bg-solucion: #e6f0e0;
   /* Textos y líneas sobre la banda verde bosque (Impacto), en los
      dos temas. Todos pasan AA sobre --vg-forest-bg. */
   --vg-on-forest-fg: #ece8df;
@@ -391,7 +387,6 @@ html {
   --vg-pronostico: #23221f;
   --vg-carbono: #d6a06c;
   --vg-agua: #6fbfbf;
-  --vg-bg-solucion: #1b201c;
   --vg-icon-green: var(--vg-campo);
   --vg-wa-bar: #202c33;
   --vg-wa-bar-fg: #e9edef;
@@ -412,16 +407,16 @@ html {
   :root { --page-gutter: var(--space-700); }
 }
 
-/* Recorrido a pantalla completa (decisión 50, SectionPager.astro): en
-   pantallas horizontales cada panel ocupa una pantalla y los tamaños
-   siguen al alto de la ventana, para que todo entre sin scroll interno.
-   Crecen en pantallas altas y se achican en las bajas, con topes. */
+/* Secciones de una pantalla (.vg-pantalla, ADR 0007): en pantallas
+   horizontales cada sección ocupa más o menos una pantalla y los tamaños
+   siguen al alto de la ventana, para que el contenido entre entero. Crecen
+   en pantallas altas y se achican en las bajas, con topes. */
 @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
   :root {
-    /* Alto del header (siempre visible, 80 px) y aire abajo: el contenido
-       se centra en lo que queda de pantalla. */
-    --panel-pad-top: var(--space-800);
-    --panel-pad-bottom: calc(var(--space-300) + 1vh);
+    /* El mismo aire arriba y abajo: el contenido queda centrado en toda la
+       pantalla, con o sin el header (se oculta al bajar). */
+    --panel-pad-top: var(--space-500);
+    --panel-pad-bottom: var(--space-500);
     --fit-hero: clamp(2.5rem, 3.4vh + 1.6rem, 4.25rem);
     --fit-display: clamp(2.25rem, 2.6vh + 1.6rem, 3.75rem);
     --fit-headline: clamp(1.75rem, 1.9vh + 1.15rem, 2.75rem);

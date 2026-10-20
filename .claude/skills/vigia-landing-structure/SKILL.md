@@ -32,7 +32,7 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 
 ```
 1. Hero · 2. El problema · 3. Lo que hace VigIA · 4. La solución    ← recorrido del mismo lote (.vg-journey)
-5. Frase destacada · 6. Impacto · 7. Sobre nosotros + 8. Clientes (una pantalla)
+5. Frase destacada · 6. Impacto · 7. Sobre nosotros + 8. Clientes (juntos)
 9. Preguntas frecuentes + cierre (CTA al pie) · Footer
 ```
 
