@@ -20,8 +20,8 @@ import './Footer.css';
 
 const lang = idiomaDe(Astro.currentLocale);
 const { FOOTER, MARCA, UI, WHATSAPP_URL } = contenido(lang);
-// En inglés la dirección lleva el país: el público no es sólo argentino.
-const direccion = lang === 'en' ? OFFICE_ADDRESS : 'Concejal Lorusso 762, Alta Gracia, Córdoba';
+// Fuera del español la dirección lleva el país: el público no es argentino.
+const direccion = lang === 'es' ? 'Concejal Lorusso 762, Alta Gracia, Córdoba' : OFFICE_ADDRESS;
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_ADDRESS)}`;
 const year = new Date().getFullYear();
 const LOGO_ALTO = 48;
@@ -97,7 +97,7 @@ const redes = [
           {
             FOOTER.legales.map((l) => (
               <li>
-                <a href={l.href} hreflang={lang === 'en' ? 'es' : undefined}>
+                <a href={l.href} hreflang={lang === 'es' ? undefined : 'es'}>
                   {l.texto}
                 </a>
               </li>

@@ -1,7 +1,8 @@
 // Contenido en español, un objeto por sección (ver doc/landing/ESTRUCTURA_LANDING.md,
-// versión 2). La versión en inglés es src/data/vigia.en.js, con las mismas
-// claves: si agregás o cambiás un texto acá, hacelo también allá (reglas en
-// doc/landing/TRADUCCION_EN.md). Cada afirmación tiene respaldo en doc/landing/MODULO_VIGIA.md §10:
+// versión 2). Las versiones en inglés y portugués son src/data/vigia.en.js y
+// src/data/vigia.pt.js, con las mismas claves: si agregás o cambiás un texto
+// acá, hacelo también allá (reglas en doc/landing/TRADUCCION_EN.md y
+// TRADUCCION_PT.md). Cada afirmación tiene respaldo en doc/landing/MODULO_VIGIA.md §10:
 // balance hídrico FAO-56 por ambiente, DPV contra umbrales por cultivo,
 // pronóstico a 14 días y las alertas de alertEngine.ts.
 // Reglas (skill vigia-landing-structure): sin IA, satélite, estrés biótico ni

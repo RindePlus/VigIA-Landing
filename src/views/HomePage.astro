@@ -4,9 +4,10 @@
 // lote) → Frase destacada → Resultados → Sobre nosotros (con los clientes) →
 // Preguntas (con el CTA de cierre). Scroll normal en todas las pantallas
 // (ADR 0007).
-// Una sola home para los dos idiomas (ADR 0004): src/pages/index.astro la
-// usa en español y src/pages/en/index.astro en inglés. El contenido sale de
-// src/data/vigia.js o vigia.en.js según el idioma. Los medios de las tres
+// Una sola home para los tres idiomas (ADR 0004 y ADR 0008):
+// src/pages/index.astro la usa en español, src/pages/en/index.astro en inglés
+// y src/pages/pt/index.astro en portugués. El contenido sale de
+// src/data/vigia.js, vigia.en.js o vigia.pt.js según el idioma. Los medios de las tres
 // primeras secciones usan MediaStory: animación en código y, si hay, el
 // video (src/data/videos.js).
 import BaseLayout from '../layouts/BaseLayout.astro';
