@@ -2,6 +2,7 @@
 
 - **Estado:** Propuesto
 - **Fecha:** 2026-10-16
+- **Ampliado por:** [ADR 0008](0008-version-en-portugues.md) (portugués de Brasil en `/pt/`)
 
 ## Contexto
 

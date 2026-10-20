@@ -2,9 +2,9 @@
 
 Plan de contenido de la home. Define qué secciones tiene la página, en qué orden, qué dice cada una y con qué medios. Lo que se afirma sale de [`MODULO_VIGIA.md`](MODULO_VIGIA.md) (sección 10). Lo visual lo resuelven `landing-page-design` (Parte B) y las traducciones de `CLAUDE.md`. La estructura y el copy los cuida la skill `vigia-landing-structure`.
 
-**Estado:** versión 2, **implementada** en `src/pages/index.astro`, con los textos en `src/data/vigia.js`. Quedan las [preguntas abiertas](#preguntas-abiertas) y los opcionales de video.
+**Estado:** versión 2, **implementada** en `src/views/HomePage.astro`, con los textos en `src/data/vigia.js` (español), `vigia.en.js` (inglés) y `vigia.pt.js` (portugués de Brasil). Quedan las [preguntas abiertas](#preguntas-abiertas) y los opcionales de video. Las secciones de abajo describen la página como está hoy; el registro de cambios está en [Decisiones](#decisiones).
 
-**Qué cambia respecto de la versión 1:**
+**Qué cambió respecto de la versión 1** (al pasar a la v2; varias cosas cambiaron después, ver Decisiones):
 
 - La marca pasa a ser **VigIA BioEstrés**.
 - El hero se apoya en el resultado ("antes de que se convierta en pérdida") y no en el nombre del submódulo.
@@ -39,24 +39,24 @@ Plan de contenido de la home. Define qué secciones tiene la página, en qué or
 ## Mapa de la página
 
 ```
-Header ─ Cómo funciona · Impacto · Nosotros · Contacto · Educación (/educacion) · [Ingresar]
-│
-│  ┌─ recorrido (.vg-journey: fondo por etapas + hilo) ─┐
+Header ─ Cómo funciona ▾ · Impacto · Nosotros · Contacto · Educación (/educacion) · ES/EN/PT · [Ingresar]
+│        (se oculta al bajar y vuelve al subir)
+│  ┌─ recorrido (.vg-journey: fondo de la página + hilo) ─┐
 ├─ 1. Hero                 #inicio          · punto 1 · gráfico de balance (código)
 ├─ 2. El problema          #problema        · punto 2 · gráfico sin aviso → video problema
-├─ 3. Qué hace VigIA       #que-hace        · punto 3 · cuatro tarjetas con foto + tres tipos de estrés
-├─ 4. La solución          #como-funciona   · punto 4 · celular WhatsApp → video resolución
-│  └────────────────────────────────────────────────────┘
-├─ 5. Frase destacada                         (palabras que se encienden al hacer scroll)
+├─ 3. Lo que hace VigIA    #que-hace        · punto 3 · cuatro tarjetas con foto + otros módulos
+├─ 4. La solución          #como-funciona   · punto 4 · WhatsApp → video resolución; debajo, "Cómo lo hace"
+│  └──────────────────────────────────────────────────────┘
+├─ 5. Frase destacada      #frase           (tres renglones; "antes" se subraya al llegar el hilo)
 ├─ 6. Impacto              #impacto         (cuatro indicadores, tablas de grano y carbono)
-├─ 7. Sobre nosotros       #nosotros        (personas con foto y logo de su empresa)
-├─ 8. Clientes             #clientes        (carrusel)
-├─ 9. Preguntas frecuentes #preguntas
-├─ 10. Cierre (CTA)
+├─ 7. Sobre nosotros       #nosotros        (personas con foto y logo; debajo, el carrusel de clientes #clientes)
+├─ 8. Preguntas frecuentes #preguntas       (con el CTA de cierre en la columna del título)
 └─ Footer                  #contacto
 ```
 
-**Un solo CTA principal en toda la página:** **Contactanos para empezar a usar VigIA**. Abre WhatsApp con el mensaje "Hola, quiero empezar a usar VigIA BioEstrés". Va en el hero y en el cierre con el mismo texto.
+En pantallas horizontales (escritorio y tablet acostada) cada sección ocupa más o menos una pantalla, con el contenido centrado y el mismo aire arriba y abajo (`.vg-pantalla`); el scroll es el normal del navegador (decisión 57, [ADR 0007](../adr/0007-scroll-normal-en-toda-la-home.md)).
+
+**Un solo CTA principal en toda la página:** **Contactanos para empezar a usar VigIA**. Abre WhatsApp con el mensaje "Hola, quiero empezar a usar VigIA BioEstrés". Va en el hero y en Preguntas frecuentes, con el mismo texto.
 
 ---
 
@@ -64,9 +64,9 @@ Header ─ Cómo funciona · Impacto · Nosotros · Contacto · Educación (/edu
 
 | Elemento | Contenido |
 |---|---|
-| Etiqueta | ESTRÉS HÍDRICO Y TÉRMICO |
+| Etiqueta | Sin etiqueta (decisión 50): "estrés hídrico y térmico" pasa a la bajada |
 | Título (h1) | **Detectá el estrés antes de que se convierta en pérdida** |
-| Bajada | VigIA BioEstrés sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés se vea a campo. Para productores y asesores que deciden con datos. |
+| Bajada | VigIA BioEstrés sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés hídrico y térmico se vea a campo. Para productores y asesores que deciden con datos. (36 palabras: una sobre el máximo, aceptado para no perder el tipo de estrés). |
 | Botón | Sólo **Contactanos para empezar a usar VigIA** (WhatsApp, con flecha), monocromo: negro en tema claro y blanco en oscuro (decisión 33). Va en la columna de texto, **debajo de la bajada** y alineado a la izquierda con el texto (decisión 47). Sin botón secundario (decisión 31). En celular y tablet (una columna) va debajo del gráfico: primero se ve lo que hace y después se pide la acción. |
 | Visual | El gráfico termina a la altura del botón. `BalanceChart.astro`, simplificado: sólo la línea de agua útil, el umbral, "Hoy" y la zona de pronóstico (sin chips de datos, lluvia ni "Ejemplo ilustrativo"). La línea se dibuja y, justo antes de tocar el umbral, aparece la notificación, colgada de una línea punteada ámbar que sube desde el punto de **Hoy** (la alerta se envía hoy, cuando el pronóstico ya muestra el cruce; el punto ámbar del cruce es lo que se anticipa), con el logo de WhatsApp grande (el aviso llega por WhatsApp) y el texto **Alerta enviada · Estrés hídrico en 14 días**, y late el punto del cruce. El gráfico muestra 18 días de historia y los 14 del pronóstico (el horizonte del motor): la línea toca el umbral justo al final del pronóstico. En escritorio la notificación va sobre el gráfico (arriba a la derecha); en celular, debajo. Sin video. |
 
@@ -76,39 +76,37 @@ Se mantiene de la versión 1.
 
 | Elemento | Contenido |
 |---|---|
-| Etiqueta | EL PROBLEMA |
 | Título | **El cultivo muestra el estrés cuando ya perdiste rinde** |
 | Bajada | Para cuando lo ves a campo, reaccionás tarde y el daño ya está hecho. |
 
-**Disposición:** etiqueta, título, bajada y razones van en la columna izquierda; el gráfico, a la derecha, queda centrado verticalmente entre el título y las razones.
+**Disposición:** título, bajada y razones van en la columna izquierda; el gráfico, a la derecha, arranca a la altura del título. Sin etiqueta de sección.
 
 **Dos razones**, sin numerar, cada una con un ícono ámbar (el color de este capítulo), separadas sólo por aire, sin línea: planta (el síntoma llega tarde para el bioinsumo) y nube con sol (el pronóstico regional no conoce tu lote). Son dos y no tres por la decisión 15: el síntoma tardío y el bioinsumo que llega tarde son la misma idea.
 
 1. **El síntoma llega tarde para el bioinsumo.** Cuando la hoja se enrolla, el rinde ya está comprometido y aplicar el bioinsumo protege poco.
 2. **El pronóstico regional no conoce tu lote.** No sabe cuánta agua le queda a tu suelo ni en qué etapa está tu cultivo.
 
-**Visual:** `ProblemChart.astro`, simplificado como el del hero (mismas etiquetas grandes, sin lluvia ni "+6 días"): la línea gris cruza el umbral en silencio, el área roja "Rinde perdido" y la línea roja "Lo ves a campo" al final. Como cierre, una alerta roja **"Se ve a campo 6 días tarde · El bioinsumo ya no llega a tiempo"** cuelga del borde inferior de la tarjeta, debajo de "Lo ves a campo" (en celular, debajo del gráfico). Después, el video `problema`.
+**Visual:** `ProblemChart.astro`, simplificado como el del hero (mismas etiquetas grandes, sin lluvia ni "+6 días"): la línea gris cruza el umbral en silencio, el área roja "Rinde perdido" y la línea roja "Lo ves a campo" al final. Como cierre, una alerta **"Se ve a campo 6 días tarde · El bioinsumo ya no llega a tiempo"**, con el ícono en rojo y el borde gris de la tarjeta (sin recuadro de color), cuelga del borde inferior de la tarjeta, debajo de "Lo ves a campo" (en celular, debajo del gráfico). Después, el video `problema`.
 
 ## 3. Lo que hace VigIA (`#que-hace`)
 
-Sección nueva (decisión 15). Cuenta qué hace VigIA: acompaña desde antes de la siembra, cuida el agua, detecta los picos de estrés durante toda la campaña y está orientado a bioinsumos. Además, toma los tipos de estrés que antes cerraban El problema. Punto 3 del hilo y fondo en celeste (decisión 23). La etiqueta "La solución" pasó a la sección 4 (decisión 30). Desde la decisión 42 se llama **Lo que hace VigIA** y sus cuatro tarjetas cuentan también las cuatro alertas.
+Sección nueva (decisión 15). Cuenta qué hace VigIA: acompaña desde antes de la siembra, cuida el agua, detecta los picos de estrés durante toda la campaña y está orientado a bioinsumos. Además, toma los tipos de estrés que antes cerraban El problema. Punto 3 del hilo, en verde agua (decisión 49; antes celeste, decisión 23). La etiqueta "La solución" pasó a la sección 4 (decisión 30). Desde la decisión 42 se llama **Lo que hace VigIA** y sus cuatro tarjetas cuentan también las cuatro alertas.
 
 | Elemento | Contenido |
 |---|---|
-| Etiqueta | LO QUE HACE VIGIA (en celeste) |
 | Título | **VigIA BioEstrés vigila el estrés toda la campaña** |
 | Bajada | Sigue cada ambiente desde antes de la siembra hasta el final del ciclo, y te dice cuándo cuidar el agua y cuándo aplicar el bioinsumo. |
 
-**Cuatro tarjetas con foto**, primero en la sección (decisión 38): foto arriba (4:3, apaisada; 16:9 en dos columnas) con **esquinas rectas**, título y texto corto, sin caja. Cuatro columnas en escritorio, dos en tablet, una en celular. Foto, título y texto comparten renglones (subgrid): si un título baja a dos líneas, los textos siguen arrancando a la misma altura.
+**Cuatro tarjetas con foto**, primero en la sección (decisión 38): la foto ocupa toda la tarjeta y el título y el texto corto van abajo, sobre una franja translúcida con desenfoque (decisión 57). La línea entre foto y texto queda a la misma altura en todas; los títulos, centrados en el renglón del más largo, y los textos arrancan a la par. Cuatro columnas en escritorio, dos en tablet, una en celular. Foto, título y texto comparten renglones (subgrid). En escritorio, el alto de la foto sigue al alto de la ventana.
 
-| Tarjeta | Texto | Foto (provisoria) |
+| Tarjeta | Texto | Foto (Wikimedia Commons, decisión 49) |
 |---|---|---|
-| Detecta picos de estrés | Falta de agua, aire que seca a la planta o los dos juntos. Te avisa por ambiente, con margen. | 2.3, mano sobre soja marchita |
-| Desde antes de la siembra | Sigue el agua del suelo desde antes de sembrar y te avisa 14 días antes de la etapa crítica. | 2.2, suelo agrietado (falta una de barbecho) |
-| Cuida el uso del agua | Sabés cuánta agua útil tiene cada ambiente. Si se viene la falta de agua, regás justo cuando hace falta. | 1.2, lote al sol (falta una de riego) |
-| Orientado a bioinsumos | Cada aviso trae su bioinsumo: hídrico, antiestrés térmico o preventivo antes de la etapa crítica. | 3.2, pulverizadora |
+| Detecta picos de estrés | Falta de agua, aire que seca a la planta o los dos juntos. Te avisa por ambiente, con margen. | Lote de soja en febrero, con manchones |
+| Desde antes de la siembra | Sigue el agua del suelo desde antes de sembrar y te avisa 14 días antes de la etapa crítica. | Soja en siembra directa sobre rastrojo de sorgo |
+| Cuida el uso del agua | Sabés cuánta agua útil tiene cada ambiente. Si se viene la falta de agua, regás justo cuando hace falta. | Pivote de riego sobre soja |
+| Orientado a bioinsumos | Cada aviso trae su bioinsumo: hídrico, antiestrés térmico o preventivo antes de la etapa crítica. | Tractor con pulverizadora |
 
-"Desde antes de la siembra" va sin número a propósito: el balance arranca 60 días antes de la siembra, pero lo que importa es que acompaña todo el proceso. "Orientado a bioinsumos" se dice en positivo. Las fotos salen de `media-src/imagenes/`, achicadas a 800 px en `src/assets/quehace/`.
+"Desde antes de la siembra" va sin número a propósito: el balance arranca 60 días antes de la siembra, pero lo que importa es que acompaña todo el proceso. "Orientado a bioinsumos" se dice en positivo. Las fotos están en `src/assets/quehace/`, con sus créditos en el pie de página (`FOOTER.creditosFotos`).
 
 Las cuatro alertas se reparten entre las tarjetas (decisión 42), sin sumar ítems:
 
@@ -134,15 +132,12 @@ Es el capítulo "con VigIA" del recorrido. **Lo principal son los dos canales de
 
 | Elemento | Contenido |
 |---|---|
-| Etiqueta | LA SOLUCIÓN (el ancla sigue siendo `#como-funciona`, la del menú y el botón del hero) |
-| Título | **Te avisa a tiempo para actuar** (sin nombrar los canales: ya los presentan las tarjetas) |
+| Título | **Te avisa a tiempo para actuar** (sin nombrar los canales: ya los presentan las tarjetas). El ancla es `#como-funciona`, la del menú. |
 | Bajada | VigIA sigue cada ambiente día a día. Cuando se viene el estrés, te avisa con margen para aplicar el bioinsumo o regar. |
 
-**Bloque principal (dos columnas):** a la izquierda, la etiqueta, el título, la bajada y los dos canales flotando, sin tarjeta ni línea entre ellos, con íconos **monocromos** (en el color del texto): **En tu WhatsApp** y **En la plataforma**. Mismo formato que las razones de El problema (decisión 48): alineados a la izquierda, a todo el ancho de la columna, ícono arriba y los mismos tamaños de texto. A la derecha, alineado abajo (termina a la altura de la tarjeta de la plataforma y no se cruza con el título), un recuadro 4:3 (la proporción del video) que llena `WhatsAppMock.astro`, así no cambia de tamaño al pasar al video. El mensaje es simple: **⚠️ Estrés hídrico en 14 días** · Lote 12 · Ambiente 2 · Planificá riego o bioinsumo. Después, el video `resolucion` y el cierre **✅ Resuelta a tiempo**.
+**Bloque principal (dos columnas):** a la izquierda, el título, la bajada y los dos canales flotando, sin tarjeta ni línea entre ellos, con íconos **monocromos** (en el color del texto): **En tu WhatsApp** y **En la plataforma**. Mismo formato que las razones de El problema (decisión 48): alineados a la izquierda, a todo el ancho de la columna, ícono arriba y los mismos tamaños de texto. A la derecha, arrancando a la altura del título, un recuadro 4:3 (la proporción del video) que llena `WhatsAppMock.astro`, así no cambia de tamaño al pasar al video. El chat lleva el favicon como foto de perfil. El mensaje es simple: **⚠️ Estrés hídrico en 14 días** · Lote 12 · Ambiente 2 · Planificá riego o bioinsumo. Después, el video `resolucion` y el cierre **✅ Resuelta a tiempo**.
 
-**Cómo lo hace** (decisión 39): debajo del bloque principal, bien separado de él (96 px) y sobre el color normal de la página (el verde agua se funde al llegar a este bloque). Con su subtítulo **centrado**, un paso más grande que los títulos de adentro. Mide hasta 880 px y va centrado. El bloque "Qué te avisa VigIA" se quitó: sus cuatro alertas pasaron a las tarjetas de la sección 3 (decisión 42).
-
-- **Cómo lo hace:** línea de tiempo **sin números**: cada paso centrado, con un punto verde encima del título y una línea fina de punto a punto. Al entrar en pantalla la línea se dibuja de izquierda a derecha y cada paso aparece cuando la línea llega a él. En celular la línea es vertical (punto a la izquierda). Con movimiento reducido se ve fija.
+- **Cómo lo hace:** debajo de las dos columnas, a todo el ancho, con un subtítulo chico (decisión 57). Línea de tiempo **horizontal y sin números**: un punto verde arriba de cada paso y una línea fina hacia el siguiente, que se dibuja de izquierda a derecha; cada paso aparece cuando la línea llega a él. En celular, vertical. Con movimiento reducido se ve fija.
 
   | Paso | Título | Texto |
   |---|---|---|
@@ -158,11 +153,12 @@ Los otros módulos (cultivos de servicio y carry-over de herbicidas) ya no van a
 
 Sección propia, fuera del recorrido, con tipografía grande (sección B11 de `landing-page-design`).
 
-> **Que el bioinsumo llegue antes que el estrés,**
+> **Que el bioinsumo llegue**
+> **antes que el estrés,**
 > **no después del daño.**
 
 - **Palabras resaltadas con los colores de la historia:** "antes" en verde (a tiempo) y "después del daño" en rojo (tarde). En `src/data/vigia.js` se marcan con `*verde*` y `_rojo_`.
-- Cada palabra pasa de un tono apagado (≈30 % de opacidad) al color pleno a medida que cruza una línea de activación, en orden de lectura, con `--ease-fluid`.
+- Tres renglones (decisión 50). El hilo entra por el renglón del medio, justo antes de "antes"; al llegar, "antes" se subraya en verde.
 - Con `prefers-reduced-motion` o sin JS, el texto se ve completo y sin animar.
 - Es texto HTML (un `<p>`, no un heading), legible por lectores de pantalla.
 
@@ -172,9 +168,8 @@ Impacto medible con datos del informe técnico (decisiones 19, 25 y 32): escenar
 
 | Elemento | Contenido |
 |---|---|
-| Etiqueta | IMPACTO |
-| Título | **Más grano y más carbono en el suelo** |
-| Bajada | Resultados de cinco campañas continuas en lotes de productores, con maíz, soja y trigo. |
+| Título | **Impacto** |
+| Bajada | Más grano y más carbono en el suelo |
 
 **Cuatro indicadores** grandes y centrados, con una línea corta debajo en letra chica, sin caja (en tablet, dos por fila):
 
@@ -185,7 +180,7 @@ Impacto medible con datos del informe técnico (decisiones 19, 25 y 32): escenar
 | **+8.680 t** | de grano recuperado frente a lotes que no siguieron a VigIA | Rinde recuperado por cultivo |
 | **~3.300 t** | de CO₂ extra capturadas en el suelo (sólo el extra del rinde recuperado; suma de los valores por cultivo, el informe da 2.800 a 4.100 t estables) | Carbono extra capturado por cultivo |
 
-**Tablas:** los dos últimos indicadores son botones, marcados sólo con una flechita discreta debajo. La primera vez que la sección entra en pantalla aparece un aviso corto debajo de los dos indicadores que se despliegan, **Tocá un indicador para ver el detalle**, que se va solo a los pocos segundos. Al tocar un indicador se despliega su tabla en un panel centrado debajo de los cuatro, **de a una** (abrir una cierra la otra; el mismo indicador, la cruz o Escape la cierran). El indicador activo no lleva fondo: sólo el número toma su color (grano verde, carbono turquesa). Una **flecha** en el borde del panel apunta a él. Al cambiar de tabla (con una ya abierta), el recuadro queda fijo (la flecha se apoya en su borde y su línea cambia de color con una transición) y adentro sólo se desplaza el contenido, como un carrusel: la tabla que sale se va hacia un lado y la nueva entra desde el otro, sin desvanecerse, junto con la flecha y con la misma curva y duración. El panel se despliega con una animación de alto y opacidad (todo sin animación con movimiento reducido).
+**Tablas:** los dos últimos indicadores son botones, marcados sólo con una flechita discreta debajo. La primera vez que la sección entra en pantalla aparece un aviso corto debajo de los dos indicadores que se despliegan, **Tocá un indicador para ver el detalle**, que se va solo a los pocos segundos. Al tocar un indicador se despliega su tabla en un panel centrado debajo de los cuatro, **de a una** (abrir una cierra la otra; el mismo indicador, la cruz o Escape la cierran). El indicador activo no lleva fondo: sólo el número toma su color (grano en verde campo, carbono en tierra). Una **flecha** en el borde del panel apunta a él. Al cambiar de tabla (con una ya abierta), el recuadro queda fijo (la flecha se apoya en su borde y su línea cambia de color con una transición) y adentro sólo se desplaza el contenido, como un carrusel: la tabla que sale se va hacia un lado y la nueva entra desde el otro, sin desvanecerse, junto con la flecha y con la misma curva y duración. El panel se despliega con una animación de alto y opacidad (todo sin animación con movimiento reducido). En pantallas horizontales, al abrir una tabla el título y la bajada se pliegan, los indicadores suben y la sección se alinea arriba, así indicadores y tabla entran en la pantalla; al cerrarla vuelve el título. En celular, el panel va de borde a borde, sólo con línea arriba y abajo.
 
 | Rinde recuperado | Hectáreas | kg/ha extra | Total |
 |---|---|---|---|
@@ -213,7 +208,6 @@ Reemplaza a Para quién es (decisión 21).
 
 | Elemento | Contenido |
 |---|---|
-| Etiqueta | SOBRE NOSOTROS |
 | Título | **Las personas detrás de VigIA BioEstrés** |
 | Bajada | Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos. (Pendiente de revisar con el equipo.) |
 
@@ -225,13 +219,13 @@ Encabezado centrado y tres tarjetas chicas en un bloque angosto y centrado (hast
 | Juan Dall’Orso | Agroconsultor | Cargada (`juan-dallorso.webp`, recortada para centrar la cara) |
 | Lucas Andreoni | BioRed | Cargada (`lucas-andreoni.webp`, 200 × 200: el original no da para más) |
 
-## 8. Clientes (`#clientes`)
+Debajo de las tarjetas, sin título, va el carrusel de clientes (`#clientes`, decisión 56): "Confían en nosotros" queda como nombre accesible de la región.
 
-Carrusel **Confían en nosotros**, sin cambios.
-
-## 9. Preguntas frecuentes (`#preguntas`)
+## 8. Preguntas frecuentes (`#preguntas`)
 
 Acordeón con `<details>`. Un script chico anima la altura al abrir y cerrar (0,7 s con `--ease-fluid`; la respuesta se funde) para que la pregunta de abajo baje sin salto; sin JS o con movimiento reducido queda el comportamiento nativo. Las mismas preguntas van como datos estructurados `FAQPage` (JSON-LD) para buscadores.
+
+En la columna del título, debajo de él, va el **cierre** (decisión 56): una línea chica que sigue al título (*¿Te quedó alguna duda? Escribinos.*) y el CTA **Contactanos para empezar a usar VigIA**. En pantallas horizontales, Preguntas y el footer llenan juntos la última pantalla.
 
 | Pregunta | Respuesta |
 |---|---|
@@ -241,24 +235,16 @@ Acordeón con `<details>`. Un script chico anima la altura al abrir y cerrar (0,
 | ¿Cómo me llegan las alertas? | En la plataforma, en el panel de cada lote, y por WhatsApp, sin tener que entrar. |
 | ¿Sirve en secano? | Sí. En secano te avisa a tiempo para el bioinsumo. Bajo riego, además, te arma un plan mensual con su costo. |
 
-## 10. Cierre (CTA final)
-
-| Elemento | Contenido |
-|---|---|
-| Título | **La próxima pérdida ya se está gestando en algún lote. Encontrala primero.** |
-| Texto | Agendá una demo de 20 minutos y te mostramos VigIA BioEstrés funcionando sobre tus lotes, con datos de tu campaña actual. |
-| Botón | **Contactanos para empezar a usar VigIA** (WhatsApp) |
-
 ## Footer (`#contacto`)
 
-Con la estructura de un footer de marca (decisión 37), fondo del tema y textos en `FOOTER` (`src/data/vigia.js`). **No repite el menú del header.**
+Con la estructura de un footer de marca (decisión 37), en verde bosque como Impacto y compacto, con textos en `FOOTER` (`src/data/vigia.js`). **No repite el menú del header.**
 
 - **Cuatro columnas a la misma altura**, para no dejar huecos (dos por fila en tablet, una en celular):
-  - **Marca:** logo de VigIA BioEstrés **monocromo** (negro en claro, blanco en oscuro) y debajo las redes (Instagram, WhatsApp, email) en círculos de 48 px con borde. Van a la izquierda para que no las tape el WhatsApp flotante.
-  - **Contacto:** email, WhatsApp y dirección en texto.
+  - **Marca:** logo de VigIA BioEstrés **monocromo en blanco** y debajo las redes (Instagram, WhatsApp, email) en círculos de 40 px con borde. Van a la izquierda para que no las tape el WhatsApp flotante.
+  - **Contacto:** email, WhatsApp y dirección en texto (en inglés y portugués, con el país).
   - **Rinde Plus:** *¿Buscás más servicios especializados para tu producción? Rinde Plus tiene otras soluciones agtech para el campo.* Enlace **Visitá Rinde Plus ↗** a `https://rindeplus.com`. No dice que VigIA sea de Rinde Plus: la plataforma tiene otros socios (decisión 40).
-  - **Ayuda:** Preguntas frecuentes · Escribinos por WhatsApp.
-- **Pie, centrado:** **Política de privacidad** (`/privacidad`) · **Términos y condiciones** (`/terminos`), y debajo © año VigIA BioEstrés · Todos los derechos reservados.
+  - **Ayuda:** Preguntas frecuentes · Escribinos por WhatsApp · **Política de privacidad** (`/privacidad`) · **Términos y condiciones** (`/terminos`).
+- **Pie, en un renglón fino:** © año VigIA BioEstrés · Todos los derechos reservados, y los créditos de las fotos.
 - Sin newsletter: el sitio es estático y no tiene dónde guardar los emails.
 
 **Páginas legales** (`LegalPage.astro`, textos en `src/data/legal.js`): describen lo que el sitio hace hoy (sin formularios, cuentas, analítica ni publicidad; guarda el tema en el navegador; carga Google Fonts; enlaza a WhatsApp, Instagram y Maps) e incluyen la leyenda de la AAIP de la Ley 25.326. **Son un borrador:** revisarlas con asesoría legal y completar razón social y CUIT antes de publicar.
@@ -267,10 +253,11 @@ Con la estructura de un footer de marca (decisión 37), fondo del tema y textos 
 
 | Campo | Valor |
 |---|---|
-| `<title>` | VigIA BioEstrés · Anticipá el estrés hídrico y térmico de tus lotes |
+| `<title>` | VigIA BioEstrés (`SEO.titulo`, igual en los tres idiomas) |
 | Meta description | Alertas de estrés hídrico y térmico por ambiente, con días de margen para aplicar el bioinsumo o regar. En la plataforma y por WhatsApp. |
 | `og:image` | 1200×630 desde `media-src/imagenes/3.3.jpg` (el lote sano), con el logo. |
 | Datos estructurados | `FAQPage` con las preguntas de la sección 8. |
+| Idiomas | `hreflang` es, en, pt y x-default, y `og:locale` con los otros dos como alternativos, en las páginas traducidas. |
 | Indexar | Sí: es la página principal del dominio. |
 
 ---
@@ -283,13 +270,13 @@ Cada sección del recorrido tiene **un** medio, dentro de `MediaStory.astro`: pr
 |---|---|---|
 | 1. Hero | `BalanceChart.astro`, 11 s (animación de ~3,5 s y el final quieto para leerlo) | Ninguno: el gráfico es la propuesta del producto. |
 | 2. El problema | `ProblemChart.astro`, 11 s (animación de ~4,6 s y el final quieto para leerlo) | `problema.mp4` (5,1 s, 2,9 MB): clip 2B, el lote se marchita y la mano toca una hoja. |
-| 3. Cómo funciona | `WhatsAppMock.astro`, 4,5 s, más 3,2 s de cierre "Resuelta" después del video | `resolucion.mp4` (5,5 s, 1,5 MB): clip 3B → 3C, la pulverizadora al amanecer y el lote sano. |
+| 4. La solución | `WhatsAppMock.astro`, 4,5 s, más 3,2 s de cierre "Resuelta" después del video | `resolucion.mp4` (5,5 s, 1,5 MB): clip 3B → 3C, la pulverizadora al amanecer y el lote sano. |
 
 **Estado:** los dos videos están en `public/videos/` con poster y cargados en `src/data/videos.js`. Los clips crudos y los masters están en `media-src/` (fuera del repo).
 
 ### Criterios
 
-- **El mismo lote cuenta la historia:** VigIA vigila (1), sin aviso se pierde rinde (2), con el aviso se actúa a tiempo (3). La luz acompaña: mediodía seco en 2, amanecer en 3.
+- **El mismo lote cuenta la historia:** VigIA vigila (hero), sin aviso se pierde rinde (El problema), con el aviso se actúa a tiempo (La solución). La luz acompaña: mediodía seco en El problema, amanecer en La solución.
 - **Interfaz en código, campo en video.** Lo que es interfaz (gráfico, alertas, celular) se anima en SVG y CSS: se ve nítido, sigue el tema y se corrige en minutos. El campo real va en video.
 - **Sin texto dentro del video.** Los textos van en HTML.
 - **Sin drones, satélites, HUD, robots ni marcas** en ningún medio.
@@ -308,7 +295,7 @@ Cada sección del recorrido tiene **un** medio, dentro de `MediaStory.astro`: pr
 - **Rótulo de capítulo:** durante el video aparece arriba a la izquierda, sin caja, en mayúsculas blancas con un ícono al principio: ⚠ rojo "Sin aviso · el daño se ve a campo" y ✓ verde "Con el aviso · se aplica a tiempo". Un degradé oscuro suave arriba del video lo hace legible sobre el cielo claro. Aparece 1,2 s después de que arranca el video, cuando la escena ya se leyó. Campos `rotulo` y `tono` en `src/data/videos.js`.
 - **Encuadre:** en celular el contenedor es casi cuadrado y el video 4:3 se recorta a los costados. El campo `encuadre` (`object-position`) conserva los silos y la pulverizadora.
 
-### Cierre espejo en Cómo funciona
+### Cierre espejo en La solución
 
 Al terminar el video de resolución vuelve el celular y, durante 3,2 s, el aviso "⚠️ Estrés hídrico en 14 días" se cruza con "✅ Resuelta a tiempo" (el mensaje sin borde de color, como en la app real). Después reinicia el ciclo. Es el espejo del "Sin aviso" del gráfico del problema.
 
@@ -316,26 +303,28 @@ Al terminar el video de resolución vuelve el celular y, durante 3,2 s, el aviso
 - Es narrativo: no afirma que la plataforma registre la aplicación ni que el balance vuelva sobre el umbral (el video muestra una aplicación de bioinsumo, no un riego).
 - Con movimiento reducido no hay etapas: se ve el aviso original.
 
-## Recorrido: hilo y fondo
+## Recorrido: hilo
 
-Las secciones 1 a 4 comparten un contenedor (`.vg-journey`) con un fondo que cambia por etapas y un hilo que se dibuja con el scroll (`JourneyThread.astro`).
+Las secciones 1 a 4 comparten un contenedor (`.vg-journey`) sobre el **fondo plano** de la página, con un hilo que se dibuja con el scroll (`JourneyThread.astro`). Desde la decisión 49 no hay fondo por etapas.
 
-| Sección | Hilo | Fondo |
-|---|---|---|
-| 1. Hero | Verde: VigIA vigila el lote. Punto **1**. | El color normal de la página. |
-| 2. El problema | Ámbar y rojo: el agua cruza el umbral sin aviso. Punto **2**. | Arena, marcado (`--vg-bg-seco`). |
-| 3. Qué hace VigIA | Celeste: aparece la respuesta. Punto **3**. | Celeste (`--vg-bg-solucion`). |
-| 4. La solución | Verde: el lote se salvó. Punto **4**. | Verde agua (`--vg-bg-agua`). |
+| Sección | Hilo |
+|---|---|
+| 1. Hero | Verde campo (`--vg-campo`): VigIA vigila el lote. Punto 1. |
+| 2. El problema | Ámbar y rojo (`--vg-sev-alerta`, `--vg-sev-critico`): el agua cruza el umbral sin aviso. Punto 2. |
+| 3. Lo que hace VigIA | Verde agua (`--vg-agua`): el agua del suelo y la respuesta. Punto 3. |
+| 4. La solución | Verde campo: el lote se salvó. Punto 4. |
 
-- El color cambia **en el borde de cada sección**, con un fundido largo (hasta 480 px, centrado en el borde) y curva suave, mezclado en oklab: no hay escalón ni bandas. El verde agua vuelve al color de la página al llegar a "Cómo lo hace" (`.vg-detalle`): el fundido arranca un poco antes del bloque y termina dentro de él. Arena, celeste y verde agua van apagados y con saturación pareja, para que se lean como una sola familia. El hilo no termina en seco: pasa por el final de "Cómo lo hace" (`.vg-detalle`, `data-vg-end`), baja por el costado y dobla para entrar de costado en la frase destacada, a la altura de su renglón del medio, en un punto verde que se rellena y late cuando el hilo llega, con la frase más o menos a mitad de pantalla (la punta del hilo va al 55 % de la pantalla y el tramo horizontal final pide poco scroll). Así el recorrido del lote termina en la moraleja.
+- Los puntos no llevan número ni laten: marcan la etapa y se rellenan cuando el hilo llega. Se anclan a los títulos de cada sección (`data-vg-node`), no a las etiquetas.
+- El hilo no termina en seco: pasa por el final de "Cómo lo hace" (`.vg-detalle`, `data-vg-end`), baja por el costado y dobla para entrar de costado en la frase destacada, a la altura de su renglón del medio, en un punto verde que se rellena cuando el hilo llega. La punta del hilo va al 55 % de la pantalla; el tramo final, de "Cómo lo hace" a la frase, va más rápido, para que el hilo llegue con el punto a dos tercios de la pantalla, antes de que asome Impacto. Así el recorrido del lote termina en la moraleja.
 - Con movimiento reducido, el hilo aparece completo y quieto.
-- El fondo por etapas es una **excepción provisoria** a la regla de fondos planos (ver `CLAUDE.md`).
+
+**Dibujos de fondo** (a línea, tenues, generados al compilar): un lote sembrado detrás del hero (`FieldRows.astro`); lotes con ambientes que unen El problema con Lo que hace VigIA (`LotesConexion.astro`); pivotes de riego a la derecha, desde el borde entre Lo que hace VigIA y La solución hasta cerca del final de La solución (`Pivotes.astro`). La frase e Impacto van sin dibujo.
 
 ---
 
-## Plan de implementación
+## Plan de implementación (histórico)
 
-De la versión 1 a la versión 2. Cada paso deja la página funcionando.
+Cómo se pasó de la versión 1 a la versión 2. Queda como registro: varias piezas cambiaron después (ver Decisiones), y la home hoy vive en `src/views/HomePage.astro`.
 
 | # | Qué | Archivos |
 |---|---|---|
@@ -417,6 +406,16 @@ De la versión 1 a la versión 2. Cada paso deja la página funcionando.
 | 46 | Otros módulos en Lo que hace VigIA | Cultivos de servicio y carry-over de herbicidas pasan del pie de las preguntas frecuentes a debajo de las tarjetas de la sección 3. El carry-over de herbicidas va a ser parte de VigIA (decisión del equipo, 2026-10-16): se deja de nombrar a RindePlus. Reemplaza la decisión 18 y la parte de módulos de la 39. |
 | 47 | Hero sin palabras clave | Se quitan las tres palabras clave del hero (desde antes de la siembra, por ambiente, alertas por WhatsApp). Sus ideas pasan a la bajada, que ahora dice desde antes de la siembra, por ambiente y por WhatsApp. El CTA sube a la columna de texto, debajo de la bajada. Reemplaza la parte de palabras clave de la decisión 17 y la ubicación del botón de la 31. |
 | 48 | Canales como las razones | Los canales de La solución toman el formato de las razones de El problema, para que los dos capítulos del recorrido se lean iguales: a la izquierda y a todo el ancho de la columna (ya no centrados ni de 420 px), ícono arriba y los mismos tamaños de texto. Los íconos siguen monocromos. |
+| 49 | Rediseño visual: agro técnico y sobrio | A partir de la crítica de Impeccable (la página se leía como hecha con IA). Sólo estética, sin cambiar textos ni información. Paleta de campo con significado (fondo piedra, verde bosque de marca, verde campo / ámbar / rojo / tierra según lo que representan) en lugar de los grises de GitHub y la paleta de Tailwind. IBM Plex Sans + Chivo Mono para datos (cero liso), en lugar de Geist. Título del hero en tinta sólida (sin degradé). Etiquetas de sección sobrias (chicas, en gris, sin mayúsculas). Fondo plano en el recorrido (fin del degradé provisorio). Hilo con puntos sin número y sin pulsos, con un tramo verde agua en Lo que hace VigIA. Frase destacada fija (no se ilumina palabra por palabra). Apariciones más cortas, sin desenfoque y sólo en grupos de contenido. Fotos de "Lo que hace VigIA" reales (Wikimedia Commons, con créditos en el pie de página) en lugar de las generadas. Botones de WhatsApp con texto oscuro (contraste). Ver ADR 0005. |
+| 50 | Recorrido a pantalla completa y fondos por capítulo | En pantallas horizontales (escritorio y tablet acostada), el hero, El problema, Lo que hace VigIA, La solución, la frase e Impacto ocupan una pantalla cada uno, con tamaños que siguen al alto de la ventana. Cada gesto de scroll pasa al panel siguiente o al anterior: hacia abajo con una traba corta (la primera transición, más lenta; la de la frase, mucho más lenta para ver llegar el hilo), hacia arriba rápido y casi sin espera; desde Impacto, scroll normal, sin que la inercia siga de largo al llegar. En los paneles de dos columnas el título arranca a la altura del gráfico o video. El hero no lleva etiqueta: "estrés hídrico y térmico" pasa a la bajada. En Lo que hace VigIA, las dos preguntas van al pie. La solución tiene dos estados: bajada y canales, y con el siguiente gesto, "Cómo lo hace" en su lugar (pasos en vertical, con traba hasta que terminan de desplegarse). La frase va en tres renglones; al llegar el hilo, un trazo recorre "antes" y se va, y aparece una flecha que respira despacio. El header queda siempre visible y se aclara sobre las bandas verdes. Fondos: líneas de nivel tenues en el hero (más claras detrás del texto), Impacto en banda verde bosque, equipo y clientes en verde salvia, preguntas del color del footer. Celular queda pendiente. Sólo en `develop-impeccable`. **Reemplazada en el scroll y en los fondos por la 57.** |
+| 51 | Scroll de pantalla en pantalla, parejo | Reemplaza lo del scroll de la decisión 50 ([ADR 0006](../adr/0006-recorrido-de-pantalla-en-pantalla.md)). Un gesto, un paso, también hacia arriba, con la misma animación que hacia abajo (520 ms): sin trabas, la inercia salteaba paneles, sobre todo en la solución. Un gesto nuevo se reconoce aunque siga la inercia del anterior y, si llega durante una animación, queda en cola. La frase pasa de 1,8 s a 1,5 s. "Cómo lo hace" traba 1 s (antes, hasta que terminaban los pasos); el cambio va en la dirección del scroll y dos rayas al pie marcan el estado. La página nunca queda entre dos paneles: se acomoda en el más cercano. Al volver desde abajo, se frena en Impacto. **Reemplazada por la 57.** |
+| 52 | Menú con desplegable | "Cómo funciona" pasa a ser un desplegable con Inicio (vuelve arriba de todo: el hero no tiene título y es más a mano que el logo), El problema, Lo que hace VigIA y La solución; el título lleva al problema. Impacto, Nosotros, Contacto y Educación siguen sueltos. Los saltos del menú dejan cada sección justo debajo del header (y los paneles a pantalla completa, alineados arriba). |
+| 53 | Equipo y clientes sobre piedra | Equipo y clientes dejan el verde salvia de la decisión 50 y vuelven al fondo piedra de la página: el salvia, frío, chocaba con el blanco cálido de las tarjetas del equipo. Impacto sigue en verde bosque y preguntas frecuentes, del color del footer. |
+| 54 | Fondo propio para El problema y La solución | El recorrido deja de ir todo sobre el mismo fondo: El problema va sobre tierra seca y La solución sobre un verde muy claro, sólidos, y el hero, Lo que hace VigIA y la frase siguen sobre piedra. Los colores acompañan el tramo del hilo de cada sección (ámbar y rojo, verde campo) y son cálidos, para no chocar con las tarjetas blancas como el salvia frío de la decisión 53. Todos los textos pasan AA. El hilo pasa por encima de las secciones, para que los fondos no lo tapen. **Reemplazada: los dos vuelven al fondo de la página (decisión 57).** |
+| 55 | Dibujos de fondo por sección | Con la misma técnica que el lote del hero (línea fina, tenue, generado al compilar), cada sección del recorrido lleva un dibujo de su tema: suelo agrietado en El problema, lotes divididos en ambientes en Lo que hace VigIA y pivotes de riego vistos desde arriba en La solución. Toman el color de su tramo del hilo, van en las zonas sin contenido y quedan al 40 % detrás del texto. La frase, Impacto, el equipo y las preguntas van sin dibujo. **Reemplazada por los dibujos que unen secciones (decisión 57).** |
+| 56 | Toda la home de a pantalla | El paso de pantalla en pantalla sigue después de Impacto. Sobre nosotros y Clientes van en una sola pantalla: el carrusel, sin el título "Confían en nosotros" (queda como nombre accesible), pegado a las tarjetas del equipo. El Cierre deja de ser una sección: se quitan su título ("La próxima pérdida…") y su texto, y el CTA va a Preguntas, en la columna del título, poco debajo de él, con una línea chica arriba que sigue al título ("¿Te quedó alguna duda? Escribinos."). Preguntas es el último panel y comparte la pantalla con el footer, que se achica y pasa a verde bosque, como Impacto. En Impacto, al abrir una tabla el título y la bajada se pliegan para que entre en la pantalla. Reemplaza la sección 10 de la estructura y, en lo del borde del recorrido, la decisión 51. **El paso de pantalla en pantalla lo reemplaza la 57; lo demás sigue.** |
+| 57 | Scroll normal en toda la home | Reemplaza el paso de pantalla en pantalla de las decisiones 50, 51 y 56 ([ADR 0007](../adr/0007-scroll-normal-en-toda-la-home.md)). Sin `SectionPager`: "Cómo lo hace" va debajo de las dos columnas de La solución, con los pasos en fila; la frase pierde la flecha. Cada sección sigue ocupando más o menos una pantalla en horizontal (`.vg-pantalla`), sin trabar el scroll. Escritorio toma los fondos que unen secciones del celular. El header vuelve a ocultarse al bajar. La solución pasa al fondo de la página; las tarjetas de Lo que hace VigIA, a foto completa con el texto sobre una franja con desenfoque; las alertas de los gráficos, con el borde gris de la tarjeta; el avatar del WhatsApp, el favicon; el footer lleva los legales en Ayuda y el pie en un renglón. |
+| 58 | Versión en portugués | El sitio suma portugués de Brasil en `/pt/` (home, precios y educación), con el contenido en `src/data/vigia.pt.js` ([ADR 0008](../adr/0008-version-en-portugues.md)). Adaptación con glosario agronómico de Brasil (`TRADUCCION_PT.md`): talhão, zona de manejo, água disponível, estádio, safra, bioestimulante. Legales en español y aviso de que el equipo responde en español, como en inglés. |
 
 ## Preguntas abiertas
 

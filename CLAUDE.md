@@ -6,7 +6,7 @@ Reglas para Claude (y para quien use Claude Code en este repo) sobre código, ra
 
 Landing page de **VigIA**, el sistema de monitoreo de cultivos de RindePlus. Es un **sitio estático de marketing**: no tiene backend, base de datos, API ni autenticación propia. El botón "Ingresar" solo enlaza a la app, que vive en otro repositorio.
 
-El sitio está en **español** (raíz: `/`, `/pricing`…) **e inglés** (`/en/`, `/en/pricing`…), ver [ADR 0004](doc/adr/0004-sitio-bilingue-es-en.md). Las legales están sólo en español.
+El sitio está en **español** (raíz: `/`, `/pricing`…), **inglés** (`/en/`, `/en/pricing`…) y **portugués de Brasil** (`/pt/`, `/pt/pricing`…), ver [ADR 0004](doc/adr/0004-sitio-bilingue-es-en.md) y [ADR 0008](doc/adr/0008-version-en-portugues.md). Las legales están sólo en español.
 
 ## Stack técnico
 
@@ -34,7 +34,7 @@ pnpm validate    # lint + typecheck + build — gate antes de /pr
 
 [`doc/landing/MODULO_VIGIA.md`](doc/landing/MODULO_VIGIA.md) describe la plataforma VigIA (incluido su backend) como **fuente de contenido** para la landing. No implica que este repo tenga backend: no agregues dependencias ni tooling de servidor.
 
-**`media-src/` es material de trabajo y está en `.gitignore`:** imágenes de Nano Banana (`imagenes/`), clips de Higgsfield (`clips-crudos/`) y archivos de edición (`edicion/`). Los nombres siguen los números de [`doc/landing/PROMPTS_IMAGENES.md`](doc/landing/PROMPTS_IMAGENES.md) (`1.1-sol-alerta.png`, `2B-hojas.mp4`). Nunca la saques del `.gitignore`: solo los videos finales comprimidos pasan a `public/videos/`.
+**`media-src/` es material de trabajo y está en `.gitignore`:** imágenes de Nano Banana (`imagenes/`), clips de Higgsfield (`clips-crudos/`) y archivos de edición (`edicion/`). Los nombres siguen los números de `media-src/PROMPTS_IMAGENES.md` (`1.1-sol-alerta.png`, `2B-hojas.mp4`); los prompts también son material de trabajo y no están en el repo. Nunca la saques del `.gitignore`: solo los videos finales comprimidos pasan a `public/videos/`.
 
 ## REGLA ESTRICTA DE GIT
 
@@ -65,7 +65,7 @@ Si un hook bloquea, leé el motivo y corregí. Nunca uses `--no-verify` ni lo es
 |---|---|---|
 | `main` | Producción. GitHub Pages publica `docs/` de `main`: lo que se mergea acá sale al aire. | Solo PRs de release desde `develop` (`/release`). |
 | `develop` | Integración. Acumula features ya revisadas para probarlas juntas antes de publicar. | Solo PRs desde feature branches (`/pr`). |
-| `develop-impeccable` | Paralela a `develop`, sin publicar: el rediseño visual hecho con la skill `impeccable` (paleta de campo, IBM Plex, fotos reales, `PRODUCT.md`, `DESIGN.md`). Se sacó de `develop` el 2026-10-18 para seguir trabajándolo aparte. | Ramas de trabajo creadas desde `origin/develop-impeccable`, con PR contra `develop-impeccable`. |
+| `develop-impeccable` | Histórica: el rediseño visual hecho con la skill `impeccable` (paleta de campo, IBM Plex, fotos reales, `PRODUCT.md`, `DESIGN.md`) se trabajó aparte de `develop` entre el 2026-10-18 y el 2026-10-20, y se integró a `develop` (revirtiendo el revert `165ee9e` y mergeando la rama). | Ya no recibe cambios: las ramas nuevas salen de `develop`, como siempre. |
 | `<type>/<slug>` | Trabajo. Ramas cortas, una por tarea, creadas desde `develop`. | Commits del desarrollador. |
 
 - `main` y `develop` son **protegidas**: ni commits ni pushes directos. Los merges los hace una persona desde GitHub.
@@ -109,18 +109,20 @@ Fuera de Claude Code, el hook opcional `.githooks/commit-msg` valida lo mismo: `
 
 ## Diseño — sistema visual
 
-La guía de diseño es la skill **`landing-page-design`** (ver [ADR 0003](doc/adr/0003-landing-page-design-skill.md)): minimalista y moderno, con movimiento que acompaña sin recargar. Sus reglas se traducen a este repo así:
+La guía de diseño es la skill **`landing-page-design`** (ver [ADR 0003](doc/adr/0003-landing-page-design-skill.md)): minimalista y moderno, con movimiento que acompaña sin recargar. El sistema visual concreto (paleta, tipografía, componentes, qué sí y qué no) está en [`DESIGN.md`](DESIGN.md), y el contexto del producto para diseñar en [`PRODUCT.md`](PRODUCT.md); los lee la skill `impeccable`. Si cambiás un token, actualizá `DESIGN.md`. Las reglas se traducen a este repo así:
 
 - **Escalas como tokens CSS**, no clases de Tailwind: `--text-*` / `--leading-*` (tipografía), `--space-*` (espaciado), `--ease-fluid` y `--dur-*` (movimiento), todos en `src/styles/global.css`. Ningún tamaño, espaciado ni curva suelta en los componentes.
-- **Tipografía**: Geist (Google Fonts), pesos hasta 700, sin itálicas. `text-wrap: pretty` en títulos y texto (los renglones se llenan al máximo, sin palabra suelta al final); `balance` sólo en la frase destacada centrada.
+- **Paleta de campo** (decisión 49 de `ESTRUCTURA_LANDING.md`, [ADR 0005](doc/adr/0005-rediseno-visual-agro-tecnico.md)): fondo piedra `--gh-canvas` (gris apenas cálido; el crema lo marca Impeccable como plantilla), tinta verde casi negra, verde bosque `--vg-forest` como único color de marca. El color tiene significado: verde campo `--vg-campo` = cultivo a salvo, ámbar `--vg-sev-alerta` = alerta o umbral, rojo `--vg-sev-critico` = pérdida, tierra `--vg-carbono` = carbono, verde agua `--vg-agua` = el tramo del hilo de "Lo que hace VigIA". Nada de azules, celestes ni lima. Los nombres `--gh-*` quedan por compatibilidad; los valores ya no son los de GitHub.
+- **Tipografía**: IBM Plex Sans (Google Fonts) para títulos y texto, pesos hasta 700, sin itálicas, sin degradés en el texto. Chivo Mono (`--font-data`, clase `.vg-data`; cero liso, sin punto) **sólo** para datos y medidas: cifras e indicadores de Impacto y tablas, con el separador de miles en la tipografía normal (`.vg-sep`). `text-wrap: pretty` en títulos y texto (los renglones se llenan al máximo, sin palabra suelta al final); `balance` sólo en la frase destacada centrada.
 - **Íconos**: Phosphor vía `react-icons/pi`. Monocromos en su color (verde `--vg-icon-green`, severidades, WhatsApp, etc.), **sin fondo ni círculo tintado**. Lo mismo para números de pasos y rótulos: nada de "badges" con fondo de color y texto flúor. Única excepción: el botón flotante de WhatsApp usa el logo oficial (`SiWhatsapp` de `react-icons/si`), porque es un logo de marca y la versión a línea de Phosphor no se reconoce bien sobre el verde.
-- **Movimiento**: toda transición usa `var(--ease-fluid)`. Las apariciones al hacer scroll se activan con el atributo `data-reveal` (y `style="--reveal-delay: …"` para escalonar). El observer está en `BaseLayout.astro`. No pongas `data-reveal` en elementos que usa el hilo como ancla (`data-vg-node`, `data-vg-end`). Todo respeta `prefers-reduced-motion`.
+- **Movimiento**: toda transición usa `var(--ease-fluid)`. Las apariciones al hacer scroll se activan con el atributo `data-reveal` (y `style="--reveal-delay: …"` para escalonar): sólo opacidad y una subida corta, sin desenfoque, y sólo en grupos de contenido (listas, tarjetas, medios); títulos, bajadas y el hero están de entrada. Sin animaciones infinitas (pulsos). El observer está en `BaseLayout.astro`. El scroll es el normal del navegador en todas las pantallas: el paso de pantalla en pantalla se quitó ([ADR 0007](doc/adr/0007-scroll-normal-en-toda-la-home.md)). En pantallas horizontales cada sección de la home mide una pantalla (clase `.vg-pantalla`, tokens `--fit-*`): una sección nueva lleva esa clase y se diseña para ese alto. No pongas `data-reveal` en elementos que usa el hilo como ancla (`data-vg-node`, `data-vg-end`). Todo respeta `prefers-reduced-motion`.
 - **Modo oscuro**: fondos neutros de la paleta de la skill (`#181818`, `#1f1f1f`, `#272727`, `#313131`, `#131209`).
 
 Excepciones acordadas a la skill:
 
-- **Header**: ancho de contenido, se oculta al bajar. Arriba de todo es transparente y sin línea (se funde con el hero); con scroll (`header--scrolled`) o con el menú de celular abierto toma fondo translúcido con desenfoque y una línea fina abajo. No es la píldora flotante que propone la skill.
-- **Fondo de los tres módulos y el hilo** (`.vg-journey`, `JourneyThread`): degradé por etapas, **provisorio**. Se van a probar otros fondos; mientras tanto no se aplica la regla de fondos planos ahí.
+- **Header**: ancho de contenido. Se oculta al bajar y vuelve al subir, deslizándose ([ADR 0007](doc/adr/0007-scroll-normal-en-toda-la-home.md); con el paso de pantalla en pantalla había quedado siempre visible). Arriba de todo es transparente y sin línea (se funde con el hero); con scroll (`header--scrolled`) o con el menú de celular abierto toma fondo translúcido con desenfoque y una línea fina abajo. No es la píldora flotante que propone la skill.
+- **Hilo del recorrido** (`.vg-journey`, `JourneyThread`): sobre el fondo plano de la página (sin degradé por etapas desde la decisión 49), con puntos sin número anclados a los títulos (`data-vg-node`).
+- **Etiquetas de sección sobrias** (decisión 49, [ADR 0005](doc/adr/0005-rediseno-visual-agro-tecnico.md)): texto chico en gris, sin mayúsculas, sin espaciado extra ni colores por sección. Impeccable las prohíbe; acá se conservan a pedido, en esa versión discreta. Hoy las secciones de la home van sin etiqueta; la usa la página de Educación.
 - **Estrategia y estructura (Parte A de la skill)**: en este repo la reemplaza `vigia-landing-structure`, que fija las secciones (incluidas frase destacada, cómo funciona y preguntas frecuentes), el CTA único y qué se puede afirmar del producto.
 
 ## Convenciones de implementación
@@ -130,7 +132,7 @@ Excepciones acordadas a la skill:
 - **Nombres**: componentes `PascalCase.astro` / `PascalCase.jsx`, hooks `useCamelCase.js`, datos `camelCase.js`.
 - **Estilos**: CSS plano con tokens (`--gh-*` tema, `--vg-*` marca, escalas de arriba). Sin hex sueltos en componentes: si falta un token, se agrega. Claro y oscuro se resuelven con los tokens, no con overrides por componente.
 - **Contenido** (copy, clientes, números) en `src/data/`, no en el markup.
-- **Dos idiomas** (ADR 0004): el copy está en `src/data/vigia.js` (español, la fuente) y `src/data/vigia.en.js` (inglés), **con las mismas claves**. Todo texto nuevo o cambiado va en los dos, y el inglés sigue [`doc/landing/TRADUCCION_EN.md`](doc/landing/TRADUCCION_EN.md) (adaptación, no traducción literal; glosario agronómico). Los componentes toman el idioma de `Astro.currentLocale` con `contenido(idiomaDe(...))` de `src/i18n/idiomas.js`; las islas React reciben los textos por props. Las vistas compartidas viven en `src/views/`; `src/pages/` y `src/pages/en/` sólo las montan.
+- **Tres idiomas** (ADR 0004 y ADR 0008): el copy está en `src/data/vigia.js` (español, la fuente), `src/data/vigia.en.js` (inglés) y `src/data/vigia.pt.js` (portugués de Brasil), **con las mismas claves**. Todo texto nuevo o cambiado va en los tres; el inglés sigue [`doc/landing/TRADUCCION_EN.md`](doc/landing/TRADUCCION_EN.md) y el portugués [`doc/landing/TRADUCCION_PT.md`](doc/landing/TRADUCCION_PT.md) (adaptación, no traducción literal; glosario agronómico de cada mercado). Los componentes toman el idioma de `Astro.currentLocale` con `contenido(idiomaDe(...))` de `src/i18n/idiomas.js`; las islas React reciben los textos por props. Las vistas compartidas viven en `src/views/`; `src/pages/`, `src/pages/en/` y `src/pages/pt/` sólo las montan.
 - **Medios**: imágenes por Astro assets con dimensiones; videos `muted playsinline` con poster.
 - **Props de React en `.astro`**: `className`, no `class` (`pnpm typecheck` lo exige).
 
@@ -142,6 +144,8 @@ Excepciones acordadas a la skill:
 | `landing-page-design` | **Prioritaria para lo visual** (Parte B): tipografía, espaciado, color, íconos, movimiento, estados. Aplicala con las traducciones y excepciones de "Diseño — sistema visual". Su Parte A la reemplaza `vigia-landing-structure`. |
 | `emil-design-eng`, `animate`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `animation-performance` | Animaciones: crearlas, revisarlas o encontrar dónde sumarlas. Siempre dentro de los tokens de movimiento del repo. |
 | `apple-design`, `break-ui`, `prototype`, `pick-ui-library`, `animation-vocabulary` | A demanda: movimiento físico, pruebas con datos extremos, variantes para comparar, elección de librerías y nombres de efectos. |
+| `impeccable` | Crítica y auditoría visual (`critique`, `audit`, `polish`…) y su detector de patrones de IA (`scripts/impeccable detect`). Sus reglas se aplican con las traducciones de "Diseño — sistema visual". Las críticas se guardan en `.impeccable/` (fuera de git). |
+| `playwright-cli` | Ver cómo queda la página: capturas en celular (390 px) y escritorio, tema claro y oscuro. Se corre con `npx -y @playwright/cli@0.1.22` (sin dependencia en `package.json`) contra `pnpm dev`; las capturas van fuera del repo. Para capturas de página completa, recorrer la página antes (las imágenes cargan al hacer scroll). Instalada con `playwright-cli install --skills`, por eso no está en `skills-lock.json`. |
 | `self-review-checklist` | Al cerrar una tarea, antes de `/commit` o `/pr`. |
 
 Las skills de terceros se instalan con `npx skills add` y quedan registradas en `skills-lock.json`. No las edites: las adaptaciones al repo van en este archivo. Las skills propias (`vigia-landing-structure`, `self-review-checklist`) no están en el lock y se editan directamente.
@@ -154,8 +158,9 @@ Viven en [`doc/adr/`](doc/adr/) (no en `docs/`, que es la salida del build). Un 
 
 ## Convenciones de lenguaje
 
-- **Español**: `CLAUDE.md`, ADRs, skills, comentarios que explican por qué (también en `vigia.en.js`), copy del sitio, body de PRs.
+- **Español**: `CLAUDE.md`, ADRs, skills, comentarios que explican por qué (también en `vigia.en.js` y `vigia.pt.js`), copy del sitio, body de PRs.
 - **Copy en inglés**: sólo en `src/data/vigia.en.js`, con las reglas de `doc/landing/TRADUCCION_EN.md`.
+- **Copy en portugués**: sólo en `src/data/vigia.pt.js`, con las reglas de `doc/landing/TRADUCCION_PT.md`.
 - **Inglés**: commits, títulos de PR, nombres de ramas, identificadores de código.
 
 ## Secretos

@@ -1,0 +1,58 @@
+---
+// Fondo entre Lo que hace VigIA y La solución (decorativo): campos con riego
+// por pivote vistos desde arriba, del lado derecho. Arrancan sobre el borde
+// entre las dos secciones y bajan por La solución hasta cerca de su final,
+// sin llegar a la frase. Cada uno es un círculo con las huellas
+// concéntricas de las ruedas, el brazo del pivote y el cuadrado del lote
+// alrededor. Habla de agua a tiempo, como el verde de La solución.
+// El dibujo va en dos copias alineadas al borde, cada una dentro de su
+// sección, para quedar detrás del texto de las dos: la de Lo que hace
+// VigIA (borde="fin") muestra la parte de arriba; la de La solución, el
+// resto. Se genera al compilar, siempre igual. Vectores sin relleno;
+// posición, color y desvanecido en sections.css (.vg-fondo-linea--pivotes).
+
+interface Props {
+  /** "fin": la copia del pie de Lo que hace VigIA. */
+  borde?: 'fin';
+}
+
+const { borde } = Astro.props;
+
+// Sin viewBox: escala 1:1, en px desde la esquina de arriba a la izquierda
+// de una franja de 900 px pegada al borde derecho (en celular se ve su
+// lado derecho). El borde entre las secciones está en y = 230 (sections.css
+// usa la misma medida).
+const fmt = (n: number) => n.toFixed(1);
+
+const PIVOTES = [
+  { cx: 650, cy: 180, r: 220, brazo: 2.4 },
+  { cx: 220, cy: 560, r: 170, brazo: -0.9 },
+  { cx: 690, cy: 700, r: 220, brazo: 0.5 },
+  { cx: 650, cy: 1180, r: 220, brazo: -2.1 },
+];
+
+const circulo = (cx: number, cy: number, r: number) =>
+  `M${fmt(cx - r)} ${fmt(cy)} A${fmt(r)} ${fmt(r)} 0 1 0 ${fmt(cx + r)} ${fmt(cy)} A${fmt(r)} ${fmt(r)} 0 1 0 ${fmt(cx - r)} ${fmt(cy)}`;
+
+const trazos = PIVOTES.map(({ cx, cy, r, brazo }) => {
+  const d: string[] = [];
+  // Borde del círculo y huellas de las ruedas, más juntas hacia afuera.
+  for (const f of [1, 0.84, 0.66, 0.46, 0.24]) d.push(circulo(cx, cy, r * f));
+  // Brazo del pivote, del centro al borde.
+  d.push(`M${fmt(cx)} ${fmt(cy)} L${fmt(cx + Math.cos(brazo) * r)} ${fmt(cy + Math.sin(brazo) * r)}`);
+  // Centro.
+  d.push(circulo(cx, cy, 3));
+  // El lote cuadrado que rodea al círculo (las esquinas quedan sin regar).
+  const m = r + 10;
+  d.push(`M${fmt(cx - m)} ${fmt(cy - m)} H${fmt(cx + m)} V${fmt(cy + m)} H${fmt(cx - m)} Z`);
+  return d.join(' ');
+});
+---
+
+<svg
+  class:list={['vg-fondo-linea vg-fondo-linea--pivotes', borde ? 'is-fin' : 'is-inicio']}
+  aria-hidden="true"
+  focusable="false"
+>
+  {trazos.map((d) => <path d={d} />)}
+</svg>

@@ -40,15 +40,13 @@ export const SEO = {
 
 // 1. Hero
 export const HERO = {
-  etiqueta: 'Water and heat stress',
   // "Pérdida" se concreta como yield loss: "loss" solo queda vago en inglés.
   titulo: 'Catch crop stress before it turns into yield loss',
-  bajada: `${MARCA} tracks every management zone from before planting and alerts you on WhatsApp days before stress shows up in the field. For growers and agronomists who make data-driven decisions.`,
+  bajada: `${MARCA} tracks every management zone from before planting and alerts you on WhatsApp days before water and heat stress shows up in the field. For growers and agronomists who make data-driven decisions.`,
 };
 
 // 2. El problema
 export const PROBLEMA = {
-  etiqueta: 'The problem',
   titulo: 'By the time the crop shows stress, the yield is already lost',
   bajada: "When you see it in the field, you're reacting too late and the damage is done.",
   razones: [
@@ -68,7 +66,6 @@ export const PROBLEMA = {
 
 // 3. Lo que hace VigIA
 export const QUE_HACE = {
-  etiqueta: 'What VigIA does',
   // "Campaña" → season (growing season); "campaign" no se usa en el agro.
   titulo: `${MARCA} watches for stress all season long`,
   bajada:
@@ -80,21 +77,21 @@ export const QUE_HACE = {
       // "Aire que seca a la planta": la demanda del aire, como en el glosario.
       texto: 'A water shortage, dry air pulling water from the plant, or both at once. Alerts per management zone, with lead time.',
       imagen: imgEstres,
-      alt: 'Soybean leaves starting to fold under the strong midday sun',
+      alt: 'Soybean field in February, with patches where the crop grew less',
     },
     {
       id: 'siembra',
       titulo: 'From pre-planting',
       texto: 'Tracks soil water from before planting and alerts you 14 days ahead of the critical stage.',
       imagen: imgSiembra,
-      alt: 'Planter entering a fallow field with crop residue at dawn',
+      alt: 'Soybean seedlings no-tilled into sorghum residue',
     },
     {
       id: 'agua',
       titulo: 'Smarter water use',
       texto: 'Know how much plant-available water each management zone has. When a shortage is coming, irrigate right when it is needed.',
       imagen: imgAgua,
-      alt: 'Center pivot irrigating a soybean field at sunset',
+      alt: 'Center pivot irrigation system over a soybean field',
     },
     {
       id: 'bioinsumo',
@@ -103,7 +100,7 @@ export const QUE_HACE = {
       // biostimulant (glosario).
       texto: 'Every alert comes with its biostimulant: drought-stress, heat-stress, or preventive ahead of the critical stage.',
       imagen: imgBioinsumos,
-      alt: 'Fine spray droplets on soybean leaves at dawn',
+      alt: 'Tractor with a sprayer applying over a crop',
     },
   ],
   // Otros módulos, debajo de las tarjetas (decisión 46).
@@ -126,7 +123,6 @@ export const QUE_HACE = {
 
 // 4. La solución
 export const COMO_FUNCIONA = {
-  etiqueta: 'The solution',
   titulo: 'Alerts in time to act',
   bajada:
     'VigIA tracks every management zone, every day. When stress is coming, it alerts you with enough lead time to apply a biostimulant or irrigate.',
@@ -162,7 +158,7 @@ export const COMO_FUNCIONA = {
 
 // 5. Frase destacada. Misma lógica de colores: *verde* (a tiempo), _rojo_
 // (tarde).
-export const FRASE = ['Get the biostimulant on *before* stress hits,', 'not _after the damage is done._'];
+export const FRASE = ['Get the biostimulant on', '*before* stress hits,', 'not _after the damage is done._'];
 
 // 6. Impacto. Mismos números que en español (impactoDatos.js), con formato
 // en inglés (20,000).
@@ -170,9 +166,8 @@ const fmt = formateador('en-US');
 const FILAS = filasImpacto(fmt, { maiz: 'Corn', soja: 'Soybean', trigo: 'Wheat' }, 'Total');
 
 export const IMPACTO = {
-  etiqueta: 'Impact',
-  titulo: 'More grain, more carbon in the soil',
-  bajada: "Results from five consecutive seasons on growers' fields, in corn, soybean and wheat.",
+  titulo: 'Impact',
+  bajada: 'More grain, more carbon in the soil',
   indicadores: [
     { id: 'hectareas', valor: `+${fmt(HA_TOTAL)}`, unidad: 'ha', texto: 'monitored' },
     { id: 'efectividad', valor: '96', unidad: '%', texto: 'biostimulant response effectiveness' },
@@ -211,7 +206,6 @@ export const IMPACTO = {
 
 // 7. Sobre nosotros
 export const NOSOTROS = {
-  etiqueta: 'About us',
   titulo: `The people behind ${MARCA}`,
   bajada: 'A team that brings together ag technology, agronomic advice and biostimulants.',
 };
@@ -221,8 +215,10 @@ export const CLIENTES = { titulo: 'Trusted by' };
 
 // 9. Preguntas frecuentes
 export const PREGUNTAS = {
-  etiqueta: 'FAQ',
   titulo: 'Common questions',
+  // Línea chica sobre el CTA, debajo del título (ahí va el cierre): sigue
+  // al título de la sección.
+  cierre: 'Still have questions? Message us.',
   items: [
     {
       pregunta: 'Do I need sensors or weather stations in the field?',
@@ -254,11 +250,6 @@ export const PREGUNTAS = {
   ],
 };
 
-// 10. Cierre
-export const CIERRE = {
-  titulo: 'The next yield loss is already building in one of your fields. Find it first.',
-  texto: `Book a 20-minute demo and we'll show you ${MARCA} running on your own fields, with data from your current season.`,
-};
 
 export const EDUCACION = {
   etiqueta: 'Learn',
@@ -294,15 +285,35 @@ export const FOOTER = {
     { texto: 'Privacy policy (Spanish)', href: '/privacidad' },
     { texto: 'Terms and conditions (Spanish)', href: '/terminos' },
   ],
-  legalesLabel: 'Legal',
   pie: 'All rights reserved.',
+  // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
+  // Commons): los piden sus licencias Creative Commons. Van al pie, junto
+  // al copyright, no en el medio de la página.
+  creditosFotos: {
+    prefijo: 'Photos via Wikimedia Commons:',
+    fotos: [
+      { autor: 'Alejo Cristian Santo', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Febrero_-_panoramio.jpg' },
+      { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },
+      { autor: 'Pollinator', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soybean_1292.JPG' },
+      { autor: 'Ermell', licencia: 'CC BY-SA 4.0', href: 'https://commons.wikimedia.org/wiki/File:Traktor_spritzanlage-20200319-RM-173117.jpg' },
+    ],
+  },
 };
 
 export const UI = {
   saltar: 'Skip to content',
   inicio: 'home',
   menu: [
-    { label: 'How it works', href: '/en/#como-funciona' },
+    {
+      label: 'How it works',
+      href: '/en/#problema',
+      hijos: [
+        { label: 'Home', href: '/en/#inicio' },
+        { label: 'The problem', href: '/en/#problema' },
+        { label: 'What VigIA does', href: '/en/#que-hace' },
+        { label: 'The solution', href: '/en/#como-funciona' },
+      ],
+    },
     { label: 'Impact', href: '/en/#impacto' },
     { label: 'About us', href: '/en/#nosotros' },
     { label: 'Contact', href: '/en/#contacto' },

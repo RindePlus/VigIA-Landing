@@ -1,53 +1,49 @@
 :root {
-  --primary: #2ecc71;
-  /* More vibrant emerald green */
-  --primary-dark: #27ae60;
-  --secondary: #0c2a1c;
-  /* Darker forest green/black for contrast */
-  --accent: #3498db;
-  --bg-main: #f0f4f8;
-  /* Slightly more blue tint for bg */
-  --bg-card: #ffffff;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --font-heading: 'Geist', ui-sans-serif, system-ui, sans-serif;
-  --font-body: 'Geist', ui-sans-serif, system-ui, sans-serif;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --radius-md: 12px;
-  --radius-lg: 24px;
+  /* Alias heredados de la Landing de RindePlus que todavía usan el header,
+     el footer y los títulos. Apuntan a la paleta de campo de abajo. */
+  --secondary: var(--gh-fg);
+  --text-main: var(--gh-fg);
+  --bg-main: var(--gh-canvas);
+  --radius-md: var(--gh-radius-card);
+
+  /* Tipografía (decisión 49): IBM Plex Sans para títulos y texto, Chivo
+     Mono sólo para datos (cifras de Impacto y tablas). Chivo Mono y no IBM
+     Plex Mono: su cero es liso, sin el punto en el medio. */
+  --font-heading: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-data: 'Chivo Mono', ui-monospace, 'SFMono-Regular', monospace;
 
   /* ============================================================
-     GitHub-style design tokens (used by the home / .rp-home)
+     Paleta de campo (decisión 49). Los nombres --gh-* quedan por
+     compatibilidad; los valores ya no son los de GitHub.
+     Fondo piedra (gris apenas cálido: el crema se lee como plantilla),
+     tinta verde casi negra, un solo verde de marca.
+     El color tiene significado: ámbar = alerta / umbral, rojo = pérdida,
+     verde campo = el cultivo a salvo, tierra = carbono en el suelo.
      ============================================================ */
-  --gh-canvas: #f6f8fa;
-  --gh-surface: #ffffff;
-  --gh-surface-2: #f6f8fa;
-  --gh-border: #d0d7de;
-  --gh-border-muted: #d8dee4;
-  --gh-border-strong: #afb8c1;
-  --gh-fg: #1f2328;
-  --gh-fg-muted: #656d76;
-  --gh-fg-subtle: #8b949e;
-  --gh-accent: #0969da;
-  --gh-accent-hover: #0860ca;
-  --gh-accent-soft: #ddf4ff;
-  --gh-accent-fg: #ffffff;
-  --gh-brand-blue: #025db8;
-  --gh-detail-green: #018c34;
-  --gh-detail-green-soft: #dafbe1;
-  --gh-detail-yellow: #ffd100;
-  --gh-detail-yellow-strong: #bf8700;
-  --gh-detail-yellow-soft: #fff8c5;
-  --gh-detail-pink: #bf3989;
-  --gh-danger: #cf222e;
+  --gh-canvas: #f3f2ee;
+  --gh-surface: #fbfaf8;
+  --gh-surface-2: #e9e7e1;
+  --gh-border: #d8d5cd;
+  --gh-border-muted: #e4e1da;
+  --gh-border-strong: #b1ada3;
+  --gh-fg: #17211d;
+  /* Grises firmes (8:1 y 6,3:1 sobre el fondo): se leen también al sol, en
+     el celular. */
+  --gh-fg-muted: #424c46;
+  --gh-fg-subtle: #525b55;
+  /* Acento de interacción (enlaces, foco, hover): verde bosque medio. */
+  --gh-accent: #1d5a49;
+  --gh-accent-hover: #164a3c;
+  --gh-accent-soft: #e2ebe4;
+  --gh-accent-fg: #fbfaf8;
+  --gh-danger: #b3261e;
   --gh-radius: 6px;
   --gh-radius-btn: 8px; /* botones (header, hero, CTAs) */
   --gh-radius-card: 12px; /* tarjetas */
-  --gh-shadow-sm: 0 1px 0 rgba(31, 35, 40, 0.04);
-  --gh-shadow-card: 0 1px 3px rgba(31, 35, 40, 0.12), 0 1px 2px rgba(31, 35, 40, 0.06);
-  --gh-shadow-overlay: 0 8px 24px rgba(31, 35, 40, 0.12);
+  --gh-shadow-sm: 0 1px 0 rgba(23, 33, 29, 0.04);
+  --gh-shadow-card: 0 1px 3px rgba(23, 33, 29, 0.1), 0 1px 2px rgba(23, 33, 29, 0.05);
+  --gh-shadow-overlay: 0 8px 24px rgba(23, 33, 29, 0.12);
 
   /* ============================================================
      Sistema visual de landing-page-design (ver CLAUDE.md)
@@ -88,50 +84,37 @@
   --dur-fast: 200ms;
   --dur-base: 400ms;
   --dur-slow: 700ms;
-  --dur-reveal: 900ms;
-  /* Aparición al hacer scroll ([data-reveal]): cuánto sube, cuánto
-     desenfoque trae, factor del escalonado entre hermanos y pausa entre
-     pasos de la línea de tiempo. En celular se achican (ver abajo). */
-  --reveal-shift: var(--space-700);
-  --reveal-blur: 8px;
-  --reveal-stagger: 1;
+  --dur-reveal: 600ms;
+  /* Aparición al hacer scroll ([data-reveal]): sólo opacidad y una subida
+     corta, sin desenfoque (decisión 49). Factor del escalonado entre
+     hermanos y pausa entre pasos de la línea de tiempo. */
+  --reveal-shift: var(--space-100);
+  --reveal-stagger: 0.6;
   --reveal-step: var(--dur-slow);
-
-  /* Título del hero: degradé sólo sobre el texto, nunca de fondo. */
-  --hero-title-from: #000000;
-  --hero-title-to: #666666;
 }
 
 /* Modo oscuro — BaseLayout.astro fija data-rp-theme en <html> antes del
    primer paint (sin flash) y useTheme lo actualiza al usar el toggle. */
 [data-rp-theme="dark"] {
-  /* Fondos oscuros: sólo la paleta neutra de landing-page-design. */
+  /* Fondos oscuros: la paleta neutra de landing-page-design. Texto en
+     blanco cálido, para que no se vea frío contra el papel del tema claro. */
   --gh-canvas: #181818;
   --gh-surface: #1f1f1f;
   --gh-surface-2: #272727;
   --gh-border: #313131;
   --gh-border-muted: #272727;
-  --hero-title-from: #ffffff;
-  --hero-title-to: #9b9b9b;
-  --gh-border-strong: #6e7681;
-  --gh-fg: #e6edf3;
-  --gh-fg-muted: #8b949e;
-  --gh-fg-subtle: #6e7681;
-  --gh-accent: #4493f8;
-  --gh-accent-hover: #58a6ff;
-  --gh-accent-soft: #121d2f;
-  --gh-accent-fg: #ffffff;
-  --gh-brand-blue: #4493f8;
-  --gh-detail-green: #3fb950;
-  --gh-detail-green-soft: #12261e;
-  --gh-detail-yellow: #e3b341;
-  --gh-detail-yellow-strong: #e3b341;
-  --gh-detail-yellow-soft: #2e2a13;
-  --gh-detail-pink: #db61a2;
-  --gh-danger: #f85149;
+  --gh-border-strong: #6b675f;
+  --gh-fg: #ece8df;
+  --gh-fg-muted: #aaa69c;
+  --gh-fg-subtle: #97938a;
+  --gh-accent: #8cc2a9;
+  --gh-accent-hover: #a6d3bd;
+  --gh-accent-soft: #1b2a24;
+  --gh-accent-fg: #131209;
+  --gh-danger: #ff8a7a;
   --gh-shadow-sm: 0 0 0 1px rgba(0, 0, 0, 0.2);
-  --gh-shadow-card: 0 1px 3px rgba(1, 4, 9, 0.5);
-  --gh-shadow-overlay: 0 8px 24px rgba(1, 4, 9, 0.7);
+  --gh-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --gh-shadow-overlay: 0 8px 24px rgba(0, 0, 0, 0.7);
 }
 
 /* Canvas + overscroll background follow the home dark theme */
@@ -197,24 +180,21 @@ li {
   text-wrap: pretty;
 }
 
-/* Aparición al hacer scroll: subida lenta con desenfoque que se aclara.
+/* Aparición al hacer scroll: opacidad y una subida corta, sin desenfoque.
    El estado oculto sólo existe si BaseLayout marcó <html> con .vg-reveal-on
    (JS activo y movimiento permitido); sin eso, todo se ve de entrada.
    `--reveal-delay` escalona elementos hermanos. */
 .vg-reveal-on [data-reveal] {
   opacity: 0;
-  filter: blur(var(--reveal-blur));
   transform: translateY(var(--reveal-shift));
   transition:
     opacity var(--dur-reveal) var(--ease-fluid),
-    filter var(--dur-reveal) var(--ease-fluid),
     transform var(--dur-reveal) var(--ease-fluid);
   transition-delay: calc(var(--reveal-delay, 0ms) * var(--reveal-stagger));
 }
 
 .vg-reveal-on [data-reveal].is-revealed {
   opacity: 1;
-  filter: none;
   transform: none;
 }
 
@@ -266,8 +246,32 @@ img {
 }
 
 :focus-visible {
-  outline: 2px solid var(--gh-accent, #0969da);
+  outline: 2px solid var(--gh-accent);
   outline-offset: 2px;
+}
+
+/* Lo que dibuja el navegador también lleva la paleta: selección, cursor de
+   texto y controles nativos. */
+::selection {
+  background: var(--gh-accent-soft);
+  color: var(--gh-fg);
+}
+
+html {
+  accent-color: var(--gh-accent);
+  caret-color: var(--gh-accent);
+}
+
+/* Datos y medidas: tipografía de datos y cifras tabulares. */
+.vg-data {
+  font-family: var(--font-data);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Separador de miles o decimal dentro de una cifra en tipografía de datos:
+   en la tipografía normal, que es angosta (ver `partes` en HomePage.astro). */
+.vg-sep {
+  font-family: var(--font-body);
 }
 
 /* Transición entre páginas (ADR 0004): al ir a otra página del sitio, en
@@ -275,7 +279,7 @@ img {
    nueva en vez de mostrar la recarga en blanco. Es la transición nativa
    entre documentos (Chrome, Edge, Safari 18.2+); donde no existe, la página
    carga como siempre. El header queda quieto: tiene su propio nombre y
-   mide lo mismo en los dos idiomas. */
+   mide lo mismo en todos los idiomas. */
 @view-transition {
   navigation: auto;
 }
@@ -304,134 +308,50 @@ img {
     scroll-behavior: auto !important;
   }
 }
-/* Paleta --rp-* que usan Header.css y Footer.css (en Landing vive en
-   components/pricing.css). */
-:root {
-  /* Backgrounds */
-  --rp-accent-gold: #d4a017;
-  --rp-accent-blue: #1d4ed8;
-
-  /* Brand gold scale */
-  --rp-gold-50: #fffdf5;
-  --rp-gold-100: #fef9e7;
-  --rp-gold-200: #fcefc4;
-  --rp-gold-300: #f7de82;
-  --rp-gold-400: #f2cd00;
-  --rp-gold-500: #e5bd13;
-  --rp-gold-600: #d4a017;
-  --rp-gold-700: #b8860b;
-
-  /* Semantic palette */
-  --rp-gray-50: #f9fafb;
-  --rp-gray-100: #f3f4f6;
-  --rp-gray-200: #e5e7eb;
-  --rp-gray-300: #d1d5db;
-  --rp-gray-400: #9ca3af;
-  --rp-gray-500: #6b7280;
-  --rp-gray-600: #4b5563;
-  --rp-gray-700: #374151;
-  --rp-gray-900: #111827;
-
-  --rp-emerald-50: #ecfdf5;
-  --rp-emerald-100: #d1fae5;
-  --rp-emerald-200: #a7f3d0;
-  --rp-emerald-300: #6ee7b7;
-  --rp-emerald-400: #34d399;
-  --rp-emerald-500: #10b981;
-  --rp-emerald-600: #059669;
-  --rp-emerald-700: #047857;
-
-  --rp-blue-50: #eff6ff;
-  --rp-blue-100: #dbeafe;
-  --rp-blue-200: #bfdbfe;
-  --rp-blue-300: #93c5fd;
-  --rp-blue-400: #60a5fa;
-  --rp-blue-500: #3b82f6;
-  --rp-blue-600: #2563eb;
-  --rp-blue-700: #1d4ed8;
-
-  --rp-amber-50: #fffbeb;
-  --rp-amber-100: #fef3c7;
-  --rp-amber-200: #fde68a;
-  --rp-amber-300: #fcd34d;
-  --rp-amber-400: #fbbf24;
-  --rp-amber-500: #f59e0b;
-  --rp-amber-600: #d97706;
-  --rp-amber-700: #b45309;
-  --rp-amber-800: #92400e;
-
-  --rp-sky-50: #f0f9ff;
-  --rp-sky-100: #e0f2fe;
-  --rp-sky-200: #bae6fd;
-  --rp-sky-300: #7dd3fc;
-  --rp-sky-400: #38bdf8;
-  --rp-sky-500: #0ea5e9;
-  --rp-sky-600: #0284c7;
-  --rp-sky-700: #0369a1;
-
-  --rp-indigo-50: #eef2ff;
-  --rp-indigo-100: #e0e7ff;
-  --rp-indigo-200: #c7d2fe;
-  --rp-indigo-300: #a5b4fc;
-  --rp-indigo-400: #818cf8;
-  --rp-indigo-500: #6366f1;
-  --rp-indigo-600: #4f46e5;
-  --rp-indigo-700: #4338ca;
-
-  --rp-violet-50: #f5f3ff;
-  --rp-violet-100: #ede9fe;
-  --rp-violet-200: #ddd6fe;
-  --rp-violet-300: #c4b5fd;
-  --rp-violet-400: #a78bfa;
-  --rp-violet-500: #8b5cf6;
-  --rp-violet-600: #7c3aed;
-  --rp-violet-700: #6d28d9;
-
-  --rp-rose-50: #fff1f2;
-  --rp-rose-100: #ffe4e6;
-  --rp-rose-200: #fecdd3;
-  --rp-rose-300: #fda4af;
-  --rp-rose-400: #fb7185;
-  --rp-rose-500: #f43f5e;
-  --rp-rose-600: #e11d48;
-  --rp-rose-700: #be123c;
-}
-
 /* ============================================================
    Marca VigIA (colores del logo) + severidades de alertas
    ============================================================ */
 :root {
+  /* Verde bosque: el color de marca (logo, CTA del cierre, títulos). */
   --vg-forest: #0e3b36;
-  --vg-blue: #1f5bff;
-  --vg-blue-soft: #e8eeff;
-  --vg-lime: #6fb23a;
-  --vg-lime-soft: #eef7e6;
-  --vg-sev-critico: #cf222e;
-  --vg-sev-critico-soft: #ffebe9;
-  --vg-sev-alerta: #9a6700;
-  --vg-sev-alerta-soft: #fff8c5;
-  --vg-sev-info: #1f5bff;
-  --vg-sev-info-soft: #e8eeff;
-  /* Fondo de los tres módulos: muy claros y de saturación pareja, para que
-     el hilo (más intenso) siempre se vea encima y los fundidos no salten. */
-  --vg-bg-seco: #f5e8d2;
-  --vg-bg-solucion: #dcebf6;
-  --vg-bg-agua: #dcefe8;
-  /* Fondo del body: el recorrido termina en este color para fundirse con
-     la frase destacada sin escalón. */
-  --vg-bg-pagina: var(--bg-main);
-  /* Celeste de La solución: hilo, punto 3 y etiqueta. */
-  --vg-sky: #0b7cc1;
-  --vg-thread-ok: #3f8f1f;
-  /* Acento de carbono (sección Impacto): turquesa, separado del verde del
-     rinde. */
-  --vg-carbono: #0e7c86;
+  --vg-forest-bg: #0e3b36;
+  --vg-forest-fg: #fbfaf8;
+  /* Verde campo: el cultivo a salvo (agua útil, hilo, íconos, grano). */
+  --vg-campo: #3b6e25;
+  /* Severidades: ámbar = alerta / umbral, rojo = pérdida. */
+  --vg-sev-critico: #b3261e;
+  --vg-sev-critico-soft: #f6e3df;
+  --vg-sev-alerta: #8a5300;
+  --vg-sev-alerta-soft: #f3e6cc;
+  /* Zona de pronóstico del gráfico. */
+  --vg-pronostico: #e8e5dd;
+  /* Tierra: carbono que queda en el suelo (sección Impacto). */
+  --vg-carbono: #7a4b26;
+  /* Textos y líneas sobre la banda verde bosque (Impacto), en los
+     dos temas. Todos pasan AA sobre --vg-forest-bg. */
+  --vg-on-forest-fg: #ece8df;
+  /* Secundarios teñidos del verde de fondo, no grises neutros. */
+  --vg-on-forest-muted: #b4d4c1;
+  --vg-on-forest-subtle: #9fc2ad;
+  --vg-on-forest-accent: #8cc2a9;
+  --vg-on-forest-campo: #93c46b;
+  --vg-on-forest-carbono: #d6a06c;
+  --vg-on-forest-line: rgba(236, 232, 223, 0.18);
+  --vg-on-forest-line-muted: rgba(236, 232, 223, 0.1);
+  --vg-on-forest-line-strong: rgba(236, 232, 223, 0.34);
+  --vg-thread-ok: var(--vg-campo);
+  /* Verde agua: el tramo del hilo de "Lo que hace VigIA" (el agua del
+     suelo), distinto del verde campo con el que termina el recorrido. */
+  --vg-agua: #2a6f73;
 
-  /* Íconos verdes sin fondo: más oscuro en claro para contrastar sobre blanco. */
-  --vg-icon-green: #3f8f1f;
+  /* Íconos verdes sin fondo. */
+  --vg-icon-green: var(--vg-campo);
   /* Verde de WhatsApp (botón del menú y widget flotante). */
   --vg-whatsapp: #25d366;
   --vg-whatsapp-hover: #1da851;
+  /* Texto sobre el verde de WhatsApp: oscuro, el blanco no llega a 3:1. */
+  --vg-whatsapp-fg: #0b2e13;
+  --vg-whatsapp-logo: #ffffff;
   /* Chat de WhatsApp de ejemplo (WhatsAppMock.astro): colores de la app. */
   --vg-wa-bar: #008069;
   --vg-wa-bar-fg: #ffffff;
@@ -447,9 +367,6 @@ img {
   --vg-wa-accent-fg: #ffffff;
   --vg-wa-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
   /* Sobre video (siempre con fondo oscuro, en los dos temas). */
-  /* CTA principal: azul de marca, más intenso en oscuro para que no se apague. */
-  --vg-cta: #1f5bff;
-  --vg-cta-hover: #1749d6;
   --vg-on-video: #ffffff;
   --vg-on-video-critico: #ff7b72;
   --vg-on-video-ok: #8fd14f;
@@ -457,28 +374,20 @@ img {
 }
 
 [data-rp-theme="dark"] {
-  --vg-forest: #e6edf3;
-  --vg-blue: #6b93ff;
-  --vg-blue-soft: #131d33;
-  --vg-lime: #8fd14f;
-  --vg-lime-soft: #18240f;
-  --vg-sev-critico: #ff7b72;
-  --vg-sev-critico-soft: #2d1416;
-  --vg-sev-alerta: #e3b341;
-  --vg-sev-alerta-soft: #2e2a13;
-  --vg-sev-info: #6b93ff;
-  --vg-sev-info-soft: #131d33;
-  /* Tonos apagados en oscuro: tierra y verde petróleo, sin saturar. */
-  --vg-bg-seco: #221c14;
-  --vg-bg-solucion: #111b25;
-  --vg-bg-agua: #111f1e;
-  --vg-bg-pagina: var(--gh-canvas);
-  --vg-sky: #5cc8ff;
-  --vg-thread-ok: #8fd14f;
-  --vg-carbono: #4fd1c5;
-  --vg-cta: #3d6bff;
-  --vg-cta-hover: #5580ff;
-  --vg-icon-green: #8fd14f;
+  /* En oscuro el verde bosque como texto pasa a blanco cálido; como fondo
+     (CTA del cierre) queda un verde muy oscuro. */
+  --vg-forest: #ece8df;
+  --vg-forest-bg: #11211d;
+  --vg-forest-fg: #ece8df;
+  --vg-campo: #93c46b;
+  --vg-sev-critico: #ff8a7a;
+  --vg-sev-critico-soft: #2d1714;
+  --vg-sev-alerta: #e0a84a;
+  --vg-sev-alerta-soft: #2c2312;
+  --vg-pronostico: #23221f;
+  --vg-carbono: #d6a06c;
+  --vg-agua: #6fbfbf;
+  --vg-icon-green: var(--vg-campo);
   --vg-wa-bar: #202c33;
   --vg-wa-bar-fg: #e9edef;
   --vg-wa-wallpaper: #0b141a;
@@ -498,17 +407,32 @@ img {
   :root { --page-gutter: var(--space-700); }
 }
 
+/* Secciones de una pantalla (.vg-pantalla, ADR 0007): en pantallas
+   horizontales cada sección ocupa más o menos una pantalla y los tamaños
+   siguen al alto de la ventana, para que el contenido entre entero. Crecen
+   en pantallas altas y se achican en las bajas, con topes. */
+@media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
+  :root {
+    /* El mismo aire arriba y abajo: el contenido queda centrado en toda la
+       pantalla, con o sin el header (se oculta al bajar). */
+    --panel-pad-top: var(--space-500);
+    --panel-pad-bottom: var(--space-500);
+    --fit-hero: clamp(2.5rem, 3.4vh + 1.6rem, 4.25rem);
+    --fit-display: clamp(2.25rem, 2.6vh + 1.6rem, 3.75rem);
+    --fit-headline: clamp(1.75rem, 1.9vh + 1.15rem, 2.75rem);
+    --fit-lead: clamp(1rem, 0.6vh + 0.75rem, 1.25rem);
+    --fit-gap: clamp(var(--space-200), 3.4vh, var(--space-600));
+  }
+}
+
 @media (max-width: 680px) {
   :root { --page-gutter: var(--space-200); }
 
   /* En celular la página es larga y se baja mucho: las apariciones son más
-     cortas y sutiles (menos recorrido, menos desenfoque, casi sin espera
-     entre hermanos) para que el contenido no se haga esperar. */
+     cortas y casi sin espera entre hermanos. */
   :root {
-    --dur-reveal: 500ms;
-    --reveal-shift: var(--space-300);
-    --reveal-blur: 2px;
-    --reveal-stagger: 0.4;
+    --dur-reveal: 400ms;
+    --reveal-stagger: 0.3;
     --reveal-step: var(--dur-base);
   }
 }
