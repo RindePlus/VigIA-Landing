@@ -103,6 +103,16 @@ const redes = [
       <p class="rp-footer__copyright">
         © {year} {MARCA} · {FOOTER.pie}
       </p>
+      <p class="rp-footer__creditos">
+        {FOOTER.creditosFotos.prefijo}{' '}
+        {
+          FOOTER.creditosFotos.fotos.map((f, i) => (
+            <>
+              <a href={f.href} target="_blank" rel="noopener noreferrer">{f.autor}</a> ({f.licencia}){i < FOOTER.creditosFotos.fotos.length - 1 ? ' · ' : ''}
+            </>
+          ))
+        }
+      </p>
     </div>
   </div>
 </footer>

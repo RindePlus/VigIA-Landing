@@ -39,14 +39,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(212, 160, 23, 0.6) 30%,
-    rgba(212, 160, 23, 0.6) 70%,
-    transparent 100%
-  );
+  height: 1px;
+  background: var(--gh-border-muted);
   pointer-events: none;
 }
 
@@ -113,14 +107,14 @@ img.logo-image:hover {
   display: block;
   width: 24px;
   height: 2px;
-  background-color: var(--rp-blue-600, #2563eb);
+  background-color: var(--gh-fg);
   border-radius: 2px;
   transition: all var(--dur-base) var(--ease-fluid);
   transform-origin: center;
 }
 
 .hamburger-button.open .hamburger-line {
-  background-color: var(--rp-gold-400, #f2cd00);
+  background-color: var(--gh-fg);
 }
 
 .hamburger-button.open .hamburger-line:nth-child(1) {
@@ -199,8 +193,8 @@ img.logo-image:hover {
 .header-nav--open .menu-item:nth-child(6) { transition-delay: 0.20s; }
 
 .menu-item:hover {
-  background-color: rgba(29, 78, 216, 0.06);
-  color: var(--rp-blue-600);
+  background-color: var(--gh-accent-soft);
+  color: var(--gh-accent);
   padding-left: 30px;
 }
 
@@ -212,7 +206,7 @@ img.logo-image:hover {
   transform: translateY(-50%) scaleX(0);
   width: 4px;
   height: 20px;
-  background: var(--rp-blue-600);
+  background: var(--gh-accent);
   border-radius: 0 4px 4px 0;
   transition: transform var(--dur-base) var(--ease-fluid);
   transform-origin: left;
@@ -233,7 +227,7 @@ img.logo-image:hover {
   border-radius: var(--gh-radius-btn, 10px);
   background: transparent;
   border: none;
-  color: var(--gh-fg-muted, #656d76);
+  color: var(--gh-fg-muted);
   font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -242,8 +236,8 @@ img.logo-image:hover {
 }
 
 .header-back-btn:hover {
-  background: var(--gh-surface-2, #f6f8fa);
-  color: var(--gh-fg, #1f2328);
+  background: var(--gh-surface-2);
+  color: var(--gh-fg);
 }
 
 
@@ -257,15 +251,15 @@ img.logo-image:hover {
   border-radius: var(--gh-radius-btn, 10px);
   background: transparent;
   border: 1px solid transparent;
-  color: var(--gh-fg-muted, #656d76);
+  color: var(--gh-fg-muted);
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-fluid), border-color var(--dur-fast) var(--ease-fluid), color var(--dur-fast) var(--ease-fluid);
 }
 
 .header-theme-toggle:hover {
-  background: var(--gh-surface-2, #f6f8fa);
-  border-color: var(--gh-border, #d0d7de);
-  color: var(--gh-fg, #1f2328);
+  background: var(--gh-surface-2);
+  border-color: var(--gh-border);
+  color: var(--gh-fg);
 }
 
 .header-theme-toggle svg {
@@ -467,7 +461,7 @@ img.logo-image:hover {
 }
 
 .header-lang__option:focus-visible {
-  outline: 2px solid var(--vg-blue);
+  outline: 2px solid var(--gh-accent);
   outline-offset: -2px;
 }
 
@@ -748,7 +742,7 @@ img.logo-image:hover {
 }
 
 /* Botón de WhatsApp al pie del drawer: sólo en celular. Verde de WhatsApp con
-   el ícono monocromo (blanco). */
+   texto e ícono oscuros (el blanco no llega a 3:1 sobre ese verde). */
 .header-nav__whatsapp {
   display: none;
   align-items: center;
@@ -758,7 +752,7 @@ img.logo-image:hover {
   padding: var(--space-100) var(--space-200);
   border-radius: var(--gh-radius-btn);
   background: var(--vg-whatsapp);
-  color: #fff;
+  color: var(--vg-whatsapp-fg);
   font-size: var(--text-base);
   line-height: var(--leading-base);
   font-weight: 600;
