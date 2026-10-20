@@ -143,6 +143,7 @@ export const COMO_FUNCIONA = {
     },
   ],
   tituloPasos: 'How it works',
+  partes: { etiqueta: 'Parts of the solution', nombres: ['The alerts', 'How it works'] },
   pasos: [
     // "Se cargan tus lotes": voz pasiva neutral, igual que en español
     // (pregunta abierta 1: quién hace el alta).
@@ -314,7 +315,16 @@ export const UI = {
   saltar: 'Skip to content',
   inicio: 'home',
   menu: [
-    { label: 'How it works', href: '/en/#como-funciona' },
+    {
+      label: 'How it works',
+      href: '/en/#problema',
+      hijos: [
+        { label: 'Home', href: '/en/#inicio' },
+        { label: 'The problem', href: '/en/#problema' },
+        { label: 'What VigIA does', href: '/en/#que-hace' },
+        { label: 'The solution', href: '/en/#como-funciona' },
+      ],
+    },
     { label: 'Impact', href: '/en/#impacto' },
     { label: 'About us', href: '/en/#nosotros' },
     { label: 'Contact', href: '/en/#contacto' },

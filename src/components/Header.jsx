@@ -37,6 +37,73 @@ const guardarPosicion = (destino) => {
   }
 };
 
+// Desplegable del menú (ítem con `hijos`). En escritorio se abre al dejar
+// el cursor encima un momento (no al pasar de largo) y se cierra con un
+// pequeño margen al salir, para poder bajar hasta la lista. Con teclado se
+// abre al enfocar el título. En el menú de celular los hijos van siempre a
+// la vista, debajo del título (Header.css).
+const ABRIR_MS = 220;
+const CERRAR_MS = 200;
+
+const MenuGrupo = ({ item, activeHref, onNavigate }) => {
+  const [abierto, setAbierto] = useState(false);
+  const timer = useRef(null);
+  const grupoRef = useRef(null);
+  const activo = item.href === activeHref || item.hijos.some((h) => h.href === activeHref);
+
+  const programar = (valor, ms) => {
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setAbierto(valor), ms);
+  };
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  const cerrar = () => {
+    window.clearTimeout(timer.current);
+    setAbierto(false);
+    onNavigate();
+  };
+
+  return (
+    <div
+      ref={grupoRef}
+      className={`menu-grupo ${abierto ? 'menu-grupo--abierto' : ''}`}
+      onPointerEnter={(e) => e.pointerType === 'mouse' && programar(true, ABRIR_MS)}
+      onPointerLeave={(e) => e.pointerType === 'mouse' && programar(false, CERRAR_MS)}
+      onFocus={() => programar(true, 0)}
+      onBlur={(e) => {
+        if (!grupoRef.current?.contains(e.relatedTarget)) programar(false, 0);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') programar(false, 0);
+      }}
+    >
+      <a
+        href={item.href}
+        className={`menu-item menu-grupo__titulo ${activo ? 'menu-item--active' : ''}`}
+        aria-current={item.href === activeHref ? 'location' : undefined}
+        onClick={cerrar}
+      >
+        {item.label}
+        <PiCaretDown className="menu-grupo__caret" aria-hidden="true" />
+      </a>
+      <ul className="menu-grupo__lista">
+        {item.hijos.map((hijo) => (
+          <li key={hijo.href}>
+            <a
+              href={hijo.href}
+              className={`menu-subitem ${hijo.href === activeHref ? 'menu-subitem--active' : ''}`}
+              aria-current={hijo.href === activeHref ? 'location' : undefined}
+              onClick={cerrar}
+            >
+              {hijo.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
 const Header = ({
   menuItems,
   showMenu = true,
@@ -86,8 +153,10 @@ const Header = ({
     let ticking = false;
 
     // Secciones del menú que existen en esta página (en las otras páginas no
-    // hay ninguna y no se marca nada).
+    // hay ninguna y no se marca nada). Los hijos de un desplegable cuentan
+    // como secciones propias; el título se marca si lo está uno de ellos.
     const secciones = menuItems
+      .flatMap((item) => [item, ...(item.hijos ?? [])])
       .map((item) => ({ href: item.href, el: document.getElementById(item.href.split('#')[1] ?? '') }))
       .filter((s) => s.el);
 
@@ -115,6 +184,9 @@ const Header = ({
       const y = window.scrollY;
       setIsScrolled(y > 8);
       const alto = headerRef.current?.offsetHeight ?? 80;
+      // Alto real del header: los saltos del menú dejan cada sección justo
+      // debajo de él (scroll-margin-top en sections.css).
+      document.documentElement.style.setProperty('--alto-header', `${alto}px`);
       setSobreOscuro(
         [...document.querySelectorAll('[data-fondo-oscuro]')].some((el) => {
           const r = el.getBoundingClientRect();
@@ -168,17 +240,26 @@ const Header = ({
 
         {showMenu && (
           <nav className={`header-nav ${isMenuOpen ? 'header-nav--open' : ''}`} id="header-menu">
-            {menuItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className={`menu-item ${item.href === activeHref ? 'menu-item--active' : ''}`}
-                aria-current={item.href === activeHref ? 'location' : undefined}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.label}
-              </a>
-            ))}
+            {menuItems.map((item) =>
+              item.hijos ? (
+                <MenuGrupo
+                  key={item.href}
+                  item={item}
+                  activeHref={activeHref}
+                  onNavigate={() => setIsMenuOpen(false)}
+                />
+              ) : (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={`menu-item ${item.href === activeHref ? 'menu-item--active' : ''}`}
+                  aria-current={item.href === activeHref ? 'location' : undefined}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ),
+            )}
 
             <div className="header-nav__theme">
               <span className="header-nav__theme-label">

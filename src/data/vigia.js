@@ -153,6 +153,9 @@ export const COMO_FUNCIONA = {
   // Subtítulo del bloque de los pasos. Las alertas pasaron a las tarjetas
   // de la sección 3 (decisión 42).
   tituloPasos: 'Cómo lo hace',
+  // Indicador de dos rayas al pie, en pantalla completa: dice en cuál de
+  // las dos partes estás (los avisos o cómo lo hace) y lleva a cada una.
+  partes: { etiqueta: 'Partes de la solución', nombres: ['Los avisos', 'Cómo lo hace'] },
   // Cómo lo hace: tres pasos cortos. Paso 1 con redacción neutral ("se
   // cargan") hasta confirmar quién hace el alta de lotes (pregunta abierta 1
   // de ESTRUCTURA_LANDING.md).
@@ -348,7 +351,19 @@ export const UI = {
   saltar: 'Saltar al contenido',
   inicio: 'inicio',
   menu: [
-    { label: 'Cómo funciona', href: '/#como-funciona' },
+    // Desplegable con las secciones del recorrido (se abre al dejar el
+    // cursor encima); el título lleva al problema. "Inicio" vuelve arriba de
+    // todo (el hero no tiene título propio): más a mano que el logo.
+    {
+      label: 'Cómo funciona',
+      href: '/#problema',
+      hijos: [
+        { label: 'Inicio', href: '/#inicio' },
+        { label: 'El problema', href: '/#problema' },
+        { label: 'Lo que hace VigIA', href: '/#que-hace' },
+        { label: 'La solución', href: '/#como-funciona' },
+      ],
+    },
     { label: 'Impacto', href: '/#impacto' },
     { label: 'Nosotros', href: '/#nosotros' },
     { label: 'Contacto', href: '/#contacto' },

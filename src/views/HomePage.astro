@@ -254,6 +254,15 @@ const faqJsonLd = {
               </ol>
             </div>
           </div>
+          <!-- Dos rayas: la parte que se ve (data-paso del panel) va marcada.
+               Sólo en pantalla completa; SectionPager atiende los clics. -->
+          <div class="vg-partes" role="group" aria-label={COMO_FUNCIONA.partes.etiqueta}>
+            {
+              COMO_FUNCIONA.partes.nombres.map((nombre, i) => (
+                <button type="button" class="vg-partes__raya" data-ir-paso={i} aria-label={nombre} />
+              ))
+            }
+          </div>
         </div>
 
         <div class="vg-media" data-reveal style={delay(1)}>

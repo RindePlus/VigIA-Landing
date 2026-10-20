@@ -327,10 +327,6 @@ html {
   --vg-pronostico: #e8e5dd;
   /* Tierra: carbono que queda en el suelo (sección Impacto). */
   --vg-carbono: #7a4b26;
-  /* Fondos por capítulo (decisión 50): el recorrido va sobre el fondo de la
-     página; la prueba (equipo, clientes, preguntas) sobre un tono apenas
-     más oscuro. Planos, sin degradé. */
-  --vg-bg-prueba: #dfe7e1;
   /* Textos y líneas sobre la banda verde bosque (Impacto y cierre), en los
      dos temas. Todos pasan AA sobre --vg-forest-bg. */
   --vg-on-forest-fg: #ece8df;
@@ -391,7 +387,6 @@ html {
   --vg-pronostico: #23221f;
   --vg-carbono: #d6a06c;
   --vg-agua: #6fbfbf;
-  --vg-bg-prueba: #202020;
   --vg-icon-green: var(--vg-campo);
   --vg-wa-bar: #202c33;
   --vg-wa-bar-fg: #e9edef;
