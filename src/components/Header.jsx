@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
 import { PiSun, PiMoon, PiUser, PiWhatsappLogo, PiCaretDown, PiCheck } from 'react-icons/pi';
-import vigiaLogo from '../assets/vigia-biostres-logo-light.png';
-import vigiaLogoDark from '../assets/vigia-biostres-logo-dark.png';
 import { useTheme } from '../hooks/useTheme';
 import { APP_URL } from '../data/social';
 import { MARCA } from '../data/vigia';
@@ -113,6 +111,8 @@ const Header = ({
   inicioLabel = MARCA,
   whatsappUrl,
   rutas = { es: '/', en: '/en/', pt: '/pt/' },
+  // URLs del logo ya optimizadas por BaseLayout (getImage), con su tamaño.
+  logos,
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
@@ -256,8 +256,10 @@ const Header = ({
       <div className="header-content">
         <a href={inicioHref} className="header-logo" aria-label={inicioLabel}>
           <img
-            src={(theme === 'dark' ? vigiaLogoDark : vigiaLogo).src}
+            src={theme === 'dark' ? logos.oscuro : logos.claro}
             alt={MARCA}
+            width={logos.ancho}
+            height={logos.alto}
             className="logo-image"
           />
         </a>

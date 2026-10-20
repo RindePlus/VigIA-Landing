@@ -50,6 +50,6 @@ export const filasImpacto = (fmt, nombres, total) => ({
       fmt(c.co2.suelo),
       fmt(c.co2.estable),
     ]),
-    [total, `~${fmt(Math.round(CO2_FIJADO / 1000) * 1000)}`, `~${fmt(CO2_SUELO)}`, fmt(CO2_DESTACADO)],
+    [total, `~${fmt(Math.round(CO2_FIJADO / 1000) * 1000)}`, `~${fmt(CO2_SUELO)}`, `~${fmt(CO2_DESTACADO)}`],
   ],
 });

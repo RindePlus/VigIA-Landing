@@ -34,7 +34,7 @@ export const CTA = {
 export const WHATSAPP_URL = buildWhatsAppUrl('Olá, quero mais informações sobre o VigIA');
 
 export const SEO = {
-  titulo: MARCA,
+  titulo: `${MARCA} · Alertas de estresse hídrico e térmico`,
   descripcion:
     'Alertas de estresse hídrico e térmico por zona de manejo, com dias de antecedência para aplicar o bioestimulante ou irrigar. Na plataforma e pelo WhatsApp.',
 };
@@ -211,6 +211,7 @@ export const IMPACTO = {
 export const NOSOTROS = {
   titulo: `As pessoas por trás do ${MARCA}`,
   bajada: 'Uma equipe que reúne tecnologia agrícola, consultoria agronômica e bioestimulantes.',
+  representa: 'Representando',
 };
 
 // 8. Clientes
@@ -287,8 +288,8 @@ export const FOOTER = {
   },
   // Las legales sólo existen en español: el enlace lo aclara.
   legales: [
-    { texto: 'Política de privacidade (em espanhol)', href: '/privacidad' },
-    { texto: 'Termos e condições (em espanhol)', href: '/terminos' },
+    { texto: 'Política de privacidade (em espanhol)', href: '/privacidad/' },
+    { texto: 'Termos e condições (em espanhol)', href: '/terminos/' },
   ],
   pie: 'Todos os direitos reservados.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
@@ -321,7 +322,7 @@ export const UI = {
     { label: 'Impacto', href: '/pt/#impacto' },
     { label: 'Quem somos', href: '/pt/#nosotros' },
     { label: 'Contato', href: '/pt/#contacto' },
-    { label: 'Conteúdos', href: '/pt/educacion' },
+    { label: 'Conteúdos', href: '/pt/educacion/' },
   ],
   header: {
     idioma: 'Idioma',

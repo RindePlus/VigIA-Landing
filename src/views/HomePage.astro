@@ -10,6 +10,7 @@
 // src/data/vigia.js, vigia.en.js o vigia.pt.js según el idioma. Los medios de las tres
 // primeras secciones usan MediaStory: animación en código y, si hay, el
 // video (src/data/videos.js).
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BalanceChart from '../components/BalanceChart.astro';
 import WhatsAppMock from '../components/WhatsAppMock.astro';
@@ -30,8 +31,8 @@ import {
   PiArrowRight,
   PiX,
 } from 'react-icons/pi';
-import { contenido, idiomaDe } from '../i18n/idiomas';
-import { buildWhatsAppUrl } from '../data/social';
+import { IDIOMAS, contenido, idiomaDe } from '../i18n/idiomas';
+import { CONTACT_EMAIL, OFFICE_ADDRESS, WHATSAPP_DISPLAY, buildWhatsAppUrl } from '../data/social';
 import { EQUIPO } from '../data/equipo';
 import { VIDEOS, DESCRIPCION_PENDIENTE } from '../data/videos';
 import '../styles/sections.css';
@@ -39,6 +40,7 @@ import '../styles/sections.css';
 const lang = idiomaDe(Astro.currentLocale);
 const {
   CTA,
+  MARCA,
   SEO,
   HERO,
   PROBLEMA,
@@ -69,19 +71,45 @@ const ctaUrl = buildWhatsAppUrl(CTA.mensajeWhatsApp);
 // Indicadores de Impacto que abren una tabla (los paneles, de a uno).
 const CON_TABLA = IMPACTO.indicadores.flatMap((ind) => (ind.tabla ? [{ id: ind.id, tabla: ind.tabla }] : []));
 
-// Datos estructurados de las preguntas frecuentes, para buscadores.
-const faqJsonLd = {
+// Datos estructurados para buscadores: la organización, el sitio (en el
+// idioma de la página) y las preguntas frecuentes. Sin redes (sameAs):
+// todavía son las de Rinde Plus (src/data/social.js).
+const sitio = (Astro.site ?? new URL('https://vigiabioestres.com')).href;
+const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: PREGUNTAS.items.map((p) => ({
-    '@type': 'Question',
-    name: p.pregunta,
-    acceptedAnswer: { '@type': 'Answer', text: p.respuesta },
-  })),
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${sitio}#organizacion`,
+      name: MARCA,
+      url: sitio,
+      logo: new URL('/marca/vigia-biostres-logo.png', sitio).href,
+      email: CONTACT_EMAIL,
+      telephone: WHATSAPP_DISPLAY,
+      address: { '@type': 'PostalAddress', streetAddress: OFFICE_ADDRESS, addressCountry: 'AR' },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${sitio}#sitio`,
+      name: MARCA,
+      url: sitio,
+      inLanguage: IDIOMAS.map((i) => i.html),
+      publisher: { '@id': `${sitio}#organizacion` },
+    },
+    {
+      '@type': 'FAQPage',
+      inLanguage: IDIOMAS.find((i) => i.code === lang)?.html,
+      mainEntity: PREGUNTAS.items.map((p) => ({
+        '@type': 'Question',
+        name: p.pregunta,
+        acceptedAnswer: { '@type': 'Answer', text: p.respuesta },
+      })),
+    },
+  ],
 };
 ---
 
-<BaseLayout title={SEO.titulo} description={SEO.descripcion} jsonLd={faqJsonLd}>
+<BaseLayout title={SEO.titulo} description={SEO.descripcion} jsonLd={jsonLd}>
   <!-- Las cuatro primeras secciones comparten un fondo que cambia con la
        historia del lote y un hilo que las conecta (JourneyThread). -->
   <div class="vg-journey">
@@ -165,12 +193,12 @@ const faqJsonLd = {
         {
           QUE_HACE.puntos.map((pt, i) => (
             <li class="vg-punto" data-reveal style={delay(i)}>
-              <img
+              <Image
                 class="vg-punto__img"
-                src={pt.imagen.src}
+                src={pt.imagen}
                 alt={pt.alt}
-                width={pt.imagen.width}
-                height={pt.imagen.height}
+                widths={[480, 800]}
+                sizes="480px"
                 loading="lazy"
                 decoding="async"
               />
@@ -488,7 +516,7 @@ const faqJsonLd = {
                   <img
                     class="vg-persona__foto"
                     src={p.foto.src}
-                    alt={p.nombre}
+                    alt=""
                     width="88"
                     height="88"
                     loading="lazy"
@@ -502,15 +530,18 @@ const faqJsonLd = {
               }
               <h3>{p.nombre}</h3>
               <div class="vg-persona__empresa">
-                <img
-                  src={p.empresa.logo.src}
-                  alt={p.empresa.nombre}
-                  width={Math.round((p.empresa.logo.width / p.empresa.logo.height) * p.empresa.logoAlto)}
-                  height={p.empresa.logoAlto}
-                  style={`--logo-alto: ${p.empresa.logoAlto}px`}
-                  loading="lazy"
-                  decoding="async"
-                />
+                <p class="vg-persona__rol">{NOSOTROS.representa}</p>
+                <div class="vg-persona__logo">
+                  <img
+                    src={p.empresa.logo.src}
+                    alt={p.empresa.nombre}
+                    width={Math.round((p.empresa.logo.width / p.empresa.logo.height) * p.empresa.logoAlto)}
+                    height={p.empresa.logoAlto}
+                    style={`--logo-alto: ${p.empresa.logoAlto}px`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
               </div>
             </li>
           ))

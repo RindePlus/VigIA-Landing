@@ -12,7 +12,8 @@ const lang = idiomaDe(Astro.currentLocale);
 const { EDUCACION, MARCA } = contenido(lang);
 ---
 
-<BaseLayout title={`${EDUCACION.titulo} · ${MARCA}`} description={EDUCACION.bajada}>
+<!-- noindex mientras sea provisoria (sin contenidos todavía). -->
+<BaseLayout title={`${EDUCACION.titulo} · ${MARCA}`} description={EDUCACION.bajada} noindex>
   <section class="vg-hero vg-hero--simple">
     <div class="vg-wrap">
       <p class="vg-eyebrow">{EDUCACION.etiqueta}</p>

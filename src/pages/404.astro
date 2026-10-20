@@ -9,7 +9,7 @@ import { NO_ENCONTRADA as NAO_ENCONTRADA } from '../data/vigia.pt';
 import '../styles/sections.css';
 ---
 
-<BaseLayout title={`${NO_ENCONTRADA.titulo} · ${MARCA}`} showMenu={false}>
+<BaseLayout title={`${NO_ENCONTRADA.titulo} · ${MARCA}`} showMenu={false} noindex>
   <section class="vg-hero vg-hero--simple"><div class="vg-wrap">
     <h1 class="vg-hero__title">404</h1>
     <p class="vg-hero__subtitle" data-404-texto data-en={NOT_FOUND.texto} data-pt={NAO_ENCONTRADA.texto}>{NO_ENCONTRADA.texto}</p>

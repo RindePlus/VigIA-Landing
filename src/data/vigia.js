@@ -29,8 +29,10 @@ export const CTA = {
 // WhatsApp general (header, footer y botón flotante).
 export const WHATSAPP_URL = buildWhatsAppUrl('Hola, quiero más información sobre VigIA');
 
+// Título de la home: la marca y la propuesta, que es lo que se busca
+// (con sólo la marca, el título no tenía ninguna palabra de búsqueda).
 export const SEO = {
-  titulo: MARCA,
+  titulo: `${MARCA} · Alertas de estrés hídrico y térmico`,
   descripcion:
     'Alertas de estrés hídrico y térmico por ambiente, con días de margen para aplicar el bioinsumo o regar. En la plataforma y por WhatsApp.',
 };
@@ -235,6 +237,9 @@ export const IMPACTO = {
 export const NOSOTROS = {
   titulo: `Las personas detrás de ${MARCA}`,
   bajada: 'Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos.',
+  // Línea chica sobre el logo de cada tarjeta: dice qué es el logo (sin
+  // inventar cargos; cuando estén confirmados, pueden ir en su lugar).
+  representa: 'En representación de',
 };
 
 // 8. Clientes (el carrusel está en src/data/clientes.js), debajo de Sobre
@@ -315,8 +320,8 @@ export const FOOTER = {
   },
   // Páginas en src/pages (textos en src/data/legal.js, borrador a revisar).
   legales: [
-    { texto: 'Política de privacidad', href: '/privacidad' },
-    { texto: 'Términos y condiciones', href: '/terminos' },
+    { texto: 'Política de privacidad', href: '/privacidad/' },
+    { texto: 'Términos y condiciones', href: '/terminos/' },
   ],
   pie: 'Todos los derechos reservados.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
@@ -356,7 +361,7 @@ export const UI = {
     { label: 'Nosotros', href: '/#nosotros' },
     { label: 'Contacto', href: '/#contacto' },
     // Página propia (no una sección de la home): va al final.
-    { label: 'Educación', href: '/educacion' },
+    { label: 'Educación', href: '/educacion/' },
   ],
   header: {
     idioma: 'Idioma',

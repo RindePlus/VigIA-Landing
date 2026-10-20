@@ -104,8 +104,10 @@
   color: var(--gh-surface);
 }
 
-/* Columnas: título en mayúsculas y contenido corto debajo. */
-.rp-footer__col h3 {
+/* Columnas: título en mayúsculas y contenido corto debajo. Son h2: en las
+   páginas sin secciones (precios, educación, legales) un h3 saltaba un
+   nivel después del h1. */
+.rp-footer__col h2 {
   margin-bottom: var(--space-100);
   color: var(--gh-fg);
   font-size: var(--text-sm);

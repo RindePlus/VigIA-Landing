@@ -12,9 +12,15 @@ import agroconsultor from '../assets/clientes/agroconsultor.png';
 //   cara centrada (los originales están en media-src/equipo/). Con `null` se
 //   muestran las iniciales. La de Lucas es de 200 × 200: el original no da
 //   para más.
-// - `logoAlto`: alto en px. Los logos tienen proporciones muy distintas
-//   (BioRed es apilado, Agroconsultor muy ancho): estos altos igualan su
-//   peso visual, como en el carrusel de clientes.
+// - `logoAlto`: alto en px del logo en la tarjeta. Iguala el peso visual
+//   de los tres, no el alto ni el ancho: cada logo ocupa más o menos la
+//   misma área, corregida por cuánta "tinta" tiene. Rinde Plus tiene letras
+//   macizas (44 % de su área es tinta, contra 22-25 % de los otros), así que
+//   va más chico; Agroconsultor es muy ancho (5:1) y va bajo; BioRed,
+//   apilado, va alto. Si cambia un logo, se recalcula: alto =
+//   √(área / (proporción × √tinta)), con la misma área para los tres. El
+//   área se eligió para que no queden más chicos que los logos del carrusel
+//   de clientes, que está justo debajo.
 // Las imágenes van enteras (metadatos de Astro): el markup usa `.src` y las
 // dimensiones para el width/height del <img>, como el carrusel de clientes.
 /**
@@ -31,18 +37,18 @@ export const EQUIPO = [
     id: 'marcos-flesia',
     nombre: 'Marcos Flesia',
     foto: fotoMarcos,
-    empresa: { nombre: 'Rinde Plus', logo: rindeplus, logoAlto: 46 },
+    empresa: { nombre: 'Rinde Plus', logo: rindeplus, logoAlto: 44 },
   },
   {
     id: 'juan-dallorso',
     nombre: 'Juan Dall’Orso',
     foto: fotoJuan,
-    empresa: { nombre: 'Agroconsultor', logo: agroconsultor, logoAlto: 40 },
+    empresa: { nombre: 'Agroconsultor', logo: agroconsultor, logoAlto: 38 },
   },
   {
     id: 'lucas-andreoni',
     nombre: 'Lucas Andreoni',
     foto: fotoLucas,
-    empresa: { nombre: 'BioRed', logo: biored, logoAlto: 66 },
+    empresa: { nombre: 'BioRed', logo: biored, logoAlto: 75 },
   },
 ];
