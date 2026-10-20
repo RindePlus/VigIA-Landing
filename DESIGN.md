@@ -145,7 +145,7 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 
 - **Sobre la banda verde** (Impacto y cierre): texto #ece8df y secundarios teñidos de verde (#b4d4c1, #9fc2ad), no grises neutros.
 - **Celular de WhatsApp** (`WhatsAppMock.astro`): copia los colores de la app real (globo #ffffff, metadatos #667781, barras, fondo). Es una réplica del producto, no parte de la paleta: no se reutilizan en otros componentes.
-- **Máscaras** (#000000): sólo como canal de opacidad en `mask-image` (líneas de nivel, carrusel de logos), nunca como color visible.
+- **Máscaras** (#000000): sólo como canal de opacidad en `mask-image` (lote del hero, carrusel de logos), nunca como color visible.
 
 ### Named Rules
 **The Meaning Rule.** Cada color dice algo: verde a salvo, ámbar alerta, rojo pérdida, tierra carbono. Un color sin significado no entra. Nada de azules, celestes, lima ni violetas.
@@ -198,7 +198,7 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
   - **En celular, en vertical o con movimiento reducido,** la página se scrollea como siempre.
 - **Llegada a la frase:** cuando el hilo llega al punto, justo antes de "antes", un trazo verde campo recorre la palabra de izquierda a derecha, con el impulso del hilo, y se va por la derecha (1,8 s). Después aparece una flecha abajo que respira despacio: crece y se achica apenas. Es la única animación continua de la página, por pedido explícito.
 - **Fondos por capítulo (decisión 50):**
-  - el recorrido, sobre el fondo de la página, con líneas de nivel tenues detrás del hero (`TopoLines.astro`), casi invisibles detrás del texto;
+  - el recorrido, sobre el fondo de la página, con un lote sembrado dibujado a línea detrás del hero (`FieldRows.astro`): surcos en perspectiva hacia un punto de fuga al centro, cortina de árboles, lomas, y a la derecha un molino y un alambrado. Tenue, desvanecido arriba y al pie, y al 40 % detrás del texto;
   - Impacto, en una banda verde bosque;
   - equipo y clientes, sobre el fondo piedra de la página, con las tarjetas blancas (decisión 53: el salvia que tenían chocaba con ellas);
   - preguntas frecuentes, del color del footer, con el cierre verde entre los dos.

@@ -1209,6 +1209,37 @@ h3 {
 
 [data-rp-theme="dark"] .vg-topo { opacity: 0.3; }
 
+/* Lote sembrado detrás del hero (FieldRows.astro), en prueba. Los surcos
+   están en la mitad de abajo: se desvanece arriba (el cielo queda limpio,
+   el header no se mezcla) y al pie (el hero no termina en un corte). Detrás
+   del texto, a la izquierda, baja a menos de la mitad: se sigue viendo,
+   pero no compite con las letras. */
+.vg-campo-fondo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--gh-border-strong);
+  stroke-width: 1;
+  opacity: 0.5;
+  pointer-events: none;
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 40%, #000 56%, #000 80%, transparent),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 40%, #000 56%, #000 80%, transparent),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  mask-composite: intersect;
+}
+
+.vg-campo-fondo path { vector-effect: non-scaling-stroke; }
+.vg-campo-fondo__lejos { opacity: 0.6; }
+
+[data-rp-theme="dark"] .vg-campo-fondo { opacity: 0.35; }
+
 /* ---------- 6. Impacto ----------
    Cuatro indicadores grandes y centrados, con una línea corta debajo, sin
    caja. Los dos últimos son botones: abren su tabla en un panel centrado
