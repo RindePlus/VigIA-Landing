@@ -15,6 +15,7 @@ Leelas antes de tocar contenido, en este orden:
 2. [`doc/landing/ESTRUCTURA_LANDING.md`](../../../doc/landing/ESTRUCTURA_LANDING.md): secciones, orden, copy aprobado, medios y decisiones.
 3. `src/data/vigia.js`: el copy implementado. El markup no lleva texto propio.
 4. `src/data/vigia.en.js` y [`doc/landing/TRADUCCION_EN.md`](../../../doc/landing/TRADUCCION_EN.md): la versión en inglés (mismas claves) y su glosario y reglas.
+5. `src/data/vigia.pt.js` y [`doc/landing/TRADUCCION_PT.md`](../../../doc/landing/TRADUCCION_PT.md): la versión en portugués de Brasil (mismas claves) y su glosario y reglas.
 
 Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actualizar el documento primero.
 
@@ -32,8 +33,8 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 
 ```
 1. Hero · 2. El problema · 3. Lo que hace VigIA · 4. La solución    ← recorrido del mismo lote (.vg-journey)
-5. Frase destacada · 6. Impacto · 7. Sobre nosotros + 8. Clientes (una pantalla)
-9. Preguntas frecuentes + cierre (CTA al pie) · Footer
+5. Frase destacada · 6. Impacto · 7. Sobre nosotros (con el carrusel de clientes)
+8. Preguntas frecuentes + cierre (CTA bajo el título) · Footer
 ```
 
 | Sección | Trabajo que hace | No hace |
@@ -41,13 +42,13 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 | 1. Hero | Resultado + para quién + CTA + gráfico animado. | Listar funciones. |
 | 2. El problema | Por qué el estrés se detecta tarde. | Hablar de VigIA. |
 | 3. Lo que hace VigIA | Cuatro tarjetas con foto: picos de estrés, desde antes de la siembra, el agua y los bioinsumos. Cuentan también las cuatro alertas y su acción. Debajo, cultivos de servicio y carry-over de herbicidas. | Explicar canales o pasos (eso es Cómo funciona). |
-| 4. La solución | Canales (plataforma y WhatsApp) y cómo lo hace (tres pasos). | Detallar fórmulas. |
-| 5. Frase destacada | Una idea en dos líneas, grande. | Llevar botón ni título. |
-| 6. Impacto | Datos medidos en campo: contexto, grano y carbono con desglose por cultivo, y calculadora. | Repetir lo que hace el producto. |
+| 4. La solución | Canales (plataforma y WhatsApp) y, debajo, cómo lo hace (tres pasos en fila). | Detallar fórmulas. |
+| 5. Frase destacada | Una idea en tres renglones, grande. | Llevar botón ni título. |
+| 6. Impacto | Datos medidos en campo: cuatro indicadores, con el desglose de grano y carbono por cultivo. | Repetir lo que hace el producto. |
 | 7. Sobre nosotros | Las personas detrás del producto, con foto y logo de su empresa. | Inventar cargos o trayectorias. |
-| 9. Preguntas | Objeciones reales: sensores, carga, cultivos, canales, secano. | Respuestas de más de 40 palabras. |
-| 8. Clientes | Carrusel de logos al pie de Sobre nosotros, sin título a la vista. | Sumar socios (van en Sobre nosotros). |
-| Cierre (en 9, bajo el título) | Una línea chica que sigue al título ("¿Te quedó alguna duda? Escribinos.") + el mismo CTA. | Un CTA distinto; volver a ser una sección propia. |
+| Clientes (en 7) | Carrusel de logos al pie de Sobre nosotros, sin título a la vista. | Sumar socios (van en Sobre nosotros). |
+| 8. Preguntas | Objeciones reales: sensores, carga, cultivos, canales, secano. | Respuestas de más de 40 palabras. |
+| Cierre (en 8, bajo el título) | Una línea chica que sigue al título ("¿Te quedó alguna duda? Escribinos.") + el mismo CTA. | Un CTA distinto; volver a ser una sección propia. |
 
 Cambiar el orden, sumar o quitar una sección es una **decisión de estructura**: se acuerda con el usuario y se registra en `ESTRUCTURA_LANDING.md` (tabla "Decisiones") antes de tocar código.
 
@@ -91,15 +92,15 @@ Si un texto no entra, se recorta la idea, no la letra.
 - **Interfaz en código** (gráficos, alertas, celular): SVG y CSS dentro de `MediaStory.astro`.
 - **Campo en video:** sólo en El problema (`problema.mp4`) y Cómo funciona (`resolucion.mp4`). El hero no lleva video.
 - Un medio por sección, sin texto dentro del video, sin drones ni HUD.
-- Nuevos clips: el proceso está en `doc/landing/PROMPTS_VIDEOS.md` y `PROMPTS_IMAGENES.md`; el material crudo va a `media-src/` (fuera del repo).
+- Nuevos clips: el proceso está en `media-src/PROMPTS_VIDEOS.md` y `media-src/PROMPTS_IMAGENES.md`, junto con el material crudo (todo fuera del repo).
 
 ## Cómo trabajar un cambio de contenido
 
 1. Ubicá la sección en `ESTRUCTURA_LANDING.md` y el respaldo en MODULO_VIGIA §10.
 2. Si cambia el copy aprobado, actualizá primero el documento y después `src/data/vigia.js`.
-3. Hacé el mismo cambio en `src/data/vigia.en.js`, adaptado (no literal) con el glosario de `TRADUCCION_EN.md`. Si aparece un término o una frase nueva que no va literal, sumala al documento con el porqué.
+3. Hacé el mismo cambio en `src/data/vigia.en.js` y `src/data/vigia.pt.js`, adaptado (no literal) con el glosario de `TRADUCCION_EN.md` y `TRADUCCION_PT.md`. Si aparece un término o una frase nueva que no va literal, sumala al documento con el porqué.
 4. El markup (`src/views/HomePage.astro`) sólo lee de `src/data/`.
-5. SEO: si cambia el hero o las preguntas, revisá `<title>`, la meta description y el JSON-LD `FAQPage` (en los dos idiomas).
+5. SEO: si cambia el hero o las preguntas, revisá `<title>`, la meta description y el JSON-LD `FAQPage` (en los tres idiomas).
 6. Cerrá con `self-review-checklist`.
 
 ## Checklist de contenido
@@ -110,5 +111,5 @@ Si un texto no entra, se recorta la idea, no la letra.
 - [ ] Presupuesto de texto respetado.
 - [ ] "VigIA BioEstrés" en títulos, SEO y cierre.
 - [ ] Copy en `src/data/`, no en el markup.
-- [ ] El cambio está también en `vigia.en.js`, adaptado según `TRADUCCION_EN.md` y con las mismas afirmaciones.
+- [ ] El cambio está también en `vigia.en.js` y `vigia.pt.js`, adaptado según `TRADUCCION_EN.md` y `TRADUCCION_PT.md` y con las mismas afirmaciones.
 - [ ] `ESTRUCTURA_LANDING.md` refleja lo implementado.

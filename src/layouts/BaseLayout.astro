@@ -2,7 +2,7 @@
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.astro';
 import WhatsAppWidget from '../components/WhatsAppWidget.jsx';
-import { IDIOMAS, alternativas, contenido, idiomaDe } from '../i18n/idiomas';
+import { IDIOMAS, alternativas, contenido, idiomaDe, ruta } from '../i18n/idiomas';
 import '../styles/global.css';
 
 interface Props {
@@ -13,10 +13,11 @@ interface Props {
   jsonLd?: Record<string, unknown>;
 }
 
-// Idioma de la página (ADR 0004): sale de la ruta (/en/… = inglés).
+// Idioma de la página (ADR 0004 y ADR 0008): sale de la ruta (/en/… =
+// inglés, /pt/… = portugués).
 const lang = idiomaDe(Astro.currentLocale);
 const idioma = IDIOMAS.find((i) => i.code === lang) ?? IDIOMAS[0];
-const otroIdioma = IDIOMAS.find((i) => i.code !== lang) ?? IDIOMAS[1];
+const otrosIdiomas = IDIOMAS.filter((i) => i.code !== lang);
 const { MARCA, SEO, UI, WHATSAPP_URL } = contenido(lang);
 // Rutas de esta misma página en cada idioma (para el selector y hreflang).
 const alt = alternativas(Astro.url.pathname);
@@ -28,11 +29,12 @@ const { title = SEO.titulo, description = SEO.descripcion, showMenu = true, json
 const site = Astro.site ?? new URL('https://vigiabioestres.com');
 const pageUrl = new URL(Astro.url.pathname, site).href;
 const ogImage = new URL('/og.jpg', site).href;
-// hreflang: sólo si la página existe en los dos idiomas (las legales no).
-const hreflang = alt.tieneEn
+// hreflang: sólo si la página existe traducida (las legales no).
+const hreflang = alt.traducida
   ? [
       { lang: 'es', href: new URL(alt.es, site).href },
       { lang: 'en', href: new URL(alt.en, site).href },
+      { lang: 'pt', href: new URL(alt.pt, site).href },
       { lang: 'x-default', href: new URL(alt.es, site).href },
     ]
   : [];
@@ -52,7 +54,7 @@ const hreflang = alt.tieneEn
     {hreflang.map((h) => <link rel="alternate" hreflang={h.lang} href={h.href} />)}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={idioma.og} />
-    {alt.tieneEn && <meta property="og:locale:alternate" content={otroIdioma.og} />}
+    {alt.traducida && otrosIdiomas.map((i) => <meta property="og:locale:alternate" content={i.og} />)}
     <meta property="og:site_name" content={MARCA} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -95,10 +97,10 @@ const hreflang = alt.tieneEn
       lang={lang}
       menuItems={UI.menu}
       textos={UI.header}
-      inicioHref={lang === 'en' ? '/en/' : '/'}
+      inicioHref={ruta(lang, '/')}
       inicioLabel={`${MARCA} — ${UI.inicio}`}
       whatsappUrl={WHATSAPP_URL}
-      rutas={{ es: alt.es, en: alt.en }}
+      rutas={{ es: alt.es, en: alt.en, pt: alt.pt }}
     />
     <main id="contenido">
       <slot />
@@ -141,14 +143,8 @@ const hreflang = alt.tieneEn
       const root = document.documentElement;
       if (root.classList.contains('vg-reveal-on')) {
         // En celular se dispara apenas el elemento asoma: al bajar rápido no
-        // quedan huecos esperando a que el contenido aparezca. En el
-        // recorrido a pantalla completa (SectionPager) cada panel se ve
-        // entero: sin margen abajo, si no lo que va al pie del panel nunca
-        // "entra" y no aparece.
+        // quedan huecos esperando a que el contenido aparezca.
         const celular = window.matchMedia('(max-width: 680px)').matches;
-        const pantallaCompleta = window.matchMedia(
-          '(min-width: 900px) and (min-height: 560px) and (orientation: landscape)',
-        ).matches;
         const observer = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -167,11 +163,7 @@ const hreflang = alt.tieneEn
               el.addEventListener('transitionend', done);
             });
           },
-          celular
-            ? { rootMargin: '0px', threshold: 0 }
-            : pantallaCompleta
-              ? { rootMargin: '0px', threshold: 0.1 }
-              : { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
+          celular ? { rootMargin: '0px', threshold: 0 } : { rootMargin: '0px 0px -10% 0px', threshold: 0.1 },
         );
         document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
       }

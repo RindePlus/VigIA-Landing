@@ -1,10 +1,13 @@
-// Idiomas del sitio (ADR 0004). Español en la raíz, inglés bajo /en/.
-// - El contenido de cada idioma vive en src/data/vigia.js (es) y
-//   src/data/vigia.en.js (en), con las mismas claves.
-// - Las reglas y el glosario de la versión en inglés están en
-//   doc/landing/TRADUCCION_EN.md.
+// Idiomas del sitio (ADR 0004 y ADR 0008). Español en la raíz, inglés bajo
+// /en/ y portugués de Brasil bajo /pt/.
+// - El contenido de cada idioma vive en src/data/vigia.js (es),
+//   src/data/vigia.en.js (en) y src/data/vigia.pt.js (pt), con las mismas
+//   claves.
+// - Las reglas y el glosario de cada traducción están en
+//   doc/landing/TRADUCCION_EN.md y doc/landing/TRADUCCION_PT.md.
 import * as es from '../data/vigia.js';
 import * as en from '../data/vigia.en.js';
+import * as pt from '../data/vigia.pt.js';
 
 export const IDIOMA_BASE = 'es';
 
@@ -13,35 +16,40 @@ export const IDIOMA_BASE = 'es';
 export const IDIOMAS = [
   { code: 'es', label: 'Español', html: 'es-AR', og: 'es_AR' },
   { code: 'en', label: 'English', html: 'en', og: 'en_US' },
+  { code: 'pt', label: 'Português', html: 'pt-BR', og: 'pt_BR' },
 ];
 
-/** Páginas que existen en inglés (ruta en español, sin barra final). Las
+/** Idiomas con prefijo en la ruta (todos menos el español). */
+const PREFIJOS = IDIOMAS.map((i) => i.code).filter((c) => c !== IDIOMA_BASE);
+
+/** Páginas que existen traducidas (ruta en español, sin barra final). Las
  *  legales quedan sólo en español hasta que las revise asesoría legal. */
-const PAGINAS_EN = ['/', '/pricing', '/educacion'];
+const PAGINAS_TRADUCIDAS = ['/', '/pricing', '/educacion'];
 
-/** Normaliza el locale de Astro (Astro.currentLocale) a 'es' | 'en'. */
-export const idiomaDe = (locale) => (locale === 'en' ? 'en' : 'es');
+/** Normaliza el locale de Astro (Astro.currentLocale) a 'es' | 'en' | 'pt'. */
+export const idiomaDe = (locale) => (locale === 'en' || locale === 'pt' ? locale : 'es');
 
-/** Contenido del idioma: mismas claves en los dos archivos. */
-export const contenido = (lang) => (lang === 'en' ? en : es);
+/** Contenido del idioma: mismas claves en todos los archivos. Con
+ *  ternarios y no un objeto indexado, así los tipos se conservan. */
+export const contenido = (lang) => (lang === 'en' ? en : lang === 'pt' ? pt : es);
 
 /** Ruta de una página en un idioma, a partir de su ruta en español
  *  ('/', '/pricing', '/#preguntas'…). */
-export const ruta = (lang, rutaEs) => (lang === 'en' ? `/en${rutaEs}` : rutaEs);
+export const ruta = (lang, rutaEs) => (lang === IDIOMA_BASE ? rutaEs : `/${lang}${rutaEs}`);
 
-/** Ruta en español de la página actual (quita /en y la barra final). */
+/** Ruta en español de la página actual (quita el prefijo del idioma y la
+ *  barra final). */
 export const rutaBase = (pathname) => {
-  const sinEn = pathname.replace(/^\/en(?=\/|$)/, '') || '/';
-  return sinEn.length > 1 ? sinEn.replace(/\/+$/, '') : '/';
+  const prefijo = new RegExp(`^/(${PREFIJOS.join('|')})(?=/|$)`);
+  const sinIdioma = pathname.replace(prefijo, '') || '/';
+  return sinIdioma.length > 1 ? sinIdioma.replace(/\/+$/, '') : '/';
 };
 
-/** Rutas de la página actual en cada idioma. Si la página no existe en
- *  inglés (legales), la opción en inglés lleva a la home en inglés. */
+/** Rutas de la página actual en cada idioma y si existe traducida. Si no
+ *  existe (legales), los otros idiomas llevan a su home. */
 export const alternativas = (pathname) => {
   const base = rutaBase(pathname);
-  return {
-    es: base,
-    en: PAGINAS_EN.includes(base) ? ruta('en', base) : '/en/',
-    tieneEn: PAGINAS_EN.includes(base),
-  };
+  const traducida = PAGINAS_TRADUCIDAS.includes(base);
+  const enIdioma = (lang) => ruta(lang, traducida ? base : '/');
+  return { es: base, en: enIdioma('en'), pt: enIdioma('pt'), traducida };
 };

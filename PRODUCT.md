@@ -13,6 +13,7 @@ web
 - **Productores agropecuarios** de Argentina, extensivos e intensivos, en secano o bajo riego, que deciden cuándo aplicar un bioinsumo o regar.
 - **Asesores agronómicos** que siguen los lotes de varios clientes y deciden con datos.
 - En la versión en inglés (`/en/`): socios, inversores y productores fuera de Argentina.
+- En la versión en portugués (`/pt/`): productores, consultores y empresas de Brasil.
 
 Muchas veces leen la página en el celular, en el campo y a pleno sol.
 
@@ -36,7 +37,7 @@ Campaña agrícola. Lotes divididos en ambientes, con cultivos como maíz, soja 
 ## Capabilities and Constraints
 
 - **Sitio estático** (Astro, GitHub Pages): sin backend, sin formularios y sin cuentas.
-- **En español y en inglés**, con las mismas claves de contenido.
+- **En español, inglés y portugués de Brasil**, con las mismas claves de contenido.
 - **Sólo se afirma lo que respalda `MODULO_VIGIA.md` §10.** No se menciona:
   - inteligencia artificial, modelos ni algoritmos ("VigIA" es sólo marca);
   - satélite, NDVI ni drones;

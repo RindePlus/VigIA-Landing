@@ -1,24 +1,27 @@
 ---
-// Fondo de conexión entre El problema y Lo que hace VigIA, sólo con scroll
-// normal (celular, vertical): lotes vistos desde arriba, del mismo tamaño
-// y trazo que los de LoteAmbientes (pocas líneas). Arranca a mitad de El
+// Fondo de conexión entre El problema y Lo que hace VigIA (decorativo):
+// lotes vistos desde arriba, como un mapa de agricultura de precisión,
+// grandes y con pocas líneas; algunos divididos en ambientes por curvas
+// suaves (el "por ambiente" de la sección). Arranca a mitad de El
 // problema y sigue por debajo del comienzo de Lo que hace VigIA, así las
 // dos secciones quedan unidas por el mismo campo.
 // Se genera al compilar, siempre igual (sin azar): suma de senos.
 // Vectores sin relleno; posición, color y desvanecido en sections.css
 // (.vg-fondo-linea--lotes).
 
-const W = 420;
+// A escala 1:1 y más ancho que cualquier pantalla: se recorta al centro,
+// así en celular y en escritorio los lotes se ven del mismo tamaño.
+const W = 2400;
 const H = 1400;
 
 const fmt = (n: number) => n.toFixed(1);
 type P = [number, number];
 
-const COLS = 3;
+const COLS = 15;
 const FILAS = 10;
 const ANCHO = 180;
 const ALTO = 150;
-const X0 = -60;
+const X0 = -150;
 const Y0 = -20;
 
 // Esquinas compartidas por lotes vecinos, corridas apenas.
@@ -52,7 +55,7 @@ const suave = (p: P[]) => {
 
 // Algunos lotes divididos en ambientes, salteados: curvas que cruzan el
 // lote ondulando, recortadas al lote con un clipPath.
-const CON_AMBIENTES = [4, 9, 16, 23];
+const CON_AMBIENTES = [22, 27, 32, 51, 71, 82, 93, 113, 133];
 const ambientes = CON_AMBIENTES.map((k) => {
   const [a, b, , d] = lotes[k];
   const curvas = [0.3, 0.55, 0.8].map((f, n) => {

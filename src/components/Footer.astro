@@ -20,8 +20,8 @@ import './Footer.css';
 
 const lang = idiomaDe(Astro.currentLocale);
 const { FOOTER, MARCA, UI, WHATSAPP_URL } = contenido(lang);
-// En inglés la dirección lleva el país: el público no es sólo argentino.
-const direccion = lang === 'en' ? OFFICE_ADDRESS : 'Concejal Lorusso 762, Alta Gracia, Córdoba';
+// Fuera del español la dirección lleva el país: el público no es argentino.
+const direccion = lang === 'es' ? 'Concejal Lorusso 762, Alta Gracia, Córdoba' : OFFICE_ADDRESS;
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_ADDRESS)}`;
 const year = new Date().getFullYear();
 const LOGO_ALTO = 48;
@@ -93,14 +93,22 @@ const redes = [
               </li>
             ))
           }
+          {/* Legales: en la columna de ayuda, así el pie queda en un renglón. */}
+          {
+            FOOTER.legales.map((l) => (
+              <li>
+                <a href={l.href} hreflang={lang === 'es' ? undefined : 'es'}>
+                  {l.texto}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </nav>
     </div>
 
+    <!-- Pie: copyright y créditos de las fotos, en un renglón fino. -->
     <div class="rp-footer__bottom">
-      <nav class="rp-footer__legal" aria-label={FOOTER.legalesLabel}>
-        {FOOTER.legales.map((l) => <a href={l.href} hreflang={lang === 'en' ? 'es' : undefined}>{l.texto}</a>)}
-      </nav>
       <p class="rp-footer__copyright">
         © {year} {MARCA} · {FOOTER.pie}
       </p>
@@ -117,3 +125,14 @@ const redes = [
     </div>
   </div>
 </footer>
+
+<script>
+  // Alto del footer (--alto-footer): Preguntas ocupa lo que queda de la
+  // pantalla, así las dos entran juntas (sections.css).
+  const pie = document.querySelector<HTMLElement>('.rp-footer');
+  if (pie) {
+    const medir = () => document.documentElement.style.setProperty('--alto-footer', `${pie.offsetHeight}px`);
+    medir();
+    new ResizeObserver(medir).observe(pie);
+  }
+</script>

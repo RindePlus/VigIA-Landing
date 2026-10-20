@@ -61,7 +61,8 @@ sh .claude/skills/impeccable/scripts/impeccable detect --json docs/index.html
 Los únicos hallazgos aceptados son `cramped-padding` en secciones con fondo propio y en la lista de preguntas: son falsos (el margen lateral lo da `.vg-wrap`). Cualquier otro se arregla o se justifica en `DESIGN.md`. Las reglas visuales están en `DESIGN.md`.
 
 Después, indicá al usuario qué mirar en `pnpm dev` (http://localhost:4321):
-- Mobile (≤ 390px) y desktop.
+- Mobile (≤ 390px) y desktop. En escritorio, que cada sección siga entrando en una pantalla (`.vg-pantalla`).
+- Los tres idiomas (`/`, `/en/` y `/pt/`) si cambió el copy o el diseño: el portugués suele ser más largo.
 - Tema claro y oscuro.
 - Con `prefers-reduced-motion: reduce` si el cambio anima algo.
 - Navegación con teclado: orden de foco y foco visible.
@@ -73,6 +74,7 @@ Después, indicá al usuario qué mirar en `pnpm dev` (http://localhost:4321):
 - Jerarquía de headings sin saltos (un solo `h1` por página).
 - Ortografía, tono y cifras del copy verificados; los datos viven en `src/data/`.
 - Si cambió el copy: checklist de contenido de `vigia-landing-structure` (cada afirmación con respaldo en `doc/landing/MODULO_VIGIA.md` §10, sin IA, satélite ni estrés biótico; herbicidas sólo como carry-over).
+- Si cambió el copy: el cambio está en `vigia.js`, `vigia.en.js` y `vigia.pt.js`, con las mismas claves.
 - `<title>` y meta description correctos si cambió una página.
 
 ## 6. Criterios de aceptación

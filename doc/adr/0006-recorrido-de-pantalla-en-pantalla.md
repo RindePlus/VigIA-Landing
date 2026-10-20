@@ -1,6 +1,6 @@
 # ADR 0006 — Recorrido de pantalla en pantalla
 
-- **Estado:** Propuesto
+- **Estado:** Superado por [ADR 0007](0007-scroll-normal-en-toda-la-home.md)
 - **Fecha:** 2026-10-19
 
 ## Contexto

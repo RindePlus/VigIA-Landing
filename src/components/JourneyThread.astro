@@ -37,9 +37,6 @@
 <script>
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const NODE_COLOR = ['var(--vg-thread-ok)', 'var(--vg-sev-alerta)', 'var(--vg-agua)', 'var(--vg-thread-ok)'];
-  // Relleno de cada punto sin alcanzar: el fondo de su sección (La solución
-  // tiene el suyo).
-  const NODE_FONDO = ['var(--gh-canvas)', 'var(--gh-canvas)', 'var(--gh-canvas)', 'var(--vg-bg-solucion)'];
 
   const journey = document.querySelector<HTMLElement>('.vg-journey');
   const svg = journey?.querySelector<SVGSVGElement>('[data-vg-thread]');
@@ -64,6 +61,8 @@
       // no pida mucho scroll: el punto llega con la frase a mitad de pantalla.
       largos: number[];
       avances: number[];
+      // Avance al terminar "Cómo lo hace", donde arranca el tramo final.
+      aServicio: number;
     } | null = null;
     let nodeEls: SVGGElement[] = [];
     let endEl: SVGGElement | null = null;
@@ -169,7 +168,7 @@
       nodeEls = nodes.map((n, i) => {
         const g = document.createElementNS(SVG_NS, 'g');
         g.setAttribute('class', 'vg-thread__node');
-        g.setAttribute('style', `--c: ${NODE_COLOR[i] ?? NODE_COLOR[0]}; --fondo: ${NODE_FONDO[i] ?? NODE_FONDO[0]}`);
+        g.setAttribute('style', `--c: ${NODE_COLOR[i] ?? NODE_COLOR[0]}`);
         const c = document.createElementNS(SVG_NS, 'circle');
         c.setAttribute('cx', String(n.x));
         c.setAttribute('cy', String(n.y));
@@ -208,7 +207,7 @@
         avances.push(acc);
         prev = p;
       }
-      geo = { nodes, yStart, yEnd, length, largos, avances };
+      geo = { nodes, yStart, yEnd, length, largos, avances, aServicio: yServicio - yStart };
       line.style.strokeDasharray = String(geo.length);
       update();
     };
@@ -216,19 +215,17 @@
     const update = () => {
       if (!geo) return;
       const jr = journey.getBoundingClientRect();
-      // Punta del hilo un poco arriba de la mitad de la pantalla. En el
-      // recorrido a pantalla completa, con la frase ya en pantalla el hilo
-      // llega entero: la frase se detiene centrada y la punta, al 55 %, no
-      // alcanzaba el punto final.
-      const frase = document.querySelector<HTMLElement>('.vg-tagline');
-      const fraseEnPantalla =
-        document.documentElement.classList.contains('vg-pager-on') &&
-        !!frase &&
-        Math.abs(frase.getBoundingClientRect().top) < window.innerHeight * 0.1;
-      const target = reduceMotion || fraseEnPantalla ? Infinity : window.innerHeight * 0.55 - jr.top;
+      // Punta del hilo un poco arriba de la mitad de la pantalla.
+      const target = reduceMotion ? Infinity : window.innerHeight * 0.55 - jr.top;
       // Avance en px de scroll desde el primer punto → largo dibujado.
-      const avance = target - geo.yStart;
-      const { largos, avances } = geo;
+      const { largos, avances, aServicio, yStart, yEnd } = geo;
+      let avance = target - yStart;
+      // Tramo final (de "Cómo lo hace" a la frase), más rápido: el hilo
+      // llega al punto cuando éste está a dos tercios de la pantalla, con la
+      // frase ya a la vista y antes de que asome Impacto.
+      const aFin = avances[avances.length - 1];
+      const tramo = Math.max(100, yEnd - window.innerHeight * 0.12 - yStart - aServicio);
+      if (avance > aServicio) avance = aServicio + ((avance - aServicio) * (aFin - aServicio)) / tramo;
       let dibujado = 0;
       if (avance >= avances[avances.length - 1]) dibujado = geo.length;
       else if (avance > 0) {
@@ -241,8 +238,8 @@
       geo.nodes.forEach((n, i) => nodeEls[i]?.classList.toggle('is-reached', target >= n.y));
       const llego = dibujado >= geo.length - 12;
       endEl?.classList.toggle('is-reached', llego);
-      // La frase reacciona a la llegada (subrayado de "antes" y flecha).
-      if (llego) frase?.classList.add('is-llegada');
+      // La frase reacciona a la llegada (subrayado de "antes").
+      if (llego) document.querySelector('.vg-tagline')?.classList.add('is-llegada');
     };
 
     let ticking = false;

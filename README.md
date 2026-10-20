@@ -6,7 +6,7 @@ Sigue la estructura y el diseño de `Landing` (Rinde Plus), pero con **Astro + R
 ## Por qué Astro
 
 - Cada página es HTML estático prerenderizado (mejor SEO y carga inicial).
-- React se usa solo en las **islas** que necesitan interactividad (header, widget de WhatsApp, animaciones de scroll).
+- React se usa solo en las **islas** que necesitan interactividad (header, widget de WhatsApp, carrusel de clientes). Los efectos chicos van en `<script>` dentro de los `.astro`.
 - El ruteo es por archivo en `src/pages/`: no hace falta el router manual ni el truco de `404.html` + `sessionStorage` de Landing.
 
 ## Comandos
@@ -55,27 +55,43 @@ Dominio: **https://vigiabioestres.com/** (también `www.`).
 
 ## Estructura
 
+El sitio está en español (raíz), inglés (`/en/`) y portugués de Brasil (`/pt/`): ver [ADR 0004](doc/adr/0004-sitio-bilingue-es-en.md) y [ADR 0008](doc/adr/0008-version-en-portugues.md).
+
 ```
 src/
-├── assets/            # logos de VigIA (claro/oscuro)
+├── assets/            # logos, fotos de "Lo que hace VigIA", equipo y clientes
 ├── components/
-│   ├── Header.jsx     # isla React (client:load): menú, toggle de tema, "Ingresar"
-│   ├── Footer.astro   # estático, sin JS
-│   ├── WhatsAppWidget.jsx  # isla React (client:idle); openWhatsApp() la abre desde otras islas
+│   ├── Header.jsx     # isla React (client:load): menú, idioma, tema, "Ingresar"; se oculta al bajar
+│   ├── Footer.astro   # estático; mide su alto para compartir pantalla con Preguntas
+│   ├── WhatsAppWidget.jsx  # isla React (client:idle): botón flotante de WhatsApp
+│   ├── BalanceChart.astro, ProblemChart.astro, WhatsAppMock.astro, MediaStory.astro
+│   │                  # medios del recorrido: gráficos y chat en código, y el video
+│   ├── JourneyThread.astro  # hilo que une las secciones del recorrido
+│   ├── FieldRows.astro, LotesConexion.astro, Pivotes.astro  # dibujos de fondo
+│   └── TaglineReveal.astro, TrustedCompanies.jsx, LegalPage.astro
 ├── data/
-│   ├── social.js      # contacto, WhatsApp, URL de la app
-│   └── modules.js     # módulos de VigIA que muestra la home
+│   ├── vigia.js       # copy en español (la fuente), un objeto por sección
+│   ├── vigia.en.js    # copy en inglés (mismas claves)
+│   ├── vigia.pt.js    # copy en portugués de Brasil (mismas claves)
+│   ├── impactoDatos.js, equipo.js, clientes.js, videos.js, legal.js
+│   └── social.js      # contacto, WhatsApp, URL de la app
+├── i18n/
+│   └── idiomas.js     # idiomas, rutas por idioma y contenido de cada uno
 ├── hooks/
-│   ├── useTheme.js    # tema claro/oscuro system-first
+│   └── useTheme.js    # tema claro/oscuro system-first
 ├── layouts/
-│   └── BaseLayout.astro    # <head>, script anti-flash de tema, header, footer, WhatsApp
-├── pages/             # una ruta por archivo
-│   ├── index.astro
-│   ├── pricing.astro
-│   └── 404.astro
+│   └── BaseLayout.astro    # <head>, hreflang, script anti-flash de tema, header, footer, WhatsApp
+├── views/             # páginas compartidas por los tres idiomas
+│   ├── HomePage.astro
+│   ├── PricingPage.astro
+│   └── EducacionPage.astro
+├── pages/             # una ruta por archivo; sólo montan las vistas
+│   ├── index.astro, pricing.astro, educacion.astro, privacidad.astro, terminos.astro, 404.astro
+│   ├── en/            # index, pricing y educacion en inglés
+│   └── pt/            # index, pricing y educacion en portugués
 └── styles/
-    ├── global.css     # tokens --gh-* (copiados de Landing) + reset
-    └── sections.css   # estilos base de secciones
+    ├── global.css     # tokens (paleta de campo, escalas) + reset
+    └── sections.css   # estilos de las secciones
 ```
 
 ## Equivalencias con Landing
@@ -91,8 +107,8 @@ src/
 
 Estructura y contenido planificado de la home: [doc/landing/ESTRUCTURA_LANDING.md](doc/landing/ESTRUCTURA_LANDING.md).
 
-Prompts para generar los videos de los módulos y el fondo: [doc/landing/PROMPTS_VIDEOS.md](doc/landing/PROMPTS_VIDEOS.md).
+Sistema visual: [DESIGN.md](DESIGN.md). Glosarios de las traducciones: [inglés](doc/landing/TRADUCCION_EN.md) y [portugués](doc/landing/TRADUCCION_PT.md).
 
-Prompts de las imágenes base de esos videos (Nano Banana): [doc/landing/PROMPTS_IMAGENES.md](doc/landing/PROMPTS_IMAGENES.md).
+Los prompts de los videos y de sus imágenes base (`PROMPTS_VIDEOS.md`, `PROMPTS_IMAGENES.md`) son material de trabajo: están en `media-src/`, fuera del repo.
 
 Documentación funcional y técnica del módulo VigIA: [doc/landing/MODULO_VIGIA.md](doc/landing/MODULO_VIGIA.md). No va en `docs/` porque esa carpeta es la salida del build y se regenera.

@@ -5,19 +5,15 @@
 // frase (JourneyThread.astro): entra por el renglón del medio, justo antes
 // de "antes". Cuando el hilo llega, la sección toma la clase `is-llegada` y
 // "antes" se subraya con el verde del hilo, como si la línea siguiera bajo
-// la palabra. En pantalla completa, una flecha abajo indica que la página
-// sigue.
-import { PiArrowDown } from 'react-icons/pi';
+// la palabra.
 
 interface Props {
   /** Una entrada por renglón. `*texto*` se resalta en verde y `_texto_` en
       rojo (los colores de la historia: a tiempo / tarde). */
   lineas: string[];
-  /** Texto accesible de la flecha que lleva a la sección siguiente. */
-  sigue?: string;
 }
 
-const { lineas, sigue } = Astro.props;
+const { lineas } = Astro.props;
 
 // Parte cada renglón en palabras, cada una con su tono (o ninguno).
 const TONOS: Record<string, string> = { '*': 'ok', _: 'critico' };
@@ -32,7 +28,7 @@ const palabras = (linea: string) =>
     });
 ---
 
-<section class="vg-tagline" id="frase" data-vg-tagline data-pantalla>
+<section class="vg-tagline vg-pantalla" id="frase" data-vg-tagline>
   <div class="vg-wrap">
     <p class="vg-tagline__text">
       {
@@ -48,12 +44,5 @@ const palabras = (linea: string) =>
       }
     </p>
   </div>
-  {
-    sigue && (
-      <a class="vg-tagline__sigue" href="#impacto" aria-label={sigue}>
-        <PiArrowDown aria-hidden="true" />
-      </a>
-    )
-  }
 </section>
 

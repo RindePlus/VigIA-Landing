@@ -2,11 +2,12 @@
 // Home de VigIA BioEstrés (versión 2 de doc/landing/ESTRUCTURA_LANDING.md):
 // Hero → El problema → Lo que hace VigIA → La solución (recorrido del mismo
 // lote) → Frase destacada → Resultados → Sobre nosotros (con los clientes) →
-// Preguntas (con el CTA de cierre). Cada una es una pantalla del paginador
-// (SectionPager); desde Preguntas, scroll normal hasta el footer.
-// Una sola home para los dos idiomas (ADR 0004): src/pages/index.astro la
-// usa en español y src/pages/en/index.astro en inglés. El contenido sale de
-// src/data/vigia.js o vigia.en.js según el idioma. Los medios de las tres
+// Preguntas (con el CTA de cierre). Scroll normal en todas las pantallas
+// (ADR 0007).
+// Una sola home para los tres idiomas (ADR 0004 y ADR 0008):
+// src/pages/index.astro la usa en español, src/pages/en/index.astro en inglés
+// y src/pages/pt/index.astro en portugués. El contenido sale de
+// src/data/vigia.js, vigia.en.js o vigia.pt.js según el idioma. Los medios de las tres
 // primeras secciones usan MediaStory: animación en código y, si hay, el
 // video (src/data/videos.js).
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -15,11 +16,8 @@ import WhatsAppMock from '../components/WhatsAppMock.astro';
 import ProblemChart from '../components/ProblemChart.astro';
 import MediaStory from '../components/MediaStory.astro';
 import FieldRows from '../components/FieldRows.astro';
-import SueloSeco from '../components/SueloSeco.astro';
 import LotesConexion from '../components/LotesConexion.astro';
-import LoteAmbientes from '../components/LoteAmbientes.astro';
 import Pivotes from '../components/Pivotes.astro';
-import SectionPager from '../components/SectionPager.astro';
 import JourneyThread from '../components/JourneyThread.astro';
 import TaglineReveal from '../components/TaglineReveal.astro';
 import TrustedCompanies from '../components/TrustedCompanies.jsx';
@@ -47,7 +45,6 @@ const {
   QUE_HACE,
   COMO_FUNCIONA,
   FRASE,
-  FRASE_SIGUE,
   IMPACTO,
   NOSOTROS,
   CLIENTES,
@@ -91,7 +88,7 @@ const faqJsonLd = {
   <JourneyThread />
 
   <!-- 1. Hero -->
-  <section class="vg-hero" id="inicio" data-pantalla>
+  <section class="vg-hero vg-pantalla" id="inicio">
     <FieldRows />
     <div class="vg-wrap vg-hero__grid">
       <div class="vg-hero__copy">
@@ -116,8 +113,7 @@ const faqJsonLd = {
   </section>
 
   <!-- 2. El problema -->
-  <section class="vg-section" id="problema" data-pantalla>
-    <SueloSeco />
+  <section class="vg-section vg-pantalla" id="problema">
     <LotesConexion />
     <div class="vg-wrap">
       <!-- Título, bajada y razones en la columna izquierda: el gráfico queda
@@ -157,14 +153,14 @@ const faqJsonLd = {
 
   <!-- 3. Lo que hace VigIA: cuatro tarjetas con foto, que también cuentan
        las cuatro alertas y su acción. Punto 3 del hilo, en celeste. -->
-  <section class="vg-section vg-solucion" id="que-hace" data-pantalla>
-    <LoteAmbientes />
+  <section class="vg-section vg-solucion vg-pantalla" id="que-hace">
     <Pivotes borde="fin" />
     <div class="vg-wrap">
       <h2 class="vg-section__title" data-vg-node="3">{QUE_HACE.titulo}</h2>
       <p class="vg-section__lead">{QUE_HACE.bajada}</p>
 
-      <!-- Cuatro tarjetas con foto arriba, título y texto corto, sin caja. -->
+      <!-- Cuatro tarjetas: la foto ocupa toda la tarjeta y el título y el
+           texto van abajo, sobre una franja con desenfoque. -->
       <ul class="vg-puntos">
         {
           QUE_HACE.puntos.map((pt, i) => (
@@ -178,8 +174,10 @@ const faqJsonLd = {
                 loading="lazy"
                 decoding="async"
               />
-              <h3>{pt.titulo}</h3>
-              <p>{pt.texto}</p>
+              <div class="vg-punto__texto">
+                <h3>{pt.titulo}</h3>
+                <p>{pt.texto}</p>
+              </div>
             </li>
           ))
         }
@@ -209,66 +207,31 @@ const faqJsonLd = {
 
   <!-- 4. La solución (ancla #como-funciona, la del menú): los dos canales de
        la alerta son lo principal -->
-  <section class="vg-section" id="como-funciona">
+  <section class="vg-section vg-pantalla" id="como-funciona">
     <Pivotes />
     <div class="vg-wrap">
       <!-- Título, bajada y canales a la izquierda; el WhatsApp con el video a
            la derecha, terminando a la altura de la tarjeta de la plataforma. -->
-      <div class="vg-avisos" data-pantalla data-pasos="2">
+      <div class="vg-avisos">
         <div class="vg-avisos__texto">
           <h2 class="vg-section__title" data-vg-node="4">{COMO_FUNCIONA.titulo}</h2>
-          <!-- Bajada + canales y "Cómo lo hace" comparten lugar: en pantalla
-               completa un gesto de scroll cambia uno por el otro
-               (SectionPager, data-pasos); en celular y en vertical van uno
-               debajo del otro. -->
-          <div class="vg-avisos__cambio">
-            <div class="vg-avisos__canales">
-              <p class="vg-section__lead">{COMO_FUNCIONA.bajada}</p>
-              <ul class="vg-canales">
-                {
-                  COMO_FUNCIONA.canales.map((c, i) => {
-                    const Icon = ICONOS_CANALES[c.id as keyof typeof ICONOS_CANALES];
-                    return (
-                      <li class={`vg-canal vg-canal--${c.id}`} data-reveal style={delay(i)}>
-                        <span class="vg-canal__icon" aria-hidden="true"><Icon /></span>
-                        <div>
-                          <h3>{c.titulo}</h3>
-                          <p>{c.texto}</p>
-                        </div>
-                      </li>
-                    );
-                  })
-                }
-              </ul>
-            </div>
-            <!-- Cómo lo hace: tres pasos en vertical, unidos por una línea. Es el
-                 ancla final del hilo (data-vg-end): no lleva data-reveal. -->
-            <div class="vg-detalle" data-vg-end>
-              <h3 class="vg-detalle__label">{COMO_FUNCIONA.tituloPasos}</h3>
-              <!-- Línea de tiempo: un punto por paso; la línea se dibuja de arriba
-                   hacia abajo y cada paso aparece cuando la línea llega a él
-                   (estilos en sections.css, .vg-pasos). -->
-              <ol class="vg-pasos" data-reveal>
-                {
-                  COMO_FUNCIONA.pasos.map((p, i) => (
-                    <li class="vg-paso" style={`--i: ${i}`}>
-                      <p class="vg-paso__titulo">{p.titulo}</p>
-                      <p class="vg-paso__texto">{p.texto}</p>
-                    </li>
-                  ))
-                }
-              </ol>
-            </div>
-          </div>
-          <!-- Dos rayas: la parte que se ve (data-paso del panel) va marcada.
-               Sólo en pantalla completa; SectionPager atiende los clics. -->
-          <div class="vg-partes" role="group" aria-label={COMO_FUNCIONA.partes.etiqueta}>
+          <p class="vg-section__lead">{COMO_FUNCIONA.bajada}</p>
+          <ul class="vg-canales">
             {
-              COMO_FUNCIONA.partes.nombres.map((nombre, i) => (
-                <button type="button" class="vg-partes__raya" data-ir-paso={i} aria-label={nombre} />
-              ))
+              COMO_FUNCIONA.canales.map((c, i) => {
+                const Icon = ICONOS_CANALES[c.id as keyof typeof ICONOS_CANALES];
+                return (
+                  <li class={`vg-canal vg-canal--${c.id}`} data-reveal style={delay(i)}>
+                    <span class="vg-canal__icon" aria-hidden="true"><Icon /></span>
+                    <div>
+                      <h3>{c.titulo}</h3>
+                      <p>{c.texto}</p>
+                    </div>
+                  </li>
+                );
+              })
             }
-          </div>
+          </ul>
         </div>
 
         <div class="vg-media" data-reveal style={delay(1)}>
@@ -277,23 +240,43 @@ const faqJsonLd = {
           </MediaStory>
         </div>
       </div>
+
+      <!-- Cómo lo hace: debajo de las dos columnas, tres pasos en fila (en
+           celular, uno debajo del otro) unidos por una línea. Es el ancla
+           final del hilo (data-vg-end): no lleva data-reveal. -->
+      <div class="vg-detalle" data-vg-end>
+        <h3 class="vg-detalle__label">{COMO_FUNCIONA.tituloPasos}</h3>
+        <!-- Línea de tiempo: un punto por paso; la línea se dibuja de un
+             punto al siguiente y cada paso aparece cuando la línea llega a él
+             (estilos en sections.css, .vg-pasos). -->
+        <ol class="vg-pasos" data-reveal>
+          {
+            COMO_FUNCIONA.pasos.map((p, i) => (
+              <li class="vg-paso" style={`--i: ${i}`}>
+                <p class="vg-paso__titulo">{p.titulo}</p>
+                <p class="vg-paso__texto">{p.texto}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
     </div>
   </section>
 
   </div>
 
   <!-- 5. Frase destacada -->
-  <TaglineReveal lineas={FRASE} sigue={FRASE_SIGUE} />
-  <SectionPager />
+  <TaglineReveal lineas={FRASE} />
 
   <!-- 6. Impacto: cuatro indicadores grandes con una línea corta debajo.
        Los dos últimos son botones que abren su tabla en un panel centrado
        debajo, de a uno; una flecha en el borde del panel apunta al indicador
        del que salió (script al final de la sección). -->
-  <section class="vg-section vg-section--compact vg-impacto" id="impacto" data-pantalla data-fondo-oscuro>
+  <section class="vg-section vg-section--compact vg-impacto vg-pantalla" id="impacto" data-fondo-oscuro>
     <div class="vg-wrap">
-      <!-- A pantalla completa, con una tabla abierta el título y la bajada se
-           pliegan: los indicadores suben y la tabla entra en la pantalla. -->
+      <!-- En pantallas horizontales, con una tabla abierta el título y la
+           bajada se pliegan: los indicadores suben y la tabla entra en la
+           pantalla (.is-tabla). -->
       <div class="vg-impacto__cabeza">
         <div>
           <h2 class="vg-section__title">{IMPACTO.titulo}</h2>
@@ -395,6 +378,14 @@ const faqJsonLd = {
       const ids = botones.map((b) => b.dataset.panel ?? '');
       const items = ids.map((id) => document.getElementById(`vg-panel-${id}`));
       let abierto: string | null = null;
+      // Donde la sección ocupa una pantalla (.vg-pantalla), al plegarse o
+      // volver el título se alinea arriba: indicadores y tabla quedan
+      // enteros a la vista.
+      const unaPantalla = window.matchMedia('(min-width: 900px) and (min-height: 560px) and (orientation: landscape)');
+      const suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const alinear = () => {
+        if (unaPantalla.matches) seccion.scrollIntoView({ behavior: suave ? 'smooth' : 'auto', block: 'start' });
+      };
 
       const ubicarFlecha = () => {
         const boton = botones.find((b) => b.dataset.panel === abierto);
@@ -413,7 +404,10 @@ const faqJsonLd = {
           b.classList.toggle('is-active', activo);
         });
         cancelarPista();
-        seccion.classList.toggle('is-tabla', id !== null);
+        if (veniaCerrado !== (id === null)) {
+          seccion.classList.toggle('is-tabla', id !== null);
+          alinear();
+        }
 
         if (id === null) {
           // Al cerrar, el panel se pliega con la tabla adentro.
@@ -480,8 +474,8 @@ const faqJsonLd = {
 
   <!-- 7. Sobre nosotros: foto, nombre y logo de la empresa de cada persona.
        Sin foto cargada, van las iniciales en el mismo círculo. Debajo, sin
-       título, el carrusel de clientes: entran los dos en una pantalla. -->
-  <section class="vg-section vg-section--compact vg-nosotros" id="nosotros" data-pantalla>
+       título, el carrusel de clientes. -->
+  <section class="vg-section vg-section--compact vg-nosotros vg-pantalla" id="nosotros">
     <div class="vg-wrap">
       <h2 class="vg-section__title">{NOSOTROS.titulo}</h2>
       <p class="vg-section__lead">{NOSOTROS.bajada}</p>
@@ -529,9 +523,8 @@ const faqJsonLd = {
     </div>
   </section>
 
-  <!-- 9. Preguntas frecuentes, y debajo el CTA de cierre. Es el último panel
-       del paginador: desde acá el scroll es normal y se ve el footer. -->
-  <section class="vg-section vg-section--compact vg-preguntas" id="preguntas" data-pantalla>
+  <!-- 9. Preguntas frecuentes, con el CTA de cierre debajo del título. -->
+  <section class="vg-section vg-section--compact vg-preguntas vg-pantalla" id="preguntas">
     <div class="vg-wrap vg-faq">
       <div class="vg-faq__head">
         <h2 class="vg-section__title">{PREGUNTAS.titulo}</h2>
