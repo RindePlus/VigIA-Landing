@@ -347,7 +347,6 @@ h3 {
   grid-template-rows: subgrid;
   row-gap: 0;
   overflow: hidden;
-  border: 1px solid var(--gh-border);
   border-radius: var(--gh-radius-card);
   background: var(--gh-surface);
 }
@@ -928,8 +927,9 @@ h3 {
 
 /* ---------- 7. Sobre nosotros ----------
    Bloque angosto y centrado: encabezado centrado y tres tarjetas chicas
-   (foto, nombre y, bajo una línea fina, el logo de la empresa). Los logos
-   van a color en claro y en blanco en oscuro, como el carrusel de clientes. */
+   translúcidas (foto, nombre y, separado sólo por aire, el logo de la
+   empresa con una línea chica que dice qué es). Los logos van a color en
+   claro y en blanco en oscuro, como el carrusel de clientes. */
 .vg-nosotros .vg-wrap {
   text-align: center;
 }
@@ -939,23 +939,32 @@ h3 {
   margin-inline: auto;
 }
 
+/* Tres columnas iguales, del ancho del contenido más ancho (el logo de
+   Agroconsultor): las tarjetas quedan con el aire justo a los costados. */
 .vg-equipo {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
   gap: var(--space-200);
-  max-width: 760px;
+  width: fit-content;
+  max-width: 100%;
   margin-inline: auto;
   list-style: none;
 }
 
+/* Tarjeta translúcida: la superficie del tema a medias y con desenfoque,
+   así deja ver el fondo de la página y no se lee como un bloque plano.
+   Borde de la misma superficie, apenas marcado. Sólo backdrop-filter, sin
+   la versión con prefijo (ver Header.css). */
 .vg-persona {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--space-300) var(--space-200) var(--space-200);
-  border: 1px solid var(--gh-border);
+  padding: var(--space-300);
+  border: 1px solid color-mix(in srgb, var(--gh-surface) 80%, transparent);
   border-radius: var(--gh-radius-card);
-  background: var(--gh-surface);
+  background: color-mix(in srgb, var(--gh-surface) 55%, transparent);
+  backdrop-filter: blur(12px);
 }
 
 .vg-persona__foto {
@@ -985,22 +994,35 @@ h3 {
   line-height: var(--leading-base);
 }
 
-/* Alto fijo para que los tres logos queden sobre la misma línea; el alto
-   de cada logo lo fija --logo-alto (src/data/equipo.js). */
+/* Al pie de la tarjeta, separado de la persona sólo por aire: una línea
+   chica que dice qué es el logo ("En representación de") y el logo. */
 .vg-persona__empresa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-75);
+  margin-top: auto;
+}
+
+.vg-persona__rol {
+  color: var(--gh-fg-subtle);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+}
+
+/* Caja común, del alto del logo más alto, para que los tres queden
+   centrados en la misma línea. Cada logo va con su alto (--logo-alto,
+   src/data/equipo.js), calculado para que los tres pesen lo mismo a la
+   vista. */
+.vg-persona__logo {
   display: flex;
   align-items: center;
   justify-content: center;
   align-self: stretch;
-  height: 96px;
-  margin-top: auto;
-  padding-top: var(--space-200);
-  border-top: 1px solid var(--gh-border-muted);
+  height: 80px;
 }
 
-/* Mismos altos que en el carrusel de clientes, para que no se vean más
-   chicos. Si la tarjeta es angosta, el logo se achica sin deformarse. */
-.vg-persona__empresa img {
+.vg-persona__logo img {
   width: auto;
   height: var(--logo-alto);
   max-width: 100%;
@@ -1017,11 +1039,13 @@ h3 {
 @media (max-width: 680px) {
   .vg-equipo {
     grid-template-columns: repeat(4, 1fr);
+    grid-auto-flow: row;
+    width: auto;
     max-width: 400px;
   }
   .vg-persona {
     grid-column: span 2;
-    padding: var(--space-200) var(--space-100) var(--space-100);
+    padding: var(--space-200) var(--space-100);
   }
   .vg-persona:last-child:nth-child(odd) {
     grid-column: 2 / span 2;
@@ -1034,10 +1058,9 @@ h3 {
     margin-bottom: var(--space-100);
     text-align: center;
   }
-  .vg-persona__empresa {
-    height: 72px;
-    padding-top: var(--space-100);
-  }
+  /* Los tres en la misma proporción, un poco más chicos. */
+  .vg-persona__logo { height: 68px; }
+  .vg-persona__logo img { height: calc(var(--logo-alto) * 0.85); }
 }
 
 /* ---------- 4. Frase destacada (TaglineReveal) ---------- */

@@ -237,6 +237,9 @@ export const IMPACTO = {
 export const NOSOTROS = {
   titulo: `Las personas detrás de ${MARCA}`,
   bajada: 'Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos.',
+  // Línea chica sobre el logo de cada tarjeta: dice qué es el logo (sin
+  // inventar cargos; cuando estén confirmados, pueden ir en su lugar).
+  representa: 'En representación de',
 };
 
 // 8. Clientes (el carrusel está en src/data/clientes.js), debajo de Sobre

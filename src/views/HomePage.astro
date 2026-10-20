@@ -530,15 +530,18 @@ const jsonLd = {
               }
               <h3>{p.nombre}</h3>
               <div class="vg-persona__empresa">
-                <img
-                  src={p.empresa.logo.src}
-                  alt={p.empresa.nombre}
-                  width={Math.round((p.empresa.logo.width / p.empresa.logo.height) * p.empresa.logoAlto)}
-                  height={p.empresa.logoAlto}
-                  style={`--logo-alto: ${p.empresa.logoAlto}px`}
-                  loading="lazy"
-                  decoding="async"
-                />
+                <p class="vg-persona__rol">{NOSOTROS.representa}</p>
+                <div class="vg-persona__logo">
+                  <img
+                    src={p.empresa.logo.src}
+                    alt={p.empresa.nombre}
+                    width={Math.round((p.empresa.logo.width / p.empresa.logo.height) * p.empresa.logoAlto)}
+                    height={p.empresa.logoAlto}
+                    style={`--logo-alto: ${p.empresa.logoAlto}px`}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
               </div>
             </li>
           ))

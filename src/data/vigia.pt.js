@@ -211,6 +211,7 @@ export const IMPACTO = {
 export const NOSOTROS = {
   titulo: `As pessoas por trás do ${MARCA}`,
   bajada: 'Uma equipe que reúne tecnologia agrícola, consultoria agronômica e bioestimulantes.',
+  representa: 'Representando',
 };
 
 // 8. Clientes

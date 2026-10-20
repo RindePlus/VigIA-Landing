@@ -208,6 +208,7 @@ export const IMPACTO = {
 export const NOSOTROS = {
   titulo: `The people behind ${MARCA}`,
   bajada: 'A team that brings together ag technology, agronomic advice and biostimulants.',
+  representa: 'Representing',
 };
 
 // 8. Clientes

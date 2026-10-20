@@ -211,7 +211,7 @@ Reemplaza a Para quién es (decisión 21).
 | Título | **Las personas detrás de VigIA BioEstrés** |
 | Bajada | Un equipo que reúne tecnología agrícola, asesoramiento agronómico y bioinsumos. (Pendiente de revisar con el equipo.) |
 
-Encabezado centrado y tres tarjetas chicas en un bloque angosto y centrado (hasta 760 px; en celular, de a dos por fila y la tercera centrada abajo, más compactas): foto redonda, nombre y, al pie bajo una línea fina, el logo de la empresa con el mismo alto que tiene en el carrusel de clientes (Rinde Plus, que no está en el carrusel, en la misma proporción). Los logos van a color en tema claro y en blanco en oscuro, como en el carrusel. Datos en `src/data/equipo.js`.
+Encabezado centrado y tres tarjetas chicas, centradas, de igual ancho: el del contenido más ancho (el logo de Agroconsultor) con el aire justo a los costados (en celular, de a dos por fila y la tercera centrada abajo, más compactas). Las tarjetas son translúcidas (la superficie del tema a medias, con desenfoque). Llevan foto redonda, nombre y, al pie, separado sólo por aire, una línea chica **En representación de** y el logo de la empresa. Cada logo va con su propio alto, calculado para que los tres pesen lo mismo a la vista (misma área, corregida por cuánta tinta tiene cada uno; ver `src/data/equipo.js`): Rinde Plus, de letras macizas, va más chico. Ninguno queda más chico que los logos del carrusel de clientes, que va justo debajo. Cuando se confirmen los cargos, pueden ir en lugar de esa línea (sin inventarlos). Los logos van a color en tema claro y en blanco en oscuro, como en el carrusel. Datos en `src/data/equipo.js`.
 
 | Persona | Empresa | Foto |
 |---|---|---|

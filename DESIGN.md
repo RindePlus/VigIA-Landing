@@ -214,7 +214,7 @@ Radios moderados: 8 px en botones, 12 px en tarjetas y paneles, 16 px en el recu
 - **WhatsApp:** verde de WhatsApp con texto oscuro (#0b2e13): el blanco no llega a 3:1. El logo del botón flotante sigue blanco, como excepción de marca.
 
 ### Cards / Containers
-Superficie #fbfaf8, borde de 1 px y 12 px de radio, sin sombra fuerte. En las tarjetas de "Lo que hace VigIA" la foto ocupa toda la tarjeta y el título y el texto van abajo, sobre una franja de la superficie translúcida con desenfoque; la línea entre foto y texto queda a la misma altura en todas (subgrid), con los títulos centrados en el renglón del más largo.
+Superficie #fbfaf8, borde de 1 px y 12 px de radio, sin sombra fuerte. En las tarjetas de "Lo que hace VigIA" (sin borde) la foto ocupa toda la tarjeta y el título y el texto van abajo, sobre una franja de la superficie translúcida con desenfoque; la línea entre foto y texto queda a la misma altura en todas (subgrid), con los títulos centrados en el renglón del más largo.
 
 ### Navigation
 - **Header:** del ancho del contenido y transparente arriba de todo.
