@@ -1150,6 +1150,18 @@ h3 {
    Equipo y clientes vuelven al fondo de la página (decisión 53: el salvia
    frío chocaba con las tarjetas blancas). Preguntas frecuentes, del color
    del footer: el cierre verde queda entre los dos. */
+/* El problema y La solución, con fondo propio: dentro, el canvas del tema
+   pasa a ese color, así lo que lo usa para recortarse queda igual. */
+#problema {
+  --gh-canvas: var(--vg-bg-problema);
+  background: var(--gh-canvas);
+}
+
+#como-funciona {
+  --gh-canvas: var(--vg-bg-solucion);
+  background: var(--gh-canvas);
+}
+
 .vg-impacto {
   /* Dentro de la banda, los tokens del tema pasan a sus versiones sobre
      verde: así tablas, botones y textos se resuelven solos, sin overrides
@@ -1239,6 +1251,74 @@ h3 {
 .vg-campo-fondo__lejos { opacity: 0.6; }
 
 [data-rp-theme="dark"] .vg-campo-fondo { opacity: 0.35; }
+
+/* Fondos a línea de El problema, Lo que hace VigIA y La solución
+   (SueloSeco, LoteAmbientes y Pivotes.astro): misma técnica que el lote
+   del hero. Cada uno toma el color de su tramo del hilo, muy mezclado con
+   el fondo de la sección; en las zonas libres y al 40 % detrás del texto. */
+.vg-fondo-linea {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--linea);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.vg-fondo-linea path { vector-effect: non-scaling-stroke; }
+
+/* Suelo agrietado: abajo a la derecha. Se corta en diagonal, desde el pie
+   (a la altura del final del texto) hasta el medio del gráfico, antes de
+   llegar al texto. */
+.vg-fondo-linea--grietas {
+  --linea: color-mix(in srgb, var(--vg-carbono) 24%, var(--gh-canvas));
+  -webkit-mask-image: linear-gradient(140deg, transparent 53%, #000 63%);
+  mask-image: linear-gradient(140deg, transparent 53%, #000 63%);
+}
+
+/* Lotes con ambientes: arriba a la derecha, se desvanece hacia las
+   tarjetas. */
+.vg-fondo-linea--ambientes {
+  --linea: color-mix(in srgb, var(--vg-agua) 34%, var(--gh-canvas));
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 22%, transparent 42%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 22%, transparent 42%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  mask-composite: intersect;
+}
+
+/* Lote a la derecha de las tarjetas, de arriba a abajo. */
+.vg-fondo-linea--ambientes-lado {
+  --linea: color-mix(in srgb, var(--vg-agua) 34%, var(--gh-canvas));
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 92%);
+}
+
+/* Pivotes: abajo y a la derecha, se desvanecen hacia arriba. */
+.vg-fondo-linea--pivotes {
+  --linea: color-mix(in srgb, var(--vg-campo) 30%, var(--gh-canvas));
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 10%, #000 45%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, transparent 10%, #000 45%),
+    linear-gradient(to right, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 40%, #000 62%);
+  mask-composite: intersect;
+}
+
+/* En oscuro, monocromos: el color de cada tramo se veía como neón sobre
+   los fondos oscuros. Van en un gris claro apenas visible, como el resto
+   de las líneas del tema. */
+[data-rp-theme="dark"] .vg-fondo-linea {
+  --linea: color-mix(in srgb, var(--gh-fg) 13%, var(--gh-canvas));
+}
 
 /* ---------- 6. Impacto ----------
    Cuatro indicadores grandes y centrados, con una línea corta debajo, sin
@@ -2006,7 +2086,9 @@ h3 {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 0;
+  /* Por encima de las secciones: las que tienen fondo propio lo taparían.
+     Va en el margen izquierdo, sin pisar contenido. */
+  z-index: 2;
   overflow: visible;
   pointer-events: none;
 }
@@ -2030,7 +2112,8 @@ h3 {
 
 /* Puntos sin número: marcan la etapa, no la cuentan. */
 .vg-thread__node circle {
-  fill: var(--gh-canvas);
+  /* Sin llenar, del color del fondo de su sección (--fondo, JourneyThread). */
+  fill: var(--fondo, var(--gh-canvas));
   stroke: var(--c);
   stroke-width: 2;
   transition: fill var(--dur-base) var(--ease-fluid);

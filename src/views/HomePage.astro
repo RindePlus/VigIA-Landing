@@ -14,6 +14,9 @@ import WhatsAppMock from '../components/WhatsAppMock.astro';
 import ProblemChart from '../components/ProblemChart.astro';
 import MediaStory from '../components/MediaStory.astro';
 import FieldRows from '../components/FieldRows.astro';
+import SueloSeco from '../components/SueloSeco.astro';
+import LoteAmbientes from '../components/LoteAmbientes.astro';
+import Pivotes from '../components/Pivotes.astro';
 import SectionPager from '../components/SectionPager.astro';
 import JourneyThread from '../components/JourneyThread.astro';
 import TaglineReveal from '../components/TaglineReveal.astro';
@@ -113,6 +116,7 @@ const faqJsonLd = {
 
   <!-- 2. El problema -->
   <section class="vg-section" id="problema" data-pantalla>
+    <SueloSeco />
     <div class="vg-wrap">
       <!-- Título, bajada y razones en la columna izquierda: el gráfico queda
            centrado a la derecha, entre el título y las razones. -->
@@ -153,6 +157,7 @@ const faqJsonLd = {
   <!-- 3. Lo que hace VigIA: cuatro tarjetas con foto, que también cuentan
        las cuatro alertas y su acción. Punto 3 del hilo, en celeste. -->
   <section class="vg-section vg-solucion" id="que-hace" data-pantalla>
+    <LoteAmbientes />
     <div class="vg-wrap">
       <p class="vg-eyebrow">{QUE_HACE.etiqueta}</p>
       <h2 class="vg-section__title" data-vg-node="3">{QUE_HACE.titulo}</h2>
@@ -204,6 +209,7 @@ const faqJsonLd = {
   <!-- 4. La solución (ancla #como-funciona, la del menú): los dos canales de
        la alerta son lo principal -->
   <section class="vg-section" id="como-funciona">
+    <Pivotes />
     <div class="vg-wrap">
       <!-- Título, bajada y canales a la izquierda; el WhatsApp con el video a
            la derecha, terminando a la altura de la tarjeta de la plataforma. -->

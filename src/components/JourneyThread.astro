@@ -37,6 +37,9 @@
 <script>
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const NODE_COLOR = ['var(--vg-thread-ok)', 'var(--vg-sev-alerta)', 'var(--vg-agua)', 'var(--vg-thread-ok)'];
+  // Relleno de cada punto sin alcanzar: el fondo de su sección (El problema
+  // y La solución tienen el suyo).
+  const NODE_FONDO = ['var(--gh-canvas)', 'var(--vg-bg-problema)', 'var(--gh-canvas)', 'var(--vg-bg-solucion)'];
 
   const journey = document.querySelector<HTMLElement>('.vg-journey');
   const svg = journey?.querySelector<SVGSVGElement>('[data-vg-thread]');
@@ -166,7 +169,7 @@
       nodeEls = nodes.map((n, i) => {
         const g = document.createElementNS(SVG_NS, 'g');
         g.setAttribute('class', 'vg-thread__node');
-        g.setAttribute('style', `--c: ${NODE_COLOR[i] ?? NODE_COLOR[0]}`);
+        g.setAttribute('style', `--c: ${NODE_COLOR[i] ?? NODE_COLOR[0]}; --fondo: ${NODE_FONDO[i] ?? NODE_FONDO[0]}`);
         const c = document.createElementNS(SVG_NS, 'circle');
         c.setAttribute('cx', String(n.x));
         c.setAttribute('cy', String(n.y));
