@@ -12,6 +12,10 @@
 // - El avance se mide por el largo de la línea (no sólo por la altura), así
 //   los tramos de costado también se dibujan de a poco.
 // - El fondo es el plano de la página: sin degradé por etapas.
+// - Pasa por debajo de los elementos con `data-vg-under` (el carrusel de
+//   clientes del hero), como por un túnel: termina en el fondo de un
+//   semicírculo abierto hacia arriba (∪) antes de la franja y vuelve a salir
+//   de la punta de otro abierto hacia abajo (∩) después; en el medio no se ve.
 // - Con movimiento reducido el hilo aparece completo y quieto. Sin JS no se
 //   dibuja.
 ---
@@ -28,9 +32,18 @@
       <stop data-stop="ok-c" style="stop-color: var(--vg-thread-ok)" />
       <stop data-stop="ok-d" style="stop-color: var(--vg-thread-ok)" />
     </linearGradient>
+    <!-- Franjas por las que el hilo pasa por debajo (el carrusel de
+         clientes): la máscara las borra entre los dos arcos. -->
+    <mask id="vg-thread-mask" maskUnits="userSpaceOnUse">
+      <rect class="vg-thread__mask-base" fill="white" />
+      <g class="vg-thread__mask-holes"></g>
+    </mask>
   </defs>
-  <path class="vg-thread__track" />
-  <path class="vg-thread__line" stroke="url(#vg-thread-grad)" />
+  <g mask="url(#vg-thread-mask)">
+    <path class="vg-thread__track" />
+    <path class="vg-thread__line" stroke="url(#vg-thread-grad)" />
+  </g>
+  <g class="vg-thread__arcos"></g>
   <g class="vg-thread__nodes"></g>
 </svg>
 
@@ -49,6 +62,15 @@
     const nodesGroup = svg.querySelector<SVGGElement>('.vg-thread__nodes')!;
     const anchors = [...journey.querySelectorAll<HTMLElement>('[data-vg-node]')];
     const end = journey.querySelector<HTMLElement>('[data-vg-end]');
+    const debajo = [...journey.querySelectorAll<HTMLElement>('[data-vg-under]')];
+    const maskBase = svg.querySelector<SVGRectElement>('.vg-thread__mask-base')!;
+    const maskHoles = svg.querySelector<SVGGElement>('.vg-thread__mask-holes')!;
+    const arcosGroup = svg.querySelector<SVGGElement>('.vg-thread__arcos')!;
+    // Arcos del túnel: medio ancho y alto (ovalados, más anchos que altos)
+    // y distancia de su punta a la franja.
+    const ARCO_RX = 8;
+    const ARCO_RY = 5;
+    const SEPARACION_ARCO = 6;
 
     let geo: {
       nodes: { x: number; y: number }[];
@@ -145,6 +167,63 @@
       svg.setAttribute('height', String(H));
       track.setAttribute('d', d);
       line.setAttribute('d', d);
+
+      // Máscara: todo visible (la base cubre de sobra lo que el hilo dibuja
+      // por fuera del SVG, hasta la frase) menos el tramo entre los dos arcos
+      // de cada franja. El arco de entrada (∪) va arriba de la franja y el de
+      // salida (∩) abajo: el hilo llega al fondo del primero y sale de la
+      // punta del segundo. Los arcos van del gris del punteado, tenues, y no
+      // cambian cuando la línea pasa. Se centran en la línea a su altura (entre los puntos
+      // la línea ondula, no es vertical).
+      // x de la línea a una altura: la muestra del recorrido más cercana.
+      const largoTotal = line.getTotalLength();
+      const xEnLinea = (y: number) => {
+        let mejor = { x, dy: Infinity };
+        for (let i = 0; i <= 400; i++) {
+          const p = line.getPointAtLength((largoTotal * i) / 400);
+          const dy = Math.abs(p.y - y);
+          if (dy < mejor.dy) mejor = { x: p.x, dy };
+        }
+        return mejor.x;
+      };
+      const mask = maskBase.parentElement!;
+      [mask, maskBase].forEach((el) => {
+        el.setAttribute('x', String(-W));
+        el.setAttribute('y', String(-H));
+        el.setAttribute('width', String(3 * W));
+        el.setAttribute('height', String(3 * H));
+      });
+      maskHoles.replaceChildren();
+      arcosGroup.replaceChildren();
+      debajo.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (!r.height) return;
+        // Fondo del arco de entrada y punta del de salida.
+        const yIn = r.top - jr.top - SEPARACION_ARCO;
+        const yOut = r.bottom - jr.top + SEPARACION_ARCO;
+        const hueco = document.createElementNS(SVG_NS, 'rect');
+        hueco.setAttribute('x', String(-W));
+        hueco.setAttribute('y', String(yIn));
+        hueco.setAttribute('width', String(3 * W));
+        hueco.setAttribute('height', String(yOut - yIn));
+        hueco.setAttribute('fill', 'black');
+        maskHoles.append(hueco);
+        const rx = ARCO_RX;
+        const ry = ARCO_RY;
+        const xIn = xEnLinea(yIn);
+        const xOut = xEnLinea(yOut);
+        [
+          // Entrada (∪): de la pata izquierda a la derecha, por abajo.
+          `M ${xIn - rx} ${yIn - ry} A ${rx} ${ry} 0 0 0 ${xIn + rx} ${yIn - ry}`,
+          // Salida (∩): de la pata izquierda a la derecha, por arriba.
+          `M ${xOut - rx} ${yOut + ry} A ${rx} ${ry} 0 0 1 ${xOut + rx} ${yOut + ry}`,
+        ].forEach((d) => {
+          const arco = document.createElementNS(SVG_NS, 'path');
+          arco.setAttribute('class', 'vg-thread__arco');
+          arco.setAttribute('d', d);
+          arcosGroup.append(arco);
+        });
+      });
 
       // Colores de la línea según la historia.
       const yStart = nodes[0].y;

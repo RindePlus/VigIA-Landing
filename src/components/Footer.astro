@@ -126,14 +126,3 @@ const redes = [
     </div>
   </div>
 </footer>
-
-<script>
-  // Alto del footer (--alto-footer): Preguntas ocupa lo que queda de la
-  // pantalla, así las dos entran juntas (sections.css).
-  const pie = document.querySelector<HTMLElement>('.rp-footer');
-  if (pie) {
-    const medir = () => document.documentElement.style.setProperty('--alto-footer', `${pie.offsetHeight}px`);
-    medir();
-    new ResizeObserver(medir).observe(pie);
-  }
-</script>

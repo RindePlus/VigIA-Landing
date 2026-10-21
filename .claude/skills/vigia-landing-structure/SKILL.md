@@ -32,8 +32,8 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 ## Estructura fija
 
 ```
-1. Hero · 2. El problema · 3. Lo que hace VigIA · 4. La solución    ← recorrido del mismo lote (.vg-journey)
-5. Frase destacada · 6. Impacto · 7. Sobre nosotros (con el carrusel de clientes)
+1. Hero (con el carrusel de clientes) · 2. El problema · 3. Lo que hace VigIA · 4. La solución    ← recorrido del mismo lote (.vg-journey)
+5. Frase destacada · 6. Impacto · 7. Sobre nosotros
 8. Preguntas frecuentes + cierre (CTA bajo el título) · Footer
 ```
 
@@ -46,7 +46,7 @@ Si el pedido contradice estas fuentes, avisá antes de escribir y proponé actua
 | 5. Frase destacada | Una idea en tres renglones, grande. | Llevar botón ni título. |
 | 6. Impacto | Datos medidos en campo: cuatro indicadores, con el desglose de grano y carbono por cultivo. | Repetir lo que hace el producto. |
 | 7. Sobre nosotros | Las personas detrás del producto, con foto y logo de su empresa. | Inventar cargos o trayectorias. |
-| Clientes (en 7) | Carrusel de logos al pie de Sobre nosotros, sin título a la vista. | Sumar socios (van en Sobre nosotros). |
+| Clientes (en 1) | Carrusel de logos al pie del hero, en la misma pantalla y sin título a la vista (decisión 59). | Sumar socios (van en Sobre nosotros). |
 | 8. Preguntas | Objeciones reales: sensores, carga, cultivos, canales, secano. | Respuestas de más de 40 palabras. |
 | Cierre (en 8, bajo el título) | Una línea chica que sigue al título ("¿Te quedó alguna duda? Escribinos.") + el mismo CTA. | Un CTA distinto; volver a ser una sección propia. |
 

@@ -150,11 +150,12 @@ const Header = ({
   // Oculta el header al bajar y lo muestra al subir (ADR 0007: con el
   // scroll normal vuelve el comportamiento de antes de la decisión 50). Para
   // ocultarse exige un recorrido hacia abajo sostenido (no un toque de
-  // rueda); para volver basta un gesto corto hacia arriba. Arriba de todo
-  // es transparente; al bajar toma el fondo con desenfoque.
+  // rueda) y para volver, lo mismo hacia arriba: subir un poco sin querer
+  // no lo muestra. Arriba de todo está siempre a la vista; ahí es
+  // transparente y al bajar toma el fondo con desenfoque.
   useEffect(() => {
     const HIDE_DISTANCE = 120;
-    const SHOW_DISTANCE = 8;
+    const SHOW_DISTANCE = 120;
     const TOP_ZONE = 160;
     let lastY = window.scrollY;
     let anchorY = lastY; // donde empezó el tramo actual en una misma dirección
@@ -170,11 +171,12 @@ const Header = ({
       .filter((s) => s.el);
 
     // Activa: la última sección cuyo borde superior ya pasó el 35 % de la
-    // ventana. Al llegar al final de la página, la última (el footer de
-    // contacto puede ser más bajo que ese 35 %).
+    // ventana. Al llegar al final de la página, la última (Preguntas, que
+    // con el footer es Contacto, puede no llegar a ese 35 %). El margen de
+    // 24 px cubre el redondeo del scroll con zoom o escalado de pantalla.
     const seccionActiva = () => {
       const linea = window.innerHeight * 0.35;
-      const alFinal = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      const alFinal = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 24;
       if (alFinal && secciones.length) return secciones[secciones.length - 1].href;
       let activa = null;
       for (const s of secciones) {

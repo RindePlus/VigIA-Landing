@@ -447,21 +447,25 @@ html {
   :root { --page-gutter: var(--space-700); }
 }
 
-/* Secciones de una pantalla (.vg-pantalla, ADR 0007): en pantallas
-   horizontales cada sección ocupa más o menos una pantalla y los tamaños
-   siguen al alto de la ventana, para que el contenido entre entero. Crecen
-   en pantallas altas y se achican en las bajas, con topes. */
+/* Hero de una pantalla (.vg-pantalla, ADR 0007 y ADR 0009): en pantallas
+   horizontales el hero, con los clientes al pie, ocupa una pantalla y los
+   tamaños siguen al alto de la ventana, para que el contenido entre entero.
+   Crecen en pantallas altas y se achican en las bajas, con topes. */
 @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
   :root {
     /* El mismo aire arriba y abajo: el contenido queda centrado en toda la
        pantalla, con o sin el header (se oculta al bajar). */
     --panel-pad-top: var(--space-500);
     --panel-pad-bottom: var(--space-500);
+    /* El hero arranca debajo del header (lo mide Header.jsx), con aire. */
+    --hero-pad-top: calc(var(--alto-header, var(--space-800)) + var(--fit-gap));
     --fit-hero: clamp(2.5rem, 3.4vh + 1.6rem, 4.25rem);
     --fit-display: clamp(2.25rem, 2.6vh + 1.6rem, 3.75rem);
-    --fit-headline: clamp(1.75rem, 1.9vh + 1.15rem, 2.75rem);
     --fit-lead: clamp(1rem, 0.6vh + 0.75rem, 1.25rem);
     --fit-gap: clamp(var(--space-200), 3.4vh, var(--space-600));
+    /* Alto del carrusel de clientes (fila de logos de 88px más 8px arriba y
+       abajo, TrustedCompanies.css): el gráfico del hero lo descuenta. */
+    --alto-carrusel: 104px;
   }
 }
 

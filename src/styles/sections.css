@@ -202,9 +202,10 @@ h3 {
 }
 
 /* ---------- Clientes (carrusel) ----------
-   Al pie de Sobre nosotros, sin título, pegado a las tarjetas del equipo. */
+   Al pie del hero, sin título (decisión 59). En horizontal comparte la
+   pantalla con el hero (bloque .vg-pantalla, al final). */
 .vg-trusted {
-  margin-top: var(--space-400);
+  margin-top: var(--space-700);
 }
 
 /* ---------- Gráfico del hero ---------- */
@@ -363,13 +364,16 @@ h3 {
 
 /* Franja del texto: la superficie del tema, translúcida y con desenfoque
    (claro u oscuro según el tema). Sólo backdrop-filter, sin la versión con
-   prefijo: el minificador deja una sola (ver Header.css). */
+   prefijo: el minificador deja una sola (ver Header.css). Con las esquinas
+   de abajo redondeadas como la tarjeta: el desenfoque no respeta el
+   recorte redondeado del padre y asomaba en las esquinas. */
 .vg-punto__texto {
   display: grid;
   grid-row: 2 / span 2;
   grid-template-rows: subgrid;
   row-gap: 0;
   padding: var(--space-100) var(--space-200) var(--space-200);
+  border-radius: 0 0 var(--gh-radius-card) var(--gh-radius-card);
   background: color-mix(in srgb, var(--gh-surface) 80%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
 }
@@ -1065,7 +1069,9 @@ h3 {
 
 /* ---------- 4. Frase destacada (TaglineReveal) ---------- */
 .vg-tagline {
-  padding-block: var(--space-900);
+  /* Abajo, el doble: el mismo aire que la separa de la sección de arriba
+     (el padding de esa sección más el propio). */
+  padding-block: var(--space-900) calc(var(--space-900) * 2);
 }
 
 .vg-tagline__text {
@@ -1300,13 +1306,6 @@ h3 {
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 70%, transparent 94%);
 }
 
-/* La frase, con aire: casi una pantalla, centrada. */
-.vg-tagline {
-  display: grid;
-  align-content: center;
-  min-height: 80svh;
-}
-
 /* En oscuro, monocromos: el color de cada tramo se veía como neón sobre
    los fondos oscuros. Van en un gris claro apenas visible, como el resto
    de las líneas del tema. */
@@ -1325,6 +1324,16 @@ h3 {
 
 .vg-impacto .vg-wrap {
   max-width: 1000px;
+}
+
+/* Título y bajada centrados, sobre los indicadores (también centrados). */
+.vg-impacto__cabeza {
+  text-align: center;
+}
+
+.vg-impacto__cabeza .vg-section__title,
+.vg-impacto__cabeza .vg-section__lead {
+  margin-inline: auto;
 }
 
 /* Contenedor de los indicadores: referencia para el aviso de una vez. */
@@ -1407,11 +1416,14 @@ h3 {
   font-size: var(--text-base);
   transition:
     transform var(--dur-base) var(--ease-fluid),
-    color var(--dur-base) var(--ease-fluid);
+    color var(--dur-base) var(--ease-fluid),
+    opacity var(--dur-base) var(--ease-fluid);
 }
 
 .vg-indicador--boton:hover .vg-indicador__caret { color: var(--tono); transform: translateY(2px); }
-.vg-indicador--boton.is-active .vg-indicador__caret { color: var(--tono); transform: rotate(180deg); }
+/* Activo: la flechita se oculta (sin mover nada); la que apunta al
+   indicador es la de la tarjeta de la tabla. */
+.vg-indicador--boton.is-active .vg-indicador__caret { opacity: 0; }
 
 /* Aviso de una sola vez, debajo de los dos indicadores que se despliegan
    (los dos últimos: centro de las columnas 3 y 4). Aparece y se va solo.
@@ -1461,17 +1473,21 @@ h3 {
 .vg-panel__inner {
   position: relative;
   min-height: 0;
+  /* Siempre recortado (también abierto): si se deja ver lo que sobra al
+     abrir, la tabla entera se dibuja mientras el panel todavía crece y
+     pisa la sección de abajo. */
   overflow: hidden;
-  margin-top: var(--space-200);
-  padding-top: 10px;
+  /* Pegado a los indicadores: sólo el lugar de la flecha. */
+  padding-top: 11px;
 }
 
-.vg-panel.is-open .vg-panel__inner { overflow: visible; }
-
-/* Flecha: un rombo en el borde superior del panel, debajo del indicador. */
+/* Flecha: un rombo sobre el borde de color de arriba del panel, debajo del
+   indicador. Su centro cae en el medio de ese borde (11px de lugar + 1px),
+   así sus dos lados salen del borde sin hueco y la punta entra en el
+   recorte del panel. */
 .vg-panel__flecha {
   position: absolute;
-  top: 3px;
+  top: 4px;
   left: var(--flecha-x);
   z-index: 1;
   width: 16px;
@@ -1498,8 +1514,11 @@ h3 {
   overflow: hidden;
   padding: var(--space-400);
   border: 1px solid var(--gh-border);
+  /* Borde de arriba del color del dato, de punta a punta. */
+  border-top: 2px solid var(--tono);
   border-radius: var(--gh-radius-card);
   background: var(--gh-surface);
+  transition: border-top-color var(--dur-slow) var(--ease-fluid);
 }
 
 .vg-panel__item {
@@ -2156,6 +2175,16 @@ h3 {
   stroke-linecap: round;
 }
 
+/* Arcos del túnel bajo el carrusel de clientes: del gris del punteado y
+   tenues, fijos (no cambian cuando la línea pasa). */
+.vg-thread__arco {
+  fill: none;
+  stroke: var(--gh-border-strong);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+
 /* Puntos sin número: marcan la etapa, no la cuentan. */
 .vg-thread__node circle {
   /* Sin llenar, del color del fondo de la página. */
@@ -2184,14 +2213,14 @@ h3 {
 }
 
 /* ============================================================
-   Secciones de una pantalla (.vg-pantalla, ADR 0007)
-   En pantallas horizontales (escritorio, tablet acostada) cada sección
-   ocupa más o menos una pantalla, con el contenido centrado y el mismo
-   aire arriba y abajo (con o sin el header, que se oculta al bajar). El
-   scroll es el normal: si una
-   sección no entra, crece. Los tamaños salen de los tokens --fit-*
-   (global.css), que siguen al alto de la ventana. En celular y en
-   vertical, la página queda como siempre.
+   Hero de una pantalla (.vg-pantalla, ADR 0007 y ADR 0009)
+   En pantallas horizontales (escritorio, tablet acostada) sólo el hero
+   ocupa una pantalla, con el carrusel de clientes al pie: el contenido se
+   centra en lo que deja el carrusel. Las demás secciones miden lo que su
+   contenido: con una pantalla cada una, en monitores grandes quedaba mucho
+   aire entre ellas. Los tamaños del hero salen de los tokens --fit-*
+   (global.css), que siguen al alto de la ventana. En celular y en vertical,
+   la página queda como siempre.
    ============================================================ */
 @media (min-width: 900px) and (min-height: 560px) and (orientation: landscape) {
   .vg-pantalla {
@@ -2208,6 +2237,13 @@ h3 {
      sección arriba de todo y el contenido queda centrado en la pantalla. */
   section[id].vg-pantalla { scroll-margin-top: 0; }
 
+  /* Hero: arranca debajo del header (arriba de todo siempre está a la
+     vista), con el texto y el gráfico centrados en el alto libre y el
+     carrusel al pie. */
+  .vg-hero.vg-pantalla { padding-top: var(--hero-pad-top); }
+  .vg-hero > .vg-hero__grid { margin-block: auto; }
+  .vg-hero > .vg-trusted { margin-top: var(--fit-gap); }
+
   /* En las secciones de dos columnas, el título arranca a la altura del
      borde de arriba del gráfico o del video. */
   .vg-hero__grid,
@@ -2223,44 +2259,36 @@ h3 {
     line-height: 1.04;
   }
 
-  /* Tipografía según el alto de la ventana. */
-  .vg-pantalla .vg-section__title {
-    font-size: var(--fit-headline);
-    line-height: 1.15;
-  }
-
-  .vg-pantalla .vg-section__lead,
   .vg-hero__subtitle {
     font-size: var(--fit-lead);
     line-height: 1.55;
+    margin-block: var(--space-200) var(--fit-gap);
   }
 
-  .vg-pantalla .vg-section__lead { margin-bottom: var(--fit-gap); }
-  .vg-hero__subtitle { margin-block: var(--space-200) var(--fit-gap); }
-
   /* Medios: el ancho sale del alto disponible, así el gráfico y el celular
-     no estiran la sección más allá de la pantalla. */
-  .vg-hero__grid > .vg-media,
+     nunca son más altos que la pantalla. En el hero se descuentan sólo el
+     header, el carrusel y su separación: el gráfico puede llenar todo el
+     alto que queda. */
+  .vg-hero__grid > .vg-media {
+    width: 100%;
+    max-width: calc((100svh - var(--hero-pad-top) - var(--panel-pad-bottom) - var(--alto-carrusel) - var(--fit-gap)) * 1.3);
+    justify-self: end;
+  }
+
   .vg-problema .vg-media {
     width: 100%;
     max-width: calc((100svh - var(--panel-pad-top) - var(--panel-pad-bottom) - var(--space-400)) * 1.3);
     justify-self: end;
   }
 
-  /* La solución suma "Cómo lo hace" debajo: el WhatsApp es más chico que
-     el gráfico, para que entren los dos en la pantalla. */
   .vg-avisos > .vg-media {
     width: 100%;
     max-width: calc((100svh - var(--panel-pad-top) - var(--panel-pad-bottom) - var(--space-400)) * 0.9);
     justify-self: end;
   }
 
-  .vg-pantalla .vg-detalle { margin-top: var(--fit-gap); }
-  .vg-pantalla .vg-detalle__label { margin-bottom: var(--space-200); }
-
   /* Lo que hace VigIA: la foto según el alto de la ventana y cuatro
-     tarjetas en fila también en tablet acostada (en dos filas no entran en
-     una pantalla). */
+     tarjetas en fila también en tablet acostada. */
   .vg-puntos { --alto-foto: clamp(8rem, 24vh, 15rem); }
 
   .vg-puntos {
@@ -2268,23 +2296,6 @@ h3 {
     max-width: 980px;
     row-gap: var(--fit-gap);
   }
-
-  /* El espacio libre se reparte con márgenes automáticos: entre el header
-     y el título, entre las tarjetas y las dos preguntas, y al pie. */
-  #que-hace > .vg-wrap {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  #que-hace > .vg-wrap > .vg-section__title { margin-top: auto; }
-  .vg-modulos { margin-block: auto; padding-top: var(--fit-gap); }
-  .vg-razon,
-  .vg-canal { padding-block: calc(var(--fit-gap) / 2); }
-
-  /* Frase: una pantalla entera y más grande. */
-  .vg-tagline.vg-pantalla { min-height: 100svh; }
 
   .vg-tagline__text {
     font-size: var(--fit-display);
@@ -2294,9 +2305,19 @@ h3 {
   /* Impacto con una tabla abierta (.is-tabla): el título y la bajada se
      pliegan y los indicadores suben, así indicadores y tabla entran en la
      pantalla; al cerrarla, todo vuelve a centrarse con el título. El
-     script de la sección alinea la sección arriba al abrir y al cerrar; sin
-     el anclaje del navegador, que corría el scroll al plegarse el título. */
+     scroll no se mueve: la sección tiene alto fijo y no se alinea, y sin el
+     anclaje del navegador, que corría el scroll al plegarse el título. */
   .vg-impacto { overflow-anchor: none; }
+
+  /* Impacto no ocupa la pantalla entera: mide siempre lo mismo, lo que
+     ocupa con la tabla más alta abierta (--alto-impacto, lo mide el script
+     de la sección), con un margen chico que no llega al ras. Cerrada, el
+     título y los indicadores quedan centrados en ese alto; al abrir una
+     tabla la sección no crece. */
+  .vg-impacto.vg-pantalla {
+    min-height: var(--alto-impacto, 0px);
+    padding-block: var(--space-500);
+  }
 
   .vg-impacto__cabeza {
     display: grid;
@@ -2321,14 +2342,6 @@ h3 {
   }
 
   .vg-impacto.is-tabla .vg-indicadores { margin-top: 0; }
-
-  /* Preguntas comparte la última pantalla con el footer: ocupa lo que el
-     footer deja (lo mide Footer.astro). Si se abren preguntas, crece. */
-  #preguntas.vg-pantalla {
-    min-height: calc(100svh - var(--alto-footer, 0px));
-  }
-
-  #preguntas .vg-faq__item summary { padding-block: var(--space-100); }
 }
 
 /* ---------- Páginas legales (LegalPage.astro) ----------

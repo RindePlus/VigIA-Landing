@@ -321,7 +321,9 @@ export const UI = {
     },
     { label: 'Impacto', href: '/pt/#impacto' },
     { label: 'Quem somos', href: '/pt/#nosotros' },
-    { label: 'Contato', href: '/pt/#contacto' },
+    // Contacto lleva a Preguntas, que abre con el CTA y sigue con el footer
+    // de contacto: las dos son "Contacto" en el menú.
+    { label: 'Contato', href: '/pt/#preguntas' },
     { label: 'Conteúdos', href: '/pt/educacion/' },
   ],
   header: {
