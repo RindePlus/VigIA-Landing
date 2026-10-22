@@ -545,9 +545,9 @@ h3 {
   /* Tiempos del despliegue, pausados para que se siga paso a paso: cada
      punto aparece en --t-punto y la línea hasta el siguiente se dibuja en
      --t-linea. El paso i arranca en i × (punto + línea); los tres tardan
-     unos 4,3 s. */
-  --t-punto: var(--dur-slow);
-  --t-linea: calc(var(--dur-slow) * 1.6);
+     unos 3,2 s. */
+  --t-punto: calc(var(--dur-base) * 1.25);
+  --t-linea: calc(var(--dur-slow) * 1.2);
   display: grid;
   gap: var(--hueco);
   list-style: none;
@@ -651,6 +651,9 @@ h3 {
     padding: calc(var(--punto) + var(--space-200)) 0 0;
     text-align: center;
   }
+
+  /* El subtítulo, centrado como los pasos de abajo. */
+  .vg-detalle__label { text-align: center; }
 
   .vg-paso::before {
     top: 0;
