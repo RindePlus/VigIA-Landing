@@ -10,7 +10,7 @@
 // src/data/vigia.js, vigia.en.js o vigia.pt.js según el idioma. Los medios de las tres
 // primeras secciones usan MediaStory: animación en código y, si hay, el
 // video (src/data/videos.js).
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BalanceChart from '../components/BalanceChart.astro';
 import WhatsAppMock from '../components/WhatsAppMock.astro';
@@ -34,8 +34,27 @@ import {
 import { IDIOMAS, contenido, idiomaDe } from '../i18n/idiomas';
 import { CONTACT_EMAIL, OFFICE_ADDRESS, WHATSAPP_DISPLAY, buildWhatsAppUrl } from '../data/social';
 import { EQUIPO } from '../data/equipo';
+import { CLIENTES as LOGOS_CLIENTES } from '../data/clientes';
 import { VIDEOS, DESCRIPCION_PENDIENTE } from '../data/videos';
 import '../styles/sections.css';
+
+// Logos del carrusel optimizados: WebP al doble del alto en que se muestran
+// (pantallas de alta densidad). Eran PNG originales (uno de 228 KB para 50 px
+// de alto) y, al estar en el hero, se descargaban de entrada. El ancho y el
+// alto reservan el lugar de cada logo antes de que cargue (sin corrimientos).
+const logosClientes = await Promise.all(
+  LOGOS_CLIENTES.map(async (c) => {
+    const img = await getImage({ src: c.logo, height: c.h * 2, format: 'webp' });
+    return {
+      id: c.id,
+      nombre: c.nombre,
+      mono: c.mono ?? false,
+      src: img.src,
+      h: c.h,
+      w: Math.round((c.h * c.logo.width) / c.logo.height),
+    };
+  }),
+);
 
 const lang = idiomaDe(Astro.currentLocale);
 const {
@@ -138,13 +157,15 @@ const jsonLd = {
         </MediaStory>
       </div>
     </div>
-    <!-- Clientes al pie del hero, en la misma pantalla (decisión 59): fuera
-         del .vg-wrap, el carrusel ocupa todo el ancho. Sin título a la vista
+    <!-- Clientes al pie del hero, justo debajo de la primera pantalla
+         (decisiones 59 y 62): aparece al bajar un poco, no de entrada. Fuera
+         del .vg-wrap, el carrusel ocupa todo el ancho. Se hidrata al verse
+         (client:visible) y sus logos llegan optimizados (logosClientes). Sin título a la vista
          ("Confían en nosotros" queda como nombre accesible). El hilo pasa
          por debajo, como por un túnel: entra en un semicírculo (∪) y sale por otro (∩)
          (data-vg-under, JourneyThread.astro). -->
     <div class="vg-trusted" id="clientes" role="region" aria-label={CLIENTES.titulo} data-vg-under>
-      <TrustedCompanies client:idle />
+      <TrustedCompanies client:visible clientes={logosClientes} />
     </div>
   </section>
 

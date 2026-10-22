@@ -17,21 +17,23 @@ import speedagro from '../assets/clientes/speedagro.png';
 // negro (claro) / blanco (oscuro) en vez de mostrar colores.
 // `h` → alto en px. Los assets están recortados al arte, así que estos valores
 // igualan el área visual de cada logo.
-// Las imágenes llegan como metadatos de Astro: se usa `.src`.
+// `logo` son los metadatos de Astro (src, ancho y alto del original): HomePage
+// los pasa por getImage (WebP al doble del alto en que se muestran) y le da al
+// carrusel la URL y el tamaño, para que reserve el lugar de cada logo.
 // Sin BioRed ni Agroconsultor: son socios del producto y ya salen en Sobre
 // nosotros (equipo.js), no clientes (decisión 45).
 export const CLIENTES = [
-  { id: 'altina', logo: altina.src, nombre: 'Altina', h: 41 },
-  { id: 'chiaraviglio', logo: chiaraviglio.src, nombre: 'Chiaraviglio Hnos', h: 46 },
-  { id: 'prome', logo: prome.src, nombre: 'Prome AgroNegocios', h: 54 },
-  { id: 'munira', logo: munira.src, nombre: 'Munira Foods', mono: true, h: 64 },
-  { id: 'chiaratech', logo: chiaratech.src, nombre: 'Chiara Tech', h: 57 },
-  { id: 'aaas', logo: aaas.src, nombre: 'Agro Assistance Service', h: 47 },
-  { id: 'kimzza', logo: kimzza.src, nombre: 'Kimzza', h: 42 },
-  { id: 'conci', logo: conci.src, nombre: 'Conci Riego', mono: true, h: 45 },
-  { id: 'aapresid', logo: aapresid.src, nombre: 'Aapresid', h: 40 },
-  { id: 'adj', logo: adj.src, nombre: 'ADJ', h: 50 },
-  { id: 'halcon', logo: halcon.src, nombre: 'Halcón', h: 50 },
-  { id: 'biozelen', logo: biozelen.src, nombre: 'Bio Zelen', h: 74 },
-  { id: 'speedagro', logo: speedagro.src, nombre: 'SpeedAgro', h: 40 },
+  { id: 'altina', logo: altina, nombre: 'Altina', h: 41 },
+  { id: 'chiaraviglio', logo: chiaraviglio, nombre: 'Chiaraviglio Hnos', h: 46 },
+  { id: 'prome', logo: prome, nombre: 'Prome AgroNegocios', h: 54 },
+  { id: 'munira', logo: munira, nombre: 'Munira Foods', mono: true, h: 64 },
+  { id: 'chiaratech', logo: chiaratech, nombre: 'Chiara Tech', h: 57 },
+  { id: 'aaas', logo: aaas, nombre: 'Agro Assistance Service', h: 47 },
+  { id: 'kimzza', logo: kimzza, nombre: 'Kimzza', h: 42 },
+  { id: 'conci', logo: conci, nombre: 'Conci Riego', mono: true, h: 45 },
+  { id: 'aapresid', logo: aapresid, nombre: 'Aapresid', h: 40 },
+  { id: 'adj', logo: adj, nombre: 'ADJ', h: 50 },
+  { id: 'halcon', logo: halcon, nombre: 'Halcón', h: 50 },
+  { id: 'biozelen', logo: biozelen, nombre: 'Bio Zelen', h: 74 },
+  { id: 'speedagro', logo: speedagro, nombre: 'SpeedAgro', h: 40 },
 ];

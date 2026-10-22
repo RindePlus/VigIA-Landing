@@ -488,20 +488,16 @@ html {
     --panel-pad-bottom: var(--space-500);
     /* El hero arranca debajo del header (lo mide Header.jsx), con aire. */
     --hero-pad-top: calc(var(--alto-header, var(--space-800)) + var(--fit-gap));
-    /* Alto del hero: una pantalla, con tope de 880 px. Es lo que ocupa el
-       contenido con aire; en pantallas más altas (monitores de escritorio)
-       el resto quedaba vacío, repartido arriba y abajo del contenido. Las
-       notebooks (hasta ~880 px de alto) siguen con la pantalla entera. */
-    --alto-pantalla: min(100svh, 880px);
+    /* Alto de la primera pantalla: el hero la ocupa entera, con el texto y
+       el gráfico centrados, y el carrusel de clientes queda justo debajo
+       (aparece al bajar un poco, no de entrada). */
+    --alto-pantalla: 100svh;
     /* Tope de 3.75rem: en pantallas altas y anchas el título llegaba a casi
        cuatro veces la bajada y se veía desproporcionado. */
     --fit-hero: clamp(2.5rem, 3.4vh + 1.6rem, 3.75rem);
     --fit-display: clamp(2.25rem, 2.6vh + 1.6rem, 3.75rem);
     --fit-lead: clamp(1rem, 0.6vh + 0.75rem, 1.25rem);
     --fit-gap: clamp(var(--space-200), 3.4vh, var(--space-600));
-    /* Alto del carrusel de clientes (fila de logos de 88px más 8px arriba y
-       abajo, TrustedCompanies.css): el gráfico del hero lo descuenta. */
-    --alto-carrusel: 104px;
   }
 }
 
