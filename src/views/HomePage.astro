@@ -498,6 +498,51 @@ const jsonLd = {
       });
       window.addEventListener('resize', ubicarFlecha, { passive: true });
 
+      // Cierre fuera de la vista: con la sección entera fuera de la pantalla
+      // por 2 s, o a más de una pantalla de distancia, la tabla se cierra
+      // sola. Quien vuelve a Impacto la encuentra como al principio, con el
+      // título. Salir un momento y volver no la cierra, y nunca se cierra a
+      // la vista: el cierre es instantáneo (sin animación) y, si la sección
+      // quedó arriba, se compensa el alto que pierde (en celular crece con la
+      // tabla), así lo que se está mirando no se mueve.
+      const FUERA_MS = 2000;
+      let fuera = false;
+      let fueraTimer = 0;
+      const cerrarFuera = () => {
+        window.clearTimeout(fueraTimer);
+        if (!abierto || !fuera) return;
+        const raiz = document.documentElement;
+        const antes = seccion.getBoundingClientRect();
+        raiz.style.overflowAnchor = 'none';
+        seccion.classList.add('is-sin-transicion');
+        mostrar(null);
+        const diferencia = seccion.getBoundingClientRect().height - antes.height;
+        if (antes.bottom < 0 && diferencia) {
+          window.scrollTo({ top: window.scrollY + diferencia, behavior: 'instant' });
+        }
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            seccion.classList.remove('is-sin-transicion');
+            raiz.style.overflowAnchor = '';
+          }),
+        );
+      };
+      // Lejos: a más de una pantalla de distancia, arriba o abajo.
+      const siLejos = () => {
+        if (!fuera || !abierto) return;
+        const r = seccion.getBoundingClientRect();
+        if (r.bottom < -window.innerHeight || r.top > window.innerHeight * 2) cerrarFuera();
+      };
+      new IntersectionObserver(([entrada]) => {
+        fuera = !entrada.isIntersecting;
+        window.clearTimeout(fueraTimer);
+        if (fuera && abierto) fueraTimer = window.setTimeout(cerrarFuera, FUERA_MS);
+        // El aviso llega después del scroll: un salto largo (el menú) ya
+        // puede haber dejado la sección lejos.
+        siLejos();
+      }).observe(seccion);
+      window.addEventListener('scroll', siLejos, { passive: true });
+
       // Alto fijo de la sección en horizontal: el que ocupa con la tabla más
       // alta abierta (margen + indicadores + panel), para que al abrirla la
       // sección no crezca. Las dos tablas comparten la celda: el alto del

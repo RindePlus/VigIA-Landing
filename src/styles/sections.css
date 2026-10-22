@@ -1387,6 +1387,14 @@ h3 {
   max-width: var(--ancho-impacto);
 }
 
+/* Cierre de la tabla fuera de la vista (script de la sección): todo de
+   golpe, sin animaciones, para poder medir y compensar el alto en el acto.
+   El !important gana a las transiciones de cada parte del panel. */
+.vg-impacto.is-sin-transicion,
+.vg-impacto.is-sin-transicion * {
+  transition: none !important;
+}
+
 /* Título y bajada centrados, sobre los indicadores (también centrados). */
 .vg-impacto__cabeza {
   text-align: center;
