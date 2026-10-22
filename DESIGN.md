@@ -26,6 +26,8 @@ colors:
   on-forest-muted: "#b4d4c1"
   on-forest-subtle: "#9fc2ad"
   on-forest-accent: "#8cc2a9"
+  on-forest-campo: "#93c46b"
+  on-forest-carbono: "#d6a06c"
   wa-bubble: "#ffffff"
   wa-meta: "#667781"
   mask: "#000000"
@@ -144,6 +146,8 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 - **Bordes** (#d8d5cd, #e4e1da, #b1ada3): tarjetas, divisores y el trazo punteado del hilo.
 
 - **Sobre la banda verde** (Impacto): texto #ece8df y secundarios teñidos de verde (#b4d4c1, #9fc2ad), no grises neutros.
+- **Verde campo sobre la banda** (#93c46b): el grano en Impacto (número del indicador activo, total de la tabla y borde de arriba de su tarjeta), el verde campo aclarado para el fondo verde.
+- **Tierra sobre la banda** (#d6a06c): lo mismo para el carbono.
 - **Celular de WhatsApp** (`WhatsAppMock.astro`): copia los colores de la app real (globo #ffffff, metadatos #667781, barras, fondo). Es una réplica del producto, no parte de la paleta: no se reutilizan en otros componentes.
 - **Máscaras** (#000000): sólo como canal de opacidad en `mask-image` (lote del hero, carrusel de logos), nunca como color visible.
 
