@@ -38,13 +38,20 @@ const guardarPosicion = (destino) => {
 // Desplegable del menú (ítem con `hijos`). En escritorio se abre al dejar
 // el cursor encima un momento (no al pasar de largo) y se cierra con un
 // pequeño margen al salir, para poder bajar hasta la lista. Con teclado se
-// abre al enfocar el título. En el menú de celular los hijos van siempre a
-// la vista, debajo del título (Header.css).
+// abre al enfocar el título. Un clic en el título lo deja abierto (fijado):
+// sin eso, el clic lo cerraba justo cuando el foco lo abría y la lista subía
+// y bajaba. Fijado, se cierra al salir con el mouse por más tiempo, al
+// scrollear, al tocar fuera, con Escape o al elegir una opción. En el menú
+// de celular los hijos van siempre a la vista, debajo del título
+// (Header.css), y el título sigue siendo un enlace.
 const ABRIR_MS = 220;
 const CERRAR_MS = 200;
+const CERRAR_FIJADO_MS = 1200;
+const ESCRITORIO = '(min-width: 768px)';
 
 const MenuGrupo = ({ item, activeHref, onNavigate }) => {
   const [abierto, setAbierto] = useState(false);
+  const [fijado, setFijado] = useState(false);
   const timer = useRef(null);
   const grupoRef = useRef(null);
   const activo = item.href === activeHref || item.hijos.some((h) => h.href === activeHref);
@@ -58,28 +65,75 @@ const MenuGrupo = ({ item, activeHref, onNavigate }) => {
   const cerrar = () => {
     window.clearTimeout(timer.current);
     setAbierto(false);
+    setFijado(false);
     onNavigate();
+  };
+
+  // Fijado: se cierra al scrollear o al tocar fuera del desplegable.
+  useEffect(() => {
+    if (!fijado) return undefined;
+    const soltar = () => {
+      window.clearTimeout(timer.current);
+      setAbierto(false);
+      setFijado(false);
+    };
+    const fuera = (e) => {
+      if (!grupoRef.current?.contains(e.target)) soltar();
+    };
+    window.addEventListener('scroll', soltar, { passive: true, once: true });
+    document.addEventListener('pointerdown', fuera);
+    return () => {
+      window.removeEventListener('scroll', soltar);
+      document.removeEventListener('pointerdown', fuera);
+    };
+  }, [fijado]);
+
+  // Título en escritorio: abre y fija la lista, sin navegar (El problema ya
+  // está en la lista). En celular navega, como siempre.
+  const tocarTitulo = (e) => {
+    if (!window.matchMedia(ESCRITORIO).matches) {
+      cerrar();
+      return;
+    }
+    e.preventDefault();
+    window.clearTimeout(timer.current);
+    setAbierto(true);
+    setFijado(true);
   };
 
   return (
     <div
       ref={grupoRef}
       className={`menu-grupo ${abierto ? 'menu-grupo--abierto' : ''}`}
-      onPointerEnter={(e) => e.pointerType === 'mouse' && programar(true, ABRIR_MS)}
-      onPointerLeave={(e) => e.pointerType === 'mouse' && programar(false, CERRAR_MS)}
+      onPointerEnter={(e) => e.pointerType === 'mouse' && programar(true, abierto ? 0 : ABRIR_MS)}
+      onPointerLeave={(e) => {
+        if (e.pointerType !== 'mouse') return;
+        window.clearTimeout(timer.current);
+        timer.current = window.setTimeout(
+          () => {
+            setAbierto(false);
+            setFijado(false);
+          },
+          fijado ? CERRAR_FIJADO_MS : CERRAR_MS,
+        );
+      }}
       onFocus={() => programar(true, 0)}
       onBlur={(e) => {
         if (!grupoRef.current?.contains(e.relatedTarget)) programar(false, 0);
       }}
       onKeyDown={(e) => {
-        if (e.key === 'Escape') programar(false, 0);
+        if (e.key === 'Escape') {
+          setFijado(false);
+          programar(false, 0);
+        }
       }}
     >
       <a
         href={item.href}
         className={`menu-item menu-grupo__titulo ${activo ? 'menu-item--active' : ''}`}
         aria-current={item.href === activeHref ? 'location' : undefined}
-        onClick={cerrar}
+        aria-expanded={abierto}
+        onClick={tocarTitulo}
       >
         {item.label}
         <PiCaretDown className="menu-grupo__caret" aria-hidden="true" />
@@ -150,16 +204,25 @@ const Header = ({
   // Oculta el header al bajar y lo muestra al subir (ADR 0007: con el
   // scroll normal vuelve el comportamiento de antes de la decisión 50). Para
   // ocultarse exige un recorrido hacia abajo sostenido (no un toque de
-  // rueda); para volver basta un gesto corto hacia arriba. Arriba de todo
-  // es transparente; al bajar toma el fondo con desenfoque.
+  // rueda) y para volver, lo mismo hacia arriba: subir un poco sin querer
+  // no lo muestra. Arriba de todo está siempre a la vista; ahí es
+  // transparente y al bajar toma el fondo con desenfoque. Al ir a una
+  // sección con un enlace de la página (el menú, el footer), queda a la
+  // vista durante todo el recorrido, hacia arriba o hacia abajo: es la
+  // misma acción en las dos direcciones y el header es lo que se usó.
   useEffect(() => {
     const HIDE_DISTANCE = 120;
-    const SHOW_DISTANCE = 8;
+    const SHOW_DISTANCE = 120;
     const TOP_ZONE = 160;
+    // Tope por si el navegador no avisa el fin del scroll (scrollend) o el
+    // salto no mueve nada.
+    const NAV_MAX = 1600;
     let lastY = window.scrollY;
     let anchorY = lastY; // donde empezó el tramo actual en una misma dirección
     let direction = 0;
     let ticking = false;
+    let navegando = false;
+    let finNav = 0;
 
     // Secciones del menú que existen en esta página (en las otras páginas no
     // hay ninguna y no se marca nada). Los hijos de un desplegable cuentan
@@ -170,11 +233,12 @@ const Header = ({
       .filter((s) => s.el);
 
     // Activa: la última sección cuyo borde superior ya pasó el 35 % de la
-    // ventana. Al llegar al final de la página, la última (el footer de
-    // contacto puede ser más bajo que ese 35 %).
+    // ventana. Al llegar al final de la página, la última (Preguntas, que
+    // con el footer es Contacto, puede no llegar a ese 35 %). El margen de
+    // 24 px cubre el redondeo del scroll con zoom o escalado de pantalla.
     const seccionActiva = () => {
       const linea = window.innerHeight * 0.35;
-      const alFinal = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      const alFinal = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 24;
       if (alFinal && secciones.length) return secciones[secciones.length - 1].href;
       let activa = null;
       for (const s of secciones) {
@@ -210,7 +274,7 @@ const Header = ({
       }
       const travelled = Math.abs(y - anchorY);
 
-      if (y < TOP_ZONE) {
+      if (navegando || y < TOP_ZONE) {
         setIsHidden(false);
       } else if (direction > 0 && travelled >= HIDE_DISTANCE) {
         setIsHidden(true);
@@ -227,12 +291,49 @@ const Header = ({
       window.requestAnimationFrame(update);
     };
 
+    // Fin del salto: el tramo de scroll vuelve a contarse desde ahí, así el
+    // header no se oculta ni aparece de golpe por el recorrido del salto.
+    const terminarNav = () => {
+      if (!navegando) return;
+      navegando = false;
+      window.clearTimeout(finNav);
+      lastY = window.scrollY;
+      anchorY = lastY;
+      direction = 0;
+    };
+
+    // Clic en un enlace a una sección de esta misma página.
+    const handleClick = (event) => {
+      // Un clic que no navega (el título del desplegable) no cuenta.
+      if (event.defaultPrevented) return;
+      const enlace = event.target.closest?.('a[href*="#"]');
+      if (!enlace) return;
+      const url = new URL(enlace.href, window.location.href);
+      if (!url.hash || url.pathname !== window.location.pathname) return;
+      navegando = true;
+      setIsHidden(false);
+      window.clearTimeout(finNav);
+      finNav = window.setTimeout(terminarNav, NAV_MAX);
+    };
+
+    // Llegada desde otra página a una sección (/#impacto): el salto lo hace
+    // BaseLayout; mientras se acomoda, el header queda a la vista.
+    if (window.location.hash) {
+      navegando = true;
+      finNav = window.setTimeout(terminarNav, NAV_MAX);
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll, { passive: true });
+    window.addEventListener('scrollend', terminarNav);
+    document.addEventListener('click', handleClick);
     update(); // estado correcto si la página carga ya scrolleada
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      window.removeEventListener('scrollend', terminarNav);
+      document.removeEventListener('click', handleClick);
+      window.clearTimeout(finNav);
     };
   }, [menuItems]);
 

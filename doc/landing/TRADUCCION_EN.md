@@ -108,6 +108,7 @@ Si una frase literal se entiende pero suena rara ("the crop shows the stress whe
 | Se cargan tus lotes | **Your fields are set up** | Voz pasiva neutral, igual que en español: todavía no está definido quién hace el alta (pregunta abierta 1 de `ESTRUCTURA_LANDING.md`). |
 | Calcula cada día | **Daily calculations** | |
 | Te avisa a tiempo | **Timely alerts** | |
+| Producto · Qué vigila · Cómo te avisa (menú) | **Product · What it watches · How it alerts you** | *Watches*, como en el título de la sección (*watches for stress*). |
 | Cargás lluvias y riegos | **Log rainfall and irrigation** | *Log* es el verbo de las apps para registrar datos. |
 | Que el bioinsumo llegue antes que el estrés, no después del daño | **Get the biostimulant on before stress hits, not after the damage is done** | Mantiene el contraste antes/después y las palabras resaltadas en verde y rojo. *Get it on* = aplicarlo (jerga de aplicación). |
 | Más grano y más carbono en el suelo | **More grain, more carbon in the soil** | |

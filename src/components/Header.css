@@ -554,7 +554,7 @@ img.logo-image:hover {
      alinea con el contenido en vez de pegarse al borde de la ventana. */
   grid-template-columns: auto 1fr auto;
   gap: 40px;
-  max-width: 1160px;
+  max-width: var(--ancho-contenido);
   margin: 0 auto;
   padding: 10px 24px;
 }
@@ -932,4 +932,17 @@ img.logo-image:hover {
   @media (min-width: 768px) {
     .rp-home .header-nav { -webkit-backdrop-filter: none; }
   }
+}
+
+/* Pantallas anchas (ver global.css): el texto del menú crece con el tamaño
+   base (está en rem), pero el logo y los íconos están en px; crecen a la par
+   para que el header no quede chico al lado del contenido. */
+@media (min-width: 1800px) {
+  img.logo-image { height: 56px; }
+  .header-icon-btn svg { width: 22px; height: 22px; }
+}
+
+@media (min-width: 2300px) {
+  img.logo-image { height: 60px; }
+  .header-icon-btn svg { width: 24px; height: 24px; }
 }

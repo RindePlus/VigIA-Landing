@@ -26,4 +26,15 @@ export default defineConfig({
   build: {
     assets: 'assets',
   },
+  vite: {
+    build: {
+      // Los <script> de los componentes se incrustan en el HTML hasta 8 KB
+      // (Vite deja 4 KB). El del hilo (JourneyThread) pasó los 4 KB y, como
+      // archivo aparte, en celular sumaba un pedido antes de la primera
+      // pintura (~300 ms de FCP en Lighthouse). Para el resto (imágenes,
+      // tipografías) sigue el límite de siempre: `undefined` = el de Vite.
+      assetsInlineLimit: (archivo, contenido) =>
+        archivo.endsWith('.js') && contenido.length < 8 * 1024 ? true : undefined,
+    },
+  },
 });

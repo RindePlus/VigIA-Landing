@@ -1,16 +1,16 @@
 import { useEffect, useRef } from 'react';
-import { CLIENTES } from '../data/clientes';
 import './TrustedCompanies.css';
 
 // Carrusel de clientes portado de Landing. Diferencias:
 // - Sin animación de entrada: el HTML prerenderizado ya muestra los logos y
 //   la isla sólo agrega el desplazamiento y el arrastre al hidratar.
 // - Con `prefers-reduced-motion` no se desplaza solo (se puede arrastrar).
+// - Los logos llegan por props ya optimizados (HomePage.astro, getImage), con
+//   su ancho y alto para reservar el lugar.
 
-// Duplicados para que el loop no tenga corte.
-const TRACK = [...CLIENTES, ...CLIENTES];
-
-const TrustedCompanies = () => {
+const TrustedCompanies = ({ clientes }) => {
+  // Duplicados para que el loop no tenga corte.
+  const track = [...clientes, ...clientes];
   const carouselRef = useRef(null);
 
   useEffect(() => {
@@ -85,18 +85,21 @@ const TrustedCompanies = () => {
   return (
     <div className="carousel-wrapper">
       <div className="carousel-track" ref={carouselRef}>
-        {TRACK.map((cliente, index) => (
+        {track.map((cliente, index) => (
           <div
             key={`${cliente.id}-${index}`}
             className={`company-logo ${cliente.mono ? 'company-logo--mono' : ''}`}
-            aria-hidden={index >= CLIENTES.length ? 'true' : undefined}
+            aria-hidden={index >= clientes.length ? 'true' : undefined}
           >
             <img
-              src={cliente.logo}
-              alt={index >= CLIENTES.length ? '' : cliente.nombre}
+              src={cliente.src}
+              alt={index >= clientes.length ? '' : cliente.nombre}
+              width={cliente.w}
+              height={cliente.h}
               style={{ height: `${cliente.h}px` }}
               loading="lazy"
               decoding="async"
+              fetchPriority="low"
             />
           </div>
         ))}

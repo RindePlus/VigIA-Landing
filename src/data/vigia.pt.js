@@ -258,7 +258,6 @@ export const PREGUNTAS = {
 // "Educación" → Conteúdos: así se llama la sección en los sitios de producto
 // de Brasil ("Educação" suena a institución educativa).
 export const EDUCACION = {
-  etiqueta: 'Conteúdos',
   titulo: 'Conteúdos',
   bajada: `Estamos preparando conteúdos sobre estresse hídrico e térmico, bioestimulantes e uso da água, para você aproveitar melhor o ${MARCA}.`,
   volver: 'Voltar ao início',
@@ -310,18 +309,21 @@ export const UI = {
   inicio: 'início',
   menu: [
     {
-      label: 'Como funciona',
+      label: 'Produto',
       href: '/pt/#problema',
       hijos: [
         { label: 'Início', href: '/pt/#inicio' },
         { label: 'O problema', href: '/pt/#problema' },
-        { label: 'O que o VigIA faz', href: '/pt/#que-hace' },
-        { label: 'A solução', href: '/pt/#como-funciona' },
+        { label: 'O que monitora', href: '/pt/#que-hace' },
+        // Os alertas: "Como te avisa" mezcla el te con el você del sitio.
+        { label: 'Os alertas', href: '/pt/#como-funciona' },
       ],
     },
     { label: 'Impacto', href: '/pt/#impacto' },
     { label: 'Quem somos', href: '/pt/#nosotros' },
-    { label: 'Contato', href: '/pt/#contacto' },
+    // Contacto lleva a Preguntas, que abre con el CTA y sigue con el footer
+    // de contacto: las dos son "Contacto" en el menú.
+    { label: 'Contato', href: '/pt/#preguntas' },
     { label: 'Conteúdos', href: '/pt/educacion/' },
   ],
   header: {
