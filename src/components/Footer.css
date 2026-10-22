@@ -23,7 +23,7 @@
 }
 
 .rp-footer__inner {
-  max-width: 1160px;
+  max-width: var(--ancho-contenido);
   margin: 0 auto;
   padding: var(--space-300) var(--page-gutter) var(--space-200);
 }

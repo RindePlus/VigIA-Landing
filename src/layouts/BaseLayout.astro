@@ -103,6 +103,10 @@ const hreflang = alt.traducida && !noindex
         if (!reduce && 'IntersectionObserver' in window) {
           document.documentElement.classList.add('vg-reveal-on');
         }
+        // Llegada con una sección en la URL (/#impacto, desde otra página):
+        // sin scroll suave, así el navegador no recorre la página desde
+        // arriba. Lo vuelve a activar el script de llegada, al final.
+        if (location.hash) document.documentElement.style.scrollBehavior = 'auto';
       })();
     </script>
   </head>
@@ -150,6 +154,45 @@ const hreflang = alt.traducida && !noindex
         document.querySelectorAll('[data-reveal]').forEach(function (n) {
           var b = n.getBoundingClientRect();
           if (b.top < alto && b.bottom > -alto * 0.1) n.removeAttribute('data-reveal');
+        });
+      })();
+    </script>
+
+    <!-- Llegada desde otra página a una sección (/#impacto): va directo a
+         ella, sin recorrer la página. Antes de que el header de React mida su
+         alto, se toma del HTML, así la sección cae justo debajo de él. Al
+         terminar de cargar (tipografías, el alto fijo de Impacto) la vuelve a
+         alinear, salvo que la persona ya haya movido el scroll. Lo que queda
+         a la vista se muestra sin la animación de aparición. El header queda
+         visible durante la llegada (Header.jsx). -->
+    <script is:inline>
+      (function () {
+        var id = decodeURIComponent(location.hash.slice(1));
+        var destino = id && document.getElementById(id);
+        var raiz = document.documentElement;
+        if (!destino) { raiz.style.scrollBehavior = ''; return; }
+        var header = document.querySelector('header');
+        if (header) raiz.style.setProperty('--alto-header', header.offsetHeight + 'px');
+        var movio = false;
+        var marcar = function () { movio = true; };
+        ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function (t) {
+          window.addEventListener(t, marcar, { once: true, passive: true });
+        });
+        var ir = function () { if (!movio) destino.scrollIntoView({ block: 'start', behavior: 'instant' }); };
+        ir();
+        var alto = window.innerHeight;
+        document.querySelectorAll('[data-reveal]').forEach(function (n) {
+          var b = n.getBoundingClientRect();
+          if (b.top < alto && b.bottom > -alto * 0.1) n.removeAttribute('data-reveal');
+        });
+        var listo = function () {
+          ir();
+          // Una vuelta más: el alto de Impacto y el hilo se miden al cargar.
+          requestAnimationFrame(function () { ir(); raiz.style.scrollBehavior = ''; });
+        };
+        if (document.readyState === 'complete') listo();
+        else window.addEventListener('load', function () {
+          (document.fonts ? document.fonts.ready : Promise.resolve()).then(listo);
         });
       })();
     </script>

@@ -39,22 +39,23 @@ Plan de contenido de la home. Define qué secciones tiene la página, en qué or
 ## Mapa de la página
 
 ```
-Header ─ Cómo funciona ▾ · Impacto · Nosotros · Contacto · Educación (/educacion) · ES/EN/PT · [Ingresar]
+Header ─ Producto ▾ (Inicio · El problema · Qué vigila · Cómo te avisa) · Impacto · Nosotros · Contacto · Educación (/educacion) · ES/EN/PT · [Ingresar]
 │        (se oculta al bajar y vuelve al subir)
+│        (Contacto lleva a #preguntas y queda marcado en Preguntas y el footer)
 │  ┌─ recorrido (.vg-journey: fondo de la página + hilo) ─┐
-├─ 1. Hero                 #inicio          · punto 1 · gráfico de balance (código)
+├─ 1. Hero                 #inicio          · punto 1 · gráfico de balance (código); al pie, el carrusel de clientes #clientes
 ├─ 2. El problema          #problema        · punto 2 · gráfico sin aviso → video problema
 ├─ 3. Lo que hace VigIA    #que-hace        · punto 3 · cuatro tarjetas con foto + otros módulos
 ├─ 4. La solución          #como-funciona   · punto 4 · WhatsApp → video resolución; debajo, "Cómo lo hace"
 │  └──────────────────────────────────────────────────────┘
 ├─ 5. Frase destacada      #frase           (tres renglones; "antes" se subraya al llegar el hilo)
 ├─ 6. Impacto              #impacto         (cuatro indicadores, tablas de grano y carbono)
-├─ 7. Sobre nosotros       #nosotros        (personas con foto y logo; debajo, el carrusel de clientes #clientes)
+├─ 7. Sobre nosotros       #nosotros        (personas con foto y logo)
 ├─ 8. Preguntas frecuentes #preguntas       (con el CTA de cierre en la columna del título)
 └─ Footer                  #contacto
 ```
 
-En pantallas horizontales (escritorio y tablet acostada) cada sección ocupa más o menos una pantalla, con el contenido centrado y el mismo aire arriba y abajo (`.vg-pantalla`); el scroll es el normal del navegador (decisión 57, [ADR 0007](../adr/0007-scroll-normal-en-toda-la-home.md)).
+En pantallas horizontales (escritorio y tablet acostada) sólo el hero ocupa una pantalla (`.vg-pantalla`), y el carrusel de clientes queda justo debajo; las demás secciones miden lo que su contenido. El scroll es el normal del navegador (decisiones 57 y 59, [ADR 0007](../adr/0007-scroll-normal-en-toda-la-home.md) y [ADR 0009](../adr/0009-solo-el-hero-ocupa-una-pantalla.md)).
 
 **Un solo CTA principal en toda la página:** **Contactanos para empezar a usar VigIA**. Abre WhatsApp con el mensaje "Hola, quiero empezar a usar VigIA BioEstrés". Va en el hero y en Preguntas frecuentes, con el mismo texto.
 
@@ -69,6 +70,7 @@ En pantallas horizontales (escritorio y tablet acostada) cada sección ocupa má
 | Bajada | VigIA BioEstrés sigue cada ambiente desde antes de la siembra y te avisa por WhatsApp días antes de que el estrés hídrico y térmico se vea a campo. Para productores y asesores que deciden con datos. (36 palabras: una sobre el máximo, aceptado para no perder el tipo de estrés). |
 | Botón | Sólo **Contactanos para empezar a usar VigIA** (WhatsApp, con flecha), monocromo: negro en tema claro y blanco en oscuro (decisión 33). Va en la columna de texto, **debajo de la bajada** y alineado a la izquierda con el texto (decisión 47). Sin botón secundario (decisión 31). En celular y tablet (una columna) va debajo del gráfico: primero se ve lo que hace y después se pide la acción. |
 | Visual | El gráfico termina a la altura del botón. `BalanceChart.astro`, simplificado: sólo la línea de agua útil, el umbral, "Hoy" y la zona de pronóstico (sin chips de datos, lluvia ni "Ejemplo ilustrativo"). La línea se dibuja y, justo antes de tocar el umbral, aparece la notificación, colgada de una línea punteada ámbar que sube desde el punto de **Hoy** (la alerta se envía hoy, cuando el pronóstico ya muestra el cruce; el punto ámbar del cruce es lo que se anticipa), con el logo de WhatsApp grande (el aviso llega por WhatsApp) y el texto **Alerta enviada · Estrés hídrico en 14 días**, y late el punto del cruce. El gráfico muestra 18 días de historia y los 14 del pronóstico (el horizonte del motor): la línea toca el umbral justo al final del pronóstico. En escritorio la notificación va sobre el gráfico (arriba a la derecha); en celular, debajo. Sin video. |
+| Clientes | Al pie del hero, a todo el ancho y sin título a la vista: el carrusel de logos (`#clientes`, decisión 59). "Confían en nosotros" queda como nombre accesible de la región. Queda justo debajo de la primera pantalla: aparece al bajar un poco, no de entrada (decisión 62). El hilo pasa por debajo, como por un túnel: llega al fondo de un semicírculo abierto hacia arriba (∪) antes de la franja y sale de la punta de otro abierto hacia abajo (∩) después. |
 
 ## 2. El problema (`#problema`)
 
@@ -180,7 +182,7 @@ Impacto medible con datos del informe técnico (decisiones 19, 25 y 32): escenar
 | **+8.680 t** | de grano recuperado frente a lotes que no siguieron a VigIA | Rinde recuperado por cultivo |
 | **~3.300 t** | de CO₂ extra capturadas en el suelo (sólo el extra del rinde recuperado; suma de los valores por cultivo, el informe da 2.800 a 4.100 t estables) | Carbono extra capturado por cultivo |
 
-**Tablas:** los dos últimos indicadores son botones, marcados sólo con una flechita discreta debajo. La primera vez que la sección entra en pantalla aparece un aviso corto debajo de los dos indicadores que se despliegan, **Tocá un indicador para ver el detalle**, que se va solo a los pocos segundos. Al tocar un indicador se despliega su tabla en un panel centrado debajo de los cuatro, **de a una** (abrir una cierra la otra; el mismo indicador, la cruz o Escape la cierran). El indicador activo no lleva fondo: sólo el número toma su color (grano en verde campo, carbono en tierra). Una **flecha** en el borde del panel apunta a él. Al cambiar de tabla (con una ya abierta), el recuadro queda fijo (la flecha se apoya en su borde y su línea cambia de color con una transición) y adentro sólo se desplaza el contenido, como un carrusel: la tabla que sale se va hacia un lado y la nueva entra desde el otro, sin desvanecerse, junto con la flecha y con la misma curva y duración. El panel se despliega con una animación de alto y opacidad (todo sin animación con movimiento reducido). En pantallas horizontales, al abrir una tabla el título y la bajada se pliegan, los indicadores suben y la sección se alinea arriba, así indicadores y tabla entran en la pantalla; al cerrarla vuelve el título. En celular, el panel va de borde a borde, sólo con línea arriba y abajo.
+**Tablas:** los dos últimos indicadores son botones, marcados sólo con una flechita discreta debajo. La primera vez que la sección entra en pantalla aparece un aviso corto debajo de los dos indicadores que se despliegan, **Tocá un indicador para ver el detalle**, que se va solo a los pocos segundos. Al tocar un indicador se despliega su tabla en un panel centrado debajo de los cuatro, **de a una** (abrir una cierra la otra; el mismo indicador, la cruz o Escape la cierran). El indicador activo no lleva fondo: sólo el número toma su color (grano en verde campo, carbono en tierra) y su flechita de abajo se oculta. Una **flecha** en el borde del panel apunta a él; sale del borde de arriba de la tarjeta, que va del color del dato de punta a punta, y la tarjeta va pegada a los indicadores. Al cambiar de tabla (con una ya abierta), el recuadro queda fijo (la flecha se apoya en su borde y su línea cambia de color con una transición) y adentro sólo se desplaza el contenido, como un carrusel: la tabla que sale se va hacia un lado y la nueva entra desde el otro, sin desvanecerse, junto con la flecha y con la misma curva y duración. El panel se despliega con una animación de alto y opacidad (todo sin animación con movimiento reducido). La tabla abierta se cierra sola cuando la sección queda fuera de la pantalla por 2 s o a más de una pantalla de distancia: quien vuelve encuentra Impacto como al principio, con el título. Salir un momento y volver no la cierra, y el cierre pasa fuera de la vista, sin mover lo que se está mirando. En pantallas horizontales la sección tiene un alto fijo, el que ocupa con la tabla más alta abierta (cerrada, el título y los indicadores quedan centrados en ese alto). Al abrir una tabla el título y la bajada (centrados, del tamaño de los de las otras secciones) se pliegan y los indicadores suben, así indicadores y tabla entran en la pantalla sin que la sección crezca ni se mueva el scroll; al cerrarla vuelve el título. En celular, el panel va de borde a borde, sólo con línea arriba y abajo.
 
 | Rinde recuperado | Hectáreas | kg/ha extra | Total |
 |---|---|---|---|
@@ -219,7 +221,7 @@ Encabezado centrado y tres tarjetas chicas, centradas, de igual ancho: el del co
 | Juan Dall’Orso | Agroconsultor | Cargada (`juan-dallorso.webp`, recortada para centrar la cara) |
 | Lucas Andreoni | BioRed | Cargada (`lucas-andreoni.webp`, 200 × 200: el original no da para más) |
 
-Debajo de las tarjetas, sin título, va el carrusel de clientes (`#clientes`, decisión 56): "Confían en nosotros" queda como nombre accesible de la región.
+El carrusel de clientes, que iba debajo de las tarjetas, pasó al pie del hero (decisión 59).
 
 ## 8. Preguntas frecuentes (`#preguntas`)
 
@@ -368,7 +370,7 @@ Cómo se pasó de la versión 1 a la versión 2. Queda como registro: varias pie
 | 7 | Video en el hero | No lleva: el gráfico animado muestra el producto. |
 | 8 | Formato de video | Sólo MP4 (H.264). |
 | 9 | Variante del video del problema | Sólo el clip 2B, sin el inserto del suelo agrietado (2A). |
-| 10 | Prueba en el hero | No lleva: la prueba social queda en el carrusel "Confían en nosotros". |
+| 10 | Prueba en el hero | No lleva: la prueba social queda en el carrusel "Confían en nosotros". **Reemplazada por la 59: el carrusel pasa al pie del hero.** |
 | 11 | Logo | El header usa el logo de VigIA BioEstrés. |
 | 12 | Reversión de riesgo | No lleva: el cierre termina en el CTA. |
 | 13 | Texto del CTA | **Contactanos para empezar a usar VigIA** (reemplaza "Quiero ver mis lotes en VigIA" y "Empezá a usar VigIA"): dice qué pasa al tocarlo y para qué; abre WhatsApp. |
@@ -418,6 +420,10 @@ Cómo se pasó de la versión 1 a la versión 2. Queda como registro: varias pie
 | 56 | Toda la home de a pantalla | El paso de pantalla en pantalla sigue después de Impacto. Sobre nosotros y Clientes van en una sola pantalla: el carrusel, sin el título "Confían en nosotros" (queda como nombre accesible), pegado a las tarjetas del equipo. El Cierre deja de ser una sección: se quitan su título ("La próxima pérdida…") y su texto, y el CTA va a Preguntas, en la columna del título, poco debajo de él, con una línea chica arriba que sigue al título ("¿Te quedó alguna duda? Escribinos."). Preguntas es el último panel y comparte la pantalla con el footer, que se achica y pasa a verde bosque, como Impacto. En Impacto, al abrir una tabla el título y la bajada se pliegan para que entre en la pantalla. Reemplaza la sección 10 de la estructura y, en lo del borde del recorrido, la decisión 51. **El paso de pantalla en pantalla lo reemplaza la 57; lo demás sigue.** |
 | 57 | Scroll normal en toda la home | Reemplaza el paso de pantalla en pantalla de las decisiones 50, 51 y 56 ([ADR 0007](../adr/0007-scroll-normal-en-toda-la-home.md)). Sin `SectionPager`: "Cómo lo hace" va debajo de las dos columnas de La solución, con los pasos en fila; la frase pierde la flecha. Cada sección sigue ocupando más o menos una pantalla en horizontal (`.vg-pantalla`), sin trabar el scroll. Escritorio toma los fondos que unen secciones del celular. El header vuelve a ocultarse al bajar. La solución pasa al fondo de la página; las tarjetas de Lo que hace VigIA, a foto completa con el texto sobre una franja con desenfoque; las alertas de los gráficos, con el borde gris de la tarjeta; el avatar del WhatsApp, el favicon; el footer lleva los legales en Ayuda y el pie en un renglón. |
 | 58 | Versión en portugués | El sitio suma portugués de Brasil en `/pt/` (home, precios y educación), con el contenido en `src/data/vigia.pt.js` ([ADR 0008](../adr/0008-version-en-portugues.md)). Adaptación con glosario agronómico de Brasil (`TRADUCCION_PT.md`): talhão, zona de manejo, água disponível, estádio, safra, bioestimulante. Legales en español y aviso de que el equipo responde en español, como en inglés. |
+| 59 | Sólo el hero ocupa una pantalla; clientes en el hero | Reemplaza en el alto de las secciones la decisión 57 ([ADR 0009](../adr/0009-solo-el-hero-ocupa-una-pantalla.md)). En monitores grandes, una pantalla por sección dejaba mucho aire entre ellas: ahora sólo el hero (que arranca debajo del header) ocupa una pantalla, y el resto mide lo que su contenido. Impacto conserva el pliegue del título al abrir una tabla, para que la tabla se lea entera sin bajar. Sin la tipografía según el alto en las demás secciones y sin la pantalla compartida de Preguntas con el footer. El carrusel de clientes pasa de Sobre nosotros al pie del hero, en la misma pantalla y sin título a la vista (reemplaza la decisión 10): el hilo pasa por debajo, como por un túnel: llega al fondo de un semicírculo abierto hacia arriba (∪) antes de la franja y sale de la punta de otro abierto hacia abajo (∩) después. La frase deja de ocupar casi una pantalla y lleva abajo el doble de aire que arriba. |
+| 60 | Contacto es Preguntas más el footer | En el menú, Contacto lleva a Preguntas (`#preguntas`), que abre con el CTA, y queda marcado desde ahí hasta el final de la página. Antes llevaba al footer (`#contacto`) y mientras se leían las preguntas seguía marcado Nosotros; al final de la página tampoco se marcaba siempre. |
+| 61 | Menú: Producto | Reemplaza los nombres del desplegable de la decisión 52. "Cómo funciona" pasa a **Producto**, y sus opciones dicen qué hay en cada sección en vez de repetir títulos que fuera de la página no se entienden: Inicio · El problema · **Qué vigila** (antes "Lo que hace VigIA") · **Cómo te avisa** (antes "La solución"). En inglés: Product · Home · The problem · What it watches · How it alerts you. En portugués: Produto · Início · O problema · O que monitora · Os alertas. Las anclas no cambian. |
+| 62 | Clientes fuera de la primera pantalla | El hero vuelve a ocupar la primera pantalla entera, con el texto y el gráfico centrados, y el carrusel de clientes queda justo debajo: aparece al bajar un poco. Con los logos moviéndose a la vista de entrada, la primera pantalla se sentía cargada. Reemplaza el tope de 880 px de alto del hero. Los logos pasan a WebP optimizados ([ADR 0009](../adr/0009-solo-el-hero-ocupa-una-pantalla.md)). |
 
 ## Preguntas abiertas
 

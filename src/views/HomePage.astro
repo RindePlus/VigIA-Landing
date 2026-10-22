@@ -1,16 +1,16 @@
 ---
 // Home de VigIA BioEstrés (versión 2 de doc/landing/ESTRUCTURA_LANDING.md):
-// Hero → El problema → Lo que hace VigIA → La solución (recorrido del mismo
-// lote) → Frase destacada → Resultados → Sobre nosotros (con los clientes) →
+// Hero (con los clientes) → El problema → Lo que hace VigIA → La solución
+// (recorrido del mismo lote) → Frase destacada → Resultados → Sobre nosotros →
 // Preguntas (con el CTA de cierre). Scroll normal en todas las pantallas
-// (ADR 0007).
+// (ADR 0007); sólo el hero ocupa una pantalla (ADR 0009).
 // Una sola home para los tres idiomas (ADR 0004 y ADR 0008):
 // src/pages/index.astro la usa en español, src/pages/en/index.astro en inglés
 // y src/pages/pt/index.astro en portugués. El contenido sale de
 // src/data/vigia.js, vigia.en.js o vigia.pt.js según el idioma. Los medios de las tres
 // primeras secciones usan MediaStory: animación en código y, si hay, el
 // video (src/data/videos.js).
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BalanceChart from '../components/BalanceChart.astro';
 import WhatsAppMock from '../components/WhatsAppMock.astro';
@@ -34,8 +34,27 @@ import {
 import { IDIOMAS, contenido, idiomaDe } from '../i18n/idiomas';
 import { CONTACT_EMAIL, OFFICE_ADDRESS, WHATSAPP_DISPLAY, buildWhatsAppUrl } from '../data/social';
 import { EQUIPO } from '../data/equipo';
+import { CLIENTES as LOGOS_CLIENTES } from '../data/clientes';
 import { VIDEOS, DESCRIPCION_PENDIENTE } from '../data/videos';
 import '../styles/sections.css';
+
+// Logos del carrusel optimizados: WebP al doble del alto en que se muestran
+// (pantallas de alta densidad). Eran PNG originales (uno de 228 KB para 50 px
+// de alto) y, al estar en el hero, se descargaban de entrada. El ancho y el
+// alto reservan el lugar de cada logo antes de que cargue (sin corrimientos).
+const logosClientes = await Promise.all(
+  LOGOS_CLIENTES.map(async (c) => {
+    const img = await getImage({ src: c.logo, height: c.h * 2, format: 'webp' });
+    return {
+      id: c.id,
+      nombre: c.nombre,
+      mono: c.mono ?? false,
+      src: img.src,
+      h: c.h,
+      w: Math.round((c.h * c.logo.width) / c.logo.height),
+    };
+  }),
+);
 
 const lang = idiomaDe(Astro.currentLocale);
 const {
@@ -138,10 +157,20 @@ const jsonLd = {
         </MediaStory>
       </div>
     </div>
+    <!-- Clientes al pie del hero, justo debajo de la primera pantalla
+         (decisiones 59 y 62): aparece al bajar un poco, no de entrada. Fuera
+         del .vg-wrap, el carrusel ocupa todo el ancho. Se hidrata al verse
+         (client:visible) y sus logos llegan optimizados (logosClientes). Sin título a la vista
+         ("Confían en nosotros" queda como nombre accesible). El hilo pasa
+         por debajo, como por un túnel: entra en un semicírculo (∪) y sale por otro (∩)
+         (data-vg-under, JourneyThread.astro). -->
+    <div class="vg-trusted" id="clientes" role="region" aria-label={CLIENTES.titulo} data-vg-under>
+      <TrustedCompanies client:visible clientes={logosClientes} />
+    </div>
   </section>
 
   <!-- 2. El problema -->
-  <section class="vg-section vg-pantalla" id="problema">
+  <section class="vg-section" id="problema">
     <LotesConexion />
     <div class="vg-wrap">
       <!-- Título, bajada y razones en la columna izquierda: el gráfico queda
@@ -181,7 +210,7 @@ const jsonLd = {
 
   <!-- 3. Lo que hace VigIA: cuatro tarjetas con foto, que también cuentan
        las cuatro alertas y su acción. Punto 3 del hilo, en celeste. -->
-  <section class="vg-section vg-solucion vg-pantalla" id="que-hace">
+  <section class="vg-section vg-solucion" id="que-hace">
     <Pivotes borde="fin" />
     <div class="vg-wrap">
       <h2 class="vg-section__title" data-vg-node="3">{QUE_HACE.titulo}</h2>
@@ -235,7 +264,7 @@ const jsonLd = {
 
   <!-- 4. La solución (ancla #como-funciona, la del menú): los dos canales de
        la alerta son lo principal -->
-  <section class="vg-section vg-pantalla" id="como-funciona">
+  <section class="vg-section" id="como-funciona">
     <Pivotes />
     <div class="vg-wrap">
       <!-- Título, bajada y canales a la izquierda; el WhatsApp con el video a
@@ -274,9 +303,10 @@ const jsonLd = {
            final del hilo (data-vg-end): no lleva data-reveal. -->
       <div class="vg-detalle" data-vg-end>
         <h3 class="vg-detalle__label">{COMO_FUNCIONA.tituloPasos}</h3>
-        <!-- Línea de tiempo: un punto por paso; la línea se dibuja de un
-             punto al siguiente y cada paso aparece cuando la línea llega a él
-             (estilos en sections.css, .vg-pasos). -->
+        <!-- Línea de tiempo: un punto por paso, centrado sobre su texto
+             desde tablet. Se despliega en cadena: punto y texto del paso 1,
+             la línea hasta el 2, punto y texto del 2, y así (estilos en
+             sections.css, .vg-pasos). -->
         <ol class="vg-pasos" data-reveal>
           {
             COMO_FUNCIONA.pasos.map((p, i) => (
@@ -302,9 +332,9 @@ const jsonLd = {
        del que salió (script al final de la sección). -->
   <section class="vg-section vg-section--compact vg-impacto vg-pantalla" id="impacto" data-fondo-oscuro>
     <div class="vg-wrap">
-      <!-- En pantallas horizontales, con una tabla abierta el título y la
-           bajada se pliegan: los indicadores suben y la tabla entra en la
-           pantalla (.is-tabla). -->
+      <!-- En pantallas horizontales (ADR 0009),
+           con una tabla abierta el título y la bajada se pliegan, los
+           indicadores suben y la tabla entra en la pantalla (.is-tabla). -->
       <div class="vg-impacto__cabeza">
         <div>
           <h2 class="vg-section__title">{IMPACTO.titulo}</h2>
@@ -406,14 +436,6 @@ const jsonLd = {
       const ids = botones.map((b) => b.dataset.panel ?? '');
       const items = ids.map((id) => document.getElementById(`vg-panel-${id}`));
       let abierto: string | null = null;
-      // Donde la sección ocupa una pantalla (.vg-pantalla), al plegarse o
-      // volver el título se alinea arriba: indicadores y tabla quedan
-      // enteros a la vista.
-      const unaPantalla = window.matchMedia('(min-width: 900px) and (min-height: 560px) and (orientation: landscape)');
-      const suave = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const alinear = () => {
-        if (unaPantalla.matches) seccion.scrollIntoView({ behavior: suave ? 'smooth' : 'auto', block: 'start' });
-      };
 
       const ubicarFlecha = () => {
         const boton = botones.find((b) => b.dataset.panel === abierto);
@@ -434,7 +456,6 @@ const jsonLd = {
         cancelarPista();
         if (veniaCerrado !== (id === null)) {
           seccion.classList.toggle('is-tabla', id !== null);
-          alinear();
         }
 
         if (id === null) {
@@ -477,6 +498,68 @@ const jsonLd = {
       });
       window.addEventListener('resize', ubicarFlecha, { passive: true });
 
+      // Cierre fuera de la vista: con la sección entera fuera de la pantalla
+      // por 2 s, o a más de una pantalla de distancia, la tabla se cierra
+      // sola. Quien vuelve a Impacto la encuentra como al principio, con el
+      // título. Salir un momento y volver no la cierra, y nunca se cierra a
+      // la vista: el cierre es instantáneo (sin animación) y, si la sección
+      // quedó arriba, se compensa el alto que pierde (en celular crece con la
+      // tabla), así lo que se está mirando no se mueve.
+      const FUERA_MS = 2000;
+      let fuera = false;
+      let fueraTimer = 0;
+      const cerrarFuera = () => {
+        window.clearTimeout(fueraTimer);
+        if (!abierto || !fuera) return;
+        const raiz = document.documentElement;
+        const antes = seccion.getBoundingClientRect();
+        raiz.style.overflowAnchor = 'none';
+        seccion.classList.add('is-sin-transicion');
+        mostrar(null);
+        const diferencia = seccion.getBoundingClientRect().height - antes.height;
+        if (antes.bottom < 0 && diferencia) {
+          window.scrollTo({ top: window.scrollY + diferencia, behavior: 'instant' });
+        }
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            seccion.classList.remove('is-sin-transicion');
+            raiz.style.overflowAnchor = '';
+          }),
+        );
+      };
+      // Lejos: a más de una pantalla de distancia, arriba o abajo.
+      const siLejos = () => {
+        if (!fuera || !abierto) return;
+        const r = seccion.getBoundingClientRect();
+        if (r.bottom < -window.innerHeight || r.top > window.innerHeight * 2) cerrarFuera();
+      };
+      new IntersectionObserver(([entrada]) => {
+        fuera = !entrada.isIntersecting;
+        window.clearTimeout(fueraTimer);
+        if (fuera && abierto) fueraTimer = window.setTimeout(cerrarFuera, FUERA_MS);
+        // El aviso llega después del scroll: un salto largo (el menú) ya
+        // puede haber dejado la sección lejos.
+        siLejos();
+      }).observe(seccion);
+      window.addEventListener('scroll', siLejos, { passive: true });
+
+      // Alto fijo de la sección en horizontal: el que ocupa con la tabla más
+      // alta abierta (margen + indicadores + panel), para que al abrirla la
+      // sección no crezca. Las dos tablas comparten la celda: el alto del
+      // contenido del panel ya es el de la más alta.
+      const indicadores = seccion.querySelector<HTMLElement>('.vg-indicadores-box');
+      const interior = caja.querySelector<HTMLElement>('.vg-panel__inner');
+      const medirAlto = () => {
+        if (!indicadores || !interior) return;
+        const estilo = getComputedStyle(seccion);
+        const margen = parseFloat(estilo.paddingTop) + parseFloat(estilo.paddingBottom);
+        const alto = margen + indicadores.offsetHeight + interior.scrollHeight;
+        seccion.style.setProperty('--alto-impacto', `${Math.ceil(alto)}px`);
+      };
+      medirAlto();
+      document.fonts?.ready.then(medirAlto);
+      window.addEventListener('resize', medirAlto, { passive: true });
+
       // Aviso de una sola vez: aparece cuando los indicadores entran en
       // pantalla y se va a los pocos segundos (o al tocar un indicador).
       const pista = seccion.querySelector<HTMLElement>('[data-pista]');
@@ -501,9 +584,8 @@ const jsonLd = {
   </script>
 
   <!-- 7. Sobre nosotros: foto, nombre y logo de la empresa de cada persona.
-       Sin foto cargada, van las iniciales en el mismo círculo. Debajo, sin
-       título, el carrusel de clientes. -->
-  <section class="vg-section vg-section--compact vg-nosotros vg-pantalla" id="nosotros">
+       Sin foto cargada, van las iniciales en el mismo círculo. -->
+  <section class="vg-section vg-section--compact vg-nosotros" id="nosotros">
     <div class="vg-wrap">
       <h2 class="vg-section__title">{NOSOTROS.titulo}</h2>
       <p class="vg-section__lead">{NOSOTROS.bajada}</p>
@@ -548,14 +630,10 @@ const jsonLd = {
         }
       </ul>
     </div>
-    <!-- 8. Clientes: fuera del .vg-wrap, el carrusel ocupa todo el ancho. -->
-    <div class="vg-trusted" id="clientes" role="region" aria-label={CLIENTES.titulo}>
-      <TrustedCompanies client:visible />
-    </div>
   </section>
 
   <!-- 9. Preguntas frecuentes, con el CTA de cierre debajo del título. -->
-  <section class="vg-section vg-section--compact vg-preguntas vg-pantalla" id="preguntas">
+  <section class="vg-section vg-section--compact vg-preguntas" id="preguntas">
     <div class="vg-wrap vg-faq">
       <div class="vg-faq__head">
         <h2 class="vg-section__title">{PREGUNTAS.titulo}</h2>
@@ -592,7 +670,11 @@ const jsonLd = {
     const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     if (!reduce) {
       const css = getComputedStyle(document.documentElement);
-      const duration = parseFloat(css.getPropertyValue('--dur-slow')) || 700;
+      // El token puede llegar en ms ("700ms", en desarrollo) o en segundos
+      // (".7s": el minificador del build lo acorta). Sin mirar la unidad, en
+      // el sitio publicado la animación duraba 0,7 ms y parecía no animar.
+      const dur = css.getPropertyValue('--dur-slow').trim();
+      const duration = (dur.endsWith('ms') ? parseFloat(dur) : parseFloat(dur) * 1000) || 700;
       const easing = css.getPropertyValue('--ease-fluid').trim() || 'ease-out';
 
       document.querySelectorAll<HTMLDetailsElement>('.vg-faq__item').forEach((item) => {

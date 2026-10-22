@@ -26,6 +26,8 @@ colors:
   on-forest-muted: "#b4d4c1"
   on-forest-subtle: "#9fc2ad"
   on-forest-accent: "#8cc2a9"
+  on-forest-campo: "#93c46b"
+  on-forest-carbono: "#d6a06c"
   wa-bubble: "#ffffff"
   wa-meta: "#667781"
   mask: "#000000"
@@ -144,6 +146,8 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 - **Bordes** (#d8d5cd, #e4e1da, #b1ada3): tarjetas, divisores y el trazo punteado del hilo.
 
 - **Sobre la banda verde** (Impacto): texto #ece8df y secundarios teñidos de verde (#b4d4c1, #9fc2ad), no grises neutros.
+- **Verde campo sobre la banda** (#93c46b): el grano en Impacto (número del indicador activo, total de la tabla y borde de arriba de su tarjeta), el verde campo aclarado para el fondo verde.
+- **Tierra sobre la banda** (#d6a06c): lo mismo para el carbono.
 - **Celular de WhatsApp** (`WhatsAppMock.astro`): copia los colores de la app real (globo #ffffff, metadatos #667781, barras, fondo). Es una réplica del producto, no parte de la paleta: no se reutilizan en otros componentes.
 - **Máscaras** (#000000): sólo como canal de opacidad en `mask-image` (lote del hero, carrusel de logos), nunca como color visible.
 
@@ -175,20 +179,22 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 
 ## Layout
 
-- **Contenedor:** hasta 1160 px (`.vg-wrap`), con un margen lateral único (`--page-gutter`): 24 px en pantallas anchas, 64 px por debajo de 1260 px (deja lugar al hilo) y 16 px en celular.
+- **Contenedor:** hasta 1160 px (`.vg-wrap`, token `--ancho-contenido`, el mismo para el header y el footer), con un margen lateral único (`--page-gutter`): 24 px en pantallas anchas, 64 px por debajo de 1260 px (deja lugar al hilo) y 16 px en celular. Las tarjetas de Lo que hace VigIA van hasta 980 px (`--ancho-tarjetas`) e Impacto hasta 1000 px (`--ancho-impacto`).
+- **Pantallas anchas** (desde 1800 px de ancho, sea cual sea la resolución): el contenido pasa a 1320 px, las tarjetas a 1160 e Impacto a 1120, y el tamaño base del texto a 17 px; desde 2300 px, a 18 px. Los tamaños de texto están en `rem` y los espaciados en `px`, así crece el texto sin inflar los márgenes. El contenido no se ensancha más: con la columna más ancha el título del hero entra en menos renglones y el hero queda con más aire. El logo del header (50 → 56 → 60 px) y sus íconos crecen en los mismos escalones, porque están en px. El título del hero tiene un tope de 3.75rem (`--fit-hero`), para no pasar de unas tres veces y media la bajada. En el hero, la bajada pasa a `--text-xl` y el botón a `--text-lg` con más relleno, hay más aire entre título, bajada y botón, y el bloque sube un poco del centro exacto (8 % del alto de la pantalla como margen abajo): con la primera pantalla entera para él, en un 24" en 1920 × 1080 quedaban ~210 px vacíos bajo el header. Las notebooks (hasta ~1536 px) no cambian.
+- **Primera pantalla:** el texto y el gráfico del hero la ocupan entera, centrados entre el header y el borde de abajo (`--alto-pantalla: 100svh`), en todos los tamaños. El carrusel de clientes queda justo debajo y aparece al bajar un poco; en monitores altos queda aire arriba y abajo del contenido, repartido parejo.
 - **Secciones:** 96 px de aire vertical; las compactas, 64 px.
 - **Espaciado:** sólo los pasos de `--space-*` (2 a 96 px).
 - **Recorrido:** el hero, El problema, Lo que hace VigIA y La solución forman un recorrido unido por el hilo a la izquierda. Las primeras van en dos columnas, texto a la izquierda y medio a la derecha, y en celular pasan a una columna.
-- **Scroll normal en todas las pantallas** ([ADR 0007](doc/adr/0007-scroll-normal-en-toda-la-home.md)): el paso de pantalla en pantalla se quitó. Celular y escritorio son la misma página. En pantallas horizontales de al menos 900 × 560 px, cada sección ocupa más o menos una pantalla, con el contenido centrado y el mismo aire arriba y abajo, y los tamaños según el alto de la ventana (`.vg-pantalla`, tokens `--fit-*` y `--panel-pad-*`); si no entra, crece. En las secciones de dos columnas, el título arranca a la altura del gráfico o del video. Preguntas comparte la última pantalla con el footer (Footer.astro mide su alto, `--alto-footer`). En Impacto, al abrir una tabla el título y la bajada se pliegan, los indicadores suben y la sección se alinea arriba, para que indicadores y tabla entren en la pantalla; al cerrarla, vuelve el título.
-- **La solución:** título, bajada y canales a la izquierda y el WhatsApp a la derecha; debajo, a todo el ancho, "Cómo lo hace": tres pasos en fila unidos por una línea que se dibuja de izquierda a derecha (en celular, uno debajo del otro, con la línea bajando).
+- **Scroll normal en todas las pantallas** ([ADR 0007](doc/adr/0007-scroll-normal-en-toda-la-home.md)): el paso de pantalla en pantalla se quitó. Celular y escritorio son la misma página. En pantallas horizontales de al menos 900 × 560 px, sólo el hero ocupa una pantalla, debajo del header y con el contenido centrado (el carrusel de clientes queda justo debajo) y los tamaños según el alto de la ventana (`.vg-pantalla`, tokens `--fit-*`, `--panel-pad-*`, `--hero-pad-top` y `--alto-carrusel`; [ADR 0009](doc/adr/0009-solo-el-hero-ocupa-una-pantalla.md)). Impacto tiene un alto fijo, el que ocupa con la tabla más alta abierta, con 40 px de margen (la tabla se cierra sola fuera de la vista: 2 s fuera de la pantalla o a más de una pantalla de distancia, sin animación y sin mover lo que se está mirando): al abrir una tabla, el título (centrado) se pliega, la sección no crece y el scroll no se mueve, así indicadores y tabla entran enteros. Las demás secciones miden lo que su contenido: con una pantalla cada una, en monitores grandes quedaba mucho aire entre ellas. La frase lleva abajo el doble de aire que arriba, para quedar a la misma distancia de las dos secciones. En las secciones de dos columnas, el título arranca a la altura del gráfico o del video, y los medios no pasan del alto de la ventana. El hilo pasa por debajo del carrusel, como por un túnel: llega al fondo de un semicírculo abierto hacia arriba (∪) antes de la franja y sale de la punta de otro abierto hacia abajo (∩) después (`data-vg-under`).
+- **La solución:** título, bajada y canales a la izquierda y el WhatsApp a la derecha; debajo, a todo el ancho, "Cómo lo hace": tres pasos en fila, cada uno con un punto verde centrado sobre su título y su texto (también centrados), unidos de centro a centro por una línea sólida de 3 px del mismo verde (puntos de 16 px) (en celular, uno debajo del otro, con el punto a la izquierda y la línea bajando). Se despliegan en cadena: aparece el punto 1 con su título y su texto, la línea se dibuja hasta el punto 2, aparece el 2 con lo suyo, y así pausado, unos 3,2 s en total (`--t-punto` = 1,25 × `--dur-base`, `--t-linea` = 1,2 × `--dur-slow`). Desde tablet el subtítulo "Cómo lo hace" va centrado, como los pasos.
 - **Llegada a la frase:** el tramo final del hilo va más rápido, así llega al punto cuando éste está a dos tercios de la pantalla, antes de que asome Impacto. Al llegar, justo antes de "antes", un trazo verde campo recorre la palabra de izquierda a derecha, con el impulso del hilo, y se va por la derecha (1,8 s).
 - **Fondos (decisiones 50 y 57):**
   - El problema y La solución, sobre el fondo de la página, como el resto del recorrido (se probaron una banda de tierra para El problema y un verde claro para La solución, y se descartaron);
   - dibujos a línea de fondo que unen las secciones: lotes grandes, algunos divididos en ambientes (`LotesConexion.astro`), desde la mitad de El problema hasta el comienzo de Lo que hace VigIA; pivotes de riego vistos desde arriba (`Pivotes.astro`), grandes y del lado derecho, desde el borde entre Lo que hace VigIA y La solución hasta cerca del final de La solución, desvanecidos antes de la frase; en dos copias alineadas al borde para quedar detrás del texto de las dos. A escala 1:1 (los lotes, más anchos que cualquier pantalla y recortados al centro; los pivotes, en una franja de 900 px pegada al borde derecho). Cada uno con el color de su tramo del hilo (verde agua, verde campo) muy mezclado con el fondo, y tenues detrás del texto; en oscuro, monocromos, en un gris claro apenas visible (`.vg-fondo-linea`). La frase e Impacto van sin dibujo: la frase es el momento de foco y el verde liso de Impacto se ve más serio;
-  - la frase ocupa casi una pantalla, centrada;
+  - la frase, con el mismo aire arriba y abajo;
   - el resto del recorrido, sobre el fondo de la página, con un lote sembrado dibujado a línea detrás del hero (`FieldRows.astro`): surcos en perspectiva hacia un punto de fuga al centro, cortina de árboles, lomas, y a la derecha un molino y un alambrado. Tenue, desvanecido arriba y al pie, y al 40 % detrás del texto;
   - Impacto, en una banda verde bosque;
-  - equipo y clientes juntos (el carrusel, sin título, debajo de las tarjetas), sobre el fondo piedra de la página, con las tarjetas blancas (decisión 53: el salvia que tenían chocaba con ellas);
+  - el equipo (el carrusel de clientes pasó al pie del hero, sin título a la vista), sobre el fondo piedra de la página, con las tarjetas blancas (decisión 53: el salvia que tenían chocaba con ellas);
   - preguntas frecuentes, con el CTA de cierre, sobre la superficie (un tono más claro que la página);
   - el footer, verde bosque como Impacto, compacto.
 
@@ -196,7 +202,7 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 
 ## Elevation & Depth
 
-Casi plano. La profundidad la dan las superficies (piedra contra superficie) y bordes finos. Las sombras son mínimas, para lo que flota de verdad: la notificación del gráfico, el panel de Impacto y el widget de WhatsApp.
+Casi plano. La profundidad la dan las superficies (piedra contra superficie) y bordes finos. Las sombras son mínimas, para lo que flota de verdad: la notificación del gráfico, el panel de Impacto, el widget de WhatsApp y las tarjetas que se levantan al pasar el mouse.
 
 ### Shadow Vocabulary
 - **Tarjeta** (`0 1px 3px rgba(23,33,29,.1), 0 1px 2px rgba(23,33,29,.05)`)
@@ -216,10 +222,12 @@ Radios moderados: 8 px en botones, 12 px en tarjetas y paneles, 16 px en el recu
 ### Cards / Containers
 Superficie #fbfaf8, borde de 1 px y 12 px de radio, sin sombra fuerte. En las tarjetas de "Lo que hace VigIA" (sin borde) la foto ocupa toda la tarjeta y el título y el texto van abajo, sobre una franja de la superficie translúcida con desenfoque; la línea entre foto y texto queda a la misma altura en todas (subgrid), con los títulos centrados en el renglón del más largo.
 
+Al pasar el mouse, las tarjetas de "Lo que hace VigIA" y las del equipo crecen un 3 % (`scale`, no `transform`, que usa la aparición al hacer scroll) y toman la sombra flotante, con `--dur-base` y `--ease-fluid`. El 3 % queda por debajo de la separación entre tarjetas: no tapan a las vecinas. Sólo con mouse (`hover: hover` y `pointer: fine`) y sin movimiento reducido.
+
 ### Navigation
 - **Header:** del ancho del contenido y transparente arriba de todo.
-- **Al bajar:** fondo translúcido con desenfoque y una línea fina abajo. Se oculta al bajar un tramo sostenido (120 px) y vuelve con un gesto corto hacia arriba, deslizándose (0,5 s, curva de desaceleración larga). Arriba de todo (160 px) siempre se ve. Las secciones de una pantalla llevan el mismo aire arriba y abajo (40 px), sin reservar lugar para el header: el contenido queda centrado en la pantalla, con o sin él. Sobre las bandas verde bosque (Impacto y footer: `data-fondo-oscuro`) el fondo pasa a casi opaco, para que se lean logo y menú.
-- **Menú:** "Cómo funciona" es un desplegable con Inicio, El problema, Lo que hace VigIA y La solución; Impacto, Nosotros, Contacto y Educación van sueltos. El desplegable se abre al dejar el cursor encima un momento (220 ms, no al pasar de largo), entra con fundido y una bajada corta, y sale más rápido. En celular, los tres van siempre a la vista, debajo del título.
+- **Al bajar:** fondo translúcido con desenfoque y una línea fina abajo. Se oculta al bajar un tramo sostenido (120 px) y vuelve al subir otro tanto, deslizándose (0,5 s, curva de desaceleración larga). Arriba de todo (160 px) siempre se ve. Al ir a una sección desde el menú o el footer queda a la vista todo el recorrido, en las dos direcciones; la sección cae justo debajo del header (las del recorrido, con el título a 48 px de él; Impacto, con su banda entera a la vista). Las secciones de una pantalla llevan el mismo aire arriba y abajo (40 px), sin reservar lugar para el header: el contenido queda centrado en la pantalla, con o sin él. Sobre las bandas verde bosque (Impacto y footer: `data-fondo-oscuro`) el fondo pasa a casi opaco, para que se lean logo y menú.
+- **Menú:** "Producto" es un desplegable con Inicio, El problema, Qué vigila y Cómo te avisa (decisión 61: dicen qué hay en cada sección, no repiten sus títulos); Impacto, Nosotros, Contacto y Educación van sueltos. El desplegable se abre al dejar el cursor encima un momento (220 ms, no al pasar de largo), entra con fundido y una bajada corta, y sale más rápido. Un clic en "Producto" lo deja abierto sin navegar (antes llevaba a El problema y la lista subía y bajaba); así fijado, se cierra al sacar el mouse por más de 1,2 s, al scrollear, al tocar fuera, con Escape o al elegir una opción. En celular, los tres van siempre a la vista, debajo del título.
 - **Anclas del menú:** las secciones tienen `scroll-margin-top` del alto real del header (`--alto-header`, lo mide `Header.jsx`), así quedan justo debajo de él.
 
 ### Gráfico del balance (Signature Component)

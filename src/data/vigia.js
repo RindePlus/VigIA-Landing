@@ -285,7 +285,6 @@ export const PREGUNTAS = {
 // Página /educacion (src/views/EducacionPage.astro), enlazada al final del menú.
 // PENDIENTE: contenido definitivo. Por ahora, una página provisoria.
 export const EDUCACION = {
-  etiqueta: 'Educación',
   titulo: 'Educación',
   bajada: `Estamos preparando contenidos sobre estrés hídrico y térmico, bioinsumos y uso del agua, para sacarle más provecho a ${MARCA}.`,
   volver: 'Volver al inicio',
@@ -346,20 +345,24 @@ export const UI = {
   menu: [
     // Desplegable con las secciones del recorrido (se abre al dejar el
     // cursor encima); el título lleva al problema. "Inicio" vuelve arriba de
-    // todo (el hero no tiene título propio): más a mano que el logo.
+    // todo (el hero no tiene título propio): más a mano que el logo. Los
+    // nombres dicen qué hay en cada sección, no repiten sus títulos
+    // (decisión 61).
     {
-      label: 'Cómo funciona',
+      label: 'Producto',
       href: '/#problema',
       hijos: [
         { label: 'Inicio', href: '/#inicio' },
         { label: 'El problema', href: '/#problema' },
-        { label: 'Lo que hace VigIA', href: '/#que-hace' },
-        { label: 'La solución', href: '/#como-funciona' },
+        { label: 'Qué vigila', href: '/#que-hace' },
+        { label: 'Cómo te avisa', href: '/#como-funciona' },
       ],
     },
     { label: 'Impacto', href: '/#impacto' },
     { label: 'Nosotros', href: '/#nosotros' },
-    { label: 'Contacto', href: '/#contacto' },
+    // Contacto lleva a Preguntas, que abre con el CTA y sigue con el footer
+    // de contacto: las dos son "Contacto" en el menú.
+    { label: 'Contacto', href: '/#preguntas' },
     // Página propia (no una sección de la home): va al final.
     { label: 'Educación', href: '/educacion/' },
   ],
