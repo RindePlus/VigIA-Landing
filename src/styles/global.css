@@ -500,9 +500,8 @@ html {
     --fit-lead: clamp(1rem, 0.6vh + 0.75rem, 1.25rem);
     --fit-gap: clamp(var(--space-200), 3.4vh, var(--space-600));
     /* Alto del carrusel de clientes (fila de logos de 88px más 8px arriba y
-       abajo, TrustedCompanies.css, más su título y la separación): el
-       gráfico del hero lo descuenta. */
-    --alto-carrusel: calc(104px + var(--leading-sm) + var(--space-200));
+       abajo, TrustedCompanies.css): el gráfico del hero lo descuenta. */
+    --alto-carrusel: 104px;
   }
 }
 

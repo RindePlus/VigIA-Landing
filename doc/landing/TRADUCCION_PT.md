@@ -110,6 +110,7 @@ El español y el portugués se parecen mucho, y eso es la trampa: muchos calcos 
 | Educación | **Conteúdos** | En sitios de producto la sección de contenidos se llama así; *Educação* suena a institución educativa. |
 | Lo ves a campo / Se ve a campo 6 días tarde | **Você vê no campo / Aparece no campo 6 dias tarde** | |
 | Nosotros (menú) | **Quem somos** | Etiqueta estándar de menú. |
+| Producto · Qué vigila · Cómo te avisa (menú) | **Produto · O que monitora · Os alertas** | *Monitora*, como en el título de la sección. *Como te avisa* mezcla el *te* con el *você* del sitio; *Os alertas* es corto y estándar en un menú. |
 
 ## 6. Formato
 

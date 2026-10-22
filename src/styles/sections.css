@@ -12,14 +12,24 @@
   padding-block: var(--space-900);
 }
 
-/* Al saltar a una sección desde el menú, su borde superior queda justo
-   debajo del header (en celular y en vertical; en horizontal, las secciones
-   de una pantalla se alinean arriba de todo). --alto-header
-   lo mide Header.jsx: con un valor fijo, si el header es un píxel más bajo,
-   asoma una línea de la sección anterior. */
+/* Al saltar a una sección desde el menú (el header queda a la vista todo
+   el recorrido, Header.jsx), su borde superior queda justo debajo del
+   header. --alto-header lo mide Header.jsx: con un valor fijo, si el
+   header es un píxel más bajo, asoma una línea de la sección anterior. El
+   hero se alinea arriba de todo (bloque .vg-pantalla, al final). */
 section[id],
 footer[id] {
   scroll-margin-top: var(--alto-header, var(--space-800));
+}
+
+/* Las secciones del recorrido comparten el fondo de la página: no hay
+   borde que mostrar, así que el salto deja el título a 48 px del header en
+   vez de los 96 del padding. Entra más contenido y el título no queda
+   flotando. En celular el padding ya es chico. */
+@media (min-width: 681px) {
+  .vg-journey section[id]:not(.vg-hero) {
+    scroll-margin-top: calc(var(--alto-header, var(--space-800)) - var(--space-600));
+  }
 }
 
 .vg-section--tint {
@@ -202,20 +212,10 @@ h3 {
 }
 
 /* ---------- Clientes (carrusel) ----------
-   Al pie del hero (decisión 59), con "Confían en nosotros" arriba como
-   etiqueta sobria: chica, en gris y centrada (decisión 61). En horizontal
-   comparte la pantalla con el hero (bloque .vg-pantalla, al final). */
+   Al pie del hero, sin título (decisión 59). En horizontal comparte la
+   pantalla con el hero (bloque .vg-pantalla, al final). */
 .vg-trusted {
   margin-top: var(--space-700);
-}
-
-.vg-trusted__titulo {
-  margin-bottom: var(--space-200);
-  color: var(--gh-fg-muted);
-  font-size: var(--text-sm);
-  line-height: var(--leading-sm);
-  font-weight: 500;
-  text-align: center;
 }
 
 /* ---------- Gráfico del hero ---------- */
@@ -405,6 +405,28 @@ h3 {
   text-wrap: pretty;
 }
 
+/* Al pasar el mouse, las tarjetas de Lo que hace VigIA y del equipo crecen
+   un poco y se despegan del fondo con una sombra: la página se siente
+   menos estática. 3 % son ~4 px por lado, menos que la separación entre
+   tarjetas (24 y 16 px): no tapan a las vecinas. Con `scale` y no
+   `transform`, que lo usa la aparición al hacer scroll ([data-reveal]).
+   Sólo con mouse (en pantallas táctiles el hover queda pegado) y sin
+   movimiento reducido. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .vg-punto,
+  .vg-persona {
+    transition:
+      scale var(--dur-base) var(--ease-fluid),
+      box-shadow var(--dur-base) var(--ease-fluid);
+  }
+
+  .vg-punto:hover,
+  .vg-persona:hover {
+    scale: 1.03;
+    box-shadow: var(--gh-shadow-overlay);
+  }
+}
+
 @media (max-width: 1100px) {
   .vg-puntos { grid-template-columns: repeat(2, 1fr); max-width: 640px; }
   .vg-puntos { --alto-foto: 200px; }
@@ -503,18 +525,27 @@ h3 {
   text-wrap: pretty;
 }
 
-/* Pasos como línea de tiempo, sin números. En celular, vertical: un punto
-   verde a la izquierda de cada título y una línea fina hacia el punto de
-   abajo. Desde tablet, horizontal (ver más abajo). */
+/* Pasos como línea de tiempo, sin números: un punto verde por paso, unido
+   al siguiente por una línea sólida del mismo verde. En celular, vertical:
+   el punto a la izquierda de cada título y la línea bajando. Desde tablet,
+   en fila, con el punto centrado sobre el título (ver más abajo). */
 .vg-pasos {
-  --punto: var(--space-100);
+  --punto: var(--space-200);
   --hueco: var(--space-300);
+  --grosor: 3px;
+  /* Tiempos del despliegue, pausados para que se siga paso a paso: cada
+     punto aparece en --t-punto y la línea hasta el siguiente se dibuja en
+     --t-linea. El paso i arranca en i × (punto + línea); los tres tardan
+     unos 4,3 s. */
+  --t-punto: var(--dur-slow);
+  --t-linea: calc(var(--dur-slow) * 1.6);
   display: grid;
   gap: var(--hueco);
   list-style: none;
 }
 
 .vg-paso {
+  --inicio: calc(var(--i) * (var(--t-punto) + var(--t-linea)));
   position: relative;
   padding-left: calc(var(--punto) + var(--space-200));
 }
@@ -530,49 +561,56 @@ h3 {
   background: var(--vg-icon-green);
 }
 
-/* De un punto al de abajo, con un respiro a cada lado. */
+/* Del centro de un punto al del siguiente (abajo), sólida y del color de
+   los puntos; pasa por detrás de ellos. */
 .vg-paso:not(:last-child)::after {
   content: '';
   position: absolute;
-  top: calc(var(--leading-xl) / 2 + var(--punto) / 2 + var(--space-75));
-  bottom: calc(var(--space-75) - var(--hueco) - var(--leading-xl) / 2 + var(--punto) / 2);
-  left: calc(var(--punto) / 2);
-  width: 1px;
-  background: var(--gh-border-strong);
+  z-index: -1;
+  top: calc(var(--leading-xl) / 2);
+  bottom: calc(var(--leading-xl) / -2 - var(--hueco));
+  left: calc((var(--punto) - var(--grosor)) / 2);
+  width: var(--grosor);
+  background: var(--vg-icon-green);
   transform-origin: center top;
 }
 
-/* Despliegue de arriba hacia abajo. La lista usa el observer de
-   data-reveal (BaseLayout) sólo como disparador: ella no se desvanece; la
-   animan sus hijos. Cada paso baja a su lugar cuando la línea llega a él
-   (`--i` = posición) y la línea hacia el siguiente se dibuja a
-   continuación. Sin JS o con movimiento reducido no hay .vg-reveal-on y
-   todo se ve fijo. */
+.vg-pasos { isolation: isolate; }
+
+/* Despliegue en cadena: aparece el punto 1 (con su título y su texto), la
+   línea se dibuja hasta el punto 2, aparece el 2 con lo suyo, y así. La
+   lista usa el observer de data-reveal (BaseLayout) sólo como disparador:
+   ella no se desvanece; la animan sus partes. Sin JS o con movimiento
+   reducido no hay .vg-reveal-on y todo se ve fijo. */
 .vg-reveal-on .vg-pasos[data-reveal] {
   opacity: 1;
   transform: none;
   transition: none;
 }
 
-.vg-reveal-on .vg-pasos[data-reveal] .vg-paso {
-  transition:
-    opacity var(--dur-reveal) var(--ease-fluid),
-    transform var(--dur-reveal) var(--ease-fluid);
-  transition-delay: calc(var(--i) * var(--reveal-step));
+.vg-reveal-on .vg-pasos[data-reveal] .vg-paso::before {
+  transition: scale var(--t-punto) var(--ease-fluid);
+  transition-delay: var(--inicio);
 }
 
 .vg-reveal-on .vg-pasos[data-reveal] .vg-paso::after {
-  transition: transform var(--reveal-step) var(--ease-fluid);
-  transition-delay: calc(var(--i) * var(--reveal-step) + var(--dur-fast));
+  transition: scale var(--t-linea) var(--ease-fluid);
+  transition-delay: calc(var(--inicio) + var(--t-punto));
 }
 
-.vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso {
+.vg-reveal-on .vg-pasos[data-reveal] .vg-paso > * {
+  transition:
+    opacity var(--dur-reveal) var(--ease-fluid),
+    translate var(--dur-reveal) var(--ease-fluid);
+  transition-delay: var(--inicio);
+}
+
+.vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::before { scale: 0; }
+.vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::after { scale: 1 0; }
+
+.vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso > * {
   opacity: 0;
-  transform: translateY(calc(var(--space-100) * -1));
-}
-
-.vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::after {
-  transform: scaleY(0);
+  translate: 0 var(--space-100);
 }
 
 .vg-paso .vg-paso__titulo {
@@ -591,36 +629,37 @@ h3 {
   text-wrap: pretty;
 }
 
-/* Desde tablet, en fila: el punto arriba de cada título y la línea, al
-   costado, hasta el punto del paso siguiente. Se dibuja de izquierda a
-   derecha. */
+/* Desde tablet, en fila: el punto centrado sobre el título y el texto
+   (también centrados) y la línea, del centro de un punto al centro del
+   siguiente. Se dibuja de izquierda a derecha. */
 @media (min-width: 768px) {
   .vg-pasos {
     --hueco: var(--space-500);
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .vg-paso { padding: calc(var(--punto) + var(--space-200)) 0 0; }
+  .vg-paso {
+    padding: calc(var(--punto) + var(--space-200)) 0 0;
+    text-align: center;
+  }
 
-  .vg-paso::before { top: 0; }
+  .vg-paso::before {
+    top: 0;
+    left: calc(50% - var(--punto) / 2);
+  }
 
+  /* 50 % del paso más el hueco: llega al centro del paso siguiente. */
   .vg-paso:not(:last-child)::after {
-    top: calc(var(--punto) / 2);
-    right: calc(var(--space-75) - var(--hueco));
+    top: calc((var(--punto) - var(--grosor)) / 2);
+    right: calc(-50% - var(--hueco));
     bottom: auto;
-    left: calc(var(--punto) + var(--space-75));
+    left: 50%;
     width: auto;
-    height: 1px;
+    height: var(--grosor);
     transform-origin: left center;
   }
 
-  .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso {
-    transform: translateX(calc(var(--space-100) * -1));
-  }
-
-  .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::after {
-    transform: scaleX(0);
-  }
+  .vg-reveal-on .vg-pasos[data-reveal]:not(.is-revealed) .vg-paso::after { scale: 0 1; }
 }
 
 @media (max-width: 960px) {
@@ -2246,9 +2285,10 @@ h3 {
 
   .vg-pantalla > .vg-wrap { width: 100%; }
 
-  /* El padding ya deja lugar al header: el salto desde el menú alinea la
-     sección arriba de todo y el contenido queda centrado en la pantalla. */
-  section[id].vg-pantalla { scroll-margin-top: 0; }
+  /* El padding del hero ya deja lugar al header: el salto desde el menú lo
+     alinea arriba de todo. Impacto, en cambio, cae debajo del header como
+     el resto: con 0, el borde de su banda verde quedaba tapado. */
+  .vg-hero[id] { scroll-margin-top: 0; }
 
   /* Hero: arranca debajo del header (arriba de todo siempre está a la
      vista), con el texto y el gráfico centrados en el alto libre y el

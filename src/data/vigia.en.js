@@ -253,7 +253,6 @@ export const PREGUNTAS = {
 
 
 export const EDUCACION = {
-  etiqueta: 'Learn',
   titulo: 'Learn',
   bajada: `We are preparing content on water and heat stress, biostimulants and water use, to help you get more out of ${MARCA}.`,
   volver: 'Back to home',
@@ -306,13 +305,13 @@ export const UI = {
   inicio: 'home',
   menu: [
     {
-      label: 'How it works',
+      label: 'Product',
       href: '/en/#problema',
       hijos: [
         { label: 'Home', href: '/en/#inicio' },
         { label: 'The problem', href: '/en/#problema' },
-        { label: 'What VigIA does', href: '/en/#que-hace' },
-        { label: 'The solution', href: '/en/#como-funciona' },
+        { label: 'What it watches', href: '/en/#que-hace' },
+        { label: 'How it alerts you', href: '/en/#como-funciona' },
       ],
     },
     { label: 'Impact', href: '/en/#impacto' },

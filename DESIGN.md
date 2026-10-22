@@ -182,7 +182,7 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 - **Espaciado:** sólo los pasos de `--space-*` (2 a 96 px).
 - **Recorrido:** el hero, El problema, Lo que hace VigIA y La solución forman un recorrido unido por el hilo a la izquierda. Las primeras van en dos columnas, texto a la izquierda y medio a la derecha, y en celular pasan a una columna.
 - **Scroll normal en todas las pantallas** ([ADR 0007](doc/adr/0007-scroll-normal-en-toda-la-home.md)): el paso de pantalla en pantalla se quitó. Celular y escritorio son la misma página. En pantallas horizontales de al menos 900 × 560 px, sólo el hero ocupa una pantalla, debajo del header y con el carrusel de clientes al pie, el contenido centrado en el alto que queda y los tamaños según el alto de la ventana (`.vg-pantalla`, tokens `--fit-*`, `--panel-pad-*`, `--hero-pad-top` y `--alto-carrusel`; [ADR 0009](doc/adr/0009-solo-el-hero-ocupa-una-pantalla.md)). Impacto tiene un alto fijo, el que ocupa con la tabla más alta abierta, con 40 px de margen: al abrir una tabla, el título (centrado) se pliega, la sección no crece y el scroll no se mueve, así indicadores y tabla entran enteros. Las demás secciones miden lo que su contenido: con una pantalla cada una, en monitores grandes quedaba mucho aire entre ellas. La frase lleva abajo el doble de aire que arriba, para quedar a la misma distancia de las dos secciones. En las secciones de dos columnas, el título arranca a la altura del gráfico o del video, y los medios no pasan del alto de la ventana. El hilo pasa por debajo del carrusel, como por un túnel: llega al fondo de un semicírculo abierto hacia arriba (∪) antes de la franja y sale de la punta de otro abierto hacia abajo (∩) después (`data-vg-under`).
-- **La solución:** título, bajada y canales a la izquierda y el WhatsApp a la derecha; debajo, a todo el ancho, "Cómo lo hace": tres pasos en fila unidos por una línea que se dibuja de izquierda a derecha (en celular, uno debajo del otro, con la línea bajando).
+- **La solución:** título, bajada y canales a la izquierda y el WhatsApp a la derecha; debajo, a todo el ancho, "Cómo lo hace": tres pasos en fila, cada uno con un punto verde centrado sobre su título y su texto (también centrados), unidos de centro a centro por una línea sólida de 3 px del mismo verde (puntos de 16 px) (en celular, uno debajo del otro, con el punto a la izquierda y la línea bajando). Se despliegan en cadena: aparece el punto 1 con su título y su texto, la línea se dibuja hasta el punto 2, aparece el 2 con lo suyo, y así pausado, unos 4,3 s en total (`--t-punto` = `--dur-slow`, `--t-linea` = 1,6 × `--dur-slow`).
 - **Llegada a la frase:** el tramo final del hilo va más rápido, así llega al punto cuando éste está a dos tercios de la pantalla, antes de que asome Impacto. Al llegar, justo antes de "antes", un trazo verde campo recorre la palabra de izquierda a derecha, con el impulso del hilo, y se va por la derecha (1,8 s).
 - **Fondos (decisiones 50 y 57):**
   - El problema y La solución, sobre el fondo de la página, como el resto del recorrido (se probaron una banda de tierra para El problema y un verde claro para La solución, y se descartaron);
@@ -190,7 +190,7 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
   - la frase, con el mismo aire arriba y abajo;
   - el resto del recorrido, sobre el fondo de la página, con un lote sembrado dibujado a línea detrás del hero (`FieldRows.astro`): surcos en perspectiva hacia un punto de fuga al centro, cortina de árboles, lomas, y a la derecha un molino y un alambrado. Tenue, desvanecido arriba y al pie, y al 40 % detrás del texto;
   - Impacto, en una banda verde bosque;
-  - el equipo (el carrusel de clientes pasó al pie del hero, con "Confían en nosotros" como etiqueta chica en gris), sobre el fondo piedra de la página, con las tarjetas blancas (decisión 53: el salvia que tenían chocaba con ellas);
+  - el equipo (el carrusel de clientes pasó al pie del hero, sin título a la vista), sobre el fondo piedra de la página, con las tarjetas blancas (decisión 53: el salvia que tenían chocaba con ellas);
   - preguntas frecuentes, con el CTA de cierre, sobre la superficie (un tono más claro que la página);
   - el footer, verde bosque como Impacto, compacto.
 
@@ -198,7 +198,7 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 
 ## Elevation & Depth
 
-Casi plano. La profundidad la dan las superficies (piedra contra superficie) y bordes finos. Las sombras son mínimas, para lo que flota de verdad: la notificación del gráfico, el panel de Impacto y el widget de WhatsApp.
+Casi plano. La profundidad la dan las superficies (piedra contra superficie) y bordes finos. Las sombras son mínimas, para lo que flota de verdad: la notificación del gráfico, el panel de Impacto, el widget de WhatsApp y las tarjetas que se levantan al pasar el mouse.
 
 ### Shadow Vocabulary
 - **Tarjeta** (`0 1px 3px rgba(23,33,29,.1), 0 1px 2px rgba(23,33,29,.05)`)
@@ -218,10 +218,12 @@ Radios moderados: 8 px en botones, 12 px en tarjetas y paneles, 16 px en el recu
 ### Cards / Containers
 Superficie #fbfaf8, borde de 1 px y 12 px de radio, sin sombra fuerte. En las tarjetas de "Lo que hace VigIA" (sin borde) la foto ocupa toda la tarjeta y el título y el texto van abajo, sobre una franja de la superficie translúcida con desenfoque; la línea entre foto y texto queda a la misma altura en todas (subgrid), con los títulos centrados en el renglón del más largo.
 
+Al pasar el mouse, las tarjetas de "Lo que hace VigIA" y las del equipo crecen un 3 % (`scale`, no `transform`, que usa la aparición al hacer scroll) y toman la sombra flotante, con `--dur-base` y `--ease-fluid`. El 3 % queda por debajo de la separación entre tarjetas: no tapan a las vecinas. Sólo con mouse (`hover: hover` y `pointer: fine`) y sin movimiento reducido.
+
 ### Navigation
 - **Header:** del ancho del contenido y transparente arriba de todo.
-- **Al bajar:** fondo translúcido con desenfoque y una línea fina abajo. Se oculta al bajar un tramo sostenido (120 px) y vuelve con un gesto corto hacia arriba, deslizándose (0,5 s, curva de desaceleración larga). Arriba de todo (160 px) siempre se ve. Las secciones de una pantalla llevan el mismo aire arriba y abajo (40 px), sin reservar lugar para el header: el contenido queda centrado en la pantalla, con o sin él. Sobre las bandas verde bosque (Impacto y footer: `data-fondo-oscuro`) el fondo pasa a casi opaco, para que se lean logo y menú.
-- **Menú:** "Cómo funciona" es un desplegable con Inicio, El problema, Lo que hace VigIA y La solución; Impacto, Nosotros, Contacto y Educación van sueltos. El desplegable se abre al dejar el cursor encima un momento (220 ms, no al pasar de largo), entra con fundido y una bajada corta, y sale más rápido. En celular, los tres van siempre a la vista, debajo del título.
+- **Al bajar:** fondo translúcido con desenfoque y una línea fina abajo. Se oculta al bajar un tramo sostenido (120 px) y vuelve al subir otro tanto, deslizándose (0,5 s, curva de desaceleración larga). Arriba de todo (160 px) siempre se ve. Al ir a una sección desde el menú o el footer queda a la vista todo el recorrido, en las dos direcciones; la sección cae justo debajo del header (las del recorrido, con el título a 48 px de él; Impacto, con su banda entera a la vista). Las secciones de una pantalla llevan el mismo aire arriba y abajo (40 px), sin reservar lugar para el header: el contenido queda centrado en la pantalla, con o sin él. Sobre las bandas verde bosque (Impacto y footer: `data-fondo-oscuro`) el fondo pasa a casi opaco, para que se lean logo y menú.
+- **Menú:** "Producto" es un desplegable con Inicio, El problema, Qué vigila y Cómo te avisa (decisión 61: dicen qué hay en cada sección, no repiten sus títulos); Impacto, Nosotros, Contacto y Educación van sueltos. El desplegable se abre al dejar el cursor encima un momento (220 ms, no al pasar de largo), entra con fundido y una bajada corta, y sale más rápido. En celular, los tres van siempre a la vista, debajo del título.
 - **Anclas del menú:** las secciones tienen `scroll-margin-top` del alto real del header (`--alto-header`, lo mide `Header.jsx`), así quedan justo debajo de él.
 
 ### Gráfico del balance (Signature Component)

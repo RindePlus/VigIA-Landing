@@ -152,15 +152,23 @@ const Header = ({
   // ocultarse exige un recorrido hacia abajo sostenido (no un toque de
   // rueda) y para volver, lo mismo hacia arriba: subir un poco sin querer
   // no lo muestra. Arriba de todo está siempre a la vista; ahí es
-  // transparente y al bajar toma el fondo con desenfoque.
+  // transparente y al bajar toma el fondo con desenfoque. Al ir a una
+  // sección con un enlace de la página (el menú, el footer), queda a la
+  // vista durante todo el recorrido, hacia arriba o hacia abajo: es la
+  // misma acción en las dos direcciones y el header es lo que se usó.
   useEffect(() => {
     const HIDE_DISTANCE = 120;
     const SHOW_DISTANCE = 120;
     const TOP_ZONE = 160;
+    // Tope por si el navegador no avisa el fin del scroll (scrollend) o el
+    // salto no mueve nada.
+    const NAV_MAX = 1600;
     let lastY = window.scrollY;
     let anchorY = lastY; // donde empezó el tramo actual en una misma dirección
     let direction = 0;
     let ticking = false;
+    let navegando = false;
+    let finNav = 0;
 
     // Secciones del menú que existen en esta página (en las otras páginas no
     // hay ninguna y no se marca nada). Los hijos de un desplegable cuentan
@@ -212,7 +220,7 @@ const Header = ({
       }
       const travelled = Math.abs(y - anchorY);
 
-      if (y < TOP_ZONE) {
+      if (navegando || y < TOP_ZONE) {
         setIsHidden(false);
       } else if (direction > 0 && travelled >= HIDE_DISTANCE) {
         setIsHidden(true);
@@ -229,12 +237,47 @@ const Header = ({
       window.requestAnimationFrame(update);
     };
 
+    // Fin del salto: el tramo de scroll vuelve a contarse desde ahí, así el
+    // header no se oculta ni aparece de golpe por el recorrido del salto.
+    const terminarNav = () => {
+      if (!navegando) return;
+      navegando = false;
+      window.clearTimeout(finNav);
+      lastY = window.scrollY;
+      anchorY = lastY;
+      direction = 0;
+    };
+
+    // Clic en un enlace a una sección de esta misma página.
+    const handleClick = (event) => {
+      const enlace = event.target.closest?.('a[href*="#"]');
+      if (!enlace) return;
+      const url = new URL(enlace.href, window.location.href);
+      if (!url.hash || url.pathname !== window.location.pathname) return;
+      navegando = true;
+      setIsHidden(false);
+      window.clearTimeout(finNav);
+      finNav = window.setTimeout(terminarNav, NAV_MAX);
+    };
+
+    // Llegada desde otra página a una sección (/#impacto): el salto lo hace
+    // BaseLayout; mientras se acomoda, el header queda a la vista.
+    if (window.location.hash) {
+      navegando = true;
+      finNav = window.setTimeout(terminarNav, NAV_MAX);
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll, { passive: true });
+    window.addEventListener('scrollend', terminarNav);
+    document.addEventListener('click', handleClick);
     update(); // estado correcto si la página carga ya scrolleada
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      window.removeEventListener('scrollend', terminarNav);
+      document.removeEventListener('click', handleClick);
+      window.clearTimeout(finNav);
     };
   }, [menuItems]);
 
