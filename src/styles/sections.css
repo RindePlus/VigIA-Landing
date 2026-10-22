@@ -2427,6 +2427,28 @@ h3 {
   .vg-impacto.is-tabla .vg-indicadores { margin-top: 0; }
 }
 
+/* Hero en pantallas grandes (desde 1800 px de ancho, horizontales): con la
+   primera pantalla entera para él, el bloque quedaba chico y con mucho aire
+   arriba (en un monitor de 24" en 1920 × 1080, ~210 px bajo el header). La
+   bajada y el botón crecen un paso, con más aire entre título, bajada y
+   botón, y el bloque sube un poco del centro exacto (el centro matemático
+   se percibe bajo). Las notebooks no cambian. */
+@media (min-width: 1800px) and (min-height: 560px) and (orientation: landscape) {
+  .vg-hero > .vg-hero__grid { padding-bottom: calc(var(--alto-pantalla) * 0.08); }
+
+  .vg-hero__subtitle {
+    margin-block: var(--space-300) var(--space-600);
+    font-size: var(--text-xl);
+    line-height: 1.6;
+  }
+
+  .vg-hero__ctas .vg-btn {
+    padding: var(--space-200) var(--space-400);
+    font-size: var(--text-lg);
+    line-height: var(--leading-lg);
+  }
+}
+
 /* ---------- Páginas legales (LegalPage.astro) ----------
    Texto corrido, angosto y cómodo de leer. */
 .vg-legal {
