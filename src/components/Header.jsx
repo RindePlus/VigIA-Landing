@@ -38,13 +38,20 @@ const guardarPosicion = (destino) => {
 // Desplegable del menú (ítem con `hijos`). En escritorio se abre al dejar
 // el cursor encima un momento (no al pasar de largo) y se cierra con un
 // pequeño margen al salir, para poder bajar hasta la lista. Con teclado se
-// abre al enfocar el título. En el menú de celular los hijos van siempre a
-// la vista, debajo del título (Header.css).
+// abre al enfocar el título. Un clic en el título lo deja abierto (fijado):
+// sin eso, el clic lo cerraba justo cuando el foco lo abría y la lista subía
+// y bajaba. Fijado, se cierra al salir con el mouse por más tiempo, al
+// scrollear, al tocar fuera, con Escape o al elegir una opción. En el menú
+// de celular los hijos van siempre a la vista, debajo del título
+// (Header.css), y el título sigue siendo un enlace.
 const ABRIR_MS = 220;
 const CERRAR_MS = 200;
+const CERRAR_FIJADO_MS = 1200;
+const ESCRITORIO = '(min-width: 768px)';
 
 const MenuGrupo = ({ item, activeHref, onNavigate }) => {
   const [abierto, setAbierto] = useState(false);
+  const [fijado, setFijado] = useState(false);
   const timer = useRef(null);
   const grupoRef = useRef(null);
   const activo = item.href === activeHref || item.hijos.some((h) => h.href === activeHref);
@@ -58,28 +65,75 @@ const MenuGrupo = ({ item, activeHref, onNavigate }) => {
   const cerrar = () => {
     window.clearTimeout(timer.current);
     setAbierto(false);
+    setFijado(false);
     onNavigate();
+  };
+
+  // Fijado: se cierra al scrollear o al tocar fuera del desplegable.
+  useEffect(() => {
+    if (!fijado) return undefined;
+    const soltar = () => {
+      window.clearTimeout(timer.current);
+      setAbierto(false);
+      setFijado(false);
+    };
+    const fuera = (e) => {
+      if (!grupoRef.current?.contains(e.target)) soltar();
+    };
+    window.addEventListener('scroll', soltar, { passive: true, once: true });
+    document.addEventListener('pointerdown', fuera);
+    return () => {
+      window.removeEventListener('scroll', soltar);
+      document.removeEventListener('pointerdown', fuera);
+    };
+  }, [fijado]);
+
+  // Título en escritorio: abre y fija la lista, sin navegar (El problema ya
+  // está en la lista). En celular navega, como siempre.
+  const tocarTitulo = (e) => {
+    if (!window.matchMedia(ESCRITORIO).matches) {
+      cerrar();
+      return;
+    }
+    e.preventDefault();
+    window.clearTimeout(timer.current);
+    setAbierto(true);
+    setFijado(true);
   };
 
   return (
     <div
       ref={grupoRef}
       className={`menu-grupo ${abierto ? 'menu-grupo--abierto' : ''}`}
-      onPointerEnter={(e) => e.pointerType === 'mouse' && programar(true, ABRIR_MS)}
-      onPointerLeave={(e) => e.pointerType === 'mouse' && programar(false, CERRAR_MS)}
+      onPointerEnter={(e) => e.pointerType === 'mouse' && programar(true, abierto ? 0 : ABRIR_MS)}
+      onPointerLeave={(e) => {
+        if (e.pointerType !== 'mouse') return;
+        window.clearTimeout(timer.current);
+        timer.current = window.setTimeout(
+          () => {
+            setAbierto(false);
+            setFijado(false);
+          },
+          fijado ? CERRAR_FIJADO_MS : CERRAR_MS,
+        );
+      }}
       onFocus={() => programar(true, 0)}
       onBlur={(e) => {
         if (!grupoRef.current?.contains(e.relatedTarget)) programar(false, 0);
       }}
       onKeyDown={(e) => {
-        if (e.key === 'Escape') programar(false, 0);
+        if (e.key === 'Escape') {
+          setFijado(false);
+          programar(false, 0);
+        }
       }}
     >
       <a
         href={item.href}
         className={`menu-item menu-grupo__titulo ${activo ? 'menu-item--active' : ''}`}
         aria-current={item.href === activeHref ? 'location' : undefined}
-        onClick={cerrar}
+        aria-expanded={abierto}
+        onClick={tocarTitulo}
       >
         {item.label}
         <PiCaretDown className="menu-grupo__caret" aria-hidden="true" />
@@ -250,6 +304,8 @@ const Header = ({
 
     // Clic en un enlace a una sección de esta misma página.
     const handleClick = (event) => {
+      // Un clic que no navega (el título del desplegable) no cuenta.
+      if (event.defaultPrevented) return;
       const enlace = event.target.closest?.('a[href*="#"]');
       if (!enlace) return;
       const url = new URL(enlace.href, window.location.href);
