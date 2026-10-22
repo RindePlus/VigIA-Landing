@@ -139,11 +139,12 @@ const jsonLd = {
       </div>
     </div>
     <!-- Clientes al pie del hero, en la misma pantalla (decisión 59): fuera
-         del .vg-wrap, el carrusel ocupa todo el ancho. Sin título a la vista
-         ("Confían en nosotros" queda como nombre accesible). El hilo pasa
+         del .vg-wrap, el carrusel ocupa todo el ancho. Arriba, "Confían en
+         nosotros" como etiqueta chica en gris (decisión 61). El hilo pasa
          por debajo, como por un túnel: entra en un semicírculo (∪) y sale por otro (∩)
          (data-vg-under, JourneyThread.astro). -->
-    <div class="vg-trusted" id="clientes" role="region" aria-label={CLIENTES.titulo} data-vg-under>
+    <div class="vg-trusted" id="clientes" role="region" aria-labelledby="clientes-titulo" data-vg-under>
+      <p class="vg-trusted__titulo" id="clientes-titulo">{CLIENTES.titulo}</p>
       <TrustedCompanies client:idle />
     </div>
   </section>

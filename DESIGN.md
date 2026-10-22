@@ -175,7 +175,9 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 
 ## Layout
 
-- **Contenedor:** hasta 1160 px (`.vg-wrap`), con un margen lateral único (`--page-gutter`): 24 px en pantallas anchas, 64 px por debajo de 1260 px (deja lugar al hilo) y 16 px en celular.
+- **Contenedor:** hasta 1160 px (`.vg-wrap`, token `--ancho-contenido`, el mismo para el header y el footer), con un margen lateral único (`--page-gutter`): 24 px en pantallas anchas, 64 px por debajo de 1260 px (deja lugar al hilo) y 16 px en celular. Las tarjetas de Lo que hace VigIA van hasta 980 px (`--ancho-tarjetas`) e Impacto hasta 1000 px (`--ancho-impacto`).
+- **Pantallas anchas** (desde 1800 px de ancho, sea cual sea la resolución): el contenido pasa a 1320 px, las tarjetas a 1160 e Impacto a 1120, y el tamaño base del texto a 17 px; desde 2300 px, a 18 px. Los tamaños de texto están en `rem` y los espaciados en `px`, así crece el texto sin inflar los márgenes. El contenido no se ensancha más: con la columna más ancha el título del hero entra en menos renglones y el hero queda con más aire. El logo del header (50 → 56 → 60 px) y sus íconos crecen en los mismos escalones, porque están en px. El título del hero tiene un tope de 3.75rem (`--fit-hero`), para no pasar de unas tres veces y media la bajada. Las notebooks (hasta ~1536 px) no cambian.
+- **Alto del hero con tope:** ocupa la pantalla entera hasta 880 px de alto (`--alto-pantalla: min(100svh, 880px)`), lo que necesita su contenido con aire. En monitores más altos el sobrante quedaba vacío, repartido arriba y abajo del contenido; con el tope, debajo del carrusel asoma El problema. Las notebooks (hasta ~880 px de alto) no cambian.
 - **Secciones:** 96 px de aire vertical; las compactas, 64 px.
 - **Espaciado:** sólo los pasos de `--space-*` (2 a 96 px).
 - **Recorrido:** el hero, El problema, Lo que hace VigIA y La solución forman un recorrido unido por el hilo a la izquierda. Las primeras van en dos columnas, texto a la izquierda y medio a la derecha, y en celular pasan a una columna.
@@ -185,10 +187,10 @@ Una paleta de campo: neutros de piedra y tinta, y acentos que nombran lo que rep
 - **Fondos (decisiones 50 y 57):**
   - El problema y La solución, sobre el fondo de la página, como el resto del recorrido (se probaron una banda de tierra para El problema y un verde claro para La solución, y se descartaron);
   - dibujos a línea de fondo que unen las secciones: lotes grandes, algunos divididos en ambientes (`LotesConexion.astro`), desde la mitad de El problema hasta el comienzo de Lo que hace VigIA; pivotes de riego vistos desde arriba (`Pivotes.astro`), grandes y del lado derecho, desde el borde entre Lo que hace VigIA y La solución hasta cerca del final de La solución, desvanecidos antes de la frase; en dos copias alineadas al borde para quedar detrás del texto de las dos. A escala 1:1 (los lotes, más anchos que cualquier pantalla y recortados al centro; los pivotes, en una franja de 900 px pegada al borde derecho). Cada uno con el color de su tramo del hilo (verde agua, verde campo) muy mezclado con el fondo, y tenues detrás del texto; en oscuro, monocromos, en un gris claro apenas visible (`.vg-fondo-linea`). La frase e Impacto van sin dibujo: la frase es el momento de foco y el verde liso de Impacto se ve más serio;
-  - la frase ocupa casi una pantalla, centrada;
+  - la frase, con el mismo aire arriba y abajo;
   - el resto del recorrido, sobre el fondo de la página, con un lote sembrado dibujado a línea detrás del hero (`FieldRows.astro`): surcos en perspectiva hacia un punto de fuga al centro, cortina de árboles, lomas, y a la derecha un molino y un alambrado. Tenue, desvanecido arriba y al pie, y al 40 % detrás del texto;
   - Impacto, en una banda verde bosque;
-  - equipo y clientes juntos (el carrusel, sin título, debajo de las tarjetas), sobre el fondo piedra de la página, con las tarjetas blancas (decisión 53: el salvia que tenían chocaba con ellas);
+  - el equipo (el carrusel de clientes pasó al pie del hero, con "Confían en nosotros" como etiqueta chica en gris), sobre el fondo piedra de la página, con las tarjetas blancas (decisión 53: el salvia que tenían chocaba con ellas);
   - preguntas frecuentes, con el CTA de cierre, sobre la superficie (un tono más claro que la página);
   - el footer, verde bosque como Impacto, compacto.
 
