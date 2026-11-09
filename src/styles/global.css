@@ -117,6 +117,10 @@
      y el footer, a los dos lados. Con la ventana angosta deja lugar para el
      hilo del recorrido (que va a la izquierda del contenido). */
   --page-gutter: var(--space-300);
+  /* Lugar que ocupa el botón flotante de WhatsApp en la esquina (64 px de
+     botón + 24 px de margen + aire): lo reservan los bloques que llegan
+     hasta abajo a la derecha, como el footer. */
+  --wa-fab-espacio: 96px;
 
   /* Anchos máximos del contenido: el general (secciones, header y footer),
      el de las tarjetas de Lo que hace VigIA y el de Impacto. Crecen en
