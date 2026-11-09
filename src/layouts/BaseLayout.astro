@@ -30,7 +30,7 @@ const { MARCA, SEO, UI, WHATSAPP_URL } = contenido(lang);
 // React y no puede usar <Image>, así que se le pasan las URLs.
 const LOGO_ALTO = 50;
 const [logoHeaderClaro, logoHeaderOscuro] = await Promise.all(
-  [logoClaro, logoOscuro].map((src) => getImage({ src, height: LOGO_ALTO * 2, format: 'webp' })),
+  [logoClaro, logoOscuro].map((src) => getImage({ src, height: LOGO_ALTO * 2, format: 'webp', quality: 75 })),
 );
 const logos = {
   claro: logoHeaderClaro.src,

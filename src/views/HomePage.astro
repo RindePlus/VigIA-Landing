@@ -44,7 +44,7 @@ import '../styles/sections.css';
 // alto reservan el lugar de cada logo antes de que cargue (sin corrimientos).
 const logosClientes = await Promise.all(
   LOGOS_CLIENTES.map(async (c) => {
-    const img = await getImage({ src: c.logo, height: c.h * 2, format: 'webp' });
+    const img = await getImage({ src: c.logo, height: c.h * 2, format: 'webp', quality: 75 });
     return {
       id: c.id,
       nombre: c.nombre,
@@ -228,6 +228,7 @@ const jsonLd = {
                 alt={pt.alt}
                 widths={[480, 800]}
                 sizes="480px"
+                quality={70}
                 loading="lazy"
                 decoding="async"
               />
