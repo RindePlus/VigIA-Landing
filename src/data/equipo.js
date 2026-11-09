@@ -29,7 +29,7 @@ import agroconsultor from '../assets/clientes/agroconsultor.png';
  *   id: string,
  *   nombre: string,
  *   foto: Imagen | null,
- *   empresa: { nombre: string, logo: Imagen, logoAlto: number },
+ *   empresa: { nombre: string, logo: Imagen, logoAlto: number, web?: string },
  * }[]}
  */
 export const EQUIPO = [
@@ -37,7 +37,7 @@ export const EQUIPO = [
     id: 'marcos-flesia',
     nombre: 'Marcos Flesia',
     foto: fotoMarcos,
-    empresa: { nombre: 'Rinde Plus', logo: rindeplus, logoAlto: 44 },
+    empresa: { nombre: 'Rinde Plus', logo: rindeplus, logoAlto: 44, web: 'https://rindeplus.com' },
   },
   {
     id: 'juan-dallorso',

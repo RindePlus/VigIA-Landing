@@ -1,56 +1,70 @@
 ---
 // Footer estático (sin JS en el cliente), verde bosque como Impacto
-// (data-fondo-oscuro: el header se ajusta encima). Cuatro columnas a la misma altura:
-// la marca (logo monocromo y redes, a la izquierda para que no las tape el
-// WhatsApp flotante), contacto, Rinde Plus y ayuda; no repiten el menú del
-// header. Abajo, los enlaces legales y el copyright. Textos en FOOTER
-// (src/data/vigia.js o vigia.en.js, según el idioma de la página), canales en
-// src/data/social.js.
-import { PiArrowUpRight, PiEnvelopeSimple, PiInstagramLogo, PiWhatsappLogo } from 'react-icons/pi';
+// (data-fondo-oscuro: el header se ajusta encima). Simple, en dos renglones:
+// arriba el logo a la izquierda y, a la derecha, los legales, el acceso a
+// Rinde Plus y los canales en círculos (Instagram, WhatsApp, email,
+// ubicación); abajo, bajo una línea fina, el copyright y los créditos de las
+// fotos en un solo renglón. Textos en FOOTER (src/data/vigia.js, vigia.en.js o vigia.pt.js,
+// según el idioma de la página), canales en src/data/social.js.
+import {
+  PiArrowUpRight,
+  PiEnvelopeSimple,
+  PiInstagramLogo,
+  PiMapPin,
+  PiWhatsappLogo,
+} from 'react-icons/pi';
 import { Image } from 'astro:assets';
 import logo from '../assets/vigia-biostres-logo-light.png';
-import {
-  CONTACT_EMAIL,
-  INSTAGRAM_URL,
-  INSTAGRAM_HANDLE,
-  WHATSAPP_DISPLAY,
-  OFFICE_ADDRESS,
-} from '../data/social';
+import { CONTACT_EMAIL, INSTAGRAM_URL, INSTAGRAM_HANDLE, OFFICE_ADDRESS } from '../data/social';
 import { contenido, idiomaDe, ruta } from '../i18n/idiomas';
 import './Footer.css';
 
 const lang = idiomaDe(Astro.currentLocale);
 const { FOOTER, MARCA, UI, WHATSAPP_URL } = contenido(lang);
-// Fuera del español la dirección lleva el país: el público no es argentino.
-const direccion = lang === 'es' ? 'Concejal Lorusso 762, Alta Gracia, Córdoba' : OFFICE_ADDRESS;
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(OFFICE_ADDRESS)}`;
 const year = new Date().getFullYear();
 const LOGO_ALTO = 48;
 const logoAncho = Math.round((logo.width / logo.height) * LOGO_ALTO);
 
+// Sólo íconos: el nombre accesible y el title llevan el dato (cuenta,
+// número, mail o dirección).
 const redes = [
   { icon: PiInstagramLogo, href: INSTAGRAM_URL, label: `Instagram ${INSTAGRAM_HANDLE}` },
   { icon: PiWhatsappLogo, href: WHATSAPP_URL, label: 'WhatsApp' },
-  { icon: PiEnvelopeSimple, href: `mailto:${CONTACT_EMAIL}`, label: 'Email' },
+  { icon: PiEnvelopeSimple, href: `mailto:${CONTACT_EMAIL}`, label: `Email: ${CONTACT_EMAIL}` },
+  { icon: PiMapPin, href: mapsUrl, label: `${FOOTER.ubicacion}: ${OFFICE_ADDRESS}` },
 ];
 ---
 
 <footer class="rp-footer" id="contacto" data-fondo-oscuro>
   <div class="rp-footer__inner">
     <div class="rp-footer__main">
-      <div class="rp-footer__marca">
-        <!-- Logo monocromo en los dos temas (negro en claro, blanco en oscuro). -->
-        <a class="rp-footer__logo" href={ruta(lang, '/')} aria-label={`${MARCA}, ${UI.inicio}`}>
-          <Image src={logo} alt={MARCA} width={logoAncho} height={LOGO_ALTO} densities={[1, 2]} format="webp" loading="lazy" decoding="async" />
-        </a>
+      <!-- Logo monocromo en blanco sobre el verde. -->
+      <a class="rp-footer__logo" href={ruta(lang, '/')} aria-label={`${MARCA}, ${UI.inicio}`}>
+        <Image src={logo} alt={MARCA} width={logoAncho} height={LOGO_ALTO} densities={[1, 2]} format="webp" quality={75} loading="lazy" decoding="async" />
+      </a>
 
+      <div class="rp-footer__acciones">
+        <nav class="rp-footer__legales" aria-label={FOOTER.navLegales}>
+          {
+            FOOTER.legales.map((l) => (
+              <a href={l.href} hreflang={lang === 'es' ? undefined : 'es'}>
+                {l.texto}
+              </a>
+            ))
+          }
+        </nav>
+        <a class="rp-footer__externo" href={FOOTER.rindeplus.href} target="_blank" rel="noopener noreferrer">
+          {FOOTER.rindeplus.enlace}
+          <PiArrowUpRight aria-hidden="true" />
+        </a>
         <ul class="rp-footer__redes">
           {
             redes.map((r) => {
               const Icon = r.icon;
               return (
                 <li>
-                  <a href={r.href} aria-label={r.label} target="_blank" rel="noopener noreferrer">
+                  <a href={r.href} aria-label={r.label} title={r.label} target="_blank" rel="noopener noreferrer">
                     <Icon aria-hidden="true" />
                   </a>
                 </li>
@@ -59,69 +73,24 @@ const redes = [
           }
         </ul>
       </div>
-
-      <div class="rp-footer__col">
-        <h2>{FOOTER.contacto.titulo}</h2>
-        <address class="rp-footer__datos">
-          <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">{WHATSAPP_DISPLAY}</a>
-          <a href={mapsUrl} target="_blank" rel="noopener noreferrer">{direccion}</a>
-        </address>
-      </div>
-
-      <div class="rp-footer__col">
-        <h2>{FOOTER.rindeplus.titulo}</h2>
-        <p>{FOOTER.rindeplus.texto}</p>
-        <a class="rp-footer__externo" href={FOOTER.rindeplus.href} target="_blank" rel="noopener noreferrer">
-          {FOOTER.rindeplus.enlace}
-          <PiArrowUpRight aria-hidden="true" />
-        </a>
-      </div>
-
-      <nav class="rp-footer__col" aria-label={FOOTER.ayuda.titulo}>
-        <h2>{FOOTER.ayuda.titulo}</h2>
-        <ul>
-          {
-            FOOTER.ayuda.enlaces.map((e) => (
-              <li>
-                <a
-                  href={e.href}
-                  target={e.externo ? '_blank' : undefined}
-                  rel={e.externo ? 'noopener noreferrer' : undefined}
-                >
-                  {e.texto}
-                </a>
-              </li>
-            ))
-          }
-          {/* Legales: en la columna de ayuda, así el pie queda en un renglón. */}
-          {
-            FOOTER.legales.map((l) => (
-              <li>
-                <a href={l.href} hreflang={lang === 'es' ? undefined : 'es'}>
-                  {l.texto}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
     </div>
 
-    <!-- Pie: copyright y créditos de las fotos, en un renglón fino. -->
+    <!-- Pie en un renglón: copyright a la izquierda; créditos de las
+         fotos (los piden sus licencias) a la derecha. -->
     <div class="rp-footer__bottom">
       <p class="rp-footer__copyright">
-        © {year} {MARCA} · {FOOTER.pie}
+        © {year} {MARCA}. {FOOTER.pie}
       </p>
       <p class="rp-footer__creditos">
         {FOOTER.creditosFotos.prefijo}{' '}
         {
           FOOTER.creditosFotos.fotos.map((f, i) => (
             <>
-              <a href={f.href} target="_blank" rel="noopener noreferrer">{f.autor}</a> ({f.licencia}){i < FOOTER.creditosFotos.fotos.length - 1 ? ' · ' : ''}
+              <a href={f.href} target="_blank" rel="noopener noreferrer">{f.autor}</a>{i < FOOTER.creditosFotos.fotos.length - 1 ? ' · ' : ' '}
             </>
           ))
         }
+        {FOOTER.creditosFotos.sufijo}
       </p>
     </div>
   </div>
