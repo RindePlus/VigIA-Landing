@@ -30,7 +30,7 @@ const { MARCA, SEO, UI, WHATSAPP_URL } = contenido(lang);
 // React y no puede usar <Image>, así que se le pasan las URLs.
 const LOGO_ALTO = 50;
 const [logoHeaderClaro, logoHeaderOscuro] = await Promise.all(
-  [logoClaro, logoOscuro].map((src) => getImage({ src, height: LOGO_ALTO * 2, format: 'webp' })),
+  [logoClaro, logoOscuro].map((src) => getImage({ src, height: LOGO_ALTO * 2, format: 'webp', quality: 75 })),
 );
 const logos = {
   claro: logoHeaderClaro.src,
@@ -48,8 +48,7 @@ const { title = SEO.titulo, description = SEO.descripcion, showMenu = true, json
 const site = Astro.site ?? new URL('https://vigiabioestres.com');
 const pageUrl = new URL(conBarra(Astro.url.pathname), site).href;
 const ogImage = new URL('/og.jpg', site).href;
-// hreflang: sólo si la página existe traducida (las legales no) y se
-// indexa.
+// hreflang: sólo si la página existe traducida (el 404 no) y se indexa.
 const hreflang = alt.traducida && !noindex
   ? [
       { lang: 'es', href: new URL(alt.es, site).href },

@@ -3,7 +3,7 @@
 Guía para escribir y mantener la versión en inglés de la landing (`/en/`). Explica **por qué** se usa cada término o frase, para que cualquiera que toque el copy mantenga el mismo criterio. La decisión técnica (rutas, archivos, transición) está en [ADR 0004](../adr/0004-sitio-bilingue-es-en.md).
 
 - **Contenido en inglés:** `src/data/vigia.en.js`. Mismas claves que `src/data/vigia.js` (español, la fuente).
-- **Alcance:** home, precios y educación. Las legales quedan en español (ver "Decisiones de contenido").
+- **Alcance:** home, precios, educación y legales (`src/data/legal.en.js`, ver "Decisiones de contenido").
 
 ## 1. Principio: adaptar, no traducir
 
@@ -133,7 +133,7 @@ Si una frase literal se entiende pero suena rara ("the crop shows the stress whe
 |---|---|---|
 | Idioma de la atención | El equipo responde en español. En inglés, debajo del botón del cierre: *We are based in Argentina and our team replies in Spanish.* En el botón flotante de WhatsApp: *Our team replies in Spanish.* | Decisión del equipo (2026-10-16): mejor aclararlo que generar una expectativa que no se cumple. Si el equipo pasa a atender en inglés, se vacían `CTA.nota` y `UI.widget.nota`. |
 | Mensajes prearmados de WhatsApp | En inglés (*Hi, I'd like…*). | El mensaje lo envía el visitante: tiene que estar en su idioma. |
-| Páginas legales | Sólo en español. Desde `/en/` se enlazan como *Privacy policy (Spanish)*. | Son un borrador que tiene que revisar asesoría legal; traducir un texto legal sin revisar es riesgoso. |
+| Páginas legales | En inglés en `/en/privacidad/` y `/en/terminos/` (`src/data/legal.en.js`). Traducción fiel, no adaptación: mismas afirmaciones y compromisos; leyes y organismos con su nombre oficial y una aclaración (*Agencia de Acceso a la Información Pública (Argentina's Agency for Access to Public Information)*). Si difieren, prevalece el español. | Es un texto legal: lo que cambia de sentido en la traducción puede cambiar una obligación ([ADR 0010](../adr/0010-legales-en-tres-idiomas.md)). |
 | Dirección | En inglés se muestra completa, con *Argentina*. | El público no es sólo argentino. |
 | Demo de 20 minutos | Se mantiene. | Es la misma oferta; la nota del cierre aclara el idioma. |
 

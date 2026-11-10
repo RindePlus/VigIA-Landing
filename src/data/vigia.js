@@ -299,25 +299,17 @@ export const PRECIOS = {
   mensajeWhatsApp: `Hola, quiero conocer los precios de ${MARCA}`,
 };
 
-// Footer (src/components/Footer.astro). No repite el menú del header: suma
-// Rinde Plus (con sus otras soluciones), ayuda y los enlaces legales.
+// Footer (src/components/Footer.astro): logo, redes y acceso a Rinde Plus;
+// abajo, copyright, legales y créditos de las fotos.
 export const FOOTER = {
-  contacto: { titulo: 'Contacto' },
-  rindeplus: {
-    titulo: 'Rinde Plus',
-    // Sin decir que VigIA es de Rinde Plus: la plataforma tiene otros socios.
-    texto: '¿Buscás más servicios especializados para tu producción? Rinde Plus tiene otras soluciones agtech para el campo.',
-    enlace: 'Visitá Rinde Plus',
-    href: 'https://rindeplus.com',
-  },
-  ayuda: {
-    titulo: 'Ayuda',
-    enlaces: [
-      { texto: 'Preguntas frecuentes', href: '/#preguntas', externo: false },
-      { texto: 'Escribinos por WhatsApp', href: WHATSAPP_URL, externo: true },
-    ],
-  },
-  // Páginas en src/pages (textos en src/data/legal.js, borrador a revisar).
+  // Footer simple (logo y redes arriba, pie abajo). Rinde Plus va como
+  // enlace junto a las redes, sin decir que VigIA es de Rinde Plus: la
+  // plataforma tiene otros socios.
+  rindeplus: { enlace: 'Visitá Rinde Plus', href: 'https://rindeplus.com' },
+  ubicacion: 'Ubicación',
+  navLegales: 'Legales',
+  // Rutas en español: el footer les suma el prefijo del idioma. Textos en
+  // src/data/legal.js (y legal.en.js, legal.pt.js).
   legales: [
     { texto: 'Política de privacidad', href: '/privacidad/' },
     { texto: 'Términos y condiciones', href: '/terminos/' },
@@ -327,7 +319,11 @@ export const FOOTER = {
   // Commons): los piden sus licencias Creative Commons. Van al pie, junto
   // al copyright, no en el medio de la página.
   creditosFotos: {
-    prefijo: 'Fotos vía Wikimedia Commons:',
+    // En el pie va un solo renglón: los autores enlazan a la ficha de cada
+    // foto (con su licencia exacta, que queda anotada abajo) y las
+    // licencias se nombran una vez al final.
+    prefijo: 'Fotos:',
+    sufijo: '(CC BY y CC BY-SA, vía Wikimedia Commons)',
     fotos: [
       { autor: 'Alejo Cristian Santo', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Febrero_-_panoramio.jpg' },
       { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },

@@ -1094,6 +1094,18 @@ h3 {
   object-fit: contain;
 }
 
+.vg-persona__logo--enlace {
+  border-radius: var(--radius-md);
+  transition: opacity var(--dur-base) var(--ease-fluid);
+}
+
+.vg-persona__logo--enlace:hover { opacity: 0.75; }
+
+.vg-persona__logo--enlace:focus-visible {
+  outline: 2px solid var(--gh-accent);
+  outline-offset: 4px;
+}
+
 [data-rp-theme="dark"] .vg-persona__empresa img {
   filter: grayscale(1) brightness(0) invert(1);
 }

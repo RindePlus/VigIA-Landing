@@ -1,6 +1,6 @@
 // Sitemap del sitio (docs/sitemap.xml), generado al compilar. Lista sólo
 // las páginas que se indexan: la home en los tres idiomas, con sus
-// alternativas (hreflang), y las legales (sólo en español). Precios,
+// alternativas (hreflang), y las legales, también en los tres. Precios,
 // educación y el 404 van con noindex (BaseLayout) y quedan afuera. Las URLs
 // llevan la barra final: es la que sirve GitHub Pages, sin redirección.
 // Una página nueva que se indexe se suma acá.
@@ -10,8 +10,8 @@ import { IDIOMAS, conBarra, ruta } from '../i18n/idiomas';
 /** Páginas que se indexan, con su ruta en español y si están traducidas. */
 const PAGINAS = [
   { rutaEs: '/', traducida: true },
-  { rutaEs: '/privacidad', traducida: false },
-  { rutaEs: '/terminos', traducida: false },
+  { rutaEs: '/privacidad', traducida: true },
+  { rutaEs: '/terminos', traducida: true },
 ];
 
 export const GET: APIRoute = ({ site }) => {

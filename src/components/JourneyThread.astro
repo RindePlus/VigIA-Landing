@@ -336,7 +336,19 @@
     );
 
     // Recalcula si cambia el alto (fuentes, imágenes, tamaño de ventana).
-    new ResizeObserver(() => layout()).observe(journey);
-    layout();
+    // El primer aviso del observer llega solo, después de que el navegador
+    // ya calculó el diseño: por eso no se llama a layout() de entrada (al
+    // correr el script obligaba un reflow sincrónico de ~40 ms en celular,
+    // y además se dibujaba dos veces). Varios avisos seguidos se juntan en
+    // un solo cuadro.
+    let pendiente = false;
+    new ResizeObserver(() => {
+      if (pendiente) return;
+      pendiente = true;
+      requestAnimationFrame(() => {
+        pendiente = false;
+        layout();
+      });
+    }).observe(journey);
   }
 </script>

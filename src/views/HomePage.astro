@@ -44,7 +44,7 @@ import '../styles/sections.css';
 // alto reservan el lugar de cada logo antes de que cargue (sin corrimientos).
 const logosClientes = await Promise.all(
   LOGOS_CLIENTES.map(async (c) => {
-    const img = await getImage({ src: c.logo, height: c.h * 2, format: 'webp' });
+    const img = await getImage({ src: c.logo, height: c.h * 2, format: 'webp', quality: 75 });
     return {
       id: c.id,
       nombre: c.nombre,
@@ -228,6 +228,7 @@ const jsonLd = {
                 alt={pt.alt}
                 widths={[480, 800]}
                 sizes="480px"
+                quality={70}
                 loading="lazy"
                 decoding="async"
               />
@@ -613,17 +614,27 @@ const jsonLd = {
               <h3>{p.nombre}</h3>
               <div class="vg-persona__empresa">
                 <p class="vg-persona__rol">{NOSOTROS.representa}</p>
-                <div class="vg-persona__logo">
-                  <img
-                    src={p.empresa.logo.src}
-                    alt={p.empresa.nombre}
-                    width={Math.round((p.empresa.logo.width / p.empresa.logo.height) * p.empresa.logoAlto)}
-                    height={p.empresa.logoAlto}
-                    style={`--logo-alto: ${p.empresa.logoAlto}px`}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
+                {/* Con web propia (Rinde Plus), el logo enlaza a ella. */}
+                {(() => {
+                  const logoEmpresa = (
+                    <img
+                      src={p.empresa.logo.src}
+                      alt={p.empresa.nombre}
+                      width={Math.round((p.empresa.logo.width / p.empresa.logo.height) * p.empresa.logoAlto)}
+                      height={p.empresa.logoAlto}
+                      style={`--logo-alto: ${p.empresa.logoAlto}px`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  );
+                  return p.empresa.web ? (
+                    <a class="vg-persona__logo vg-persona__logo--enlace" href={p.empresa.web} target="_blank" rel="noopener noreferrer">
+                      {logoEmpresa}
+                    </a>
+                  ) : (
+                    <div class="vg-persona__logo">{logoEmpresa}</div>
+                  );
+                })()}
               </div>
             </li>
           ))

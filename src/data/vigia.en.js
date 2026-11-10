@@ -266,31 +266,27 @@ export const PRECIOS = {
 };
 
 export const FOOTER = {
-  contacto: { titulo: 'Contact' },
-  rindeplus: {
-    titulo: 'Rinde Plus',
-    texto: 'Looking for more specialized services for your operation? Rinde Plus offers other agtech solutions for farming.',
-    enlace: 'Visit Rinde Plus',
-    href: 'https://rindeplus.com',
-  },
-  ayuda: {
-    titulo: 'Help',
-    enlaces: [
-      { texto: 'FAQ', href: '/en/#preguntas', externo: false },
-      { texto: 'Message us on WhatsApp', href: WHATSAPP_URL, externo: true },
-    ],
-  },
-  // Las legales sólo existen en español: el enlace lo aclara.
+  // Footer simple (logo y redes arriba, pie abajo). Rinde Plus va como
+  // enlace junto a las redes, sin decir que VigIA es de Rinde Plus: la
+  // plataforma tiene otros socios.
+  rindeplus: { enlace: 'Visit Rinde Plus', href: 'https://rindeplus.com' },
+  ubicacion: 'Location',
+  navLegales: 'Legal',
+  // Rutas en español: el footer les suma /en.
   legales: [
-    { texto: 'Privacy policy (Spanish)', href: '/privacidad/' },
-    { texto: 'Terms and conditions (Spanish)', href: '/terminos/' },
+    { texto: 'Privacy policy', href: '/privacidad/' },
+    { texto: 'Terms and conditions', href: '/terminos/' },
   ],
   pie: 'All rights reserved.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
   // Commons): los piden sus licencias Creative Commons. Van al pie, junto
   // al copyright, no en el medio de la página.
   creditosFotos: {
-    prefijo: 'Photos via Wikimedia Commons:',
+    // En el pie va un solo renglón: los autores enlazan a la ficha de cada
+    // foto (con su licencia exacta, que queda anotada abajo) y las
+    // licencias se nombran una vez al final.
+    prefijo: 'Photos:',
+    sufijo: '(CC BY and CC BY-SA, via Wikimedia Commons)',
     fotos: [
       { autor: 'Alejo Cristian Santo', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Febrero_-_panoramio.jpg' },
       { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },

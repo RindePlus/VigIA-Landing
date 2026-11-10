@@ -442,7 +442,7 @@ const Header = ({
               className="header-lang__btn"
               aria-haspopup="menu"
               aria-expanded={isLangOpen}
-              aria-label={textos.idioma}
+              aria-label={`${textos.idioma}: ${lang.toUpperCase()}`}
               onClick={() => setIsLangOpen((open) => !open)}
             >
               <span>{lang.toUpperCase()}</span>
