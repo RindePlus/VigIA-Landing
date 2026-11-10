@@ -272,10 +272,10 @@ export const FOOTER = {
   rindeplus: { enlace: 'Visit Rinde Plus', href: 'https://rindeplus.com' },
   ubicacion: 'Location',
   navLegales: 'Legal',
-  // Las legales sólo existen en español: el enlace lo aclara.
+  // Rutas en español: el footer les suma /en.
   legales: [
-    { texto: 'Privacy policy (Spanish)', href: '/privacidad/' },
-    { texto: 'Terms and conditions (Spanish)', href: '/terminos/' },
+    { texto: 'Privacy policy', href: '/privacidad/' },
+    { texto: 'Terms and conditions', href: '/terminos/' },
   ],
   pie: 'All rights reserved.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia

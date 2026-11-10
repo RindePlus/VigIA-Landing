@@ -48,7 +48,7 @@ const redes = [
         <nav class="rp-footer__legales" aria-label={FOOTER.navLegales}>
           {
             FOOTER.legales.map((l) => (
-              <a href={l.href} hreflang={lang === 'es' ? undefined : 'es'}>
+              <a href={ruta(lang, l.href)}>
                 {l.texto}
               </a>
             ))

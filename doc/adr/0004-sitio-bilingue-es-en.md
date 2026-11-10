@@ -3,6 +3,7 @@
 - **Estado:** Propuesto
 - **Fecha:** 2026-10-16
 - **Ampliado por:** [ADR 0008](0008-version-en-portugues.md) (portugués de Brasil en `/pt/`)
+- **Reemplazado en parte por:** [ADR 0010](0010-legales-en-tres-idiomas.md) (las legales, punto 8)
 
 ## Contexto
 

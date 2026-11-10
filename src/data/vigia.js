@@ -308,7 +308,8 @@ export const FOOTER = {
   rindeplus: { enlace: 'Visitá Rinde Plus', href: 'https://rindeplus.com' },
   ubicacion: 'Ubicación',
   navLegales: 'Legales',
-  // Páginas en src/pages (textos en src/data/legal.js, borrador a revisar).
+  // Rutas en español: el footer les suma el prefijo del idioma. Textos en
+  // src/data/legal.js (y legal.en.js, legal.pt.js).
   legales: [
     { texto: 'Política de privacidad', href: '/privacidad/' },
     { texto: 'Términos y condiciones', href: '/terminos/' },
