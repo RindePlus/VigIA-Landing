@@ -1531,6 +1531,18 @@ h3 {
   transform: translate(-50%, 0);
 }
 
+/* Nota de las cifras: chica, en gris, centrada bajo los indicadores (o
+   bajo la tabla abierta). Sólo informa: no compite con los números. */
+.vg-impacto__aviso {
+  max-width: 64ch;
+  margin: var(--space-400) auto 0;
+  color: var(--gh-fg-subtle);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  text-align: center;
+  text-wrap: pretty;
+}
+
 /* Panel: se despliega (alto de 0 a su contenido) y la flecha de arriba se
    desliza hasta el indicador de origen. */
 .vg-panel {
@@ -2504,6 +2516,30 @@ h3 {
   text-wrap: pretty;
 }
 
-.vg-legal__seccion p + p {
+.vg-legal__seccion p + p,
+.vg-legal__seccion ul + p,
+.vg-legal__seccion p + ul {
   margin-top: var(--space-100);
+}
+
+.vg-legal__seccion ul {
+  display: grid;
+  gap: var(--space-75);
+  padding-left: var(--space-300);
+  color: var(--gh-fg-muted);
+  font-size: var(--text-base);
+  line-height: var(--leading-base);
+  list-style: disc;
+  text-wrap: pretty;
+}
+
+.vg-legal__seccion a {
+  color: var(--gh-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.vg-legal__seccion strong {
+  color: var(--gh-fg);
+  font-weight: 600;
 }

@@ -24,7 +24,7 @@ const PREFIJOS = IDIOMAS.map((i) => i.code).filter((c) => c !== IDIOMA_BASE);
 
 /** Páginas que existen traducidas (ruta en español, sin barra final). Hoy
  *  son todas menos el 404. */
-const PAGINAS_TRADUCIDAS = ['/', '/pricing', '/educacion', '/privacidad', '/terminos'];
+const PAGINAS_TRADUCIDAS = ['/', '/pricing', '/educacion', '/privacidad'];
 
 /** Normaliza el locale de Astro (Astro.currentLocale) a 'es' | 'en' | 'pt'. */
 export const idiomaDe = (locale) => (locale === 'en' || locale === 'pt' ? locale : 'es');

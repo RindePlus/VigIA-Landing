@@ -228,6 +228,11 @@ export const IMPACTO = {
   ],
   // Aviso que aparece una sola vez, cuando la sección entra en pantalla.
   pista: 'Tocá un indicador para ver el detalle',
+  // Nota fija bajo los indicadores: de dónde salen las cifras y que no se
+  // garantizan en otro lote. Antes estaba en los términos, que salieron de
+  // la landing (ADR 0011); junto a las cifras es donde la ve quien las lee.
+  aviso:
+    'Resultados de rinde medidos a campo durante cinco campañas; el carbono es una estimación. Cada lote responde distinto según su ambiente, su manejo y el clima del año.',
   cerrar: 'Cerrar detalle',
 };
 
@@ -308,12 +313,11 @@ export const FOOTER = {
   rindeplus: { enlace: 'Visitá Rinde Plus', href: 'https://rindeplus.com' },
   ubicacion: 'Ubicación',
   navLegales: 'Legales',
-  // Rutas en español: el footer les suma el prefijo del idioma. Textos en
-  // src/data/legal.js (y legal.en.js, legal.pt.js).
-  legales: [
-    { texto: 'Política de privacidad', href: '/privacidad/' },
-    { texto: 'Términos y condiciones', href: '/terminos/' },
-  ],
+  // Sólo la política de privacidad del sitio: los términos y la política
+  // de la plataforma se ven desde el login (ADR 0011). Ruta en español: el
+  // footer le suma el prefijo del idioma. Textos en src/data/legal.js (y
+  // legal.en.js, legal.pt.js).
+  legales: [{ texto: 'Política de privacidad', href: '/privacidad/' }],
   pie: 'Todos los derechos reservados.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
   // Commons): los piden sus licencias Creative Commons. Van al pie, junto
