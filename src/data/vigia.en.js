@@ -201,6 +201,8 @@ export const IMPACTO = {
     },
   ],
   pista: 'Tap an indicator to see the details',
+  aviso:
+    'Yield results measured in the field over five seasons; carbon figures are estimates. Each field responds differently depending on its management zones, how it is managed and the year’s weather.',
   cerrar: 'Close details',
 };
 
@@ -272,11 +274,8 @@ export const FOOTER = {
   rindeplus: { enlace: 'Visit Rinde Plus', href: 'https://rindeplus.com' },
   ubicacion: 'Location',
   navLegales: 'Legal',
-  // Rutas en español: el footer les suma /en.
-  legales: [
-    { texto: 'Privacy policy', href: '/privacidad/' },
-    { texto: 'Terms and conditions', href: '/terminos/' },
-  ],
+  // Ruta en español: el footer le suma /en.
+  legales: [{ texto: 'Privacy policy', href: '/privacidad/' }],
   pie: 'All rights reserved.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
   // Commons): los piden sus licencias Creative Commons. Van al pie, junto

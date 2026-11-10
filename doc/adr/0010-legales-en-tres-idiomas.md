@@ -2,6 +2,7 @@
 
 - **Estado:** Propuesto
 - **Fecha:** 2026-11-09
+- **Reemplazado en parte por:** [ADR 0011](0011-solo-politica-de-privacidad-en-la-landing.md) (los términos salen de la landing)
 - **Reemplaza en parte a:** [ADR 0004](0004-sitio-bilingue-es-en.md) (punto 8) y [ADR 0008](0008-version-en-portugues.md) (legales)
 
 ## Contexto

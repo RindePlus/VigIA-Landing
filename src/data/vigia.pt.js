@@ -204,6 +204,8 @@ export const IMPACTO = {
     },
   ],
   pista: 'Toque em um indicador para ver o detalhe',
+  aviso:
+    'Resultados de produtividade medidos em campo ao longo de cinco safras; o carbono é uma estimativa. Cada talhão responde de forma diferente conforme suas zonas de manejo, o manejo e o clima do ano.',
   cerrar: 'Fechar detalhe',
 };
 
@@ -277,11 +279,8 @@ export const FOOTER = {
   rindeplus: { enlace: 'Visite a Rinde Plus', href: 'https://rindeplus.com' },
   ubicacion: 'Localização',
   navLegales: 'Legal',
-  // Rutas en español: el footer les suma /pt.
-  legales: [
-    { texto: 'Política de privacidade', href: '/privacidad/' },
-    { texto: 'Termos e condições', href: '/terminos/' },
-  ],
+  // Ruta en español: el footer le suma /pt.
+  legales: [{ texto: 'Política de privacidade', href: '/privacidad/' }],
   pie: 'Todos os direitos reservados.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
   // Commons): los piden sus licencias Creative Commons.
