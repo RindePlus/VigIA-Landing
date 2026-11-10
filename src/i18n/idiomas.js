@@ -22,9 +22,9 @@ export const IDIOMAS = [
 /** Idiomas con prefijo en la ruta (todos menos el español). */
 const PREFIJOS = IDIOMAS.map((i) => i.code).filter((c) => c !== IDIOMA_BASE);
 
-/** Páginas que existen traducidas (ruta en español, sin barra final). Las
- *  legales quedan sólo en español hasta que las revise asesoría legal. */
-const PAGINAS_TRADUCIDAS = ['/', '/pricing', '/educacion'];
+/** Páginas que existen traducidas (ruta en español, sin barra final). Hoy
+ *  son todas menos el 404. */
+const PAGINAS_TRADUCIDAS = ['/', '/pricing', '/educacion', '/privacidad', '/terminos'];
 
 /** Normaliza el locale de Astro (Astro.currentLocale) a 'es' | 'en' | 'pt'. */
 export const idiomaDe = (locale) => (locale === 'en' || locale === 'pt' ? locale : 'es');
@@ -52,7 +52,7 @@ export const rutaBase = (pathname) => {
 export const conBarra = (r) => (r.endsWith('/') ? r : `${r}/`);
 
 /** Rutas de la página actual en cada idioma (con barra final) y si existe
- *  traducida. Si no existe (legales), los otros idiomas llevan a su home.
+ *  traducida. Si no existe, los otros idiomas llevan a su home.
  *  El 404 no es una página a la que se pueda volver: los tres idiomas
  *  llevan a su home. */
 export const alternativas = (pathname) => {

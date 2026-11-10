@@ -7,6 +7,9 @@ export const CONTACT_EMAIL = 'inforindeplus@gmail.com';
 export const WHATSAPP_NUMBER = '5493564593446';
 export const WHATSAPP_DISPLAY = '+54 9 3564 59-3446';
 export const OFFICE_ADDRESS = 'Concejal Lorusso 762, Alta Gracia, Córdoba, Argentina';
+// Sociedad que opera el sitio y responde por los datos (src/data/legal*.js).
+export const RAZON_SOCIAL = 'Conextion S.A.S.';
+export const CUIT = '30-71722681-6';
 
 export function buildWhatsAppUrl(mensaje) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;

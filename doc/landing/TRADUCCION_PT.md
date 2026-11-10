@@ -3,7 +3,7 @@
 Guía para escribir y mantener la versión en portugués de Brasil de la landing (`/pt/`). Explica **por qué** se usa cada término o frase, para que cualquiera que toque el copy mantenga el mismo criterio. La decisión técnica (rutas, archivos) está en [ADR 0008](../adr/0008-version-en-portugues.md); la versión en inglés sigue sus propias reglas en [`TRADUCCION_EN.md`](TRADUCCION_EN.md).
 
 - **Contenido en portugués:** `src/data/vigia.pt.js`. Mismas claves que `src/data/vigia.js` (español, la fuente).
-- **Alcance:** home, precios y educación. Las legales quedan en español, como en inglés.
+- **Alcance:** home, precios, educación y legales (`src/data/legal.pt.js`).
 
 ## 1. Principio: adaptar, no traducir
 
@@ -124,7 +124,7 @@ El español y el portugués se parecen mucho, y eso es la trampa: muchos calcos 
 |---|---|---|
 | Idioma de la atención | El equipo responde en español. Debajo del botón del cierre: *Estamos na Argentina e nossa equipe responde em espanhol.* En el botón flotante: *Nossa equipe responde em espanhol.* | Mismo criterio que en inglés: mejor aclararlo que generar una expectativa que no se cumple. Si el equipo atiende en portugués, se vacían `CTA.nota` y `UI.widget.nota`. |
 | Mensajes prearmados de WhatsApp | En portugués (*Olá, quero…*). | El mensaje lo envía el visitante: tiene que estar en su idioma. |
-| Páginas legales | Sólo en español. Desde `/pt/` se enlazan como *Política de privacidade (em espanhol)*. | Son un borrador que tiene que revisar asesoría legal. |
+| Páginas legales | En portugués en `/pt/privacidad/` y `/pt/terminos/` (`src/data/legal.pt.js`). Traducción fiel: mismas afirmaciones y compromisos, con el vocabulario de la LGPD (*controladora*, *titular*, *encarregado*, *peticionar à ANPD*); las leyes argentinas con su nombre oficial (*Ley 25.326*). Si difieren, prevalece el español. | Es un texto legal; la LGPD es la ley que el visitante de Brasil conoce ([ADR 0010](../adr/0010-legales-en-tres-idiomas.md)). |
 | Dirección | Completa, con *Argentina*. | El público no es argentino. |
 
 ## 8. Cómo cambiar o agregar un texto

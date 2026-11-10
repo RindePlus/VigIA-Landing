@@ -3,6 +3,7 @@
 - **Estado:** Propuesto
 - **Fecha:** 2026-10-20
 - **Amplía:** [ADR 0004](0004-sitio-bilingue-es-en.md)
+- **Reemplazado en parte por:** [ADR 0010](0010-legales-en-tres-idiomas.md) (las legales)
 
 ## Contexto
 
