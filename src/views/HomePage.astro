@@ -422,6 +422,10 @@ const jsonLd = {
           </div>
         </div>
       </div>
+
+      <!-- De dónde salen las cifras y que no se garantizan en otro lote
+           (antes en los términos, ADR 0011). Fija, sin abrir ninguna tabla. -->
+      <p class="vg-impacto__aviso" data-aviso>{IMPACTO.aviso}</p>
     </div>
   </section>
 
@@ -550,11 +554,17 @@ const jsonLd = {
       // contenido del panel ya es el de la más alta.
       const indicadores = seccion.querySelector<HTMLElement>('.vg-indicadores-box');
       const interior = caja.querySelector<HTMLElement>('.vg-panel__inner');
+      // La nota de las cifras va debajo del panel: suma su alto y su margen.
+      const aviso = seccion.querySelector<HTMLElement>('[data-aviso]');
       const medirAlto = () => {
         if (!indicadores || !interior) return;
         const estilo = getComputedStyle(seccion);
         const margen = parseFloat(estilo.paddingTop) + parseFloat(estilo.paddingBottom);
-        const alto = margen + indicadores.offsetHeight + interior.scrollHeight;
+        const alto =
+          margen +
+          indicadores.offsetHeight +
+          interior.scrollHeight +
+          (aviso ? aviso.offsetHeight + parseFloat(getComputedStyle(aviso).marginTop) : 0);
         seccion.style.setProperty('--alto-impacto', `${Math.ceil(alto)}px`);
       };
       medirAlto();
