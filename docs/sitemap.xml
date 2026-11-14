@@ -21,6 +21,25 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://vigiabioestres.com/pt/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://vigiabioestres.com/"/>
   </url>
-  <url><loc>https://vigiabioestres.com/privacidad/</loc></url>
-  <url><loc>https://vigiabioestres.com/terminos/</loc></url>
+  <url>
+    <loc>https://vigiabioestres.com/privacidad/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vigiabioestres.com/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vigiabioestres.com/en/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://vigiabioestres.com/pt/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vigiabioestres.com/privacidad/"/>
+  </url>
+  <url>
+    <loc>https://vigiabioestres.com/en/privacidad/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vigiabioestres.com/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vigiabioestres.com/en/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://vigiabioestres.com/pt/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vigiabioestres.com/privacidad/"/>
+  </url>
+  <url>
+    <loc>https://vigiabioestres.com/pt/privacidad/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vigiabioestres.com/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vigiabioestres.com/en/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://vigiabioestres.com/pt/privacidad/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vigiabioestres.com/privacidad/"/>
+  </url>
 </urlset>

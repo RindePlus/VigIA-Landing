@@ -1,10 +1,9 @@
 /* ============================================================
-   Footer: cuatro columnas a la misma altura (marca con redes, contacto,
-   Rinde Plus y ayuda, con los legales); abajo, un renglón fino con el
-   copyright y los créditos de las fotos. Verde
-   bosque, como Impacto. Compacto: en pantallas horizontales entra en la
-   misma pantalla que las preguntas (Footer.astro mide su alto). Tokens
-   --gh-* y --vg-*, escalas de global.css.
+   Footer simple: arriba, logo a la izquierda y, a la derecha, el acceso a
+   Rinde Plus y las redes en círculos; abajo, un renglón fino con el
+   copyright y los créditos de las fotos (los legales van arriba,
+   junto a Rinde Plus, así el pie entra en un renglón). Verde bosque, como
+   Impacto. Tokens --gh-* y --vg-*, escalas de global.css.
    ============================================================ */
 
 .rp-footer {
@@ -41,22 +40,21 @@
   border-radius: 4px;
 }
 
-/* --- Cuatro columnas: marca | contacto | Rinde Plus | ayuda --- */
+/* --- Arriba: logo a la izquierda; Rinde Plus y redes a la derecha --- */
 .rp-footer__main {
-  display: grid;
-  /* Marca, contacto y ayuda al ancho de su contenido (la dirección en un
-     renglón); Rinde Plus toma el resto, y su texto entra en dos. Así el
-     footer es más bajo. */
-  grid-template-columns: auto auto 1fr auto;
-  gap: var(--space-300) var(--space-500);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-200) var(--space-300);
   padding-bottom: var(--space-200);
 }
 
-.rp-footer__marca {
-  display: grid;
-  justify-items: start;
-  align-content: start;
-  gap: var(--space-200);
+.rp-footer__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-200) var(--space-300);
 }
 
 /* Logo monocromo en blanco sobre el verde (sin los colores de marca). */
@@ -65,14 +63,6 @@
   width: auto;
   height: 48px;
   filter: brightness(0) invert(1);
-}
-
-.rp-footer__datos {
-  display: grid;
-  gap: var(--space-50);
-  font-size: var(--text-sm);
-  line-height: var(--leading-sm);
-  font-style: normal;
 }
 
 .rp-footer__redes {
@@ -86,8 +76,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--gh-border-strong);
   border-radius: 50%;
   color: var(--gh-fg);
@@ -104,31 +94,12 @@
   color: var(--gh-surface);
 }
 
-/* Columnas: título en mayúsculas y contenido corto debajo. Son h2: en las
-   páginas sin secciones (precios, educación, legales) un h3 saltaba un
-   nivel después del h1. */
-.rp-footer__col h2 {
-  margin-bottom: var(--space-100);
-  color: var(--gh-fg);
-  font-size: var(--text-sm);
-  line-height: var(--leading-sm);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.rp-footer__col p {
-  max-width: 440px;
-  margin-bottom: var(--space-100);
-  font-size: var(--text-sm);
-  line-height: var(--leading-sm);
-  text-wrap: pretty;
-}
-
-.rp-footer__col ul {
-  display: grid;
-  gap: var(--space-50);
-  list-style: none;
+.rp-footer__legales {
+  display: flex;
+  flex-wrap: wrap;
+  /* Mismo espacio horizontal que entre los bloques de la fila
+     (.rp-footer__acciones), así los tres enlaces quedan parejos. */
+  gap: var(--space-25) var(--space-300);
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
 }
@@ -150,47 +121,47 @@
 
 .rp-footer__externo:hover svg { transform: translate(2px, -2px); }
 
-/* --- Pie: copyright y créditos en un renglón fino bajo una línea (los
-   legales van en la columna de ayuda) --- */
+/* --- Pie: copyright y legales a la izquierda, créditos de las fotos a
+   la derecha, en un renglón fino bajo una línea --- */
 .rp-footer__bottom {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-25) var(--space-300);
-  padding-top: var(--space-75);
+  align-items: baseline;
+  gap: var(--space-25) var(--space-200);
+  padding-top: var(--space-100);
   border-top: 1px solid var(--gh-border);
-  text-align: center;
-}
-
-.rp-footer__copyright {
-  margin: 0;
   color: var(--gh-fg-subtle);
   font-size: var(--text-xs);
   line-height: var(--leading-xs);
 }
 
-/* Créditos de las fotos: debajo del copyright, igual de discretos. */
-.rp-footer__creditos {
-  margin: 0;
-  color: var(--gh-fg-subtle);
-  font-size: var(--text-xs);
-  line-height: var(--leading-xs);
-  text-align: center;
-}
+.rp-footer__copyright,
+.rp-footer__creditos { margin: 0; }
+
+
+.rp-footer__creditos { margin-left: auto; }
 
 .rp-footer__creditos a {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.rp-footer__creditos a:hover { color: var(--gh-fg); }
-
-/* Tablet: dos por fila. Celular: una columna. */
-@media (max-width: 960px) {
-  .rp-footer__main { grid-template-columns: 1fr 1fr; }
+/* Hasta que el ancho de la página deja un margen lateral amplio, el botón
+   flotante de WhatsApp cae encima del footer: se le reserva su lugar a la
+   derecha para que no tape las redes ni los créditos. En celular el botón
+   no se muestra (WhatsAppWidget.css). */
+@media (min-width: 768px) and (max-width: 1500px) {
+  .rp-footer__inner { padding-right: max(var(--page-gutter), var(--wa-fab-espacio)); }
 }
 
+/* Celular: todo apilado y alineado a la izquierda. */
 @media (max-width: 560px) {
-  .rp-footer__main { grid-template-columns: 1fr; gap: var(--space-300); }
-  .rp-footer__logo img { height: 48px; }
+  .rp-footer__main,
+  .rp-footer__acciones {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rp-footer__bottom { flex-direction: column; }
+  .rp-footer__creditos { margin-left: 0; }
 }

@@ -204,6 +204,8 @@ export const IMPACTO = {
     },
   ],
   pista: 'Toque em um indicador para ver o detalhe',
+  aviso:
+    'Resultados de produtividade medidos em campo ao longo de cinco safras; o carbono é uma estimativa. Cada talhão responde de forma diferente conforme suas zonas de manejo, o manejo e o clima do ano.',
   cerrar: 'Fechar detalhe',
 };
 
@@ -271,30 +273,23 @@ export const PRECIOS = {
 };
 
 export const FOOTER = {
-  contacto: { titulo: 'Contato' },
-  rindeplus: {
-    titulo: 'Rinde Plus',
-    texto: 'Procura mais serviços especializados para a sua produção? A Rinde Plus tem outras soluções agtech para o campo.',
-    enlace: 'Visite a Rinde Plus',
-    href: 'https://rindeplus.com',
-  },
-  ayuda: {
-    titulo: 'Ajuda',
-    enlaces: [
-      { texto: 'Dúvidas frequentes', href: '/pt/#preguntas', externo: false },
-      { texto: 'Fale com a gente pelo WhatsApp', href: WHATSAPP_URL, externo: true },
-    ],
-  },
-  // Las legales sólo existen en español: el enlace lo aclara.
-  legales: [
-    { texto: 'Política de privacidade (em espanhol)', href: '/privacidad/' },
-    { texto: 'Termos e condições (em espanhol)', href: '/terminos/' },
-  ],
+  // Footer simple (logo y redes arriba, pie abajo). Rinde Plus va como
+  // enlace junto a las redes, sin decir que VigIA es de Rinde Plus: la
+  // plataforma tiene otros socios.
+  rindeplus: { enlace: 'Visite a Rinde Plus', href: 'https://rindeplus.com' },
+  ubicacion: 'Localização',
+  navLegales: 'Legal',
+  // Ruta en español: el footer le suma /pt.
+  legales: [{ texto: 'Política de privacidade', href: '/privacidad/' }],
   pie: 'Todos os direitos reservados.',
   // Créditos de las fotos reales de "Lo que hace VigIA" (Wikimedia
   // Commons): los piden sus licencias Creative Commons.
   creditosFotos: {
-    prefijo: 'Fotos via Wikimedia Commons:',
+    // En el pie va un solo renglón: los autores enlazan a la ficha de cada
+    // foto (con su licencia exacta, que queda anotada abajo) y las
+    // licencias se nombran una vez al final.
+    prefijo: 'Fotos:',
+    sufijo: '(CC BY e CC BY-SA, via Wikimedia Commons)',
     fotos: [
       { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },
       { autor: 'Pollinator', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soybean_1292.JPG' },

@@ -44,7 +44,7 @@ import '../styles/sections.css';
 // alto reservan el lugar de cada logo antes de que cargue (sin corrimientos).
 const logosClientes = await Promise.all(
   LOGOS_CLIENTES.map(async (c) => {
-    const img = await getImage({ src: c.logo, height: c.h * 2, format: 'webp' });
+    const img = await getImage({ src: c.logo, height: c.h * 2, format: 'webp', quality: 75 });
     return {
       id: c.id,
       nombre: c.nombre,
@@ -228,6 +228,7 @@ const jsonLd = {
                 alt={pt.alt}
                 widths={[480, 800]}
                 sizes="480px"
+                quality={70}
                 loading="lazy"
                 decoding="async"
               />
@@ -421,6 +422,10 @@ const jsonLd = {
           </div>
         </div>
       </div>
+
+      <!-- De dónde salen las cifras y que no se garantizan en otro lote
+           (antes en los términos, ADR 0011). Fija, sin abrir ninguna tabla. -->
+      <p class="vg-impacto__aviso" data-aviso>{IMPACTO.aviso}</p>
     </div>
   </section>
 
@@ -549,11 +554,17 @@ const jsonLd = {
       // contenido del panel ya es el de la más alta.
       const indicadores = seccion.querySelector<HTMLElement>('.vg-indicadores-box');
       const interior = caja.querySelector<HTMLElement>('.vg-panel__inner');
+      // La nota de las cifras va debajo del panel: suma su alto y su margen.
+      const aviso = seccion.querySelector<HTMLElement>('[data-aviso]');
       const medirAlto = () => {
         if (!indicadores || !interior) return;
         const estilo = getComputedStyle(seccion);
         const margen = parseFloat(estilo.paddingTop) + parseFloat(estilo.paddingBottom);
-        const alto = margen + indicadores.offsetHeight + interior.scrollHeight;
+        const alto =
+          margen +
+          indicadores.offsetHeight +
+          interior.scrollHeight +
+          (aviso ? aviso.offsetHeight + parseFloat(getComputedStyle(aviso).marginTop) : 0);
         seccion.style.setProperty('--alto-impacto', `${Math.ceil(alto)}px`);
       };
       medirAlto();
@@ -613,17 +624,27 @@ const jsonLd = {
               <h3>{p.nombre}</h3>
               <div class="vg-persona__empresa">
                 <p class="vg-persona__rol">{NOSOTROS.representa}</p>
-                <div class="vg-persona__logo">
-                  <img
-                    src={p.empresa.logo.src}
-                    alt={p.empresa.nombre}
-                    width={Math.round((p.empresa.logo.width / p.empresa.logo.height) * p.empresa.logoAlto)}
-                    height={p.empresa.logoAlto}
-                    style={`--logo-alto: ${p.empresa.logoAlto}px`}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
+                {/* Con web propia (Rinde Plus), el logo enlaza a ella. */}
+                {(() => {
+                  const logoEmpresa = (
+                    <img
+                      src={p.empresa.logo.src}
+                      alt={p.empresa.nombre}
+                      width={Math.round((p.empresa.logo.width / p.empresa.logo.height) * p.empresa.logoAlto)}
+                      height={p.empresa.logoAlto}
+                      style={`--logo-alto: ${p.empresa.logoAlto}px`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  );
+                  return p.empresa.web ? (
+                    <a class="vg-persona__logo vg-persona__logo--enlace" href={p.empresa.web} target="_blank" rel="noopener noreferrer">
+                      {logoEmpresa}
+                    </a>
+                  ) : (
+                    <div class="vg-persona__logo">{logoEmpresa}</div>
+                  );
+                })()}
               </div>
             </li>
           ))
