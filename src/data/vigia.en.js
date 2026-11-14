@@ -14,10 +14,10 @@
 
 import { buildWhatsAppUrl } from './social';
 import { HA_TOTAL, GRANO_T, CO2_DESTACADO, formateador, filasImpacto } from './impactoDatos';
-import imgEstres from '../assets/quehace/estres.webp';
+import imgEstres from '../assets/quehace/estres-maiz.webp';
 import imgSiembra from '../assets/quehace/siembra.webp';
 import imgAgua from '../assets/quehace/agua.webp';
-import imgBioinsumos from '../assets/quehace/bioinsumos.webp';
+import imgBioinsumos from '../assets/quehace/bioinsumos-pulverizadora.webp';
 
 // La marca no se traduce (ver TRADUCCION_EN.md, "Marca").
 export const MARCA = 'VigIA BioEstrés';
@@ -77,7 +77,7 @@ export const QUE_HACE = {
       // "Aire que seca a la planta": la demanda del aire, como en el glosario.
       texto: 'A water shortage, dry air pulling water from the plant, or both at once. Alerts per management zone, with lead time.',
       imagen: imgEstres,
-      alt: 'Soybean field in February, with patches where the crop grew less',
+      alt: 'Row of stressed corn, with dry yellow leaves among the green ones',
     },
     {
       id: 'siembra',
@@ -287,10 +287,9 @@ export const FOOTER = {
     prefijo: 'Photos:',
     sufijo: '(CC BY and CC BY-SA, via Wikimedia Commons)',
     fotos: [
-      { autor: 'Alejo Cristian Santo', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Febrero_-_panoramio.jpg' },
       { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },
       { autor: 'Pollinator', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soybean_1292.JPG' },
-      { autor: 'Ermell', licencia: 'CC BY-SA 4.0', href: 'https://commons.wikimedia.org/wiki/File:Traktor_spritzanlage-20200319-RM-173117.jpg' },
+      { autor: 'Richard Humphrey', licencia: 'CC BY-SA 2.0', href: 'https://commons.wikimedia.org/wiki/File:Tractor_and_sprayer_working_near_Congham_-_geograph.org.uk_-_3419172.jpg' },
     ],
   },
 };
