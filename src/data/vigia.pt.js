@@ -14,10 +14,10 @@
 
 import { buildWhatsAppUrl } from './social';
 import { HA_TOTAL, GRANO_T, CO2_DESTACADO, formateador, filasImpacto } from './impactoDatos';
-import imgEstres from '../assets/quehace/estres.webp';
+import imgEstres from '../assets/quehace/estres-maiz.webp';
 import imgSiembra from '../assets/quehace/siembra.webp';
 import imgAgua from '../assets/quehace/agua.webp';
-import imgBioinsumos from '../assets/quehace/bioinsumos.webp';
+import imgBioinsumos from '../assets/quehace/bioinsumos-pulverizadora.webp';
 
 // La marca no se traduce (ver TRADUCCION_PT.md, "Marca"). En portugués
 // lleva artículo masculino en la frase: "o VigIA".
@@ -81,7 +81,7 @@ export const QUE_HACE = {
       texto: 'Falta de água, ar seco puxando água da planta, ou os dois juntos. Alertas por zona de manejo, com antecedência.',
       imagen: imgEstres,
       // "Manchones" → reboleiras, como se dice en la lavoura.
-      alt: 'Lavoura de soja em fevereiro, com reboleiras onde a cultura cresceu menos',
+      alt: 'Linha de milho estressado, com folhas secas e amareladas entre as verdes',
     },
     {
       id: 'siembra',
@@ -291,10 +291,9 @@ export const FOOTER = {
     prefijo: 'Fotos:',
     sufijo: '(CC BY e CC BY-SA, via Wikimedia Commons)',
     fotos: [
-      { autor: 'Alejo Cristian Santo', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Febrero_-_panoramio.jpg' },
       { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },
       { autor: 'Pollinator', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soybean_1292.JPG' },
-      { autor: 'Ermell', licencia: 'CC BY-SA 4.0', href: 'https://commons.wikimedia.org/wiki/File:Traktor_spritzanlage-20200319-RM-173117.jpg' },
+      { autor: 'Richard Humphrey', licencia: 'CC BY-SA 2.0', href: 'https://commons.wikimedia.org/wiki/File:Tractor_and_sprayer_working_near_Congham_-_geograph.org.uk_-_3419172.jpg' },
     ],
   },
 };
