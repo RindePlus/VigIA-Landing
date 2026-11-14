@@ -10,10 +10,10 @@
 
 import { buildWhatsAppUrl } from './social';
 import { HA_TOTAL, GRANO_T, CO2_DESTACADO, formateador, filasImpacto } from './impactoDatos';
-import imgEstres from '../assets/quehace/estres.webp';
+import imgEstres from '../assets/quehace/estres-maiz.webp';
 import imgSiembra from '../assets/quehace/siembra.webp';
 import imgAgua from '../assets/quehace/agua.webp';
-import imgBioinsumos from '../assets/quehace/bioinsumos.webp';
+import imgBioinsumos from '../assets/quehace/bioinsumos-pulverizadora.webp';
 
 // Grafía del logo. Si cambia la marca, se cambia acá.
 export const MARCA = 'VigIA BioEstrés';
@@ -84,7 +84,7 @@ export const QUE_HACE = {
       // Hídrico, térmico y combinado: qué pasa en cada uno.
       texto: 'Falta de agua, aire que seca a la planta o los dos juntos. Te avisa por ambiente, con margen.',
       imagen: imgEstres,
-      alt: 'Lote de soja en febrero, con manchones donde el cultivo creció menos',
+      alt: 'Surco de maíz con estrés, con hojas secas y amarillas entre las verdes',
     },
     {
       // Sin el número de días previos a la siembra: lo que importa es que
@@ -329,10 +329,9 @@ export const FOOTER = {
   creditosFotos: {
     prefijo: 'Fotos vía Wikimedia Commons:',
     fotos: [
-      { autor: 'Alejo Cristian Santo', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Febrero_-_panoramio.jpg' },
       { autor: 'Maggilautaro', licencia: 'CC BY 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soja_en_Siembra_Directa_sobre_rastrojo_de_Sorgo_Gran%C3%ADfero.jpg' },
       { autor: 'Pollinator', licencia: 'CC BY-SA 3.0', href: 'https://commons.wikimedia.org/wiki/File:Soybean_1292.JPG' },
-      { autor: 'Ermell', licencia: 'CC BY-SA 4.0', href: 'https://commons.wikimedia.org/wiki/File:Traktor_spritzanlage-20200319-RM-173117.jpg' },
+      { autor: 'Richard Humphrey', licencia: 'CC BY-SA 2.0', href: 'https://commons.wikimedia.org/wiki/File:Tractor_and_sprayer_working_near_Congham_-_geograph.org.uk_-_3419172.jpg' },
     ],
   },
 };

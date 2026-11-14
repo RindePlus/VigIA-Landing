@@ -103,7 +103,7 @@ Sección nueva (decisión 15). Cuenta qué hace VigIA: acompaña desde antes de 
 
 | Tarjeta | Texto | Foto (Wikimedia Commons, decisión 49) |
 |---|---|---|
-| Detecta picos de estrés | Falta de agua, aire que seca a la planta o los dos juntos. Te avisa por ambiente, con margen. | Lote de soja en febrero, con manchones |
+| Detecta picos de estrés | Falta de agua, aire que seca a la planta o los dos juntos. Te avisa por ambiente, con margen. | Surco de maíz con estrés, hojas secas entre las verdes (no es de Commons: no lleva crédito al pie) |
 | Desde antes de la siembra | Sigue el agua del suelo desde antes de sembrar y te avisa 14 días antes de la etapa crítica. | Soja en siembra directa sobre rastrojo de sorgo |
 | Cuida el uso del agua | Sabés cuánta agua útil tiene cada ambiente. Si se viene la falta de agua, regás justo cuando hace falta. | Pivote de riego sobre soja |
 | Orientado a bioinsumos | Cada aviso trae su bioinsumo: hídrico, antiestrés térmico o preventivo antes de la etapa crítica. | Tractor con pulverizadora |
